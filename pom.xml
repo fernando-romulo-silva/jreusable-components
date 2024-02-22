@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>jreusablecomponents</groupId>
+	<artifactId>jreusable-components</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	
+	<parent>
+		<groupId>org.allset.java</groupId>
+		<artifactId>allset-java</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	
+	<name>Java Resuable Components</name>
+  	<description>
+		A set of reusable Java components (services, HTTP controllers, JMS, and others) for Spring, Jakarta EE, Quarkus, etc.
+    </description>
+    <inceptionYear>2023</inceptionYear>
+    <url>https://${scm.platform}/${scm.account}/${project.artifactId}</url>		
+		
+	<modules>
+		<module>jreusable-components-spring</module>
+		<module>jreusable-components-jakarta</module>
+		<module>jreusable-components-api</module>
+		<module>jreusable-components-quarkus</module>
+		<module>jreusable-components-microprofile</module>
+		<module>jreusable-components-micronaut</module>
+		<module>jreusable-components-helidon</module>
+	</modules>
+
+	<properties>
+		<junit-platform.version>5.10.0</junit-platform.version>
+		<mockito-platform.version>5.10.0</mockito-platform.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>${junit-platform.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		
+			<dependency>
+			    <groupId>org.mockito</groupId>
+			    <artifactId>mockito-bom</artifactId>
+			    <version>${mockito-platform.version}</version>
+			    <type>pom</type>
+			    <scope>import</scope>
+			</dependency>		
+			
+		</dependencies>
+	</dependencyManagement>			
+	
+</project>

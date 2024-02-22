@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>jreusablecomponents</groupId>
+		<artifactId>jreusable-components</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>jreusable-components-spring</artifactId>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>jreusable-components-spring-core</module>
+		<module>jreusable-components-spring-rest</module>
+		<module>jreusable-components-spring-batch</module>
+	</modules>
+
+	<properties>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<spring-boot.version>3.2.1</spring-boot.version>
+		<spring-boot-cloud.version>2021.0.8</spring-boot-cloud.version>
+		<junit-platform.version>5.10.0</junit-platform.version>
+	</properties>
+	
+</project>
