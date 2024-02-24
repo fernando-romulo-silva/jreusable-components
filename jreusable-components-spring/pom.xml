@@ -17,10 +17,13 @@
 	</modules>
 
 	<properties>
+		
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
+		
 		<spring-boot.version>3.2.1</spring-boot.version>
 		<spring-boot-cloud.version>2021.0.8</spring-boot-cloud.version>
+		
 		<junit-platform.version>5.10.0</junit-platform.version>
 	</properties>
 	
