@@ -8,10 +8,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
-import org.reusablecomponent.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
-import org.reusablecomponent.domain.AbstractEntity;
-import org.reusablecomponent.rest.query.AbstractEntityQueryHttpController;
-import org.reusablecomponent.spring.infra.logging.Loggable;
+import org.reusablecomponent.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
+import org.reusablecomponent.core.domain.AbstractEntity;
+import org.reusablecomponent.rest.rest.query.AbstractEntityQueryHttpController;
+import org.reusablecomponent.spring.core.infra.logging.Loggable;
 import org.springframework.http.ResponseEntity;
 
 /**

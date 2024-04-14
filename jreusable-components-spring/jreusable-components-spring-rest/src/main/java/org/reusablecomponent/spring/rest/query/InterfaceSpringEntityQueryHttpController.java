@@ -3,8 +3,8 @@ package org.reusablecomponent.spring.rest.query;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import org.reusablecomponent.domain.AbstractEntity;
-import org.reusablecomponent.rest.query.InterfaceEntityQueryHttpController;
+import org.reusablecomponent.core.domain.AbstractEntity;
+import org.reusablecomponent.rest.rest.query.InterfaceEntityQueryHttpController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

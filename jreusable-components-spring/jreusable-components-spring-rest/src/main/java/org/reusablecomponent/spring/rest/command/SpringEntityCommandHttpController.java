@@ -2,9 +2,9 @@ package org.reusablecomponent.spring.rest.command;
 
 import java.util.Optional;
 
-import org.reusablecomponent.application.command.entity.InterfaceEntityCommandFacade;
-import org.reusablecomponent.domain.AbstractEntity;
-import org.reusablecomponent.rest.command.AbstractEntityCommandHttpController;
+import org.reusablecomponent.core.application.command.entity.InterfaceEntityCommandFacade;
+import org.reusablecomponent.core.domain.AbstractEntity;
+import org.reusablecomponent.rest.rest.command.AbstractEntityCommandHttpController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

@@ -7,9 +7,9 @@ import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 import java.util.List;
 
-import org.reusablecomponent.domain.AbstractEntity;
-import org.reusablecomponent.infra.jsonpath.JsonPatch;
-import org.reusablecomponent.rest.command.InterfaceEntityCommandHttpController;
+import org.reusablecomponent.core.domain.AbstractEntity;
+import org.reusablecomponent.rest.infra.jsonpath.JsonPatch;
+import org.reusablecomponent.rest.rest.command.InterfaceEntityCommandHttpController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;

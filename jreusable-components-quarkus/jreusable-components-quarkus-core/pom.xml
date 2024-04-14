@@ -7,7 +7,7 @@
 		<artifactId>jreusable-components-quarkus</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>reusable-component-quarkus-core</artifactId>
+	<artifactId>jreusable-components-quarkus-core</artifactId>
 
 	<dependencies>
 		

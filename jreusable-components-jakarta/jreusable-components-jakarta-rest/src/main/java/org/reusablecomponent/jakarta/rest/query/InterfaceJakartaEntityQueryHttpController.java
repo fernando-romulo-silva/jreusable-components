@@ -4,8 +4,8 @@ package org.reusablecomponent.jakarta.rest.query;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_XML;
 
-import org.reusablecomponent.domain.AbstractEntity;
-import org.reusablecomponent.rest.query.InterfaceEntityQueryHttpController;
+import org.reusablecomponent.core.domain.AbstractEntity;
+import org.reusablecomponent.rest.rest.query.InterfaceEntityQueryHttpController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

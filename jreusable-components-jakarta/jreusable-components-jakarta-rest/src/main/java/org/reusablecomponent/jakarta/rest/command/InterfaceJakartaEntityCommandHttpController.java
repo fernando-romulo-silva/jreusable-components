@@ -6,9 +6,9 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_XML;
 
 import java.util.List;
 
-import org.reusablecomponent.domain.AbstractEntity;
-import org.reusablecomponent.infra.jsonpath.JsonPatch;
-import org.reusablecomponent.rest.command.InterfaceEntityCommandHttpController;
+import org.reusablecomponent.core.domain.AbstractEntity;
+import org.reusablecomponent.rest.infra.jsonpath.JsonPatch;
+import org.reusablecomponent.rest.rest.command.InterfaceEntityCommandHttpController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

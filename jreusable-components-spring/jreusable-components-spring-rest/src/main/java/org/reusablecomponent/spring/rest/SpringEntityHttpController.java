@@ -2,9 +2,9 @@ package org.reusablecomponent.spring.rest;
 
 import java.util.List;
 
-import org.reusablecomponent.domain.AbstractEntity;
-import org.reusablecomponent.infra.jsonpath.JsonPatch;
-import org.reusablecomponent.rest.EntityHttpController;
+import org.reusablecomponent.core.domain.AbstractEntity;
+import org.reusablecomponent.rest.infra.jsonpath.JsonPatch;
+import org.reusablecomponent.rest.rest.EntityHttpController;
 import org.reusablecomponent.spring.rest.command.InterfaceSpringEntityCommandHttpController;
 import org.reusablecomponent.spring.rest.query.InterfaceSpringEntityQueryHttpController;
 import org.springframework.http.ResponseEntity;
