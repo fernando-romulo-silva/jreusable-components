@@ -1,12 +1,13 @@
 package org.reusablecomponent.core.infra.messaging.event;
 
-import java.time.LocalDateTime;
+import java.util.function.Consumer;
 
+/**
+ * 
+ */
 public class Event {
 
-    private final LocalDateTime when;
-
-    private final String transaction;
+    private final When when;
 
     private final Who who;
 
@@ -16,26 +17,18 @@ public class Event {
 
     private final Why why;
 
-    private final String data;
-    
     // ---------------------------------------------
 
     private Event(final Builder builder) {
 	this.when = builder.when;
-	this.transaction = builder.transaction;
 	this.who = builder.who;
 	this.what = builder.what;
 	this.where = builder.where;
 	this.why = builder.why;
-	this.data = builder.data;
     }
     
-    public LocalDateTime getWhen() {
+    public When getWhen() {
         return when;
-    }
-
-    public String getTransaction() {
-        return transaction;
     }
 
     public Who getWho() {
@@ -54,18 +47,12 @@ public class Event {
         return why;
     }
 
-    public String getData() {
-        return data;
-    }    
-    
 
     // ---------------------------------------------
 
     public static class Builder {
 
-	public LocalDateTime when;
-
-	public String transaction;
+	public When when;
 
 	public Who who;
 
@@ -75,21 +62,14 @@ public class Event {
 
 	public Why why;
 
-	public String data;
+	public Builder with(final Consumer<Builder> function) {
+	    function.accept(this);
+	    return this;
+	}
 
 	public Event build() {
 	    return new Event(this);
 	}
     }
-
-    // ---------------------------------------------
-
-    record Who(String id, String realmId, String login) {}
-
-    record What(String fact, String desc) {}
-
-    record Where(String serviceName, String applicationName) {}
-
-    record Why(String reason) {}
     
 }

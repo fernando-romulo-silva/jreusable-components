@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import org.reusablecomponent.core.application.base.AbstractEntiyBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.reusablecomponent.core.infra.exception.ElementWithIdNotFoundException;
+import org.reusablecomponent.core.infra.messaging.event.OperationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +51,22 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, OneResult
 	this.countAllFunction = countAllFunction;
     }
     
+    // ---------------------------------------------------------------------------
+
+    /**
+     * @param entity
+     */
+    protected void preFindAll(final Map<String, String[]> directives) {
+
+    }
+
+    /**
+     * @param entity
+     */
+    protected void posFindAll(final Map<String, String[]> directives, final MultipleResult multipleResult) {
+
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -57,6 +74,8 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, OneResult
     public MultipleResult findAll(@Nullable final Map<String, String[]> directives) {
 	
 	LOGGER.debug("");
+	
+	preFindAll(directives);
 	
 //	final var formatDirectives = Optional.ofNullable(directives)
 //        	.map(params -> params.get("format"))
@@ -66,6 +85,10 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, OneResult
 //        	.anyMatch("full"::equalsIgnoreCase);	
 	
 	final var result = findAllFunction.get();
+	
+	posFindAll(directives, result);
+	
+	publishOperation(OperationEvent.FIND_ALL, getMultipleResultEventData(result));	
 	
 	LOGGER.debug("");
 	
@@ -81,7 +104,7 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, OneResult
 	final var result = findByIdFunction.apply(id);
 	
 	if (result instanceof Optional resultOptional && resultOptional.isEmpty()) {
-	    throw new ElementWithIdNotFoundException(getEntityClazz(), id);
+	    throw new ElementWithIdNotFoundException(getEntityClazz(), i18nService, id);
 	}
 	
 	return result;

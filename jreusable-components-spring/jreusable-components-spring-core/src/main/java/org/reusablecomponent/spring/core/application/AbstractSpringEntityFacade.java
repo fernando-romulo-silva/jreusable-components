@@ -3,6 +3,7 @@ package org.reusablecomponent.spring.core.application;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.commons.collections4.IterableUtils;
 import org.reusablecomponent.core.application.command.entity.InterfaceEntityCommandFacade;
 import org.reusablecomponent.core.application.full.entity.nonpaged.EntityFacade;
 import org.reusablecomponent.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
@@ -184,4 +185,12 @@ public abstract class AbstractSpringEntityFacade<Entity extends AbstractEntity<I
 //    public Void deleteAllBy(final Iterable<Id> ids) {
 //	return super.deleteAllBy(ids);
 //    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getMultipleResultEventData(final Iterable<Entity> multipleResult) {
+	return "Result size "+IterableUtils.size(multipleResult);
+    }
 }

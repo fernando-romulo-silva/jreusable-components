@@ -3,8 +3,8 @@ package org.reusablecomponent.application;
 import static jakarta.transaction.Transactional.TxType.REQUIRED;
 import static jakarta.transaction.Transactional.TxType.SUPPORTS;
 
-import org.reusablecomponent.core.application.EntityFacade;
 import org.reusablecomponent.core.application.command.entity.InterfaceEntityCommandFacade;
+import org.reusablecomponent.core.application.full.entity.nonpaged.EntityFacade;
 import org.reusablecomponent.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.reusablecomponent.domain.InterfaceQuarkusRepository;

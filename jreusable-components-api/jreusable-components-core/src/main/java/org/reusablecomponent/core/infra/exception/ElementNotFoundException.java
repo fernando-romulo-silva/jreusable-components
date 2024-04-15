@@ -41,21 +41,21 @@ public class ElementNotFoundException extends BaseApplicationException {
      * 
      * @param <T>  The class type
      * @param cls  Class element
-     * @param i18n The msg translation function
+     * @param i18nService The msg translation function
      * @param msg  The specific message
      */
-    public <T> ElementNotFoundException(final Class<T> cls, final InterfaceI18nService i18n, final String msg) {
-	super("{exception.elementNotFound}", i18n, new Object[] { cls.getSimpleName(), msg });
+    public <T> ElementNotFoundException(final Class<T> cls, final InterfaceI18nService i18nService, final String msg) {
+	super("{exception.elementNotFound}", i18nService, new Object[] { cls.getSimpleName(), msg });
     }
 
     /**
      * Constructs a new BaseApplicationException exception with the specified detail message.
      * 
      * @param msg    The detail message
-     * @param i18n   The msg translation function
+     * @param i18nService   The msg translation function
      * @param params The parameters used on message
      */
-    protected ElementNotFoundException(final String msg, final InterfaceI18nService i18n, final Object... params) {
-	super(msg, i18n, params);
+    protected ElementNotFoundException(final String msg, final InterfaceI18nService i18nService, final Object... params) {
+	super(msg, i18nService, params);
     }
 }

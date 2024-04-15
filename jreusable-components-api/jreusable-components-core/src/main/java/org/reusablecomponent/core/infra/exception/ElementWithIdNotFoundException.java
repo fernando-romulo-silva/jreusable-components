@@ -23,11 +23,11 @@ public class ElementWithIdNotFoundException extends ElementNotFoundException {
     /**
      * @param <T>
      * @param cls
-     * @param i18n
+     * @param i18nService
      * @param id
      */
-    public <T> ElementWithIdNotFoundException(final Class<T> cls, final InterfaceI18nService i18n, final Object id) {
-	super("{exception.elementIdNotFound}", i18n, new Object[] { cls.getSimpleName(), formatNumber(id) });
+    public <T> ElementWithIdNotFoundException(final Class<T> cls, final InterfaceI18nService i18nService, final Object id) {
+	super("{exception.elementIdNotFound}", i18nService, new Object[] { cls.getSimpleName(), formatNumber(id) });
     }    
 
     private static Object formatNumber(final Object id) {

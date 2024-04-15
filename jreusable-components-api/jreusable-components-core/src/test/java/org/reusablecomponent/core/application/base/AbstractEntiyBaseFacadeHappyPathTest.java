@@ -25,28 +25,12 @@ import org.reusablecomponent.core.infra.messaging.logger.LoggerPublisherSerice;
 import org.reusablecomponent.core.infra.security.InterfaceSecurityService;
 import org.reusablecomponent.core.infra.security.dummy.DummySecurityService;
 
-import jakarta.annotation.Nullable;
-
 @Tag("unit")
 @DisplayName("Test the AbstractEntiyBaseFacade entity test, happy Path :) ")
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class AbstractEntiyBaseFacadeTest {
-    
-    static class TestEntiyBaseFacade extends AbstractEntiyBaseFacade<Department, String> {
-	
-	    protected TestEntiyBaseFacade(
-			    @Nullable final InterfacePublisherSerice publisherService, 
-			    @Nullable final InterfaceI18nService i18nService,
-			    @Nullable final InterfaceSecurityService securityService) {
-		super(publisherService, i18nService, securityService);
-	    }
-	    
-	    protected TestEntiyBaseFacade() {
-		super();
-	    }
-    }
+class AbstractEntiyBaseFacadeHappyPathTest {
     
     @Test
     @Order(1)

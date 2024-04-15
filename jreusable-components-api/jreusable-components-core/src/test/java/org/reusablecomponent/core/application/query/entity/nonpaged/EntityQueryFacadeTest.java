@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.reusablecomponent.core.domain.Person;
 
 
-public class EntityQueryFacadeTest {
+abstract class EntityQueryFacadeTest {
 
     @Mock
     protected Function<Long, Boolean> existsByIdFunction;

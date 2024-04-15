@@ -15,72 +15,12 @@
 		<module>jreusable-components-rest</module>
 	</modules>
 	
-	<dependencies>
-			
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<scope>test</scope>
-		</dependency>		
-
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-params</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<scope>test</scope>
-		</dependency>
+	<properties>
+		<junit-platform.version>5.10.0</junit-platform.version>
+		<mockito-platform.version>5.10.0</mockito-platform.version>
 		
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-junit-jupiter</artifactId>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<version>3.25.2</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.github.jsqlparser</groupId>
-			<artifactId>jsqlparser</artifactId>
-			<version>4.0</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>nl.jqno.equalsverifier</groupId>
-			<artifactId>equalsverifier</artifactId>
-			<version>3.16</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.jparams</groupId>
-			<artifactId>to-string-verifier</artifactId>
-			<version>1.4.8</version>
-			<scope>test</scope>
-		</dependency>		
-		
-	</dependencies>
+		<commons-lang3.version>3.14.0</commons-lang3.version>
+		<slf4j-api.version>2.0.11</slf4j-api.version>
+	</properties>
 	
 </project>

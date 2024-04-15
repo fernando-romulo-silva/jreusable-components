@@ -6,6 +6,8 @@ public interface InterfaceSecurityService {
     
     String getUserRealm();
     
+    String getSession();
+    
     String getApplication();
     
 }

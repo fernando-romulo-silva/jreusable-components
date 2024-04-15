@@ -1,5 +1,7 @@
 package org.reusablecomponent.core.application.query.entity.nonpaged;
 
+import static java.util.Objects.isNull;
+
 import java.util.Map;
 
 import org.reusablecomponent.core.application.base.InterfaceEntityBaseFacade;
@@ -39,4 +41,17 @@ public interface InterfaceEntityQueryFacade<Entity extends AbstractEntity<Id>, I
      * @return
      */
     CountResult count();
+    
+    /**
+     * @param multipleResult
+     * @return
+     */
+    default String getMultipleResultEventData(final MultipleResult multipleResult) {
+	
+	if (isNull(multipleResult)) {
+	    return "Result size 0";
+	}
+	
+	return multipleResult.toString();
+    }
 }

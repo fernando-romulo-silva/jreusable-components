@@ -52,7 +52,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class AbstractEntiyHappyTest extends AbstractAbstractEntiyTest {
+class AbstractEntiyHappyPathTest extends AbstractAbstractEntiyTest {
      
     @Test
     @Order(1)

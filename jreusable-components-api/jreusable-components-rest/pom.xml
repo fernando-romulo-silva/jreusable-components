@@ -14,8 +14,29 @@
 	<properties>
 		<swagger-core.version>2.2.19</swagger-core.version>
 		<jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
-		<commons-lang3.version>3.14.0</commons-lang3.version>
 	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>${junit-platform.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		
+			<dependency>
+			    <groupId>org.mockito</groupId>
+			    <artifactId>mockito-bom</artifactId>
+			    <version>${mockito-platform.version}</version>
+			    <type>pom</type>
+			    <scope>import</scope>
+			</dependency>		
+			
+		</dependencies>
+	</dependencyManagement>		
 
 	<dependencies>
 		
@@ -50,6 +71,12 @@
 		    <version>${commons-lang3.version}</version>
 		</dependency>
 		
+		<dependency>
+		    <groupId>jakarta.el</groupId>
+		    <artifactId>jakarta.el-api</artifactId>
+		    <version>5.0.1</version>
+		</dependency>		
+		
 		<!-- test -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -81,7 +108,6 @@
 			<version>3.25.3</version>
 			<scope>test</scope>
 		</dependency>
-
 
 		<dependency>
 			<groupId>com.github.jsqlparser</groupId>
