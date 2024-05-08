@@ -3,18 +3,23 @@ package org.reusablecomponent.core.domain;
 import static java.text.MessageFormat.format;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.application_example.domain.Gender.MALE;
+import static org.application_example.domain.Hobby.COOKING;
+import static org.application_example.domain.Hobby.VIDEO_GAMMING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
-import static org.reusablecomponent.core.domain.Gender.MALE;
-import static org.reusablecomponent.core.domain.Hobby.COOKING;
-import static org.reusablecomponent.core.domain.Hobby.VIDEO_GAMMING;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.application_example.domain.Department;
+import org.application_example.domain.Gender;
+import org.application_example.domain.Hobby;
+import org.application_example.domain.Person;
+import org.application_example.domain.Project;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -35,13 +40,13 @@ import jakarta.validation.ConstraintViolationException;
  * @author Fernando Romulo da Silva
  */
 @Tag("unit")
-@DisplayName("Test the AbstractEntiy entity test, unhappy Path :( ")
+@DisplayName("Test the AbstractEntiy entity test, unhappy path :( ")
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 class AbstractEntiyUnhappyPathTest extends AbstractAbstractEntiyTest {
 
-    Stream<Arguments> checkEntityWithoutBuilderData() {
+    Stream<Arguments> checkEntityWithoutBuilderNoExceptionData() {
 	
 	final var id = "00001";
 	final var name = "Development 01";
@@ -58,20 +63,53 @@ class AbstractEntiyUnhappyPathTest extends AbstractAbstractEntiyTest {
 	
     }
 
+    @Order(1)
     @ParameterizedTest(name = "Pos {index} : id ''{0}'', name ''{1}'', sector ''{2}'''")
-    @MethodSource("checkEntityWithoutBuilderData")
-    @Order(4)
-    @DisplayName("Test entity without builder creation")
-    void checkEntityWithoutBuilderTest(final String id, final String name, final String sector) {
+    @MethodSource("checkEntityWithoutBuilderNoExceptionData")
+    @DisplayName("Test entity without builder creation, without exception")
+    void checkEntityWithoutBuilderNoExceptionTest(final String id, final String name, final String sector) {
 	
 	final var department = new Department(id, name, sector);
 	
-	final var violations = validator.validate(department);
+	final var violations = VALIDATOR.validate(department);
 	
 	assertThat(violations).hasSize(1);
     }
     
+  //---------------------------------------------------------------------------------------------
     
+    Stream<Arguments> checkEntityWithoutBuilderExceptionData() {
+	
+	final var id = 1L;
+	final var name = "XPTO";
+	final var department = new Department("00001", "Development 01", "Technology");
+	
+	// given
+	return Stream.of(
+			Arguments.of(null , name  , department),
+			Arguments.of(id   , EMPTY , department),
+			Arguments.of(id   , null  , null      )
+			// so on
+	);
+	
+    }
+
+    @Order(2)
+    @ParameterizedTest(name = "Pos {index} : id ''{0}'', name ''{1}'', priority ''{2}'''")
+    @MethodSource("checkEntityWithoutBuilderExceptionData")
+    @DisplayName("Test entity without builder creation, with exception")
+    void checkEntityWithoutBuilderExceptionTest(final Long id, final String name, final Department department) {
+	
+	// when
+	assertThatThrownBy(() -> {
+	    
+	    new Project(id, name, department);
+	    
+	}) // then 
+	.as(format("Check the invalid entity: id ''{0}'', name ''{1}'' ", id, name)) //
+	.isInstanceOf(ConstraintViolationException.class);
+	
+    }
     
     //---------------------------------------------------------------------------------------------
     
@@ -96,9 +134,9 @@ class AbstractEntiyUnhappyPathTest extends AbstractAbstractEntiyTest {
 	);
     }
 
+    @Order(3)
     @ParameterizedTest(name = "Pos {index} : id ''{0}'', name ''{1}'', createdDate ''{2}'', createdReason ''{3}''")
     @MethodSource("createEntityWithBuilderData")
-    @Order(2)
     @DisplayName("Test invalid entity with builder creation")
     void createEntityWithBuilderTest(final Long id, final String name, final String createdReason, final Integer score, final Gender gender, final String country, final LocalDate birthDate, final List<Hobby> hobbies) {
 

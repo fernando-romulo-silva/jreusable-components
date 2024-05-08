@@ -1,6 +1,6 @@
 package org.reusablecomponent.core.infra.messaging.event;
 
-public enum OperationEvent implements InterfaceOperationEvent {
+public enum CommonEvent implements InterfaceOperationEvent {
 
     SAVE_ITEM,
     UPDATE_ITEM,

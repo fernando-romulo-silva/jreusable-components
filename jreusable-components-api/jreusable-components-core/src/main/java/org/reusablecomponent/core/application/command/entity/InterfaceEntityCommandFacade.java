@@ -6,63 +6,90 @@ import org.reusablecomponent.core.domain.AbstractEntity;
 /**
  * @param <Entity>
  * @param <Id>
- * @param <OneResult>
- * @param <MultipleResult>
- * @param <VoidResult>
+ * @param <SaveEntityIn>
+ * @param <SaveEntityOut>
+ * @param <SaveEntitiesIn>
+ * @param <SaveEntitiesOut>
+ * @param <UpdateEntityIn>
+ * @param <UpdateEntityOut>
+ * @param <UpdateEntitiesIn>
+ * @param <UpdateEntitiesOut>
+ * @param <DeleteEntityIn>
+ * @param <DeleteEntityOut>
+ * @param <DeleteEntitisIn>
+ * @param <DeleteEntitiesOut>
+ * @param <DeleteIdIn>
+ * @param <DeleteIdOut>
+ * @param <DeleteIdsIn>
+ * @param <DeleteIdsOut>
  */
-public interface InterfaceEntityCommandFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, VoidResult> 
-	extends InterfaceEntityBaseFacade<Entity, Id> {
+public interface InterfaceEntityCommandFacade< // generics 
+		// default
+		Entity extends AbstractEntity<Id>, Id, // basic
+		// save
+		SaveEntityIn, SaveEntityOut, // save a entity
+		SaveEntitiesIn, SaveEntitiesOut, // save entities
+		// update
+		UpdateEntityIn, UpdateEntityOut, // update a entity
+		UpdateEntitiesIn, UpdateEntitiesOut, // update entities
+		// delete entity
+		DeleteEntityIn, DeleteEntityOut, // delete a entity
+		DeleteEntitisIn, DeleteEntitiesOut, // delete entities
+		// delete by id
+		DeleteIdIn, DeleteIdOut, // delete a entity by id
+		DeleteIdsIn, DeleteIdsOut> // delete entities by id
+		// from base
+		extends InterfaceEntityBaseFacade<Entity, Id> {
+
+    // --------------------------------------------------------------------------------
 
     /**
      * @param entity
      * @return
      */
-    OneResult save(final Entity entity);
-    
+    SaveEntityOut save(final SaveEntityIn entity);
+
     /**
      * @param entities
      * @return
      */
-    MultipleResult saveAll(final Iterable<Entity> entities);    
+    SaveEntitiesOut saveAll(final SaveEntitiesIn entities);
+
+    // --------------------------------------------------------------------------------
 
     /**
      * @param entity
      * @return
      */
-    OneResult update(final Entity entity);
-    
+    UpdateEntityOut update(final UpdateEntityIn entity);
+
+    /**
+     * @param entities
+     * @return
+     */
+    UpdateEntitiesOut updateAll(final UpdateEntitiesIn entities);
+
+    // --------------------------------------------------------------------------------
+
+    /**
+     * @param entity
+     * @return
+     */
+    DeleteEntityOut delete(final DeleteEntityIn entity);
+
+    /**
+     * @param entities
+     */
+    DeleteEntitiesOut deleteAll(final DeleteEntitisIn entities);
+
     /**
      * @param id
-     * @param entity
-     * @return
      */
-    OneResult update(final Id id, final Entity entity);
-    
-    /**
-     * @param entities
-     * @return
-     */
-    MultipleResult updateAll(final Iterable<Entity> entities);    
+    DeleteIdOut deleteBy(final DeleteIdIn id);
 
-    /**
-     * @param entity
-     * @return
-     */
-    VoidResult delete(final Entity entity);
-
-    /**
-     * @param entities
-     */
-    VoidResult deleteAll(final Iterable<Entity> entities);    
-    
-    /**
-     * @param id
-     */
-    VoidResult deleteBy(final Id id);
-    
     /**
      * @param ids
      */
-    VoidResult deleteAllBy(final Iterable<Id> ids);
+    DeleteIdsOut deleteAllBy(final DeleteIdsIn ids);
 
 }

@@ -21,7 +21,7 @@ public class JavaReactReaderService implements InterfaceReaderService {
     }
 
     /**
-     *
+     * {@inheritDoc}
      */
     @Override
     public void read(final Event event) {

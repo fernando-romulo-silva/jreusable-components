@@ -1,6 +1,9 @@
 package org.reusablecomponent.core.application.query.entity.nonpaged;
 
+import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.FIND_ALL;
+
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -8,7 +11,6 @@ import java.util.function.Supplier;
 import org.reusablecomponent.core.application.base.AbstractEntiyBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.reusablecomponent.core.infra.exception.ElementWithIdNotFoundException;
-import org.reusablecomponent.core.infra.messaging.event.OperationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,15 +21,15 @@ import jakarta.validation.constraints.NotNull;
  * @param <Entity>
  * @param <Id>
  */
-public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, CountResult, BooleanResult> 
+public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, BooleanResult> 
 	extends AbstractEntiyBaseFacade<Entity, Id> 
-	implements InterfaceEntityQueryFacade<Entity, Id, OneResult, MultipleResult, CountResult, BooleanResult> {
+	implements InterfaceEntityQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, BooleanResult> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityQueryFacade.class);
     
-    protected final Function<Id, BooleanResult> existsByIdFunction;
+    protected final Function<QueryIdIn, BooleanResult> existsByIdFunction;
     
-    protected final Function<Id, OneResult> findByIdFunction;
+    protected final Function<QueryIdIn, OneResult> findByIdFunction;
     
     protected final Supplier<MultipleResult> findAllFunction;
     
@@ -40,8 +42,8 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, OneResult
      * @param countAllFunction
      */
     public EntityQueryFacade(
-		    @NotNull final Function<Id, BooleanResult> existsByIdFunction,
-		    @NotNull final Function<Id, OneResult> findByIdFunction,
+		    @NotNull final Function<QueryIdIn, BooleanResult> existsByIdFunction,
+		    @NotNull final Function<QueryIdIn, OneResult> findByIdFunction,
 		    @NotNull final Supplier<MultipleResult> findAllFunction,
 		    @NotNull final Supplier<CountResult> countAllFunction) {
 	super();
@@ -52,19 +54,35 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, OneResult
     }
     
     // ---------------------------------------------------------------------------
+    
+    /**
+     * @param saveEntityIn
+     * @return
+     */
+    protected String convertDirectivesToPublishData(final Map<String, String[]> directives) {
+	return Objects.toString(directives);
+    }
+    
+    /**
+     * @param saveEntityOut
+     * @return
+     */
+    protected String convertMultipleResultPublishData(final MultipleResult multipleResult) {
+	return Objects.toString(multipleResult);
+    }    
 
     /**
      * @param entity
      */
-    protected void preFindAll(final Map<String, String[]> directives) {
-
+    protected Map<String, String[]> preFindAll(final Map<String, String[]> directives) {
+	return directives;
     }
 
     /**
      * @param entity
      */
-    protected void posFindAll(final Map<String, String[]> directives, final MultipleResult multipleResult) {
-
+    protected MultipleResult posFindAll(final MultipleResult multipleResult) {
+	return multipleResult;
     }
     
     /**
@@ -73,9 +91,11 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, OneResult
     @Override
     public MultipleResult findAll(@Nullable final Map<String, String[]> directives) {
 	
-	LOGGER.debug("");
+	final var session = securityService.getSession();
 	
-	preFindAll(directives);
+	LOGGER.debug("Findind all '{}', session '{}'", getEntityClazz().getSimpleName(), session);
+	
+	final var finalDirectives = preFindAll(directives);
 	
 //	final var formatDirectives = Optional.ofNullable(directives)
 //        	.map(params -> params.get("format"))
@@ -86,11 +106,11 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, OneResult
 	
 	final var result = findAllFunction.get();
 	
-	posFindAll(directives, result);
+	final var resultFinal = posFindAll(result);
 	
-	publishOperation(OperationEvent.FIND_ALL, getMultipleResultEventData(result));	
+	publish(convertDirectivesToPublishData(finalDirectives), convertMultipleResultPublishData(resultFinal), FIND_ALL);
 	
-	LOGGER.debug("");
+	LOGGER.debug("Found '{}', session '{}'", getEntityClazz().getSimpleName(), session);
 	
 	return result;
     }
@@ -99,7 +119,7 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, OneResult
      * {@inheritDoc}
      */
     @Override
-    public OneResult findBy(@NotNull final Id id) {
+    public OneResult findBy(@NotNull final QueryIdIn id, final Map<String, String[]> directives) {
 	
 	final var result = findByIdFunction.apply(id);
 	
@@ -114,7 +134,7 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, OneResult
      * {@inheritDoc}
      */
     @Override
-    public BooleanResult existsBy(@NotNull final Id id) {
+    public BooleanResult existsBy(@NotNull final QueryIdIn id) {
 	
 	final var result = existsByIdFunction.apply(id);
 	

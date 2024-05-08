@@ -1,15 +1,17 @@
 package org.reusablecomponent.core.application.base;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Objects.nonNull;
 
 import java.time.LocalDateTime;
-import java.util.TimeZone;
-import java.util.function.Predicate;
+import java.time.ZoneId;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.core.infra.i18n.DefaultI18nService;
+import org.reusablecomponent.core.infra.exception.ExceptionTranslatorService;
 import org.reusablecomponent.core.infra.i18n.InterfaceI18nService;
+import org.reusablecomponent.core.infra.i18n.JavaSEI18nService;
 import org.reusablecomponent.core.infra.messaging.InterfacePublisherSerice;
 import org.reusablecomponent.core.infra.messaging.event.Event;
 import org.reusablecomponent.core.infra.messaging.event.InterfaceOperationEvent;
@@ -20,7 +22,7 @@ import org.reusablecomponent.core.infra.messaging.event.Who;
 import org.reusablecomponent.core.infra.messaging.event.Why;
 import org.reusablecomponent.core.infra.messaging.logger.LoggerPublisherSerice;
 import org.reusablecomponent.core.infra.security.InterfaceSecurityService;
-import org.reusablecomponent.core.infra.security.dummy.DummySecurityService;
+import org.reusablecomponent.core.infra.security.JavaSecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,17 +35,20 @@ import jakarta.validation.constraints.NotNull;
  * @param <Entity>
  * @param <Id>
  */
-public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>, Id> implements InterfaceEntityBaseFacade<Entity, Id> {
+public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>, Id> 
+	implements InterfaceEntityBaseFacade<Entity, Id> {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractEntiyBaseFacade.class);
 
+    // -------
+    
     protected final InterfacePublisherSerice publisherSerice;
 
     protected final InterfaceSecurityService securityService;
 
     protected final InterfaceI18nService i18nService;
-
-    // -------
+    
+    protected final ExceptionTranslatorService exceptionTranslatorService;
 
     protected final Class<Entity> entityClazz;
 
@@ -54,7 +59,8 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
     protected AbstractEntiyBaseFacade(
 		    @Nullable final InterfacePublisherSerice publisherService, 
 		    @Nullable final InterfaceI18nService i18nService,
-		    @Nullable final InterfaceSecurityService securityService) {
+		    @Nullable final InterfaceSecurityService securityService,
+		    @Nullable final ExceptionTranslatorService exceptionTranslatorService) {
 
 	super();
 
@@ -62,12 +68,13 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
 	this.idClazz = retrieveIdClazz();
 
 	this.publisherSerice = nonNull(publisherService) ? publisherService : new LoggerPublisherSerice();
-	this.i18nService = nonNull(i18nService) ? i18nService : new DefaultI18nService();
-	this.securityService = nonNull(securityService) ? securityService : new DummySecurityService();
+	this.i18nService = nonNull(i18nService) ? i18nService : new JavaSEI18nService();
+	this.securityService = nonNull(securityService) ? securityService : new JavaSecurityService();
+	this.exceptionTranslatorService = nonNull(exceptionTranslatorService) ? exceptionTranslatorService : (paramException, paramI18nService) -> new RuntimeException(paramException);
     }
 
     protected AbstractEntiyBaseFacade() {
-	this(null, null, null);
+	this(null, null, null, null);
     }
 
     // ------
@@ -91,16 +98,68 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
 
 	return (Class<Id>) idTypeToken.getRawType();
     }
+    
+    /**
+     * @return
+     */
+    protected boolean publishEvents() {
+	return true;
+    }
+    
+    /**
+     * @param dataIn
+     * @param dataOut
+     * @param operation
+     */
+    protected void publish(final String dataIn, final String dataOut, final InterfaceOperationEvent operation) {
+	
+	checkNotNull(operation, "Operation argument cannot be null");
+	
+	LOGGER.debug("Publishing {} operation", operation);
+	
+	if (!publishEvents()) {
+	    LOGGER.debug("Published {} operation avoided", operation);
+	    return;
+	}
+	
+	final var data = StringUtils.deleteWhitespace(""" 
+	    		    {		
+	    			in: ${in},
+	    			out: ${out}
+	    		    }	
+	    		""").replace("${in}", dataIn)
+			    .replace("${out}", dataOut);
+	
+	final var user = securityService.getUserName();
+	final var realm = securityService.getUserRealm();
+	final var session = securityService.getSession();
+	final var application = securityService.getApplication();
+
+	final var event = new Event.Builder().with($ -> {
+	    $.what = new What(data);
+	    $.when = new When(LocalDateTime.now(), ZoneId.systemDefault());
+	    $.where = new Where(application, session);
+	    $.who = new Who(realm, user);
+	    $.why = new Why(operation.toString());
+	}).build();
+
+	try {
+	    publisherSerice.publish(event);
+	} catch (final Exception ex) {
+	    LOGGER.error(ExceptionUtils.getRootCauseMessage(ex), ex);
+	}
+	
+	LOGGER.debug("Published '{}' operation, event '{}'", event.getId());
+    }
 
     // ------
 
     @NotNull
-    protected Class<Id> getIdClazz() {
+    protected final Class<Id> getIdClazz() {
 	return idClazz;
     }
 
     /**
-     * {@inheritDoc}
      */
     @NotNull
     protected Class<Entity> getEntityClazz() {
@@ -108,7 +167,6 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
     }
 
     /**
-     * {@inheritDoc}
      */
     @NotNull
     protected InterfacePublisherSerice getPublisherSerice() {
@@ -130,42 +188,12 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
     protected InterfaceSecurityService getSecurityService() {
 	return securityService;
     }
-
+    
     /**
-     * @param <BooleanResult>
-     * @param existsEntityFunction
-     * @param booleanResult
      * @return
      */
-    protected final <BooleanResult> boolean checkEntityExists(@NotNull final Predicate<BooleanResult> existsEntityFunction, @NotNull final BooleanResult booleanResult) {
-	return existsEntityFunction.test(booleanResult);
-    }
-
-    /**
-     * @param operation
-     * @param data
-     */
-    protected void publishOperation(final InterfaceOperationEvent operation, final String data) {
-	
-	final var user = securityService.getUserName();
-	final var realm = securityService.getUserRealm();
-	final var session = securityService.getSession();
-	final var application = securityService.getApplication();
-
-	final var event = new Event.Builder().with($ -> {
-	    
-	    $.what = new What(data);
-	    $.when = new When(LocalDateTime.now(), TimeZone.getDefault());
-	    $.where = new Where(application, session);
-	    $.who = new Who(realm, user);
-	    $.why = new Why(operation.toString());
-	    
-	}).build();
-
-	try {
-	    publisherSerice.publish(event);
-	} catch (final Exception ex) {
-	    LOGGER.error(ExceptionUtils.getRootCauseMessage(ex));
-	}
+    @NotNull
+    protected ExceptionTranslatorService getExceptionTranslatorService() {
+        return exceptionTranslatorService;
     }
 }

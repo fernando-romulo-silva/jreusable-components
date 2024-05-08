@@ -9,11 +9,12 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
-abstract class AbstractAbstractEntiyTest {
+@SuppressWarnings("exports")
+public abstract class AbstractAbstractEntiyTest {
     
-    public final static ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+    public final static ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
     
-    public Validator validator;
+    public final static Validator VALIDATOR = VALIDATOR_FACTORY.getValidator();
     
     public static boolean updateValue(final Object object, final String fieldName, final Object fieldValue) {
 
@@ -26,6 +27,7 @@ abstract class AbstractAbstractEntiyTest {
 		var field = clazz.getDeclaredField(fieldName);
 		field.setAccessible(true);
 		field.set(object, fieldValue);
+		
 		return true;
 
 	    } catch (final NoSuchFieldException ex) {
@@ -41,11 +43,10 @@ abstract class AbstractAbstractEntiyTest {
     @BeforeEach
     void setUp() {
 	Locale.setDefault(Locale.ENGLISH); // expecting english error messages
-	validator = validatorFactory.getValidator();
     }
     
     @AfterAll
     void tearDown() {
-	validatorFactory.close();
+	VALIDATOR_FACTORY.close();
     }
 }

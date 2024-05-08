@@ -3,6 +3,7 @@ package org.reusablecomponent.core.application.full.entity.nonpaged;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 import org.reusablecomponent.core.application.command.entity.InterfaceEntityCommandFacade;
 import org.reusablecomponent.core.application.full.entity.AbstractEntityCommonFacade;
@@ -52,10 +53,10 @@ public class EntitySpecificationFacade
      */
     protected EntitySpecificationFacade(
 		    final Function<Entity, OneResultCommand> saveFunction,
-		    final Function<Iterable<Entity>, MultipleResult> saveAllFunction,
+		    final UnaryOperator<MultipleResult> saveAllFunction,
 		    //
 		    final Function<Entity, VoidResult> deleteFunction,
-		    final Function<Iterable<Entity>, VoidResult> deleteAllFunction,
+		    final Function<MultipleResult, VoidResult> deleteAllFunction,
 		    final Function<Id, VoidResult> deleteByIdFunction,
 		    final Function<Iterable<Id>, VoidResult> deleteAllByIdFunction,
 		    //

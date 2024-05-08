@@ -11,9 +11,9 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.application_example.domain.Person;
 import org.junit.jupiter.api.BeforeAll;
 import org.mockito.Mock;
-import org.reusablecomponent.core.domain.Person;
 
 
 abstract class EntityQueryFacadeTest {
@@ -53,6 +53,5 @@ abstract class EntityQueryFacadeTest {
 		.thenReturn(personList);
 	
     }
-    
     
 }

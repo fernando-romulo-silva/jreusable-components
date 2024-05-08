@@ -15,7 +15,7 @@ import org.reusablecomponent.core.domain.AbstractEntity;
  * @param <VoidResult>
  */
 public interface InterfaceEntityFacade <Entity extends AbstractEntity<Id>, Id, OneResultCommand, OneResultQuery, MultipleResult, CountResult, ExistsResult, VoidResult>
-
+	//
 	extends InterfaceEntityCommandFacade<Entity, Id, OneResultCommand, MultipleResult, VoidResult>,
 	        InterfaceEntityQueryFacade<Entity, Id, OneResultQuery, MultipleResult, CountResult, ExistsResult> {
 

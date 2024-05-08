@@ -61,7 +61,7 @@ public class EntityQuerySpecificationFacade <Entity extends AbstractEntity<Id>, 
      * {@inheritDoc}
      */
     @Override
-    public OneResult findBy(@NotNull final Specification specification) {
+    public OneResult findOneBy(@NotNull final Specification specification, final Map<String, String[]> directives) {
 	
 	final var result = findOneByFunction.apply(specification);
 			// .orElseThrow(() -> new ElementWithIdNotFoundException(getEntityClazz(), specification));

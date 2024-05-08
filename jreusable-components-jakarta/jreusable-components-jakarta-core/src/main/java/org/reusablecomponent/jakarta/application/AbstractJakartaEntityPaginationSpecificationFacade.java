@@ -3,6 +3,7 @@ package org.reusablecomponent.jakarta.application;
 import static jakarta.transaction.Transactional.TxType.REQUIRED;
 import static jakarta.transaction.Transactional.TxType.SUPPORTS;
 
+import java.awt.print.Pageable;
 import java.util.Optional;
 
 import org.reusablecomponent.core.application.command.entity.InterfaceEntityCommandFacade;
@@ -11,9 +12,8 @@ import org.reusablecomponent.core.application.query.entity.paged.InterfaceEntity
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.reusablecomponent.jakarta.domain.InterfaceJakartaPaginationRepository;
 
-import jakarta.data.repository.Page;
-import jakarta.data.repository.Pageable;
-import jakarta.data.repository.Sort;
+import jakarta.data.Sort;
+import jakarta.data.page.Page;
 import jakarta.transaction.Transactional;
 
 /**
@@ -23,7 +23,7 @@ import jakarta.transaction.Transactional;
  */
 @Transactional(value = SUPPORTS)
 public abstract class AbstractJakartaEntityPaginationSpecificationFacade <Entity extends AbstractEntity<Id>, Id, Specification> 
-	extends EntityPaginationSpecificationFacade<Entity, Id, Entity, Optional<Entity>, Iterable<Entity>, Page<Entity>, Long, Boolean, Void, Pageable, Sort, Specification> {
+	extends EntityPaginationSpecificationFacade<Entity, Id, Entity, Optional<Entity>, Iterable<Entity>, Page<Entity>, Long, Boolean, Void, Pageable, Sort<Entity>, Specification> {
 
     protected InterfaceJakartaPaginationRepository<Entity, Id> repository;
     
@@ -33,21 +33,28 @@ public abstract class AbstractJakartaEntityPaginationSpecificationFacade <Entity
      */
     protected AbstractJakartaEntityPaginationSpecificationFacade(
 		    final InterfaceEntityCommandFacade<Entity, Id, Entity, Iterable<Entity>, Void> entityCommandFacade, 
-		    final InterfaceEntityQueryPaginationSpecificationFacade<Entity, Id, Optional<Entity>, Page<Entity>, Pageable, Sort, Specification> entityQueryPaginationFacade) {
+		    final InterfaceEntityQueryPaginationSpecificationFacade<Entity, Id, Optional<Entity>, Page<Entity>, Pageable, Sort<Entity>, Specification> entityQueryPaginationFacade) {
 	super(entityCommandFacade, entityQueryPaginationFacade);
     }
     
     protected AbstractJakartaEntityPaginationSpecificationFacade(final InterfaceJakartaPaginationRepository<Entity, Id> repository) {
 	super(
-		repository::save, // saveFunction
-		repository::saveAll, // saveAllFunction
+//		repository::save, // saveFunction
+		null,
+//		repository::saveAll, // saveAllFunction
+		null,
 		//
-	 	entity -> { repository.delete(entity); return null;}, // deleteFunction
-	 	entities -> { repository.deleteAll(entities); return null; }, // deleteAllFunction
-	 	id -> { repository.deleteById(id); return null; }, // deleteByIdFunciton
-	 	ids -> { repository.deleteAllById(ids); return null; }, // deleteAllByIdFunction
+//	 	entity -> { repository.delete(entity); return null;}, // deleteFunction
+		null,
+//	 	entities -> { repository.deleteAll(entities); return null; }, // deleteAllFunction
+	 	null,
+//	 	id -> { repository.deleteById(id); return null; }, // deleteByIdFunciton
+	 	null,
+//	 	ids -> { repository.deleteAllById(ids); return null; }, // deleteAllByIdFunction
+	 	null,
 		//
- 		repository::existsById, // existsByIdFunction
+// 		repository::existsById, // existsByIdFunction
+	 	null,
  		booleanResult -> booleanResult, // existsEntityFunction
 		//
 		(specification, pageable) -> null, // findBySpecificationFunction

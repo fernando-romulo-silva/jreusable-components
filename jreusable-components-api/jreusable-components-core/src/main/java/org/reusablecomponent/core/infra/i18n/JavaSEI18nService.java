@@ -12,10 +12,16 @@ import org.apache.commons.lang3.stream.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DefaultI18nService implements InterfaceI18nService {
+/**
+ * 
+ */
+public class JavaSEI18nService implements InterfaceI18nService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultI18nService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JavaSEI18nService.class);
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String translate(final String code, final Object... params) {
 

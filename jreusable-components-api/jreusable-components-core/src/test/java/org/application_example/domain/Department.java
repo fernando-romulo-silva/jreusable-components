@@ -1,7 +1,11 @@
-package org.reusablecomponent.core.domain;
+package org.application_example.domain;
 
 import java.time.LocalDateTime;
 
+import org.reusablecomponent.core.domain.AbstractEntity;
+
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 
 public class Department extends AbstractEntity<String> {
@@ -13,6 +17,10 @@ public class Department extends AbstractEntity<String> {
 
     @NotEmpty
     private String sector;
+    
+    @Min(0)
+    @Max(1000)
+    public Integer operation = 0;
 
     // ------------------- constructors
 
@@ -20,13 +28,14 @@ public class Department extends AbstractEntity<String> {
 	super();
     }
 
-    public Department(@NotEmpty final String id, @NotEmpty final String name, @NotEmpty final String sector) {
+    public Department(final String id, final String name, final String sector) {
 	super();
+	
 	this.id = id;
 	this.name = name;
 	this.sector = sector;
     }
-
+    
     // -------------------- update
 
     public void update(@NotEmpty final String name, @NotEmpty final String sector) {
@@ -35,6 +44,10 @@ public class Department extends AbstractEntity<String> {
 
 	this.name = name;
 	this.sector = sector;
+    }
+    
+    public void increaseOperation() {
+	operation++;
     }
 
     // -------------------- getters
@@ -50,5 +63,9 @@ public class Department extends AbstractEntity<String> {
 
     public String getSector() {
 	return sector;
+    }
+    
+    public Integer getOperation() {
+        return operation;
     }
 }

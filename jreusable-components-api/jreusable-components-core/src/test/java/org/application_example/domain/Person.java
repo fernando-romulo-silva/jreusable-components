@@ -1,6 +1,6 @@
-package org.reusablecomponent.core.domain;
+package org.application_example.domain;
 
-import static org.reusablecomponent.core.domain.AbstractAbstractEntiyTest.validatorFactory;
+import static org.reusablecomponent.core.domain.AbstractAbstractEntiyTest.VALIDATOR;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,7 +8,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.reusablecomponent.core.domain.AbstractEntity;
+import org.reusablecomponent.core.domain.AbstractEntityBuilder;
+
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -109,10 +113,6 @@ public class Person extends AbstractEntity<Long> {
 
 	public Gender gender;
 
-	public Builder() {
-	    super(validatorFactory.getValidator());
-	}
-
 	public Builder with(final Consumer<Builder> function) {
 	    function.accept(this);
 	    return this;
@@ -128,6 +128,11 @@ public class Person extends AbstractEntity<Long> {
 	@NotNull
 	public Person build() {
 	    return validate(new Person(this));
+	}
+
+	@Override
+	protected Validator getValidator() {
+	    return VALIDATOR;
 	}
     }
 }

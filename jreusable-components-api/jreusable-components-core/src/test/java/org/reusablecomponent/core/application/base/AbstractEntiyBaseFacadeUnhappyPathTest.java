@@ -7,10 +7,13 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.application_example.application.TestEntiyBaseFacade;
+import org.application_example.domain.Department;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +21,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reusablecomponent.core.domain.Department;
 
 import jakarta.validation.Validation;
 
@@ -31,7 +33,7 @@ class AbstractEntiyBaseFacadeUnhappyPathTest {
     
     Stream<Arguments> checkEntityExistsMethodData() {
 	
-	final Predicate<Department> existsEntityFunction = (dep) -> nonNull(dep);
+	final var existsEntityFunction = (Predicate<Department>) (dep) -> nonNull(dep);
 	final var department = new Department("asfdlkd1", "Dep1", "Account");
 	
 	// given
@@ -63,6 +65,17 @@ class AbstractEntiyBaseFacadeUnhappyPathTest {
 	
 	// then
 	assertThat(violations).hasSize(1);
+    }
+    
+    
+    // ---------------------------------------------------------------------------------------------------------------- 
+    
+    
+    @Test
+    @Order(2)
+    @DisplayName("Test the publish operation")
+    void publishOperationTest() {
+	
     }
 
 }

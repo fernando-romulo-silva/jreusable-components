@@ -1,8 +1,9 @@
 package org.reusablecomponent.core.domain;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.function.Consumer;
 
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotNull;
@@ -11,24 +12,22 @@ public abstract class AbstractEntityBuilder <Id, Entity extends AbstractEntity<I
     
     public String createdReason;
     
-    protected final Validator validator;
-    
-    protected AbstractEntityBuilder(final Validator validator) {
-	this.validator = validator;
-    }
-
-    @Valid @NotNull public abstract Entity build();
-    
     protected Entity validate(final Entity entity) {
 	
-        final var violations = validator.validate(entity);
+	checkNotNull(entity, "Entity argument cannot be null");
 	
-        if (!violations.isEmpty()) {
-	    throw new ConstraintViolationException(violations);
-	}
+	final var validator = getValidator();
+
+	entity.validade(validator);
 
 	return entity;
     }
+
+    protected abstract Validator getValidator();
+    
+    @Valid 
+    @NotNull 
+    public abstract Entity build();
     
     
     

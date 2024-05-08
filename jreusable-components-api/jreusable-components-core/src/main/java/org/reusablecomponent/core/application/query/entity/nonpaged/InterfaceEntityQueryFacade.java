@@ -10,19 +10,27 @@ import org.reusablecomponent.core.domain.AbstractEntity;
 /**
  * @param <Entity>
  * @param <Id>
+ * @param <QueryIdIn>
  * @param <OneResult>
  * @param <MultipleResult>
  * @param <CountResult>
  * @param <ExistsResult>
  */
-public interface InterfaceEntityQueryFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult> //
-	extends InterfaceEntityBaseFacade<Entity, Id> {
+public interface InterfaceEntityQueryFacade
+				<Entity extends AbstractEntity<Id>, Id,
+				 QueryIdIn,
+				 OneResult, 
+				 MultipleResult, 
+				 CountResult, 
+				 ExistsResult> //
+
+extends InterfaceEntityBaseFacade<Entity, Id> {
     
     /**
      * @param id
      * @return
      */
-    OneResult findBy(final Id id);
+    OneResult findBy(final QueryIdIn queryIdIn, final Map<String, String[]> directives);
     
     /**
      * @param directives
@@ -34,7 +42,7 @@ public interface InterfaceEntityQueryFacade<Entity extends AbstractEntity<Id>, I
      * @param id
      * @return
      */
-    ExistsResult existsBy(final Id id);
+    ExistsResult existsBy(final QueryIdIn queryIdIn);
     
     /**
      *

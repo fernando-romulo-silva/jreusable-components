@@ -9,14 +9,14 @@ import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
 import static nl.jqno.equalsverifier.Warning.REFERENCE_EQUALITY;
 import static nl.jqno.equalsverifier.Warning.STRICT_INHERITANCE;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.application_example.domain.Gender.FEMALE;
+import static org.application_example.domain.Gender.MALE;
+import static org.application_example.domain.Hobby.COOKING;
+import static org.application_example.domain.Hobby.READING;
+import static org.application_example.domain.Hobby.VIDEO_GAMMING;
+import static org.application_example.domain.Hobby.WATCHING_MOVIES;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
-import static org.reusablecomponent.core.domain.Gender.FEMALE;
-import static org.reusablecomponent.core.domain.Gender.MALE;
-import static org.reusablecomponent.core.domain.Hobby.COOKING;
-import static org.reusablecomponent.core.domain.Hobby.READING;
-import static org.reusablecomponent.core.domain.Hobby.VIDEO_GAMMING;
-import static org.reusablecomponent.core.domain.Hobby.WATCHING_MOVIES;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,6 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.application_example.domain.Department;
+import org.application_example.domain.Gender;
+import org.application_example.domain.Hobby;
+import org.application_example.domain.Person;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -56,8 +60,10 @@ class AbstractEntiyHappyPathTest extends AbstractAbstractEntiyTest {
      
     @Test
     @Order(1)
+    //@Disabled("EqualsVerifier not support Java 21")
     @DisplayName("Test the equals And HashCode Contract")
     void tryEqualsAndHashCodeContractTest() { // NOPMD - JUnitTestsShouldIncludeAssert: EqualsVerifier already do it
+	
 	EqualsVerifier.forClass(Person.class)
 			.suppress(NONFINAL_FIELDS, STRICT_INHERITANCE, REFERENCE_EQUALITY)
 			.withOnlyTheseFields("id")
@@ -139,9 +145,9 @@ class AbstractEntiyHappyPathTest extends AbstractAbstractEntiyTest {
 	);
     }
 
+    @Order(5)
     @ParameterizedTest(name = "Pos {index} : id ''{0}'', name ''{1}'', createdDate ''{2}'', createdReason ''{3}''")
     @MethodSource("createEntityWithBuilderData")
-    @Order(5)
     @DisplayName("Test entity with builder creation")
     void createEntityWithBuilderTest(final Long id, final String name, final LocalDateTime createdDate, final String createdReason, final Integer score, final Gender gender, final String country, final LocalDate birthDate, final List<Hobby> hobbies) {
 

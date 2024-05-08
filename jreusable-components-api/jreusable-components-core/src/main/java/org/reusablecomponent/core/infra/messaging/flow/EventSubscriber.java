@@ -19,17 +19,23 @@ class EventSubscriber implements Subscriber<Event> {
     private Subscription subscription;
     
     private InterfaceReaderService eventConsumer;
-
-    @Override
-    public void onSubscribe(final Subscription subscription) {
-        this.subscription = subscription;
-        subscription.request(1);
-    }
     
     void setConsumer(@NotNull final InterfaceReaderService eventConsumer) {
 	this.eventConsumer = eventConsumer;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onSubscribe(final Subscription subscription) {
+	this.subscription = subscription;
+	subscription.request(1);
+    }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onNext(final Event event) {
 	LOGGER.info("event #{}" , event);
@@ -37,12 +43,18 @@ class EventSubscriber implements Subscriber<Event> {
         subscription.request(1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onError(final Throwable throwable) {
 	LOGGER.error("There is an error in event sending:{}" , getRootCauseMessage(throwable));
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onComplete() {
 	LOGGER.info("event has ended");

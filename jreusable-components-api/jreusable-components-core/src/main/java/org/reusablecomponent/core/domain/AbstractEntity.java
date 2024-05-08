@@ -1,12 +1,17 @@
 package org.reusablecomponent.core.domain;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 
 @Valid
 public abstract class AbstractEntity<Id> implements InterfaceEntity<Id, AbstractEntity<Id>> {
@@ -27,7 +32,18 @@ public abstract class AbstractEntity<Id> implements InterfaceEntity<Id, Abstract
 	super();
 	createdDate = LocalDateTime.now();
     }
-
+    
+    protected final void validade(final Validator validator) {
+	
+	checkNotNull(validator, "validator argument cannot be null");
+	
+        final var violations = validator.validate(this);
+	
+        if (ObjectUtils.isNotEmpty(violations)) {
+	    throw new ConstraintViolationException(violations);
+	}
+    }
+    
     // --------------------------------------------------------------------------
     
     @Override
@@ -59,7 +75,7 @@ public abstract class AbstractEntity<Id> implements InterfaceEntity<Id, Abstract
     
     @Override
     public int hashCode() {
-	return Objects.hash(this.getId());
+	return Objects.hash(id);
     }
 
     @Override
@@ -74,7 +90,7 @@ public abstract class AbstractEntity<Id> implements InterfaceEntity<Id, Abstract
 	    result = true;
 	    
 	} else if (obj instanceof AbstractEntity<?> other) {
-	    result = Objects.equals(this.getId(), other.getId());
+	    result = Objects.equals(this.id, other.id);
 	    
 	} else {
 	    result = false;

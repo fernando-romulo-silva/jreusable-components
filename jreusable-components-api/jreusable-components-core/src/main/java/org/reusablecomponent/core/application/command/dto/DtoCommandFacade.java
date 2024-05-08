@@ -17,18 +17,18 @@ import org.reusablecomponent.core.infra.exception.ElementWithIdNotFoundException
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
-public class DtoCommandFacade <DTO, Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, VoidResult> // Operations on Dtos
+public class DtoCommandFacade <DTO, Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, VoidResult, WrapEntity, WrapEntities, WrapIds> // Operations on Dtos
 	//
 	extends AbstractEntiyBaseFacade<Entity, Id>  // Base facade
 	//
 	implements InterfaceDtoCommandFacade<DTO, Entity, Id, OneResult, MultipleResult> { 
 
-    protected final InterfaceEntityCommandFacade<Entity, Id, OneResult, MultipleResult, VoidResult> entityCommandFacade;
+    protected final InterfaceEntityCommandFacade<Entity, Id, OneResult, MultipleResult, VoidResult, WrapEntity, WrapEntities, WrapIds> entityCommandFacade;
     
     protected final Function<Id, Optional<Entity>> findByIdFunction;
     
     public DtoCommandFacade(
-		    @NotNull final InterfaceEntityCommandFacade<Entity, Id, OneResult, MultipleResult, VoidResult> entityCommandFacade, 
+		    @NotNull final InterfaceEntityCommandFacade<Entity, Id, OneResult, MultipleResult, VoidResult, WrapEntity, WrapEntities, WrapIds> entityCommandFacade, 
 		    @NotNull final Function<Id, Optional<Entity>> findByIdFunction) {
 	super();
 	this.entityCommandFacade = entityCommandFacade;
@@ -48,7 +48,7 @@ public class DtoCommandFacade <DTO, Entity extends AbstractEntity<Id>, Id, OneRe
 
 	final var entity = convertToEntity.apply(dto);
 
-	final var newEntity = entityCommandFacade.save(entity);
+//	final var newEntity = entityCommandFacade.save(entity);
 	
 	//final var newDto = convertToDto.apply(newEntity);
 
@@ -69,7 +69,7 @@ public class DtoCommandFacade <DTO, Entity extends AbstractEntity<Id>, Id, OneRe
 				.map(convertToEntity)
 				.toList();
 
-	final var newEntities = entityCommandFacade.saveAll(entities);
+//	final var newEntities = entityCommandFacade.saveAll((MultipleResult)entities);
 
 //	final var newDtos = StreamSupport.stream(newEntities.spliterator(), false)
 //				.map(convertToDto)
@@ -97,10 +97,9 @@ public class DtoCommandFacade <DTO, Entity extends AbstractEntity<Id>, Id, OneRe
 	final var entityToUpdate = updateEntityData.apply(dto, entity);
 
 	// TODO how about Mono<Entity>?
-	@SuppressWarnings("unchecked")
-	final var entityUpdated = (Entity) entityCommandFacade.update(entityToUpdate);
+//	final var entityUpdated = (Entity) entityCommandFacade.update(entityToUpdate);
 
-	final var result = convertToDto.apply(entityUpdated);
+//	final var result = convertToDto.apply(entityUpdated);
 
 	// TODO how about Mono<Entity>?		
 	return null;
@@ -143,8 +142,8 @@ public class DtoCommandFacade <DTO, Entity extends AbstractEntity<Id>, Id, OneRe
 		.map(d -> updateEntityData.apply(d.getKey(), d.getValue()))
 		.toList();
 
-	final var entitiesUpdated = entityCommandFacade.updateAll(entitiesToUpdate);
+//	final var entitiesUpdated = entityCommandFacade.updateAll((MultipleResult) entitiesToUpdate);
 	
-	return entitiesUpdated;
+	return null;
     }
 }

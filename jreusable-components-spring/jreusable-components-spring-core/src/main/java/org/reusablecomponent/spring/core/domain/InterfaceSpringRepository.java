@@ -8,4 +8,5 @@ import org.springframework.data.repository.NoRepositoryBean;
 public interface InterfaceSpringRepository <Entity extends AbstractEntity<Id>, Id> 
 	extends CrudRepository<Entity, Id> {
     
+    
 }

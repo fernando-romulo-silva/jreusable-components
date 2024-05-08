@@ -1,18 +1,19 @@
 package org.reusablecomponent.core.application.command.entity;
 
-import static java.lang.Boolean.FALSE;
+import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.DELETE_ID;
+import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.DELETE_IDS;
+import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.DELETE_ITEM;
+import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.DELETE_LIST;
+import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.SAVE_ITEM;
+import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.SAVE_LIST;
+import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.UPDATE_ITEM;
+import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.UPDATE_LIST;
 
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.StreamSupport;
 
 import org.reusablecomponent.core.application.base.AbstractEntiyBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.core.infra.exception.ElementConflictException;
-import org.reusablecomponent.core.infra.exception.ElementWithIdNotFoundException;
-import org.reusablecomponent.core.infra.messaging.event.Event;
-import org.reusablecomponent.core.infra.messaging.event.OperationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,218 +23,124 @@ import jakarta.validation.constraints.NotNull;
 /**
  * @param <Entity>
  * @param <Id>
- * @param <OneResult>
- * @param <MultipleResult>
- * @param <VoidResult>
- * @param <BooleanResult>
+ * @param <SaveEntityIn>
+ * @param <SaveEntityOut>
+ * @param <SaveEntitiesIn>
+ * @param <SaveEntitiesOut>
+ * @param <UpdateEntityIn>
+ * @param <UpdateEntityOut>
+ * @param <UpdateEntitiesIn>
+ * @param <UpdateEntitiesOut>
+ * @param <DeleteEntityIn>
+ * @param <DeleteEntityOut>
+ * @param <DeleteEntitiesIn>
+ * @param <DeleteEntitiesOut>
+ * @param <DeleteIdIn>
+ * @param <DeleteIdOut>
+ * @param <DeleteIdsIn>
+ * @param <DeleteIdsOut>
  */
-public class EntityCommandFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, VoidResult, BooleanResult> // Operations on Entity 
-	extends AbstractEntiyBaseFacade<Entity, Id>  // Base facade
-	implements InterfaceEntityCommandFacade<Entity, Id, OneResult, MultipleResult, VoidResult> {  // interface command facade
+public class EntityCommandFacade <  // generics 
+		// default
+                Entity extends AbstractEntity<Id>, Id, // basic
+                // save
+                SaveEntityIn, SaveEntityOut, // save a entity
+                SaveEntitiesIn, SaveEntitiesOut, // save entities
+                // update
+                UpdateEntityIn, UpdateEntityOut, // update a entity
+                UpdateEntitiesIn, UpdateEntitiesOut, // update entities
+                // delete
+                DeleteEntityIn, DeleteEntityOut, // delete a entity
+                DeleteEntitiesIn, DeleteEntitiesOut, // delete entities
+                // delete by id
+                DeleteIdIn, DeleteIdOut, // delete a entity by id
+                DeleteIdsIn, DeleteIdsOut // delete entities by id
+	    > 
+	// Base Facade
+	extends AbstractEntiyBaseFacade<Entity, Id>  
+	// Interface command facade
+	implements InterfaceEntityCommandFacade	<
+            Entity, Id, // basic
+            //
+            SaveEntityIn, SaveEntityOut, // save a entity
+            SaveEntitiesIn, SaveEntitiesOut, // save entities
+            
+            UpdateEntityIn, UpdateEntityOut, // update a entity
+            UpdateEntitiesIn, UpdateEntitiesOut, // update entities
+            
+            DeleteEntityIn, DeleteEntityOut, // delete a entity
+            DeleteEntitiesIn, DeleteEntitiesOut, // delete entities
+            
+            DeleteIdIn, DeleteIdOut, // delete a entity by id
+            DeleteIdsIn, DeleteIdsOut // delete entities by id
+		> { 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityCommandFacade.class);
 
-    protected final Function<Entity, OneResult> saveFunction;
-
-    protected final Function<Entity, VoidResult> deleteFunction;
+    protected final Function<SaveEntityIn, SaveEntityOut> saveFunction;
+    protected final Function<SaveEntitiesIn, SaveEntitiesOut> saveAllFunction;
     
-    protected final Function<Iterable<Entity>, VoidResult> deleteAllFunction;
+    protected final Function<UpdateEntityIn, UpdateEntityOut> updateFunction;
+    protected final Function<UpdateEntitiesIn, UpdateEntitiesOut> updateAllFunction;    
     
-    protected final Function<Id, VoidResult> deleteByIdFunction;
-    
-    protected final Function<Iterable<Id>, VoidResult> deleteAllByIdFunction;
+    protected final Function<DeleteEntityIn, DeleteEntityOut> deleteFunction;
+    protected final Function<DeleteEntitiesIn, DeleteEntitiesOut> deleteAllFunction;
+    protected final Function<DeleteIdIn, DeleteIdOut> deleteByIdFunction;
+    protected final Function<DeleteIdsIn, DeleteIdsOut> deleteAllByIdFunction;
 
-    protected final Function<Id, BooleanResult> existsByIdFunction;
-    
-    protected final Predicate<BooleanResult> existsEntityFunction;
-
-    protected final Function<Iterable<Entity>, MultipleResult> saveAllFunction;
-
-    /**
-     * @param saveFunction
-     * @param saveAllFunction
-     * @param deleteFunction
-     * @param deleteAllFunction
-     * @param deleteByIdFunction
-     * @param deleteAllByIdFunction
-     * @param existsByIdFunction
-     * @param existsEntityFunction
-     */
-    public EntityCommandFacade(
-		    @NotNull final Function<Entity, OneResult> saveFunction, // function to save one entity 
-		    @NotNull final Function<Iterable<Entity>, MultipleResult> saveAllFunction, // save all Function
-		    //
-		    @NotNull final Function<Entity, VoidResult> deleteFunction, // function to delete one entity
-		    @NotNull final Function<Iterable<Entity>, VoidResult> deleteAllFunction, // function to delete all entities
-		    @NotNull final Function<Id, VoidResult> deleteByIdFunction, // function to delete one by id
-		    @NotNull final Function<Iterable<Id>, VoidResult> deleteAllByIdFunction, // function to delete a entity's collection by id
-		    //
-		    @NotNull final Function<Id, BooleanResult> existsByIdFunction, // function check it exists by id, it's can return diferrent things
-		    @NotNull final Predicate<BooleanResult> existsEntityFunction // Here we convert BooleanResult to Boolean
-    ){
-	super();
-	this.saveFunction = saveFunction;
-	this.saveAllFunction = saveAllFunction;
+    protected EntityCommandFacade(final EntityCommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> builder) {
+	// super class parameters
+	super(
+		builder.publisherSerice, 
+		builder.i18nService, 
+		builder.securityService, 
+		builder.exceptionTranslatorService
+	);
 	//
-	this.deleteFunction = deleteFunction;
-	this.deleteAllFunction = deleteAllFunction;
-	this.deleteByIdFunction = deleteByIdFunction;
-	this.deleteAllByIdFunction = deleteAllByIdFunction;
+	this.saveFunction = builder.saveFunction;
+	this.saveAllFunction = builder.saveAllFunction;
 	//
-	this.existsByIdFunction = existsByIdFunction;
-	this.existsEntityFunction = existsEntityFunction;
-    }
-
-    // ---------------------------------------------------------------------------
-
-    /**
-     * @param entity
-     */
-    protected void preSave(final Entity entity) {
-
-    }
-
-    /**
-     * @param entity
-     */
-    protected void posSave(final Object entity) {
-
+	this.updateFunction = builder.updateFunction;
+	this.updateAllFunction = builder.updateAllFunction;
+	//
+	this.deleteFunction = builder.deleteFunction;
+	this.deleteAllFunction = builder.deleteAllFunction;
+	this.deleteByIdFunction = builder.deleteByIdFunction;
+	this.deleteAllByIdFunction = builder.deleteAllByIdFunction;
     }
     
-    /**
-     * @param entity
-     */
-    protected void publishSave(final Object entity) {
-	
-	final var operation = OperationEvent.SAVE_ITEM;
-	
-	final var event = new Event.Builder()
-			.build();
-	
-	
-	publisherSerice.publish(event);
-    }
+    // ----------------------------------------------------------------------------------------------------------
     
     /**
-     * {@inheritDoc}
-     */
-    @Valid
-    @NotNull
-    @Override
-    public OneResult save(@NotNull final Entity entity) {
-
-	LOGGER.debug("");
-
-	preSave(entity);
-
-	final var savedEntity = saveFunction.apply(entity);
-
-	if (entity.isPublishable()) {
-	    publishSave(savedEntity);
-	}
-	
-	posSave(savedEntity);
-
-	LOGGER.debug("");
-	
-	return savedEntity;
-    }
-
-    /**
-     * @param entities
-     */
-    protected void preSaveAll(final Iterable<Entity> entities) {
-	
-    }
-
-    /**
-     * @param entities
-     */
-    protected void posSaveAll(final MultipleResult entities) {
-	
-    }
-    
-    /**
-     * @param entity
-     */
-    protected void publishSaveAll(final Iterable<Entity> entity) {
-	
-	final var operation = OperationEvent.SAVE_LIST;
-	
-	final var event = new Event.Builder()
-			.build();
-	
-	
-	publisherSerice.publish(event);
-    }    
-    
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public MultipleResult saveAll(@NotNull final Iterable<@NotNull Entity> entities) {
-	
-	preSaveAll(entities);
-	
-	final var result = saveAllFunction.apply(entities);
-	
-	final var entitiestoPublish = StreamSupport.stream(entities.spliterator(), false)
-			.filter(Entity::isPublishable)
-			.toList();
-	publishSaveAll(entitiestoPublish);
-	
-	posSaveAll(result);
-	
-	return result;
-    }
-    
-    // ---------------------------------------------------------------------------
-    
-    /**
-     * @param entity
-     */
-    protected void preUpdate(final Entity entity) {
-
-    }
-
-    /**
-     * @param entity
+     * @param saveEntityIn
      * @return
      */
-    protected OneResult posUpdate(final OneResult entity) {
-	return entity;
+    protected String convertSaveEntityInToPublishData(final SaveEntityIn saveEntityIn) {
+	return Objects.toString(saveEntityIn);
     }
     
     /**
-     * @param entity
+     * @param saveEntityOut
+     * @return
      */
-    protected void publishUpdate(final Object entity) {
-	
-	final var operation = OperationEvent.UPDATE_ITEM;
-	
-	final var event = new Event.Builder()
-			.build();
-	
-	
-	publisherSerice.publish(event);
-    }     
-    
+    protected String convertSaveEntityOutToPublishData(final SaveEntityOut saveEntityOut) {
+	return Objects.toString(saveEntityOut);
+    } 
+
     /**
-     * {@inheritDoc}
+     * @param saveEntityIn
+     * @return
      */
-    @Valid
-    @Override
-    public OneResult update(@NotNull @Valid final Entity entity) {
-	preUpdate(entity);
+    protected SaveEntityIn preSave(final SaveEntityIn saveEntityIn) {
+	return saveEntityIn;
+    }
 
-	final var result = saveFunction.apply(entity);
-	
-	if (entity.isPublishable()) {
-	    publishUpdate(entity);
-	}
-
-	return posUpdate(result);
+    /**
+     * @param saveEntityOut
+     * @return
+     */
+    protected SaveEntityOut posSave(final SaveEntityOut saveEntityOut) {
+	return saveEntityOut;
     }
     
     /**
@@ -242,279 +149,365 @@ public class EntityCommandFacade<Entity extends AbstractEntity<Id>, Id, OneResul
     @Valid
     @NotNull
     @Override
-    public OneResult update(@NotNull final Id id, @NotNull @Valid final Entity entity) {
-	
-	preUpdate(entity);
+    public SaveEntityOut save(@NotNull final SaveEntityIn saveEntityIn) {
 
-	final var existsEntity = checkEntityExists(existsEntityFunction, existsByIdFunction.apply(id));
+	final var session = securityService.getSession();
 	
-	if (Objects.equals(FALSE, existsEntity)) {
-	    throw new ElementWithIdNotFoundException(getEntityClazz(), getI18nService(), id);
-	}
+	LOGGER.debug("Saving entity '{}', session '{}'", saveEntityIn, session);
 
-	final var result = saveFunction.apply(entity);
-	
-	if (entity.isPublishable()) {
-	    publishUpdate(entity);
-	}
+	final var saveEntityInFinal = preSave(saveEntityIn);
 
-	return posUpdate(result);
-    }    
-    
-    
-    /**
-     * @param entities
-     */
-    protected void preUpdateAll(final Iterable<Entity> entities) {
-	
-    }
-
-    /**
-     * @param entities
-     */
-    protected void posUpdateAll(final Iterable<Entity> entities) {
-	
-    }    
-    
-    
-    /**
-     * @param entity
-     */
-    protected void publishUpdateAll(final Iterable<Entity> entities) {
-	
-	final var operation = OperationEvent.UPDATE_LIST;
-	
-	final var event = new Event.Builder()
-			.build();
-	
-	
-	publisherSerice.publish(event);
-    }     
-    
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public MultipleResult updateAll(@NotNull final Iterable<@NotNull @Valid Entity> entities) {
-	
-	preUpdateAll(entities);
-	
-	final var result = saveAllFunction.apply(entities);
-	
-	final var entitiestoPublish = StreamSupport.stream(entities.spliterator(), false)
-			.filter(Entity::isPublishable)
-			.toList();
-	
-	posUpdateAll(entities);
-	
-	publishUpdateAll(entitiestoPublish);
-	
-	return result;
-    }
-
-    // ---------------------------------------------------------------------------
-    /**
-     * @param entity
-     */
-    protected void preDelete(final Entity entity) {
-    }
-    
-    /**
-     * @param entity
-     */
-    protected void posDelete(final Entity entity) {
-    }
-    
-    /**
-     * @param entity
-     */
-    protected void publishDelete(final Entity entity) {
-	
-	final var operation = OperationEvent.DELETE_ITEM;
-	
-	final var event = new Event.Builder()
-			.build();
-	
-	
-	publisherSerice.publish(event);
-    }  
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public VoidResult delete(@NotNull final Entity entity) {
-
-	final var existsEntity = checkEntityExists(existsEntityFunction, existsByIdFunction.apply(entity.getId()));
-	
-	if (Objects.equals(FALSE, existsEntity)) {
-	    throw new ElementWithIdNotFoundException(getEntityClazz(), getI18nService(), entity.getId());
-	}
-
-	preDelete(entity);
-
-	VoidResult result = null;
+	final SaveEntityOut result;
 	
 	try {
-
-	    result = deleteFunction.apply(entity);
-
+	    result = saveFunction.apply(saveEntityInFinal);
 	} catch (final Exception ex) {
-
-	    throw new ElementConflictException("{exception.entityDeleteDataIntegrityViolation}", ex, entity.getId().toString());
-	}
-	
-	if (entity.isPublishable()) {
-	    publishDelete(entity);
+	    throw exceptionTranslatorService.translate(ex, i18nService);
 	}
 
-	posDelete(entity);
+	final var resultFinal = posSave(result);
 	
-	return result;
-    }
-    
-    /**
-     * @param entity
-     */
-    protected void preDeleteAll(final Iterable<Entity> entities) {
-    }
-    
-    /**
-     * @param entity
-     */
-    protected void posDeleteAll(final Iterable<Entity> entities) {
-    }
-    
-    /**
-     * @param entity
-     */
-    protected void publishDeleteAll(final Iterable<Entity> entities) {
+	publish(convertSaveEntityInToPublishData(saveEntityInFinal), convertSaveEntityOutToPublishData(resultFinal), SAVE_ITEM);
+
+	LOGGER.debug("Saved entity '{}', session '{}'", resultFinal, session);
 	
-	final var operation = OperationEvent.DELETE_LIST;
-	
-	final var event = new Event.Builder()
-			.build();
-	
-	
-	publisherSerice.publish(event);
-    }  
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public VoidResult deleteAll(@NotNull final Iterable<@NotNull Entity> entities) {
-	
-	preDeleteAll(entities);
-	
-	final var result = deleteAllFunction.apply(entities);
-	
-	posDeleteAll(entities);
-	
-	final var entitiestoPublish = StreamSupport.stream(entities.spliterator(), false)
-			.filter(Entity::isPublishable)
-			.toList();
-	publishDeleteAll(entitiestoPublish);
-	
-	return result;
-    }
-    
-    /**
-     * @param id
-     */
-    protected void preDeleteBy(final Id id) {
-    }
-    
-    /**
-     * @param id
-     */
-    protected void posDeleteBy(final Id id) {
+	return resultFinal;
     }
 
-    /**
-     * @param entity
-     */
-    protected void publishDeleteById(final Id id) {
-	
-	final var operation = OperationEvent.DELETE_ID;
-	
-	final var event = new Event.Builder()
-			.build();
-	
-	
-	publisherSerice.publish(event);
+    
+    // ----------------------------------------------------------------------------------------------------------
+    
+    protected String convertDataSaveEntitiesInToPublishData(final SaveEntitiesIn saveEntitiesIn) {
+	return Objects.toString(saveEntitiesIn);
+    }
+    
+    protected String convertSaveEntitiesOutToPublishData(final SaveEntitiesOut saveEntitiesOut) {
+	return Objects.toString(saveEntitiesOut);
     } 
     
+    protected SaveEntitiesIn preSaveAll(final SaveEntitiesIn saveEntiesIn) {
+	return saveEntiesIn;
+    }
+
+    protected SaveEntitiesOut posSaveAll(final SaveEntitiesOut saveEntiesOut) {
+	return saveEntiesOut;
+    }
+    
     /**
      * {@inheritDoc}
      */
+    @NotNull
     @Override
-    public VoidResult deleteBy(@NotNull final Id id) {
+    public SaveEntitiesOut saveAll(@NotNull final SaveEntitiesIn saveEntitiesIn) {
+	
+	final var session = securityService.getSession();
+	
+	LOGGER.debug("Saving all entities '{}' with session '{}'", saveEntitiesIn, session);
+	
+	final var saveEntitiesInFinal = preSaveAll(saveEntitiesIn);
+	
+	final SaveEntitiesOut result;
+	
+	try {
+	    result = saveAllFunction.apply(saveEntitiesInFinal);
+	} catch (final Exception ex) {
+	    throw exceptionTranslatorService.translate(ex, i18nService);
+	}	
+	
+	final var resultFinal = posSaveAll(result);
+	
+	publish(convertDataSaveEntitiesInToPublishData(saveEntitiesInFinal), convertSaveEntitiesOutToPublishData(resultFinal), SAVE_LIST);
+	
+	LOGGER.debug("Saved all entities '{}' with session '{}'", resultFinal, session);	
+	
+	return resultFinal;
+    }
+    
+    // ----------------------------------------------------------------------------------------------------------
+    
+    protected String convertUpdateEntityInToPublishData(final UpdateEntityIn updateEntityIn) {
+	return Objects.toString(updateEntityIn);
+    }
+    
+    protected String convertUpdateEntityOutToPublishData(final UpdateEntityOut updateEntityOut) {
+	return Objects.toString(updateEntityOut);
+    }     
+    
+    protected UpdateEntityIn preUpdate(final UpdateEntityIn updateEntityIn) {
+	return updateEntityIn;
+    }
 
-	final var exists = checkEntityExists(existsEntityFunction, existsByIdFunction.apply(id));
+    protected UpdateEntityOut posUpdate(final UpdateEntityOut updateEntityOut) {
+	return updateEntityOut;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Valid
+    @Override
+    public UpdateEntityOut update(@NotNull @Valid final UpdateEntityIn updateEntityIn) {
 	
-	if (Objects.equals(Boolean.FALSE, exists)) {
-	    throw new ElementWithIdNotFoundException(getEntityClazz(), getI18nService(), id);
-	}
+	final var session = securityService.getSession();
 	
-	preDeleteBy(id);
+	LOGGER.debug("Updating entity '{}' with session '{}'", updateEntityIn, session);
+	
+	final var updateEntityInFinal = preUpdate(updateEntityIn);
+
+	final UpdateEntityOut result;
+	
+	try {
+	    result = updateFunction.apply(updateEntityInFinal);
+	} catch (final Exception ex) {
+	    throw exceptionTranslatorService.translate(ex, i18nService);
+	}	
+	
+	final var resultFinal = posUpdate(result);
+	
+	publish(convertUpdateEntityInToPublishData(updateEntityInFinal), convertUpdateEntityOutToPublishData(resultFinal), UPDATE_ITEM);
+	
+	LOGGER.debug("Updated entity '{}' with session '{}'", resultFinal, session);	
+	
+	return resultFinal;
+    }
+    
+    // ----------------------------------------------------------------------------------------------------------
+    
+    protected String convertUpdateEntitiesInToPublishData(final UpdateEntitiesIn updateEntitiesIn) {
+	return Objects.toString(updateEntitiesIn);
+    }
+    
+    protected String convertUpdateEntitiesOutToPublishData(final UpdateEntitiesOut updateEntitiesOut) {
+	return Objects.toString(updateEntitiesOut);
+    }
+    
+    protected UpdateEntitiesIn preUpdateAll(final UpdateEntitiesIn updateEntitiesIn) {
+	return updateEntitiesIn;
+    }
+
+    protected UpdateEntitiesOut posUpdateAll(final UpdateEntitiesOut updateEntitiesOut) {
+	return updateEntitiesOut;
+    }    
+    
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public UpdateEntitiesOut updateAll(@NotNull final UpdateEntitiesIn updateEntitiesIn) {
+	
+	final var session = securityService.getSession();
+	
+	LOGGER.debug("Updating entities '{}' with session '{}'", updateEntitiesIn, session);
+	
+	final var updateEntitiesInFinal = preUpdateAll(updateEntitiesIn);
+	
+	final UpdateEntitiesOut result;
 
 	try {
-
-	    final var result = deleteByIdFunction.apply(id);
-
-	    posDeleteBy(id);
-	    
-	    publishDeleteById(id);
-	    
-	    return result;
-	    
+	    result = updateAllFunction.apply(updateEntitiesInFinal);
 	} catch (final Exception ex) {
-	    throw new ElementConflictException("{exception.entityDeleteDataIntegrityViolation}", ex, id.toString());
+	    throw exceptionTranslatorService.translate(ex, i18nService);
 	}
+	
+	final var resultFinal = posUpdateAll(result);
+	
+	publish(convertUpdateEntitiesInToPublishData(updateEntitiesInFinal), convertUpdateEntitiesOutToPublishData(resultFinal), UPDATE_LIST);
+	
+	LOGGER.debug("Updated all entities '{}' with session '{}'", resultFinal, session);
+	
+	return result;
     }
-    
-    /**
-     * @param id
-     */
-    protected void preDeleteBy(final Iterable<Id> ids) {
-    }
-    
-    /**
-     * @param id
-     */
-    protected void posDeleteBy(final Iterable<Id> ids) {
-    }   
 
-    /**
-     * @param entity
-     */
-    protected void publishDeleteAllBy(final Iterable<Id> ids) {
-	
-	final var operation = OperationEvent.DELETE_IDS;
-	
-	final var event = new Event.Builder()
-			.build();
-	
-	
-	publisherSerice.publish(event);
-    }  
+    // ----------------------------------------------------------------------------------------------------------
+    
+    protected String convertDeleteEntityInToPublishData(final DeleteEntityIn deleteEntityIn) {
+	return Objects.toString(deleteEntityIn);
+    }
+    
+    protected String convertDeleteEntityOutToPublishData(final DeleteEntityOut deleteEntityOut) {
+	return Objects.toString(deleteEntityOut);
+    }     
+    
+    protected DeleteEntityIn preDelete(final DeleteEntityIn deleteEntityIn) {
+	return deleteEntityIn;
+    }
+    
+    protected DeleteEntityOut posDelete(final DeleteEntityOut deleteEntityOut) {
+	return deleteEntityOut;
+    }
     
     /**
      * {@inheritDoc}
      */
     @Override
-    public VoidResult deleteAllBy(@NotNull final Iterable<Id> ids) {
-	preDeleteBy(ids);
+    public DeleteEntityOut delete(@NotNull final DeleteEntityIn deleteEntityIn) {
+
+	final var session = securityService.getSession();
 	
-	final var result = deleteAllByIdFunction.apply(ids);
+	LOGGER.debug("Deleting entity '{}' with session '{}'", deleteEntityIn, session);	
 	
-	posDeleteBy(ids);
+	final var deleteEntityInFinal = preDelete(deleteEntityIn);
+
+	final DeleteEntityOut result;
+
+	try {
+	    result = deleteFunction.apply(deleteEntityInFinal);
+	} catch (final Exception ex) {
+	    throw exceptionTranslatorService.translate(ex, i18nService);
+	}	
 	
-	publishDeleteAllBy(ids);
+	final var resultFinal = posDelete(result);
+
+	publish(convertDeleteEntityInToPublishData(deleteEntityInFinal), convertDeleteEntityOutToPublishData(resultFinal), DELETE_ITEM);
+	
+	LOGGER.debug("Deleted entity '{}' with session '{}'", resultFinal, session);
 	
 	return result;
+    }
+    
+    
+    // ---------------------------------------------------------------------------------------------------------- 
+    
+    protected String convertDeleteEntitiesInToPublishData(final DeleteEntitiesIn deleteEntitiesIn) {
+	return Objects.toString(deleteEntitiesIn);
+    }
+    
+    protected String convertDeleteEntitiesOutOutToPublishData(final DeleteEntitiesOut deleteEntitiesOut) {
+	return Objects.toString(deleteEntitiesOut);
+    } 
+    
+    protected DeleteEntitiesIn preDeleteAll(final DeleteEntitiesIn deleteEntitiesIn) {
+	return deleteEntitiesIn;
+    }
+    
+    protected DeleteEntitiesOut posDeleteAll(final DeleteEntitiesOut deleteEntitiesOut) {
+	return deleteEntitiesOut;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DeleteEntitiesOut deleteAll(@NotNull final DeleteEntitiesIn deleteEntitiesIn) {
+	
+	final var session = securityService.getSession();
+	
+	LOGGER.debug("Deleting entities '{}' with session '{}'", deleteEntitiesIn, session);
+	
+	final var deleteEntitiesInFinal = preDeleteAll(deleteEntitiesIn);
+	
+	final DeleteEntitiesOut result; 
+	
+	try {
+	    result = deleteAllFunction.apply(deleteEntitiesInFinal);
+	} catch (final Exception ex) {
+	    throw exceptionTranslatorService.translate(ex, i18nService);
+	}
+	
+	final var resultFinal = posDeleteAll(result);
+	
+	publish(convertDeleteEntitiesInToPublishData(deleteEntitiesInFinal), convertDeleteEntitiesOutOutToPublishData(resultFinal), DELETE_LIST);
+	
+	LOGGER.debug("Deleted entities '{}' with session '{}'", resultFinal, session);
+	
+	return resultFinal;
+    }
+    
+    
+    // ----------------------------------------------------------------------------------------------------------
+    
+    protected String convertDeleteIdInToPublishData(final DeleteIdIn deleteIdIn) {
+	return Objects.toString(deleteIdIn);
+    }
+    
+    protected String convertDeleteIdOutToPublishData(final DeleteIdOut deleteIdOut) {
+	return Objects.toString(deleteIdOut);
+    }     
+    
+    protected DeleteIdIn preDeleteById(final DeleteIdIn deleteIdIn) {
+	return deleteIdIn;
+    }
+    
+    protected DeleteIdOut posDeleteById(final DeleteIdOut deleteIdOut) {
+	return deleteIdOut;
     }    
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DeleteIdOut deleteBy(@NotNull final DeleteIdIn deleteIdIn) {
 
+	final var session = securityService.getSession();
+	
+	LOGGER.debug("Deleting by id '{}' with session '{}'", deleteIdIn, session);	
+	
+	final var deleteIdInFinal = preDeleteById(deleteIdIn);
+
+	final DeleteIdOut result;
+	
+	try {
+	    result = deleteByIdFunction.apply(deleteIdInFinal);
+	} catch (final Exception ex) {
+	    throw exceptionTranslatorService.translate(ex, i18nService);
+	}
+	
+	final var resultFinal = posDeleteById(result);
+
+	publish(convertDeleteIdInToPublishData(deleteIdInFinal), convertDeleteIdOutToPublishData(resultFinal), DELETE_ID);
+	
+	LOGGER.debug("Deleted by id '{}' with session '{}'", resultFinal, session);
+
+	return resultFinal;	    
+    }
+    
+    
+    // ----------------------------------------------------------------------------------------------------------
+    
+    protected String convertDeleteIdsInToPublishData(final DeleteIdsIn deleteIdsIn) {
+	return Objects.toString(deleteIdsIn);
+    }
+    
+    protected String convertDeleteIdsOutToPublishData(final DeleteIdsOut deleteIdsOut) {
+	return Objects.toString(deleteIdsOut);
+    }    
+    
+    
+    protected DeleteIdsIn preDeleteEntitiesBy(final DeleteIdsIn deleteIdsIn) {
+	return deleteIdsIn;
+    }
+    
+    protected DeleteIdsOut posDeleteEntitiesBy(final DeleteIdsOut deleteIdsOut) {
+	return deleteIdsOut;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DeleteIdsOut deleteAllBy(@NotNull final DeleteIdsIn deleteIdsIn) {
+	
+	final var session = securityService.getSession();
+	
+	LOGGER.debug("Deleting by ids '{}' with session '{}'", deleteIdsIn, session);	
+	
+	final var deleteIdsInFinal = preDeleteEntitiesBy(deleteIdsIn);
+	
+	final DeleteIdsOut result;
+	
+	try {
+	    result = deleteAllByIdFunction.apply(deleteIdsInFinal);
+	} catch (final Exception ex) {
+	    throw exceptionTranslatorService.translate(ex, i18nService);
+	}
+	
+	final var resultFinal = posDeleteEntitiesBy(result);
+	
+	publish(convertDeleteIdsInToPublishData(deleteIdsInFinal), convertDeleteIdsOutToPublishData(resultFinal), DELETE_IDS);
+	
+	LOGGER.debug("Deleted by ids '{}' with session '{}'", resultFinal, session);
+	
+	return resultFinal;
+    }    
 }

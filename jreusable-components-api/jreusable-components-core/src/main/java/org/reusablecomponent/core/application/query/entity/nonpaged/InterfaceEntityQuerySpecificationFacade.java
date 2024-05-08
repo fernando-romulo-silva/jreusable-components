@@ -24,7 +24,7 @@ public interface InterfaceEntityQuerySpecificationFacade<Entity extends Abstract
      * @param specification
      * @return
      */
-    OneResult findBy(final Specification specification);
+    OneResult findOneBy(final Specification specification, final Map<String, String[]> directives);
     
     /**
      * @param specification

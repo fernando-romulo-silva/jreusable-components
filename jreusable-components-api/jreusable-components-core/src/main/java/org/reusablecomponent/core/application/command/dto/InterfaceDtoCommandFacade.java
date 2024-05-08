@@ -1,8 +1,5 @@
 package org.reusablecomponent.core.application.command.dto;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
 import org.reusablecomponent.core.application.base.InterfaceEntityBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 
@@ -22,7 +19,9 @@ public interface InterfaceDtoCommandFacade<DTO, Entity extends AbstractEntity<Id
      * @param convertToDto
      * @return
      */
-    OneResult save(final DTO dto, Function<DTO, Entity> convertToEntity, final Function<Entity, DTO> convertToDto);
+    
+    // Function<DTO, Entity> convertToEntity, final Function<Entity, DTO> convertToDto
+    OneResult save(final DTO dto);
 
     /**
      * @param dtos
@@ -30,9 +29,8 @@ public interface InterfaceDtoCommandFacade<DTO, Entity extends AbstractEntity<Id
      * @param convertToDto
      * @return
      */
-    MultipleResult saveAll(final Iterable<DTO> dtos, final Function<DTO, Entity> convertToEntity, final Function<Entity, DTO> convertToDto);
+    MultipleResult saveAll(final Iterable<DTO> dtos);
 
-    
     /**
      * @param id
      * @param dto
@@ -40,9 +38,10 @@ public interface InterfaceDtoCommandFacade<DTO, Entity extends AbstractEntity<Id
      * @param convertToDto
      * @return
      */
-    OneResult update(final Id id, DTO dto, final BiFunction<DTO, Entity, Entity> updateEntityData, final Function<Entity, DTO> convertToDto);
-
     
+    // final BiFunction<DTO, Entity, Entity> updateEntityData, final Function<Entity, DTO> convertToDto
+    OneResult update(final Id id, final DTO dto);
+
     /**
      * @param ids
      * @param dtos
@@ -50,6 +49,7 @@ public interface InterfaceDtoCommandFacade<DTO, Entity extends AbstractEntity<Id
      * @param convertToDto
      * @return
      */
-    MultipleResult updateAll(final Iterable<Id> ids, final Iterable<DTO> dtos, final BiFunction<DTO, Entity, Entity> updateEntityData, final Function<Entity, DTO> convertToDto);      
+    // final BiFunction<DTO, Entity, Entity> updateEntityData, final Function<Entity, DTO> convertToDto
+    MultipleResult updateAll(final Iterable<Id> ids, final Iterable<DTO> dtos);      
 
 }

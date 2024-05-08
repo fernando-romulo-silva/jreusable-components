@@ -1,54 +1,117 @@
 package org.reusablecomponent.core.infra.messaging.event;
 
+import static org.reusablecomponent.core.infra.messaging.event.util.ConverterBeanUtil.converterBeanToJSon;
+
+import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Consumer;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 
  */
 public class Event {
 
+    private final String id;
+
+    @Valid
+    @NotNull
     private final When when;
 
+    @Valid
+    @NotNull
     private final Who who;
 
+    @Valid
+    @NotNull
     private final What what;
 
+    @Valid
+    @NotNull
     private final Where where;
 
+    @Valid
+    @NotNull
     private final Why why;
 
     // ---------------------------------------------
 
     private Event(final Builder builder) {
+	this.id = UUID.randomUUID().toString();
 	this.when = builder.when;
 	this.who = builder.who;
 	this.what = builder.what;
 	this.where = builder.where;
 	this.why = builder.why;
     }
-    
+
+    public String getId() {
+	return id;
+    }
+
     public When getWhen() {
-        return when;
+	return when;
     }
 
     public Who getWho() {
-        return who;
+	return who;
     }
 
     public What getWhat() {
-        return what;
+	return what;
     }
 
     public Where getWhere() {
-        return where;
+	return where;
     }
 
     public Why getWhy() {
-        return why;
+	return why;
     }
 
+    public String toXml() {
+	return "";
+    }
+
+    public String toJson() {
+	return converterBeanToJSon(this, Event.class);
+    }
+
+    public String toYaml() {
+	return "";
+    }
+
+    @Override
+    public String toString() {
+	return "";
+    }
 
     // ---------------------------------------------
+
+    @Override
+    public int hashCode() {
+	return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+
+	if (Objects.isNull(obj)) {
+	    return false;
+	}
+
+	if (this == obj) {
+	    return true;
+	}
+
+	if (obj instanceof Event other) {
+	    return Objects.equals(id, other.id);
+	}
+
+	return false;
+    }
 
     public static class Builder {
 
@@ -71,5 +134,5 @@ public class Event {
 	    return new Event(this);
 	}
     }
-    
+
 }
