@@ -7,6 +7,7 @@ import static org.assertj.core.groups.Tuple.tuple;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 import org.application_example.application.TestEntiyBaseFacade;
+import org.application_example.application.TestEntiyNoPublishBaseFacade;
 import org.application_example.domain.Department;
 import org.application_example.infra.DummySecurityService;
 import org.junit.jupiter.api.DisplayName;
@@ -134,7 +135,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 
     @Test
     @Order(4)
-    @DisplayName("Test the publish operation")
+    @DisplayName("Test if publish operation")
     void publishOperationTest() {
 
 	// given
@@ -147,12 +148,43 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 	final var facade = new TestEntiyBaseFacade();
 	
 	// when
-	facade.publish("Save", "Out", CommonEvent.SAVE_ITEM);
+	facade.publish("SaveIn", null, CommonEvent.SAVE_ITEM);
 	
 	// then
         assertThat(listAppender.list)
         	.extracting(ILoggingEvent::getFormattedMessage, ILoggingEvent::getLevel)
-        	.containsExactly(tuple("Publish event: Save", Level.DEBUG));
+        	.containsExactly(tuple("Publish event: [in:SaveIn],[out:null]", Level.DEBUG));
+	
+    }
+    
+    @Test
+    @Order(5)
+    @DisplayName("Test if ignore publish operation")
+    void ignorePublishOperationTest() {
+
+	// given
+        final var listAppender = new ListAppender<ILoggingEvent>();
+        listAppender.start();
+        
+        final var publishServiceLogger = (Logger) LoggerFactory.getLogger(LoggerPublisherSerice.class);
+        final var facadeLogger = (Logger) LoggerFactory.getLogger(AbstractEntiyBaseFacade.class);
+        
+        publishServiceLogger.addAppender(listAppender);
+        facadeLogger.addAppender(listAppender);
+        
+	final var facade = new TestEntiyNoPublishBaseFacade();
+	
+	// when
+	facade.publish("SaveIn", "SaveOut", CommonEvent.SAVE_ITEM);
+	
+	// then
+        assertThat(listAppender.list)
+        	.extracting(ILoggingEvent::getFormattedMessage, ILoggingEvent::getLevel)
+        	.doesNotContain(tuple("Publish event: [in:SaveIn],[out:SaveOut]", Level.DEBUG))
+        	.containsExactly(
+        			 tuple("Publishing SAVE_ITEM operation", Level.DEBUG),
+        			 tuple("Published SAVE_ITEM operation avoided", Level.DEBUG)
+        			);
 	
     }
 }

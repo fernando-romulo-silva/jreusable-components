@@ -1,9 +1,5 @@
 package org.reusablecomponent.core.application.query.entity.nonpaged;
 
-import static java.util.Objects.isNull;
-
-import java.util.Map;
-
 import org.reusablecomponent.core.application.base.InterfaceEntityBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 
@@ -11,6 +7,7 @@ import org.reusablecomponent.core.domain.AbstractEntity;
  * @param <Entity>
  * @param <Id>
  * @param <QueryIdIn>
+ * @param <Directives>
  * @param <OneResult>
  * @param <MultipleResult>
  * @param <CountResult>
@@ -19,6 +16,7 @@ import org.reusablecomponent.core.domain.AbstractEntity;
 public interface InterfaceEntityQueryFacade
 				<Entity extends AbstractEntity<Id>, Id,
 				 QueryIdIn,
+				 Directives,
 				 OneResult, 
 				 MultipleResult, 
 				 CountResult, 
@@ -27,16 +25,29 @@ public interface InterfaceEntityQueryFacade
 extends InterfaceEntityBaseFacade<Entity, Id> {
     
     /**
-     * @param id
+     * @param queryIdIn
+     * @param directives
      * @return
      */
-    OneResult findBy(final QueryIdIn queryIdIn, final Map<String, String[]> directives);
+    OneResult findBy(final QueryIdIn queryIdIn, final Directives directives);
     
     /**
      * @param directives
      * @return
      */
-    MultipleResult findAll(final Map<String, String[]> directives);
+    MultipleResult findAll(final Directives directives);
+    
+    /**
+     * @param id
+     * @return
+     */
+    OneResult findBy(final QueryIdIn queryIdIn);
+    
+    /**
+     * @param directives
+     * @return
+     */
+    MultipleResult findAll();    
 
     /**
      * @param id
@@ -49,17 +60,4 @@ extends InterfaceEntityBaseFacade<Entity, Id> {
      * @return
      */
     CountResult count();
-    
-    /**
-     * @param multipleResult
-     * @return
-     */
-    default String getMultipleResultEventData(final MultipleResult multipleResult) {
-	
-	if (isNull(multipleResult)) {
-	    return "Result size 0";
-	}
-	
-	return multipleResult.toString();
-    }
 }

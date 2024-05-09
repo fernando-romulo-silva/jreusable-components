@@ -2,36 +2,41 @@ package org.reusablecomponent.core.application.query.entity.nonpaged;
 
 import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.FIND_ALL;
 
-import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.reusablecomponent.core.application.base.AbstractEntiyBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.core.infra.exception.ElementWithIdNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
+
 /**
  * @param <Entity>
  * @param <Id>
+ * @param <QueryIdIn>
+ * @param <Directives>
+ * @param <OneResult>
+ * @param <MultipleResult>
+ * @param <CountResult>
+ * @param <BooleanResult>
  */
-public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, BooleanResult> 
+public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn, Directives, OneResult, MultipleResult, CountResult, BooleanResult> 
 	extends AbstractEntiyBaseFacade<Entity, Id> 
-	implements InterfaceEntityQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, BooleanResult> {
+	implements InterfaceEntityQueryFacade<Entity, Id, QueryIdIn, Directives, OneResult, MultipleResult, CountResult, BooleanResult> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityQueryFacade.class);
     
     protected final Function<QueryIdIn, BooleanResult> existsByIdFunction;
     
-    protected final Function<QueryIdIn, OneResult> findByIdFunction;
+    protected final BiFunction<QueryIdIn, Directives, OneResult> findByIdFunction;
     
-    protected final Supplier<MultipleResult> findAllFunction;
+    protected final Function<Directives, MultipleResult> findAllFunction;
     
     protected final Supplier<CountResult> countAllFunction;
     
@@ -43,8 +48,8 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn
      */
     public EntityQueryFacade(
 		    @NotNull final Function<QueryIdIn, BooleanResult> existsByIdFunction,
-		    @NotNull final Function<QueryIdIn, OneResult> findByIdFunction,
-		    @NotNull final Supplier<MultipleResult> findAllFunction,
+		    @NotNull final BiFunction<QueryIdIn, Directives, OneResult> findByIdFunction,
+		    @NotNull final Function<Directives, MultipleResult> findAllFunction,
 		    @NotNull final Supplier<CountResult> countAllFunction) {
 	super();
 	this.existsByIdFunction = existsByIdFunction;
@@ -59,7 +64,7 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn
      * @param saveEntityIn
      * @return
      */
-    protected String convertDirectivesToPublishData(final Map<String, String[]> directives) {
+    protected String convertDirectivesToPublishData(final Directives directives) {
 	return Objects.toString(directives);
     }
     
@@ -67,14 +72,24 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn
      * @param saveEntityOut
      * @return
      */
-    protected String convertMultipleResultPublishData(final MultipleResult multipleResult) {
+    protected String convertMultipleResultToPublishData(final MultipleResult multipleResult) {
 	return Objects.toString(multipleResult);
-    }    
+    }
+    
+    /**
+     * @param saveEntityOut
+     * @return
+     */
+    protected String convertOneResultToPublishData(final OneResult oneResult) {
+	return Objects.toString(oneResult);
+    }
+    
+    // ---------------------------------------------------------------------------
 
     /**
      * @param entity
      */
-    protected Map<String, String[]> preFindAll(final Map<String, String[]> directives) {
+    protected Directives preFindAll(final Directives directives) {
 	return directives;
     }
 
@@ -89,7 +104,15 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn
      * {@inheritDoc}
      */
     @Override
-    public MultipleResult findAll(@Nullable final Map<String, String[]> directives) {
+    public MultipleResult findAll() {
+	return findAll(null);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MultipleResult findAll(@Nullable final Directives directives) {
 	
 	final var session = securityService.getSession();
 	
@@ -104,42 +127,57 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn
 //        	.collect(Collectors.toList());
 //        	.anyMatch("full"::equalsIgnoreCase);	
 	
-	final var result = findAllFunction.get();
+	final var result = findAllFunction.apply(directives);
 	
 	final var resultFinal = posFindAll(result);
 	
-	publish(convertDirectivesToPublishData(finalDirectives), convertMultipleResultPublishData(resultFinal), FIND_ALL);
+	publish(convertDirectivesToPublishData(finalDirectives), convertMultipleResultToPublishData(resultFinal), FIND_ALL);
 	
 	LOGGER.debug("Found '{}', session '{}'", getEntityClazz().getSimpleName(), session);
 	
 	return result;
     }
     
+    // ---------------------------------------------------------------------------
+    
     /**
      * {@inheritDoc}
      */
     @Override
-    public OneResult findBy(@NotNull final QueryIdIn id, final Map<String, String[]> directives) {
+    public OneResult findBy(final QueryIdIn queryIdIn) {
+	return findBy(queryIdIn, null);
+    }    
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public OneResult findBy(@NotNull final QueryIdIn queryIdIn, @Nullable final Directives directives) {
 	
-	final var result = findByIdFunction.apply(id);
+	final var result = findByIdFunction.apply(queryIdIn, directives);
 	
-	if (result instanceof Optional resultOptional && resultOptional.isEmpty()) {
-	    throw new ElementWithIdNotFoundException(getEntityClazz(), i18nService, id);
-	}
+//	if (result instanceof Optional resultOptional && resultOptional.isEmpty()) {
+//	    throw new ElementWithIdNotFoundException(getEntityClazz(), i18nService, queryIdIn);
+//	}
 	
 	return result;
     }
+    
+    
+    // ---------------------------------------------------------------------------
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public BooleanResult existsBy(@NotNull final QueryIdIn id) {
+    public BooleanResult existsBy(@NotNull final QueryIdIn queryIdIn) {
 	
-	final var result = existsByIdFunction.apply(id);
+	final var result = existsByIdFunction.apply(queryIdIn);
 	
 	return result;
     }
+    
+    // ---------------------------------------------------------------------------
 
     /**
      * {@inheritDoc}

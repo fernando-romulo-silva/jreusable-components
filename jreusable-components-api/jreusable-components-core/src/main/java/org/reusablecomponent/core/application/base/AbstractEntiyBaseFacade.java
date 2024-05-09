@@ -2,11 +2,11 @@ package org.reusablecomponent.core.application.base;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Objects.nonNull;
+import static java.util.Optional.ofNullable;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.reusablecomponent.core.infra.exception.ExceptionTranslatorService;
@@ -21,8 +21,8 @@ import org.reusablecomponent.core.infra.messaging.event.Where;
 import org.reusablecomponent.core.infra.messaging.event.Who;
 import org.reusablecomponent.core.infra.messaging.event.Why;
 import org.reusablecomponent.core.infra.messaging.logger.LoggerPublisherSerice;
+import org.reusablecomponent.core.infra.security.DefaultSecurityService;
 import org.reusablecomponent.core.infra.security.InterfaceSecurityService;
-import org.reusablecomponent.core.infra.security.JavaSecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +69,7 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
 
 	this.publisherSerice = nonNull(publisherService) ? publisherService : new LoggerPublisherSerice();
 	this.i18nService = nonNull(i18nService) ? i18nService : new JavaSEI18nService();
-	this.securityService = nonNull(securityService) ? securityService : new JavaSecurityService();
+	this.securityService = nonNull(securityService) ? securityService : new DefaultSecurityService();
 	this.exceptionTranslatorService = nonNull(exceptionTranslatorService) ? exceptionTranslatorService : (paramException, paramI18nService) -> new RuntimeException(paramException);
     }
 
@@ -102,7 +102,7 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
     /**
      * @return
      */
-    protected boolean publishEvents() {
+    protected boolean isPublishEvents() {
 	return true;
     }
     
@@ -111,24 +111,20 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
      * @param dataOut
      * @param operation
      */
-    protected void publish(final String dataIn, final String dataOut, final InterfaceOperationEvent operation) {
+    protected Event publish(final String dataIn, final String dataOut, final InterfaceOperationEvent operation) {
 	
 	checkNotNull(operation, "Operation argument cannot be null");
 	
 	LOGGER.debug("Publishing {} operation", operation);
 	
-	if (!publishEvents()) {
+	if (!isPublishEvents()) {
 	    LOGGER.debug("Published {} operation avoided", operation);
-	    return;
+	    return null;
 	}
 	
-	final var data = StringUtils.deleteWhitespace(""" 
-	    		    {		
-	    			in: ${in},
-	    			out: ${out}
-	    		    }	
-	    		""").replace("${in}", dataIn)
-			    .replace("${out}", dataOut);
+	final var data = "[in:${in}],[out:${out}]"
+			    .replace("${in}", ofNullable(dataIn).orElse("null"))
+			    .replace("${out}", ofNullable(dataOut).orElse("null"));
 	
 	final var user = securityService.getUserName();
 	final var realm = securityService.getUserRealm();
@@ -147,9 +143,12 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
 	    publisherSerice.publish(event);
 	} catch (final Exception ex) {
 	    LOGGER.error(ExceptionUtils.getRootCauseMessage(ex), ex);
+	    return null;
 	}
 	
 	LOGGER.debug("Published '{}' operation, event '{}'", event.getId());
+	
+	return event;
     }
 
     // ------

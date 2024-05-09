@@ -1,14 +1,10 @@
 package org.reusablecomponent.core.application.base;
 
-import static java.util.Objects.nonNull;
-import static org.assertj.core.api.Assertions.assertThat;
+import static java.text.MessageFormat.format;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-
 import org.application_example.application.TestEntiyBaseFacade;
-import org.application_example.domain.Department;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -17,12 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import jakarta.validation.Validation;
 
 @Tag("unit")
 @DisplayName("Test the AbstractEntiyBaseFacade entity test, unhappy Path :( ")
@@ -31,51 +22,23 @@ import jakarta.validation.Validation;
 @TestMethodOrder(OrderAnnotation.class)
 class AbstractEntiyBaseFacadeUnhappyPathTest {
     
-    Stream<Arguments> checkEntityExistsMethodData() {
-	
-	final var existsEntityFunction = (Predicate<Department>) (dep) -> nonNull(dep);
-	final var department = new Department("asfdlkd1", "Dep1", "Account");
-	
-	// given
-	return Stream.of(
-			Arguments.of(null                 , department),
-			Arguments.of(existsEntityFunction , null      )
-	);
-	
-    }
-    
-    @ParameterizedTest(name = "Pos {index} : existsEntityFunction ''{0}'', department ''{1}''")
-    @MethodSource("checkEntityExistsMethodData")
-    @Order(1)
-    @DisplayName("Test check entity exists method")
-    void checkEntityExistsMethodTest(final Predicate<Department> existsEntityFunction, final Department department) throws NoSuchMethodException, SecurityException {
-
-	final var facade = new TestEntiyBaseFacade();
-
-	final var method = TestEntiyBaseFacade.class.getSuperclass().getDeclaredMethod("checkEntityExists", Predicate.class, Object.class);
-	method.setAccessible(true);
-	
-	final Object[] parameterValues = { existsEntityFunction, department };
-
-	final var factory = Validation.buildDefaultValidatorFactory();
-	final var executableValidator = factory.getValidator().forExecutables();
-
-	// when
-	final var violations = executableValidator.validateParameters(facade, method, parameterValues);
-	
-	// then
-	assertThat(violations).hasSize(1);
-    }
-    
-    
-    // ---------------------------------------------------------------------------------------------------------------- 
-    
     
     @Test
-    @Order(2)
+    @Order(1)
     @DisplayName("Test the publish operation")
     void publishOperationTest() {
 	
+	// given
+	final var facade = new TestEntiyBaseFacade();
+	
+	// when
+	assertThatThrownBy(() -> {
+
+	    facade.publish("SaveIn", null, null);
+
+	}) // then
+	.as(format("Check the null operation")) //
+	.isInstanceOf(NullPointerException.class);
     }
 
 }

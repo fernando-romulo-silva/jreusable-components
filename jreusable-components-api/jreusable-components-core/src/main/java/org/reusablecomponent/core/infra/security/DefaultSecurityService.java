@@ -5,7 +5,7 @@ import java.net.UnknownHostException;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class JavaSecurityService implements InterfaceSecurityService {
+public class DefaultSecurityService implements InterfaceSecurityService {
 
     /**
      * {@inheritDoc}
