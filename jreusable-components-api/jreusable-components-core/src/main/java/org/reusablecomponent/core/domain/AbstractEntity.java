@@ -17,62 +17,64 @@ import jakarta.validation.Validator;
 public abstract class AbstractEntity<Id> implements InterfaceEntity<Id, AbstractEntity<Id>> {
 
     protected Id id;
-    
+
     protected LocalDateTime createdDate;
-    
+
     protected String createdReason;
-    
+
     protected LocalDateTime updatedDate;
-    
+
     protected String updatedReason;
-    
-    // -------------------------------------------------------------------------- 
-    
+
+    // --------------------------------------------------------------------------
+
     protected AbstractEntity() {
 	super();
 	createdDate = LocalDateTime.now();
     }
-    
-    protected final void validade(final Validator validator) {
-	
+
+    protected final AbstractEntity<Id> validade(final Validator validator) {
+
 	checkNotNull(validator, "validator argument cannot be null");
-	
-        final var violations = validator.validate(this);
-	
-        if (ObjectUtils.isNotEmpty(violations)) {
+
+	final var violations = validator.validate(this);
+
+	if (ObjectUtils.isNotEmpty(violations)) {
 	    throw new ConstraintViolationException(violations);
 	}
+
+	return this;
     }
-    
+
     // --------------------------------------------------------------------------
-    
+
     @Override
     public Id getId() {
-        return id;
+	return id;
     }
 
     @Override
     public LocalDateTime getCreatedDate() {
-        return createdDate;
+	return createdDate;
     }
 
     @Override
     public Optional<String> getCreatedReason() {
-        return Optional.ofNullable(createdReason);
+	return Optional.ofNullable(createdReason);
     }
 
     @Override
     public Optional<LocalDateTime> getUpdatedDate() {
-        return Optional.ofNullable(updatedDate);
+	return Optional.ofNullable(updatedDate);
     }
 
     @Override
     public Optional<String> getUpdatedReason() {
-        return Optional.ofNullable(updatedReason);
+	return Optional.ofNullable(updatedReason);
     }
 
     // --------------------------------------------------------------------------
-    
+
     @Override
     public int hashCode() {
 	return Objects.hash(id);
@@ -80,25 +82,25 @@ public abstract class AbstractEntity<Id> implements InterfaceEntity<Id, Abstract
 
     @Override
     public boolean equals(final Object obj) {
-	
+
 	final boolean result;
-	
+
 	if (Objects.isNull(obj)) {
 	    result = false;
-	    		   
+
 	} else if (this == obj) {
 	    result = true;
-	    
+
 	} else if (obj instanceof AbstractEntity<?> other) {
 	    result = Objects.equals(this.id, other.id);
-	    
+
 	} else {
 	    result = false;
 	}
 
 	return result;
     }
-    
+
     @Override
     public String toString() {
 	return ToStringBuilder.reflectionToString(this);

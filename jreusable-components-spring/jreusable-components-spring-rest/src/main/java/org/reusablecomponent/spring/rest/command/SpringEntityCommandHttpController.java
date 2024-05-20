@@ -1,73 +1,41 @@
 package org.reusablecomponent.spring.rest.command;
 
-import java.util.Optional;
-
-import org.reusablecomponent.core.application.command.entity.InterfaceEntityCommandFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.reusablecomponent.rest.rest.command.AbstractEntityCommandHttpController;
-import org.springframework.http.HttpStatus;
+import org.reusablecomponent.spring.core.application.command.InterfaceSpringCommandFacade;
 import org.springframework.http.ResponseEntity;
 
 /**
  * @param <Entity>
  * @param <Id>
  */
-public class SpringEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id> 
-	extends AbstractEntityCommandHttpController<Entity, Id, Optional<Entity>, Iterable<Entity>, Void, ResponseEntity<?>>
+public class SpringEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id> extends AbstractEntityCommandHttpController<Entity, Id, // basic 				
+		Entity, Entity, // save a entity
+		Iterable<Entity>, Iterable<Entity>, // save entities
+		// update
+		Entity, Entity, // update a entity
+		Iterable<Entity>, Iterable<Entity>, // update entities
+		// delete entity
+		Entity, Void, // delete a entity
+		Iterable<Entity>, Void, // delete entities
+		// delete by id
+		Id, Void, // delete a entity by id
+		Iterable<Id>, Void, // delete entities by id>
+		ResponseEntity<?>> 
 	implements InterfaceSpringEntityCommandHttpController<Entity, Id> {
 
     /**
      * @param interfaceEntityCommandFacade
      */
-    protected SpringEntityCommandHttpController(final InterfaceEntityCommandFacade<Entity, Id, Optional<Entity>, Iterable<Entity>, Void> interfaceEntityCommandFacade) {
+    protected SpringEntityCommandHttpController(final InterfaceSpringCommandFacade<Entity, Id> interfaceEntityCommandFacade) {
 	super(interfaceEntityCommandFacade);
     }
-
-    // ==== HTTP Methods ====================================================================================================================
-    
-    /**
-     * {@inheritDoc}
-     */
-//    @Override
-//    public ResponseEntity<?> post(final Entity entity, final HttpServletRequest request, final HttpServletResponse response) {
-//	return super.post(entity, request, response);
-//    }
-//    
-//    @Override
-//    public ResponseEntity<?> put(final Id id, Entity entity, HttpServletRequest request, HttpServletResponse response) {
-//        return super.put(id, entity, request, response);
-//    }
-//    
-//    @Override
-//    public ResponseEntity<?> patch(
-//		    final Id id, 
-//		    final List<JsonPatch> jsonPatchs, //
-//		    final HttpServletRequest request, //
-//		    final HttpServletResponse response) {
-//	return super.patch(id, jsonPatchs, request, response);
-//    }
-//    
-//    @Override
-//    public ResponseEntity<?> delete(final Id id, final HttpServletRequest request, final HttpServletResponse response) {
-//        return super.delete(id, request, response);
-//    }
-    
-    // ==== Utils Methods ====================================================================================================================
-    
+   
     /**
      * {@inheritDoc}
      */
     @Override
-    protected Optional<Entity> findById(Id id) {
-	// TODO Auto-generated method stub
-	return Optional.empty();
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Entity getEntityResult(final Optional<Entity> objectResult) {
+    protected ResponseEntity<Entity> createResponsePut(final Entity entity) {
 	// TODO Auto-generated method stub
 	return null;
     }
@@ -76,24 +44,7 @@ public class SpringEntityCommandHttpController<Entity extends AbstractEntity<Id>
      * {@inheritDoc}
      */
     @Override
-    protected ResponseEntity<?> createResponseDelete(final Id id) {
-	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected ResponseEntity<?> createResponsePut(final Entity entity) {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected ResponseEntity<?> createResponsePatch(final Entity entity) {
+    protected ResponseEntity<Entity> createResponsePatch(final Entity entity) {
 	// TODO Auto-generated method stub
 	return null;
     }
@@ -102,7 +53,50 @@ public class SpringEntityCommandHttpController<Entity extends AbstractEntity<Id>
      * {@inheritDoc}
      */
     @Override
-    protected ResponseEntity<?> createResponsePost(final Entity entity) {
+    protected ResponseEntity<Entity> createResponsePost(final Entity entity) {
 	return ResponseEntity.ok().build();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Entity findById(final Id id) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Entity getEntitySaveResult(final Entity saveEntityOut) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Entity getEntityUpdateResult(final Entity saveEntityOut) {
+	return saveEntityOut;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Entity getUpdateEntityIn(final Entity entity) {
+	return entity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected ResponseEntity<?> createResponseDelete(final Void deleteIdOut) {
+	// TODO Auto-generated method stub
+	return null;
     }    
 }

@@ -6,9 +6,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
+import java.util.stream.Stream;
+
 import org.application_example.application.TestEntiyBaseFacade;
 import org.application_example.application.TestEntiyNoPublishBaseFacade;
 import org.application_example.domain.Department;
+import org.application_example.domain.Project;
 import org.application_example.infra.DummySecurityService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -19,13 +22,15 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.reusablecomponent.core.domain.AbstractEntity;
 import org.reusablecomponent.core.infra.exception.ExceptionTranslatorService;
+import org.reusablecomponent.core.infra.exception.GenericException;
 import org.reusablecomponent.core.infra.i18n.InterfaceI18nService;
 import org.reusablecomponent.core.infra.i18n.JavaSEI18nService;
-import org.reusablecomponent.core.infra.messaging.InterfacePublisherSerice;
 import org.reusablecomponent.core.infra.messaging.event.CommonEvent;
-import org.reusablecomponent.core.infra.messaging.logger.LoggerPublisherSerice;
 import org.reusablecomponent.core.infra.security.InterfaceSecurityService;
+import org.reusablecomponent.messaging.InterfacePublisherSerice;
+import org.reusablecomponent.messaging.logger.LoggerPublisherSerice;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Level;
@@ -49,7 +54,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 	final InterfacePublisherSerice publisherService = (event) -> out.println(event);
 	final InterfaceI18nService i18nService = (code, params) -> "translated!";
 	final InterfaceSecurityService interfaceSecurityService = new DummySecurityService();
-	final ExceptionTranslatorService exceptionTranslatorService = (ex, i18n) -> new RuntimeException(ex);
+	final ExceptionTranslatorService exceptionTranslatorService = (ex, i18n) -> new GenericException(ex);
 	
 	// when
 	final var facade = new TestEntiyBaseFacade(publisherService, i18nService, interfaceSecurityService, exceptionTranslatorService);
@@ -153,7 +158,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 	// then
         assertThat(listAppender.list)
         	.extracting(ILoggingEvent::getFormattedMessage, ILoggingEvent::getLevel)
-        	.containsExactly(tuple("Publish event: [in:SaveIn],[out:null]", Level.DEBUG));
+        	.containsExactly(tuple("Publish event [in:SaveIn],[out:null]", Level.DEBUG));
 	
     }
     
@@ -180,7 +185,55 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 	// then
         assertThat(listAppender.list)
         	.extracting(ILoggingEvent::getFormattedMessage, ILoggingEvent::getLevel)
-        	.doesNotContain(tuple("Publish event: [in:SaveIn],[out:SaveOut]", Level.DEBUG))
+        	.doesNotContain(tuple("Publish event [in:SaveIn],[out:SaveOut]", Level.DEBUG))
+        	.containsExactly(
+        			 tuple("Publishing SAVE_ITEM operation", Level.DEBUG),
+        			 tuple("Published SAVE_ITEM operation avoided", Level.DEBUG)
+        			);
+	
+    }
+    
+    @Test
+    @Order(6)
+    @DisplayName("Test if ignore publish operation by directives")
+    void ignorePublishByDirectivesOperationTest() {
+
+	// given
+        final var listAppender = new ListAppender<ILoggingEvent>();
+        listAppender.start();
+        
+        final var publishServiceLogger = (Logger) LoggerFactory.getLogger(LoggerPublisherSerice.class);
+        final var facadeLogger = (Logger) LoggerFactory.getLogger(AbstractEntiyBaseFacade.class);
+        
+        publishServiceLogger.addAppender(listAppender);
+        facadeLogger.addAppender(listAppender);
+        
+        final var project = new Project(1L, "Project 1", null);
+        
+        assertThat(project)
+        	.extracting(Project::isPublishable)
+        	.isEqualTo(Boolean.FALSE);
+        
+        
+	final var facade = new TestEntiyBaseFacade() {
+	    
+	    @Override
+	    protected boolean isPublishEvents(final Object... directives) {
+		
+		return Stream.of(directives)
+			.filter( p -> p instanceof AbstractEntity)
+			.map(p -> AbstractEntity.class.cast(p))
+			.allMatch(e -> e.isPublishable());
+	    }
+	};
+	
+	// when
+	facade.publish("SaveIn", "SaveOut", CommonEvent.SAVE_ITEM, project);
+	
+	// then
+        assertThat(listAppender.list)
+        	.extracting(ILoggingEvent::getFormattedMessage, ILoggingEvent::getLevel)
+        	.doesNotContain(tuple("Publish event [in:SaveIn],[out:SaveOut]", Level.DEBUG))
         	.containsExactly(
         			 tuple("Publishing SAVE_ITEM operation", Level.DEBUG),
         			 tuple("Published SAVE_ITEM operation avoided", Level.DEBUG)

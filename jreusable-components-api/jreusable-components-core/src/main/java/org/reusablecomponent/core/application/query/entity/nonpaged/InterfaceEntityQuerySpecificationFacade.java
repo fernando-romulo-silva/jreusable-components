@@ -1,7 +1,5 @@
 package org.reusablecomponent.core.application.query.entity.nonpaged;
 
-import java.util.Map;
-
 import org.reusablecomponent.core.application.base.InterfaceEntityBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 
@@ -10,7 +8,14 @@ import org.reusablecomponent.core.domain.AbstractEntity;
  * @param <Id>
  * @param <Specification>
  */
-public interface InterfaceEntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, CountResult, ExistsResult, Specification> 
+public interface InterfaceEntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, // basic
+			// results
+			OneResult, // One result type
+			MultiplePagedResult, // multiple result type
+			CountResult, // count result type
+			ExistsResult, // exists result type
+			// specification
+			Specification> // query specification (parameters, filters, orders, etc)
 	extends InterfaceEntityBaseFacade<Entity, Id> {
 
     /**
@@ -18,13 +23,13 @@ public interface InterfaceEntityQuerySpecificationFacade<Entity extends Abstract
      * @param directives
      * @return
      */
-    MultiplePagedResult findBy(final Specification specification, final Map<String, String[]> directives);
+    MultiplePagedResult findBy(final Specification specification, final Object... directives);
     
     /**
      * @param specification
      * @return
      */
-    OneResult findOneBy(final Specification specification, final Map<String, String[]> directives);
+    OneResult findOneBy(final Specification specification, final Object... directives);
     
     /**
      * @param specification

@@ -1,10 +1,10 @@
 package org.reusablecomponent.core.infra.messaging.event;
 
-import static org.reusablecomponent.core.infra.messaging.event.util.ConverterBeanUtil.converterBeanToJSon;
-
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
+
+import org.reusablecomponent.core.infra.messaging.ConverterBeanUtil;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -76,7 +76,7 @@ public class Event {
     }
 
     public String toJson() {
-	return converterBeanToJSon(this, Event.class);
+	return ConverterBeanUtil.converterBeanToJSon(this, Event.class);
     }
 
     public String toYaml() {

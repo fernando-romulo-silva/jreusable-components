@@ -1,10 +1,7 @@
 package org.reusablecomponent.core.application.query.entity.paged;
 
-import java.util.Map;
-
 import org.reusablecomponent.core.application.base.InterfaceEntityBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
-
 
 /**
  * @param <Entity>
@@ -17,7 +14,15 @@ import org.reusablecomponent.core.domain.AbstractEntity;
  * @param <Sort>
  * @param <Specification>
  */
-public interface InterfaceEntityQueryPaginationSpecificationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification> 
+public interface InterfaceEntityQueryPaginationSpecificationFacade<Entity extends AbstractEntity<Id>, Id, // basic
+		// results
+		OneResult, 
+		MultiplePagedResult, 
+		// Pagination
+		Pageable, Sort, 
+		// Specification
+		Specification> 
+	// Base
 	extends InterfaceEntityBaseFacade<Entity, Id> {
 
     /**
@@ -26,11 +31,11 @@ public interface InterfaceEntityQueryPaginationSpecificationFacade<Entity extend
      * @param directives
      * @return
      */
-    MultiplePagedResult findBy(final Pageable pageable, final Specification specification, final Map<String, String[]> directives);
+    MultiplePagedResult findBy(final Pageable pageable, final Specification specification, final Object... directives);
 
     /**
      * @param specification
      * @return
      */
-    OneResult findBy(final Specification specification, final Sort sort);
+    OneResult findOneBy(final Specification specification, final Sort sort);
 }

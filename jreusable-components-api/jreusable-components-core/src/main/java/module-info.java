@@ -6,12 +6,21 @@ open module org.reusablecomponent.core {
     requires org.slf4j;
     requires ch.qos.logback.core;
     requires ch.qos.logback.classic;
-    requires com.google.gson;
+    // requires com.google.gson;
+
     
     // import non-modules
-    requires gson.javatime.serialisers;
     requires com.google.common;
     requires org.apache.commons.lang3;
+    requires gson.javatime.serialisers;
+    requires com.google.gson;
+    
+    // -- messaging
+    requires transitive org.reusablecomponent.messaging;
+//    requires org.reusablecomponent.messaging.event;
+//    requires org.reusablecomponent.messaging.logger;
+//    requires org.reusablecomponent.messaging.flow;
+//    requires org.reusablecomponent.messaging.util;
     
     //---------------------------------------------------
     // export
@@ -35,9 +44,8 @@ open module org.reusablecomponent.core {
     // -- i18n
     exports org.reusablecomponent.core.infra.i18n;
     
-    // -- messaging
-    exports org.reusablecomponent.core.infra.messaging;
-    
     // -- security
     exports org.reusablecomponent.core.infra.security;
+    
+    // -- messaging
 }

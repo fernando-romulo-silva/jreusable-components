@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.reusablecomponent.core.application.command.entity.InterfaceEntityCommandFacade;
 import org.reusablecomponent.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.spring.core.application.AbstractSpringEntityFacade;
+import org.reusablecomponent.spring.core.application.full.entity.nonpaged.AbstractSpringEntityFacade;
 import org.reusablecomponent.spring.core.infra.i18n.SpringI18nService;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class Test {
 	
 	facade.existsBy(1L);
 	
-	final Long i = facade.count();
+	final Long i = facade.countAll();
 	
 	facade.deleteAllBy(null);
     }

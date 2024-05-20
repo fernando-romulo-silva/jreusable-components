@@ -59,7 +59,6 @@ public abstract class BaseApplicationException extends RuntimeException {
 	super(getFinalMessage(msg, i18nService, params), ex);
     }
     
-    
     /**
      * @param msg
      * @param i18nService

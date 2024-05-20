@@ -35,6 +35,12 @@
 	<dependencies>
 			
 		<dependency>
+			<groupId>jreusablecomponents</groupId>
+			<artifactId>jreusable-components-messaging</artifactId>
+			<version>${project.version}</version>
+		</dependency>	
+			
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j-api.version}</version>
@@ -92,9 +98,8 @@
 			<groupId>com.fatboyindustrial.gson-javatime-serialisers</groupId>
 			<artifactId>gson-javatime-serialisers</artifactId>
 			<version>1.1.2</version>
-		</dependency>
-
-
+		</dependency>			
+		
 		<!-- Test -->
 		
 		<dependency>

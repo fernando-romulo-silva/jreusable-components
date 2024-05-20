@@ -22,7 +22,23 @@ import jakarta.validation.Valid;
  * @param <Entity>
  * @param <Id>
  */
-public interface InterfaceEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id, HttpResponse> extends InterfaceEntityBaseHttpController {
+public interface InterfaceEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id, // basic
+		QueryIdIn, 
+
+		// save
+		SaveEntityIn, SaveEntityOut, // save a entity
+		SaveEntitiesIn, SaveEntitiesOut, // save entities
+		// update
+		UpdateEntityIn, UpdateEntityOut, // update a entity
+		UpdateEntitiesIn, UpdateEntitiesOut, // update entities
+		// delete entity
+		DeleteEntityIn, DeleteEntityOut, // delete a entity
+		DeleteEntitiesIn, DeleteEntitiesOut, // delete entities
+		// delete by id
+		DeleteIdIn, DeleteIdOut, // delete a entity by id
+		DeleteIdsIn, DeleteIdsOut, // delete entities by id
+		HttpResponse> // httpResult
+	extends InterfaceEntityBaseHttpController {
 
     /**
      * @param <Response>
@@ -36,7 +52,7 @@ public interface InterfaceEntityCommandHttpController<Entity extends AbstractEnt
 		    @Valid //
 		    @RequestBody //
 		    @CreateEntityRequestBody //
-		    final Entity entity, 
+		    final SaveEntityIn saveEntityIn, 
 		    
 		    final HttpServletRequest request, 
 		    final HttpServletResponse response);
@@ -50,7 +66,7 @@ public interface InterfaceEntityCommandHttpController<Entity extends AbstractEnt
     HttpResponse delete( //
 		    //
 		    @Parameter(description = "The entity id's", example = "1000") //
-		    final Id id, //
+		    final DeleteIdIn deleteIdIn, //
 		    //
 		    final HttpServletRequest request, //
 		    final HttpServletResponse response);
@@ -67,12 +83,12 @@ public interface InterfaceEntityCommandHttpController<Entity extends AbstractEnt
     HttpResponse put( //
 		    //
 		    @Parameter(description = "The entity id's", example = "1000") //
-		    final Id id, //
+		    final QueryIdIn id, //
 
 		    @Valid //
 		    @RequestBody //
 		    @UpdateEntityRequestBody //
-		    final Entity entity, //
+		    final UpdateEntityIn updateEntityIn, //
 		    //
 		    final HttpServletRequest request, //
 		    final HttpServletResponse response);
@@ -89,7 +105,7 @@ public interface InterfaceEntityCommandHttpController<Entity extends AbstractEnt
     HttpResponse patch(
 		    //
 		    @Parameter(description = "The entity type id's", example = "1000") //
-		    final Id id, 
+		    final QueryIdIn id, 
 		    //
 		    @Parameter(description = "A json path structure", 
 		    	       example = """

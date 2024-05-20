@@ -1,12 +1,15 @@
 package org.reusablecomponent.core.application.query.entity.nonpaged;
 
+import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.EXISTS_BY_ID;
 import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.FIND_ALL;
+import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.FIND_BY_ID;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.StringUtils;
 import org.reusablecomponent.core.application.base.AbstractEntiyBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.slf4j.Logger;
@@ -24,19 +27,19 @@ import jakarta.validation.constraints.NotNull;
  * @param <OneResult>
  * @param <MultipleResult>
  * @param <CountResult>
- * @param <BooleanResult>
+ * @param <ExistsResult>
  */
-public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn, Directives, OneResult, MultipleResult, CountResult, BooleanResult> 
+public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> 
 	extends AbstractEntiyBaseFacade<Entity, Id> 
-	implements InterfaceEntityQueryFacade<Entity, Id, QueryIdIn, Directives, OneResult, MultipleResult, CountResult, BooleanResult> {
+	implements InterfaceEntityQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityQueryFacade.class);
     
-    protected final Function<QueryIdIn, BooleanResult> existsByIdFunction;
+    protected final Function<QueryIdIn, ExistsResult> existsByIdFunction;
     
-    protected final BiFunction<QueryIdIn, Directives, OneResult> findByIdFunction;
+    protected final BiFunction<QueryIdIn, Object[], OneResult> findByIdFunction;
     
-    protected final Function<Directives, MultipleResult> findAllFunction;
+    protected final Function<Object[], MultipleResult> findAllFunction;
     
     protected final Supplier<CountResult> countAllFunction;
     
@@ -47,9 +50,9 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn
      * @param countAllFunction
      */
     public EntityQueryFacade(
-		    @NotNull final Function<QueryIdIn, BooleanResult> existsByIdFunction,
-		    @NotNull final BiFunction<QueryIdIn, Directives, OneResult> findByIdFunction,
-		    @NotNull final Function<Directives, MultipleResult> findAllFunction,
+		    @NotNull final Function<QueryIdIn, ExistsResult> existsByIdFunction,
+		    @NotNull final BiFunction<QueryIdIn, Object[], OneResult> findByIdFunction,
+		    @NotNull final Function<Object[], MultipleResult> findAllFunction,
 		    @NotNull final Supplier<CountResult> countAllFunction) {
 	super();
 	this.existsByIdFunction = existsByIdFunction;
@@ -60,36 +63,40 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn
     
     // ---------------------------------------------------------------------------
     
-    /**
-     * @param saveEntityIn
-     * @return
-     */
-    protected String convertDirectivesToPublishData(final Directives directives) {
-	return Objects.toString(directives);
-    }
-    
-    /**
-     * @param saveEntityOut
-     * @return
-     */
     protected String convertMultipleResultToPublishData(final MultipleResult multipleResult) {
 	return Objects.toString(multipleResult);
     }
     
-    /**
-     * @param saveEntityOut
-     * @return
-     */
     protected String convertOneResultToPublishData(final OneResult oneResult) {
 	return Objects.toString(oneResult);
     }
     
+    protected String convertCountResultToPublishData(final CountResult countResult) {
+	return Objects.toString(countResult);
+    }
+    
+    protected String convertQueryIdInToPublishData(final QueryIdIn queryIdIn) {
+	return Objects.toString(queryIdIn);
+    } 
+    
     // ---------------------------------------------------------------------------
-
+    
+    protected String convertDirectivesToPublishData(final Object... directives) {
+	return Objects.toString(directives);
+    }
+    
     /**
      * @param entity
      */
-    protected Directives preFindAll(final Directives directives) {
+    protected Object[] preFindAll(final Object... directives) {
+	
+//	final var formatDirectives = Optional.ofNullable(directives)
+//	.map(params -> params.get("format"))
+//	.stream()
+//	.flatMap(Arrays::stream)
+//	.collect(Collectors.toList());
+//	.anyMatch("full"::equalsIgnoreCase);	
+	
 	return directives;
     }
 
@@ -104,15 +111,7 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn
      * {@inheritDoc}
      */
     @Override
-    public MultipleResult findAll() {
-	return findAll(null);
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public MultipleResult findAll(@Nullable final Directives directives) {
+    public MultipleResult findAll(@Nullable final Object... directives) {
 	
 	final var session = securityService.getSession();
 	
@@ -120,70 +119,152 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	
 	final var finalDirectives = preFindAll(directives);
 	
-//	final var formatDirectives = Optional.ofNullable(directives)
-//        	.map(params -> params.get("format"))
-//        	.stream()
-//        	.flatMap(Arrays::stream)
-//        	.collect(Collectors.toList());
-//        	.anyMatch("full"::equalsIgnoreCase);	
+	final MultipleResult result;
 	
-	final var result = findAllFunction.apply(directives);
+	try {
+	    result = findAllFunction.apply(directives);
+	} catch (final Exception ex) {
+	    throw exceptionTranslatorService.translate(ex, i18nService);
+	}
 	
-	final var resultFinal = posFindAll(result);
+	final var finalResult = posFindAll(result);
 	
-	publish(convertDirectivesToPublishData(finalDirectives), convertMultipleResultToPublishData(resultFinal), FIND_ALL);
+	final var dataIn = convertDirectivesToPublishData(finalDirectives);
+	final var dataOut = convertMultipleResultToPublishData(finalResult);
+	publish(dataIn, dataOut, FIND_ALL);
 	
-	LOGGER.debug("Found '{}', session '{}'", getEntityClazz().getSimpleName(), session);
+	LOGGER.debug("Found all '{}', session '{}'", getEntityClazz().getSimpleName(), session);
 	
-	return result;
+	return finalResult;
     }
     
     // ---------------------------------------------------------------------------
     
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public OneResult findBy(final QueryIdIn queryIdIn) {
-	return findBy(queryIdIn, null);
+    protected QueryIdIn preFindBy(final QueryIdIn queryIdIn, final Object... directives) {
+	
+//	final var formatDirectives = Optional.ofNullable(directives)
+//	.map(params -> params.get("format"))
+//	.stream()
+//	.flatMap(Arrays::stream)
+//	.collect(Collectors.toList());
+//	.anyMatch("full"::equalsIgnoreCase);	
+	
+	return queryIdIn;
+    }
+    
+    protected OneResult posFindBy(final OneResult oneResult) {
+	return oneResult;
     }    
     
     /**
      * {@inheritDoc}
      */
     @Override
-    public OneResult findBy(@NotNull final QueryIdIn queryIdIn, @Nullable final Directives directives) {
+    public OneResult findBy(@NotNull final QueryIdIn queryIdIn, @Nullable final Object... directives) {
 	
-	final var result = findByIdFunction.apply(queryIdIn, directives);
+	final var session = securityService.getSession();
 	
-//	if (result instanceof Optional resultOptional && resultOptional.isEmpty()) {
-//	    throw new ElementWithIdNotFoundException(getEntityClazz(), i18nService, queryIdIn);
-//	}
+	LOGGER.debug("Findind by '{}', directives '{}', session '{}'", queryIdIn, directives, session);
 	
-	return result;
+	final var finalQueryIdIn = preFindBy(queryIdIn, directives);	
+	
+	final OneResult result;
+	
+	try {
+	    result = findByIdFunction.apply(queryIdIn, directives);
+	} catch (final Exception ex) {
+	    throw exceptionTranslatorService.translate(ex, i18nService);
+	}
+	
+	final var finalResult = posFindBy(result);
+	
+	final var dataIn = convertQueryIdInToPublishData(finalQueryIdIn);
+	final var dataOut = convertOneResultToPublishData(finalResult);
+	publish(dataIn, dataOut, FIND_BY_ID);
+	
+	LOGGER.debug("Found by '{}', result '{}', session '{}'", queryIdIn, finalResult, session);
+	
+	return finalResult;
     }
     
     
     // ---------------------------------------------------------------------------
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public BooleanResult existsBy(@NotNull final QueryIdIn queryIdIn) {
-	
-	final var result = existsByIdFunction.apply(queryIdIn);
-	
-	return result;
+    
+    protected QueryIdIn preExistsBy(final QueryIdIn queryIdIn) {
+	return queryIdIn;
     }
     
-    // ---------------------------------------------------------------------------
-
+    protected ExistsResult posExistsBy(final ExistsResult existsResult) {
+	return existsResult;
+    }
+    
+    protected String convertExistsResultToPublishData(final ExistsResult resultFinal) {
+	return Objects.toString(resultFinal);
+    }
+    
     /**
      * {@inheritDoc}
      */
     @Override
-    public CountResult count() {
-	return countAllFunction.get();
+    public ExistsResult existsBy(@NotNull final QueryIdIn queryIdIn) {
+	
+	final var session = securityService.getSession();
+	
+	LOGGER.debug("Existing by '{}', session '{}'", queryIdIn, session);
+	
+	final var finalQueryIdIn = preExistsBy(queryIdIn);	
+	
+	final ExistsResult result;
+	
+	try { 
+	    result = existsByIdFunction.apply(finalQueryIdIn);
+	} catch (final Exception ex) {
+	    throw exceptionTranslatorService.translate(ex, i18nService);
+	}
+	
+	final var finalResult = posExistsBy(result);
+	
+	final var dataIn = convertQueryIdInToPublishData(finalQueryIdIn);
+	final var dataOut = convertExistsResultToPublishData(finalResult);
+	publish(dataIn, dataOut, EXISTS_BY_ID);
+	
+	LOGGER.debug("Existed by '{}', result '{}', session '{}'", finalQueryIdIn, finalResult, session);
+	
+	return finalResult;
+    }
+
+    // ---------------------------------------------------------------------------
+
+    protected CountResult posCountAll(final CountResult countResult) {
+	return countResult;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CountResult countAll() {
+	
+	final var session = securityService.getSession();
+	
+	LOGGER.debug("Counting all '{}', session '{}'", getEntityClazz().getSimpleName(), session);
+	
+	final CountResult result;
+	
+	try { 
+	    result = countAllFunction.get();
+	} catch (final Exception ex) {
+	    throw exceptionTranslatorService.translate(ex, i18nService);
+	}
+	
+	final var finalResult = posCountAll(result);
+	
+	final var dataIn = StringUtils.EMPTY;
+	final var dataOut = convertCountResultToPublishData(finalResult);
+	publish(dataIn, dataOut, EXISTS_BY_ID);
+	
+	LOGGER.debug("Counted all '{}', result '{}', session '{}'", getEntityClazz().getSimpleName(), finalResult, session);
+	
+	return finalResult;
     }
 }

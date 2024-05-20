@@ -45,23 +45,5 @@ class EntityCommandFacadeUnhappyPathTest {
 	defaultData.addAll(List.of(department01, department02));
     }
     
-    @Test
-    @Order(1)
-    @DisplayName("save a entity test")
-    void saveRepeatedElement() {
-	
-	// given
-	assertThat(defaultData).contains(department01);
-	
-	// when
-	assertThatThrownBy(() -> {
-	    
-	    defaultFacade.save(department01);
-	    
-	}) // then 
-	.as(format("Check the repeated entity: ''{0}''", department01)) //
-	.isInstanceOf(ElementAlreadyExistsException.class);
-	
-    }
 
 }

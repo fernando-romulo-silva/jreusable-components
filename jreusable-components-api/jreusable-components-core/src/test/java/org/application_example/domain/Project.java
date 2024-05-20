@@ -1,6 +1,6 @@
 package org.application_example.domain;
 
-import static org.reusablecomponent.core.domain.AbstractAbstractEntiyTest.VALIDATOR;
+import static org.reusablecomponent.core.util.AbstractValidatorTest.VALIDATOR;
 
 import java.util.Optional;
 
@@ -33,6 +33,10 @@ public class Project extends AbstractEntity<Long> {
 	this.department = department;
 	
 	validade(VALIDATOR);
+    }
+    
+    public boolean isPublishable() {
+	return false;
     }
     
     // -------------------- getters

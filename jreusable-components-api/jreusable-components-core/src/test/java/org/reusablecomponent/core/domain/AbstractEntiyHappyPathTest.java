@@ -41,6 +41,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.reusablecomponent.core.util.AbstractValidatorTest;
 
 import com.jparams.verifier.tostring.ToStringVerifier;
 
@@ -56,7 +57,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class AbstractEntiyHappyPathTest extends AbstractAbstractEntiyTest {
+class AbstractEntiyHappyPathTest extends AbstractValidatorTest {
      
     @Test
     @Order(1)

@@ -1,13 +1,7 @@
 package org.reusablecomponent.core.application.full.entity.nonpaged;
 
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
-
 import org.reusablecomponent.core.application.command.entity.InterfaceEntityCommandFacade;
 import org.reusablecomponent.core.application.full.entity.AbstractEntityCommonFacade;
-import org.reusablecomponent.core.application.query.entity.nonpaged.EntityQuerySpecificationFacade;
 import org.reusablecomponent.core.application.query.entity.nonpaged.InterfaceEntityQuerySpecificationFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 
@@ -18,99 +12,67 @@ import jakarta.validation.constraints.NotNull;
  * @param <Id>
  * @param <Specification>
  */
-public class EntitySpecificationFacade 
-        <Entity extends AbstractEntity<Id>, Id, OneResultCommand, OneResultQuery, MultipleResult, CountResult, ExistsResult, VoidResult, Specification>
-
-	extends AbstractEntityCommonFacade<Entity, Id, OneResultCommand, MultipleResult, VoidResult, ExistsResult>
-	implements InterfaceEntitySpecificationFacade <Entity, Id, OneResultCommand, OneResultQuery, MultipleResult, CountResult, ExistsResult, VoidResult, Specification>  {
+public class EntitySpecificationFacade<Entity extends AbstractEntity<Id>, Id, // basic
+		// ------------ command
+		// save
+		SaveEntityIn, SaveEntityOut, // save a entity
+		SaveEntitiesIn, SaveEntitiesOut, // save entities
+		// update
+		UpdateEntityIn, UpdateEntityOut, // update a entity
+		UpdateEntitiesIn, UpdateEntitiesOut, // update entities
+		// delete
+		DeleteEntityIn, DeleteEntityOut, // delete a entity
+		DeleteEntitiesIn, DeleteEntitiesOut, // delete entities
+		// delete by id
+		DeleteIdIn, DeleteIdOut, // delete a entity by id
+		DeleteIdsIn, DeleteIdsOut, // delete entities by id
+		// ------------ query
+		OneResult, // One result type
+		MultiplePagedResult, // multiple result type
+		CountResult, // count result type
+		ExistsResult, // exists result type
+		Specification> // query specification (parameters, filters, orders, etc)
+		//
+		extends	AbstractEntityCommonFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
+		implements InterfaceEntitySpecificationFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut, OneResult, MultiplePagedResult, CountResult, ExistsResult, Specification> {
     
-    protected final InterfaceEntityQuerySpecificationFacade<Entity, Id, OneResultQuery, MultipleResult, CountResult, ExistsResult, Specification> entityQueryFacade;
+    protected final InterfaceEntityQuerySpecificationFacade<Entity, Id, OneResult, MultiplePagedResult, CountResult, ExistsResult, Specification> entityQueryFacade;
 
     /**
      * @param entityCommandFacade
      * @param entityQueryFacade
      */
     protected EntitySpecificationFacade(
-		    @NotNull final InterfaceEntityCommandFacade<Entity, Id, OneResultCommand, MultipleResult, VoidResult> entityCommandFacade, 
-		    @NotNull final InterfaceEntityQuerySpecificationFacade<Entity, Id, OneResultQuery, MultipleResult, CountResult, ExistsResult, Specification> entityQueryFacade) {
+		    @NotNull final InterfaceEntityCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> entityCommandFacade, 
+		    @NotNull final InterfaceEntityQuerySpecificationFacade<Entity, Id, OneResult, MultiplePagedResult, CountResult, ExistsResult, Specification> entityQueryFacade) {
 	super(entityCommandFacade);
 	this.entityQueryFacade = entityQueryFacade;
     }
-    
-    /**
-     * @param saveFunction
-     * @param saveAllFunction
-     * @param deleteFunction
-     * @param deleteAllFunction
-     * @param deleteByIdFunction
-     * @param deleteAllByIdFunction
-     * @param existsByIdFunction
-     * @param findByIdFunction
-     * @param findBySpecificationFunction
-     * @param findOneByFunction
-     * @param existsBySpecificationFunction
-     * @param countBySpecificationFunction
-     */
-    protected EntitySpecificationFacade(
-		    final Function<Entity, OneResultCommand> saveFunction,
-		    final UnaryOperator<MultipleResult> saveAllFunction,
-		    //
-		    final Function<Entity, VoidResult> deleteFunction,
-		    final Function<MultipleResult, VoidResult> deleteAllFunction,
-		    final Function<Id, VoidResult> deleteByIdFunction,
-		    final Function<Iterable<Id>, VoidResult> deleteAllByIdFunction,
-		    //
-		    final Function<Id, ExistsResult> existsByIdFunction,
-		    final Predicate<ExistsResult> existsEntityFunction,
-		    //
-		    final Function<Specification, MultipleResult> findBySpecificationFunction,
-		    final Function<Specification, OneResultQuery> findOneByFunction,
-		    final Function<Specification, ExistsResult> existsBySpecificationFunction,
-		    final Function<Specification, CountResult> countBySpecificationFunction) {
-	
-	super(
-		saveFunction, 
-		saveAllFunction, 
-		deleteFunction, 
-		deleteAllFunction, 
-		deleteByIdFunction, 
-		deleteAllByIdFunction, 
-		existsByIdFunction, 
-		existsEntityFunction
-	);
-	
-	this.entityQueryFacade = new EntityQuerySpecificationFacade<>(
-		findBySpecificationFunction, 
-		findOneByFunction, 
-		existsBySpecificationFunction, 
-		countBySpecificationFunction
-	);
-    }
-    
+
     /**
      * {@inheritDoc}
-     */
+     */    
+    @Override
+    public MultiplePagedResult findBy(final Specification specification, final Object... directives) {
+	return entityQueryFacade.findBy(specification, directives);
+    }
+
+    /**
+     * {@inheritDoc}
+     */    
+    @Override
+    public OneResult findOneBy(final Specification specification, final Object... directives) {
+	return entityQueryFacade.findOneBy(specification, directives);
+    }
+
+    /**
+     * {@inheritDoc}
+     */    
     @Override
     public ExistsResult existsBy(final Specification specification) {
 	return entityQueryFacade.existsBy(specification);
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public OneResultQuery findBy(final Specification specification) {
-	return entityQueryFacade.findBy(specification);
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public MultipleResult findBy(final Specification specification, final Map<String, String[]> directives) {
-	return entityQueryFacade.findBy(specification, directives);
-    }
-    
+
     /**
      * {@inheritDoc}
      */

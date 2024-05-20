@@ -1,11 +1,5 @@
 package org.reusablecomponent.rest.rest.query.base;
 
-import org.apache.commons.lang3.StringUtils;
-import org.reusablecomponent.rest.rest.base.AbstractEntityBaseHttpController;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 /**
  * @param <Entity>
  * @param <Id>
@@ -14,71 +8,39 @@ import jakarta.servlet.http.HttpServletResponse;
  * @param <ExistsResult>
  * @param <CountResult>
  */
-public abstract class AbstractEntityQueryBaseHttpController <Id, OneResult, MultipleResult, CountResult, ExistsResult, HttpResponse> 
-	extends AbstractEntityBaseHttpController<Id, OneResult>
-	implements InterfaceEntityQueryBaseController<Id, HttpResponse> {
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public HttpResponse get( //
-		    final Id id,
-		    final HttpServletRequest request,
-		    final HttpServletResponse response) {
-
-	response.setStatus(200);
-	
-	if (isHttpHead(request)) {
-	    
-	    final var result = existsById(id);
-	    return createResponseHead(result);
-	     
-	 } else {
-	     
-	     final var result = findById(id);
-	     return createResponseGetOne(result);
-	 }
-    }
+public abstract class AbstractEntityQueryBaseHttpController <QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult, HttpResponseVoid, HttpResponseOne, HttpResponseMultiple> {
     
     
-    /**
-     * @param request
-     * @return
-     */
-    protected final boolean isHttpHead(final HttpServletRequest request) {
-        return StringUtils.equalsIgnoreCase("HEAD", request.getMethod());
-    }
-    
+    // TODO convert to functions, like command and query
     /**
      * @param multipleResult
      * @return
      */
-    protected abstract HttpResponse createResponseGetMultiple(final MultipleResult multipleResult);
+    protected abstract HttpResponseMultiple createResponseGetMultiple(final MultipleResult multipleResult);
     
     /**
      * @param oneResult
      * @return
      */
-    protected abstract HttpResponse createResponseGetOne(final OneResult oneResult);
+    protected abstract HttpResponseOne createResponseGetOne(final OneResult oneResult);
     
     /**
      * @param existsResult
      * @return
      */
-    protected abstract HttpResponse createResponseHead(final ExistsResult existsResult);
+    protected abstract HttpResponseVoid createResponseHead(final ExistsResult existsResult);
     
     /**
-     * @param id
+     * @param queryIdIn
      * @return
      */
-    protected abstract ExistsResult existsById(final Id id);
+    protected abstract ExistsResult existsById(final QueryIdIn queryIdIn);
     
     /**
      * @param <Response>
      * @param exists
      * @return
      */
-    protected abstract ExistsResult createExistsResult(final CountResult exists); 
+    protected abstract ExistsResult createExistsResult(final CountResult countResult); 
 
 }

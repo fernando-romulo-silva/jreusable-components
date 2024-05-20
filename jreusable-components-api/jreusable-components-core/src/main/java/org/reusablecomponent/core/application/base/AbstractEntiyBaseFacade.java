@@ -2,7 +2,6 @@ package org.reusablecomponent.core.application.base;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Objects.nonNull;
-import static java.util.Optional.ofNullable;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -10,9 +9,9 @@ import java.time.ZoneId;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.reusablecomponent.core.infra.exception.ExceptionTranslatorService;
+import org.reusablecomponent.core.infra.exception.GenericException;
 import org.reusablecomponent.core.infra.i18n.InterfaceI18nService;
 import org.reusablecomponent.core.infra.i18n.JavaSEI18nService;
-import org.reusablecomponent.core.infra.messaging.InterfacePublisherSerice;
 import org.reusablecomponent.core.infra.messaging.event.Event;
 import org.reusablecomponent.core.infra.messaging.event.InterfaceOperationEvent;
 import org.reusablecomponent.core.infra.messaging.event.What;
@@ -20,9 +19,10 @@ import org.reusablecomponent.core.infra.messaging.event.When;
 import org.reusablecomponent.core.infra.messaging.event.Where;
 import org.reusablecomponent.core.infra.messaging.event.Who;
 import org.reusablecomponent.core.infra.messaging.event.Why;
-import org.reusablecomponent.core.infra.messaging.logger.LoggerPublisherSerice;
 import org.reusablecomponent.core.infra.security.DefaultSecurityService;
 import org.reusablecomponent.core.infra.security.InterfaceSecurityService;
+import org.reusablecomponent.messaging.InterfacePublisherSerice;
+import org.reusablecomponent.messaging.logger.LoggerPublisherSerice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +70,7 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
 	this.publisherSerice = nonNull(publisherService) ? publisherService : new LoggerPublisherSerice();
 	this.i18nService = nonNull(i18nService) ? i18nService : new JavaSEI18nService();
 	this.securityService = nonNull(securityService) ? securityService : new DefaultSecurityService();
-	this.exceptionTranslatorService = nonNull(exceptionTranslatorService) ? exceptionTranslatorService : (paramException, paramI18nService) -> new RuntimeException(paramException);
+	this.exceptionTranslatorService = nonNull(exceptionTranslatorService) ? exceptionTranslatorService : (paramException, paramI18nService) -> new GenericException(paramException);
     }
 
     protected AbstractEntiyBaseFacade() {
@@ -80,7 +80,7 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
     // ------
 
     @SuppressWarnings("unchecked")
-    private Class<Entity> retrieveEntityClazz() {
+    private final Class<Entity> retrieveEntityClazz() {
 
 	final var entityTypeToken = new TypeToken<Entity>(getClass()) {
 	    private static final long serialVersionUID = 1L;
@@ -90,7 +90,7 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
     }
 
     @SuppressWarnings("unchecked")
-    private Class<Id> retrieveIdClazz() {
+    private final Class<Id> retrieveIdClazz() {
 
 	final var idTypeToken = new TypeToken<Id>(getClass()) {
 	    private static final long serialVersionUID = 1L;
@@ -100,9 +100,10 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
     }
     
     /**
+     * @param directives 
      * @return
      */
-    protected boolean isPublishEvents() {
+    protected boolean isPublishEvents(final Object... directives) {
 	return true;
     }
     
@@ -111,20 +112,17 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
      * @param dataOut
      * @param operation
      */
-    protected Event publish(final String dataIn, final String dataOut, final InterfaceOperationEvent operation) {
+    protected final Event publish(final String dataIn, final String dataOut, final InterfaceOperationEvent operation, final Object... directives) {
 	
-	checkNotNull(operation, "Operation argument cannot be null");
+	checkNotNull(operation, "The argument 'operation' cannot be null");
+	checkNotNull(directives, "The argument argument 'directives' cannot be null");
 	
 	LOGGER.debug("Publishing {} operation", operation);
 	
-	if (!isPublishEvents()) {
+	if (!isPublishEvents(directives)) {
 	    LOGGER.debug("Published {} operation avoided", operation);
 	    return null;
 	}
-	
-	final var data = "[in:${in}],[out:${out}]"
-			    .replace("${in}", ofNullable(dataIn).orElse("null"))
-			    .replace("${out}", ofNullable(dataOut).orElse("null"));
 	
 	final var user = securityService.getUserName();
 	final var realm = securityService.getUserRealm();
@@ -132,15 +130,17 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
 	final var application = securityService.getApplication();
 
 	final var event = new Event.Builder().with($ -> {
-	    $.what = new What(data);
+	    $.what = new What(dataIn, dataOut);
 	    $.when = new When(LocalDateTime.now(), ZoneId.systemDefault());
 	    $.where = new Where(application, session);
 	    $.who = new Who(realm, user);
 	    $.why = new Why(operation.toString());
 	}).build();
 
+	final var eventString = event.toJson();
+	
 	try {
-	    publisherSerice.publish(event);
+	    publisherSerice.publish(eventString);
 	} catch (final Exception ex) {
 	    LOGGER.error(ExceptionUtils.getRootCauseMessage(ex), ex);
 	    return null;
@@ -152,23 +152,28 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
     }
 
     // ------
-
+    
+    /**
+     * @return
+     */
     @NotNull
-    protected final Class<Id> getIdClazz() {
+    public final Class<Id> getIdClazz() {
 	return idClazz;
     }
 
     /**
+     * @return
      */
     @NotNull
-    protected Class<Entity> getEntityClazz() {
+    public final Class<Entity> getEntityClazz() {
 	return entityClazz;
     }
 
     /**
+     * @return
      */
     @NotNull
-    protected InterfacePublisherSerice getPublisherSerice() {
+    public final InterfacePublisherSerice getPublisherSerice() {
 	return publisherSerice;
     }
 
@@ -176,7 +181,7 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
      * @return
      */
     @NotNull
-    protected InterfaceI18nService getI18nService() {
+    public final InterfaceI18nService getI18nService() {
 	return i18nService;
     }
 
@@ -184,7 +189,7 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
      * @return
      */
     @NotNull
-    protected InterfaceSecurityService getSecurityService() {
+    public final InterfaceSecurityService getSecurityService() {
 	return securityService;
     }
     
@@ -192,7 +197,7 @@ public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>,
      * @return
      */
     @NotNull
-    protected ExceptionTranslatorService getExceptionTranslatorService() {
+    public final ExceptionTranslatorService getExceptionTranslatorService() {
         return exceptionTranslatorService;
     }
 }

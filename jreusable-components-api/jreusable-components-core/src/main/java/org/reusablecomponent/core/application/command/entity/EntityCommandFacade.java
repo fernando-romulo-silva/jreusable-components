@@ -72,8 +72,8 @@ public class EntityCommandFacade <  // generics
             DeleteEntitiesIn, DeleteEntitiesOut, // delete entities
             
             DeleteIdIn, DeleteIdOut, // delete a entity by id
-            DeleteIdsIn, DeleteIdsOut // delete entities by id
-		> { 
+            DeleteIdsIn, DeleteIdsOut> { // delete entities by id
+		
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityCommandFacade.class);
 
@@ -88,7 +88,7 @@ public class EntityCommandFacade <  // generics
     protected final Function<DeleteIdIn, DeleteIdOut> deleteByIdFunction;
     protected final Function<DeleteIdsIn, DeleteIdsOut> deleteAllByIdFunction;
 
-    protected EntityCommandFacade(final EntityCommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> builder) {
+    public EntityCommandFacade(final EntityCommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> builder) {
 	// super class parameters
 	super(
 		builder.publisherSerice, 
@@ -105,6 +105,7 @@ public class EntityCommandFacade <  // generics
 	//
 	this.deleteFunction = builder.deleteFunction;
 	this.deleteAllFunction = builder.deleteAllFunction;
+	//
 	this.deleteByIdFunction = builder.deleteByIdFunction;
 	this.deleteAllByIdFunction = builder.deleteAllByIdFunction;
     }
@@ -155,23 +156,25 @@ public class EntityCommandFacade <  // generics
 	
 	LOGGER.debug("Saving entity '{}', session '{}'", saveEntityIn, session);
 
-	final var saveEntityInFinal = preSave(saveEntityIn);
+	final var finalSaveEntityIn = preSave(saveEntityIn);
 
 	final SaveEntityOut result;
 	
 	try {
-	    result = saveFunction.apply(saveEntityInFinal);
+	    result = saveFunction.apply(finalSaveEntityIn);
 	} catch (final Exception ex) {
 	    throw exceptionTranslatorService.translate(ex, i18nService);
 	}
 
-	final var resultFinal = posSave(result);
+	final var finalResult = posSave(result);
 	
-	publish(convertSaveEntityInToPublishData(saveEntityInFinal), convertSaveEntityOutToPublishData(resultFinal), SAVE_ITEM);
+	final var dataIn = convertSaveEntityInToPublishData(finalSaveEntityIn);
+	final var dataOut = convertSaveEntityOutToPublishData(finalResult);
+	publish(dataIn, dataOut, SAVE_ITEM, finalSaveEntityIn, finalResult);
 
-	LOGGER.debug("Saved entity '{}', session '{}'", resultFinal, session);
+	LOGGER.debug("Saved entity '{}', session '{}'", finalResult, session);
 	
-	return resultFinal;
+	return finalResult;
     }
 
     
@@ -204,23 +207,25 @@ public class EntityCommandFacade <  // generics
 	
 	LOGGER.debug("Saving all entities '{}' with session '{}'", saveEntitiesIn, session);
 	
-	final var saveEntitiesInFinal = preSaveAll(saveEntitiesIn);
+	final var finalSaveEntitiesIn = preSaveAll(saveEntitiesIn);
 	
 	final SaveEntitiesOut result;
 	
 	try {
-	    result = saveAllFunction.apply(saveEntitiesInFinal);
+	    result = saveAllFunction.apply(finalSaveEntitiesIn);
 	} catch (final Exception ex) {
 	    throw exceptionTranslatorService.translate(ex, i18nService);
 	}	
 	
-	final var resultFinal = posSaveAll(result);
+	final var finalResult = posSaveAll(result);
 	
-	publish(convertDataSaveEntitiesInToPublishData(saveEntitiesInFinal), convertSaveEntitiesOutToPublishData(resultFinal), SAVE_LIST);
+	final var dataIn = convertDataSaveEntitiesInToPublishData(finalSaveEntitiesIn);
+	final var dataOut = convertSaveEntitiesOutToPublishData(finalResult);
+	publish(dataIn, dataOut, SAVE_LIST, finalSaveEntitiesIn, finalResult);
 	
-	LOGGER.debug("Saved all entities '{}' with session '{}'", resultFinal, session);	
+	LOGGER.debug("Saved all entities '{}' with session '{}'", finalResult, session);	
 	
-	return resultFinal;
+	return finalResult;
     }
     
     // ----------------------------------------------------------------------------------------------------------
@@ -252,23 +257,25 @@ public class EntityCommandFacade <  // generics
 	
 	LOGGER.debug("Updating entity '{}' with session '{}'", updateEntityIn, session);
 	
-	final var updateEntityInFinal = preUpdate(updateEntityIn);
+	final var finalUpdateEntityIn = preUpdate(updateEntityIn);
 
 	final UpdateEntityOut result;
 	
 	try {
-	    result = updateFunction.apply(updateEntityInFinal);
+	    result = updateFunction.apply(finalUpdateEntityIn);
 	} catch (final Exception ex) {
 	    throw exceptionTranslatorService.translate(ex, i18nService);
 	}	
 	
-	final var resultFinal = posUpdate(result);
+	final var finalResult = posUpdate(result);
 	
-	publish(convertUpdateEntityInToPublishData(updateEntityInFinal), convertUpdateEntityOutToPublishData(resultFinal), UPDATE_ITEM);
+	final var dataIn = convertUpdateEntityInToPublishData(finalUpdateEntityIn);
+	final var dataOut = convertUpdateEntityOutToPublishData(finalResult);
+	publish(dataIn, dataOut, UPDATE_ITEM, finalUpdateEntityIn, finalResult);
 	
-	LOGGER.debug("Updated entity '{}' with session '{}'", resultFinal, session);	
+	LOGGER.debug("Updated entity '{}' with session '{}'", finalResult, session);	
 	
-	return resultFinal;
+	return finalResult;
     }
     
     // ----------------------------------------------------------------------------------------------------------
@@ -300,21 +307,23 @@ public class EntityCommandFacade <  // generics
 	
 	LOGGER.debug("Updating entities '{}' with session '{}'", updateEntitiesIn, session);
 	
-	final var updateEntitiesInFinal = preUpdateAll(updateEntitiesIn);
+	final var finalUpdateEntitiesIn = preUpdateAll(updateEntitiesIn);
 	
 	final UpdateEntitiesOut result;
 
 	try {
-	    result = updateAllFunction.apply(updateEntitiesInFinal);
+	    result = updateAllFunction.apply(finalUpdateEntitiesIn);
 	} catch (final Exception ex) {
 	    throw exceptionTranslatorService.translate(ex, i18nService);
 	}
 	
-	final var resultFinal = posUpdateAll(result);
+	final var finalResult = posUpdateAll(result);
 	
-	publish(convertUpdateEntitiesInToPublishData(updateEntitiesInFinal), convertUpdateEntitiesOutToPublishData(resultFinal), UPDATE_LIST);
+	final var dataIn = convertUpdateEntitiesInToPublishData(finalUpdateEntitiesIn);
+	final var dataOut = convertUpdateEntitiesOutToPublishData(finalResult);
+	publish(dataIn, dataOut, UPDATE_LIST, finalUpdateEntitiesIn, finalResult);
 	
-	LOGGER.debug("Updated all entities '{}' with session '{}'", resultFinal, session);
+	LOGGER.debug("Updated all entities '{}' with session '{}'", finalResult, session);
 	
 	return result;
     }
@@ -347,21 +356,23 @@ public class EntityCommandFacade <  // generics
 	
 	LOGGER.debug("Deleting entity '{}' with session '{}'", deleteEntityIn, session);	
 	
-	final var deleteEntityInFinal = preDelete(deleteEntityIn);
+	final var finalDeleteEntityIn = preDelete(deleteEntityIn);
 
 	final DeleteEntityOut result;
 
 	try {
-	    result = deleteFunction.apply(deleteEntityInFinal);
+	    result = deleteFunction.apply(finalDeleteEntityIn);
 	} catch (final Exception ex) {
 	    throw exceptionTranslatorService.translate(ex, i18nService);
 	}	
 	
-	final var resultFinal = posDelete(result);
+	final var finalResult = posDelete(result);
 
-	publish(convertDeleteEntityInToPublishData(deleteEntityInFinal), convertDeleteEntityOutToPublishData(resultFinal), DELETE_ITEM);
+	final var dataIn = convertDeleteEntityInToPublishData(finalDeleteEntityIn);
+	final var dataOut = convertDeleteEntityOutToPublishData(finalResult);
+	publish(dataIn, dataOut, DELETE_ITEM, finalDeleteEntityIn, finalResult);
 	
-	LOGGER.debug("Deleted entity '{}' with session '{}'", resultFinal, session);
+	LOGGER.debug("Deleted entity '{}' with session '{}'", finalResult, session);
 	
 	return result;
     }
@@ -395,23 +406,25 @@ public class EntityCommandFacade <  // generics
 	
 	LOGGER.debug("Deleting entities '{}' with session '{}'", deleteEntitiesIn, session);
 	
-	final var deleteEntitiesInFinal = preDeleteAll(deleteEntitiesIn);
+	final var finalDeleteEntitiesIn = preDeleteAll(deleteEntitiesIn);
 	
 	final DeleteEntitiesOut result; 
 	
 	try {
-	    result = deleteAllFunction.apply(deleteEntitiesInFinal);
+	    result = deleteAllFunction.apply(finalDeleteEntitiesIn);
 	} catch (final Exception ex) {
 	    throw exceptionTranslatorService.translate(ex, i18nService);
 	}
 	
-	final var resultFinal = posDeleteAll(result);
+	final var finalResult = posDeleteAll(result);
 	
-	publish(convertDeleteEntitiesInToPublishData(deleteEntitiesInFinal), convertDeleteEntitiesOutOutToPublishData(resultFinal), DELETE_LIST);
+	final var dataIn = convertDeleteEntitiesInToPublishData(finalDeleteEntitiesIn);
+	final var dataOut = convertDeleteEntitiesOutOutToPublishData(finalResult);
+	publish(dataIn, dataOut, DELETE_LIST, finalDeleteEntitiesIn, finalResult);
 	
-	LOGGER.debug("Deleted entities '{}' with session '{}'", resultFinal, session);
+	LOGGER.debug("Deleted entities '{}' with session '{}'", finalResult, session);
 	
-	return resultFinal;
+	return finalResult;
     }
     
     
@@ -443,23 +456,25 @@ public class EntityCommandFacade <  // generics
 	
 	LOGGER.debug("Deleting by id '{}' with session '{}'", deleteIdIn, session);	
 	
-	final var deleteIdInFinal = preDeleteById(deleteIdIn);
+	final var finalDeleteIdIn = preDeleteById(deleteIdIn);
 
 	final DeleteIdOut result;
 	
 	try {
-	    result = deleteByIdFunction.apply(deleteIdInFinal);
+	    result = deleteByIdFunction.apply(finalDeleteIdIn);
 	} catch (final Exception ex) {
 	    throw exceptionTranslatorService.translate(ex, i18nService);
 	}
 	
-	final var resultFinal = posDeleteById(result);
+	final var finalResult = posDeleteById(result);
 
-	publish(convertDeleteIdInToPublishData(deleteIdInFinal), convertDeleteIdOutToPublishData(resultFinal), DELETE_ID);
+	final var dataIn = convertDeleteIdInToPublishData(finalDeleteIdIn);
+	final var dataOut = convertDeleteIdOutToPublishData(finalResult);
+	publish(dataIn, dataOut, DELETE_ID, finalDeleteIdIn, finalResult);
 	
-	LOGGER.debug("Deleted by id '{}' with session '{}'", resultFinal, session);
+	LOGGER.debug("Deleted by id '{}' with session '{}'", finalResult, session);
 
-	return resultFinal;	    
+	return finalResult;	    
     }
     
     
@@ -492,22 +507,24 @@ public class EntityCommandFacade <  // generics
 	
 	LOGGER.debug("Deleting by ids '{}' with session '{}'", deleteIdsIn, session);	
 	
-	final var deleteIdsInFinal = preDeleteEntitiesBy(deleteIdsIn);
+	final var finalDeleteIdsIn = preDeleteEntitiesBy(deleteIdsIn);
 	
 	final DeleteIdsOut result;
 	
 	try {
-	    result = deleteAllByIdFunction.apply(deleteIdsInFinal);
+	    result = deleteAllByIdFunction.apply(finalDeleteIdsIn);
 	} catch (final Exception ex) {
 	    throw exceptionTranslatorService.translate(ex, i18nService);
 	}
 	
-	final var resultFinal = posDeleteEntitiesBy(result);
+	final var finalResult = posDeleteEntitiesBy(result);
 	
-	publish(convertDeleteIdsInToPublishData(deleteIdsInFinal), convertDeleteIdsOutToPublishData(resultFinal), DELETE_IDS);
+	final var dataIn = convertDeleteIdsInToPublishData(finalDeleteIdsIn);
+	final var dataOut = convertDeleteIdsOutToPublishData(finalResult);
+	publish(dataIn, dataOut, DELETE_IDS, finalDeleteIdsIn, finalResult);
 	
-	LOGGER.debug("Deleted by ids '{}' with session '{}'", resultFinal, session);
+	LOGGER.debug("Deleted by ids '{}' with session '{}'", finalResult, session);
 	
-	return resultFinal;
+	return finalResult;
     }    
 }

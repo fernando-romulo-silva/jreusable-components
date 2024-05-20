@@ -27,7 +27,20 @@ import jakarta.servlet.http.HttpServletResponse;
  * @param <Id>
  */
 public interface InterfaceSpringEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id> 
-	extends InterfaceEntityCommandHttpController<Entity, Id, ResponseEntity<?>> {
+		extends InterfaceEntityCommandHttpController<Entity, Id,
+				// save
+				Entity, Entity, // save a entity
+				Iterable<Entity>, Iterable<Entity>, // save entities
+				// update
+				Entity, Entity, // update a entity
+				Iterable<Entity>, Iterable<Entity>, // update entities
+				// delete entity
+				Entity, Void, // delete a entity
+				Iterable<Entity>, Void, // delete entities
+				// delete by id
+				Id, Void, // delete a entity by id
+				Iterable<Id>, Void, // delete entities by id
+				ResponseEntity<?>> {
 
     /**
      * {@inheritDoc}

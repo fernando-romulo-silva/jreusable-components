@@ -12,7 +12,7 @@ import org.application_example.infra.DummySecurityService;
 import org.reusablecomponent.core.application.command.entity.EntityCommandFacade;
 import org.reusablecomponent.core.application.command.entity.EntityCommandFacadeBuilder;
 import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.core.infra.messaging.logger.LoggerPublisherSerice;
+import org.reusablecomponent.messaging.logger.LoggerPublisherSerice;
 
 public class EntityCommandFacadeDummy<Entity extends AbstractEntity<Id>, Id> 
 	//
@@ -30,8 +30,7 @@ public class EntityCommandFacadeDummy<Entity extends AbstractEntity<Id>, Id>
 	        List<Entity>, List<Boolean>, // delete entities
 	        //
 	        Id, Boolean, // delete entity by id
-	        List<Id>, List<Boolean> // delete entities by id
-	> {
+	        List<Id>, List<Boolean> > { // delete entities by id
     
     private final List<AbstractEntity<Id>> repository;
 

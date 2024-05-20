@@ -1,120 +1,103 @@
 package org.reusablecomponent.core.application.full.entity.nonpaged;
 
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
-
 import org.reusablecomponent.core.application.command.entity.InterfaceEntityCommandFacade;
 import org.reusablecomponent.core.application.full.entity.AbstractEntityCommonFacade;
-import org.reusablecomponent.core.application.query.entity.nonpaged.EntityQueryFacade;
 import org.reusablecomponent.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 
 import jakarta.validation.constraints.NotNull;
-
 
 /**
  * @param <Entity>
  * @param <Id>
  * @param <Specification>
  */
-public class EntityFacade 
-	<Entity extends AbstractEntity<Id>, Id, OneResultCommand, OneResultQuery, MultipleResult, CountResult, ExistsResult, VoidResult>
-        //
-	extends AbstractEntityCommonFacade<Entity, Id, OneResultCommand, MultipleResult, VoidResult, ExistsResult>
-	implements InterfaceEntityFacade <Entity, Id, OneResultCommand, OneResultQuery, MultipleResult, CountResult, ExistsResult, VoidResult> {
+public class EntityFacade<Entity extends AbstractEntity<Id>, Id, // basic
+		// ------------ command
+		// save
+		SaveEntityIn, SaveEntityOut, // save a entity
+		SaveEntitiesIn, SaveEntitiesOut, // save entities
+		// update
+		UpdateEntityIn, UpdateEntityOut, // update a entity
+		UpdateEntitiesIn, UpdateEntitiesOut, // update entities
+		// delete
+		DeleteEntityIn, DeleteEntityOut, // delete a entity
+		DeleteEntitiesIn, DeleteEntitiesOut, // delete entities
+		// delete by id
+		DeleteIdIn, DeleteIdOut, // delete a entity by id
+		DeleteIdsIn, DeleteIdsOut, // delete entities by id
+		// ------------ query
+		QueryIdIn, // by id arg
+		// results
+		OneResult, // One result
+		MultipleResult, // multiple result
+		CountResult, // count result
+		ExistsResult> // exists result
+		// Base class
+		extends AbstractEntityCommonFacade<Entity, Id, // basic
+				//
+				SaveEntityIn, SaveEntityOut, // save a entity
+				SaveEntitiesIn, SaveEntitiesOut, // save entities
 
-    protected final InterfaceEntityQueryFacade<Entity, Id, OneResultQuery, MultipleResult, CountResult, ExistsResult> entityQueryFacade;
-    
+				UpdateEntityIn, UpdateEntityOut, // update a entity
+				UpdateEntitiesIn, UpdateEntitiesOut, // update entities
+
+				DeleteEntityIn, DeleteEntityOut, // delete a entity
+				DeleteEntitiesIn, DeleteEntitiesOut, // delete entities
+
+				DeleteIdIn, DeleteIdOut, // delete a entity by id
+				DeleteIdsIn, DeleteIdsOut>  // delete entities by id
+                // Base interface
+		implements InterfaceEntityFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> {
+
+    protected final InterfaceEntityQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> entityQueryFacade;
+
     /**
      * @param entityCommandFacade
      * @param entityQueryFacade
      */
-    protected EntityFacade(
-		    @NotNull final InterfaceEntityCommandFacade<Entity, Id, OneResultCommand, MultipleResult, VoidResult> entityCommandFacade, 
-		    @NotNull final InterfaceEntityQueryFacade<Entity, Id, OneResultQuery, MultipleResult, CountResult, ExistsResult> entityQueryFacade) {
-	
+    protected EntityFacade( //
+		    @NotNull final InterfaceEntityCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> entityCommandFacade, 
+		    @NotNull final InterfaceEntityQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> entityQueryFacade) {
 	super(entityCommandFacade);
 	this.entityQueryFacade = entityQueryFacade;
-    }
-    
-    /**
-     * @param saveFunction
-     * @param saveAllFunction
-     * @param deleteFunction
-     * @param deleteAllFunction
-     * @param deleteByIdFunction
-     * @param deleteAllByIdFunction
-     * @param existsByIdFunction
-     * @param findByIdFunction
-     * @param findAllFunction
-     */
-    protected EntityFacade( //
-		    final Function<Entity, OneResultCommand> saveFunction,
-		    final UnaryOperator<MultipleResult> saveAllFunction,
-		    //
-		    final Function<Entity, VoidResult> deleteFunction,
-		    final Function<MultipleResult, VoidResult> deleteAllFunction,
-		    final Function<Id, VoidResult> deleteByIdFunction,
-		    final Function<Iterable<Id>, VoidResult> deleteAllByIdFunction,
-		    //
-		    final Function<Id, ExistsResult> existsByIdFunction,
-		    final Predicate<ExistsResult> existsEntityFunction,
-		    //
-		    final Function<Id, OneResultQuery> findByIdFunction,
-		    final Supplier<MultipleResult> findAllFunction,
-		    final Supplier<CountResult> countAllFunction) {
-	
-	super(
-		saveFunction, 
-		saveAllFunction, 
-		deleteFunction, 
-		deleteAllFunction, 
-		deleteByIdFunction, 
-		deleteAllByIdFunction, 
-		existsByIdFunction,
-		existsEntityFunction
-	);
-	
-	this.entityQueryFacade = new EntityQueryFacade<>(
-			existsByIdFunction, 
-			findByIdFunction, 
-			findAllFunction, 
-			countAllFunction
-	);
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public MultipleResult findAll(final Map<String, String[]> directives) {
-	return entityQueryFacade.findAll(directives);
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public OneResultQuery findBy(final Id id) {
-	return entityQueryFacade.findBy(id);
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ExistsResult existsBy(final Id id) {
-	return entityQueryFacade.existsBy(id);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public CountResult count() {
-	return entityQueryFacade.count();
+    public OneResult findBy(final QueryIdIn queryIdIn, final Object... directives) {
+	return entityQueryFacade.findBy(queryIdIn, directives);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MultipleResult findAll(final Object... directives) {
+	return entityQueryFacade.findAll(directives);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ExistsResult existsBy(final QueryIdIn queryIdIn) {
+	return entityQueryFacade.existsBy(queryIdIn);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CountResult countAll() {
+	return entityQueryFacade.countAll();
+    }
+
+    @Override
+    public InterfaceEntityCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> getEntityCommandFacade() {
+	// TODO Auto-generated method stub
+	return entityCommandFacade;
     }
 }

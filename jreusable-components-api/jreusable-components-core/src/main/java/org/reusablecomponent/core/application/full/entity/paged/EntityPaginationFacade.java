@@ -1,13 +1,7 @@
 package org.reusablecomponent.core.application.full.entity.paged;
 
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
-
 import org.reusablecomponent.core.application.command.entity.InterfaceEntityCommandFacade;
 import org.reusablecomponent.core.application.full.entity.AbstractEntityCommonFacade;
-import org.reusablecomponent.core.application.query.entity.paged.EntityQueryPaginationFacade;
 import org.reusablecomponent.core.application.query.entity.paged.InterfaceEntityQueryPaginationFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 
@@ -19,59 +13,50 @@ import org.reusablecomponent.core.domain.AbstractEntity;
  * @param <Specification>
  * @param <Sort>
  */
-public class EntityPaginationFacade
-        <Entity extends AbstractEntity<Id>, Id, OneResultCommand, OneResultQuery, ExistsResult, VoidResult, MultipleResult, MultiplePagedResult, Pageable, Sort>
+public class EntityPaginationFacade<Entity extends AbstractEntity<Id>, Id, // basic
+		// ------------ command
+		// save
+		SaveEntityIn, SaveEntityOut, // save a entity
+		SaveEntitiesIn, SaveEntitiesOut, // save entities
+		// update
+		UpdateEntityIn, UpdateEntityOut, // update a entity
+		UpdateEntitiesIn, UpdateEntitiesOut, // update entities
+		// delete entity
+		DeleteEntityIn, DeleteEntityOut, // delete a entity
+		DeleteEntitiesIn, DeleteEntitiesOut, // delete entities
+		// delete by id
+		DeleteIdIn, DeleteIdOut, // delete a entity by id
+		DeleteIdsIn, DeleteIdsOut, // delete entities by id
+		// ------------ query
+		// results
+		OneResult, // one result type
+		MultiplePagedResult, // multiple result type
+		// Pagination
+		Pageable, // pageable type
+		Sort> // sort type
 
-	extends AbstractEntityCommonFacade<Entity, Id, OneResultCommand, MultipleResult, VoidResult, ExistsResult>
-	implements InterfaceEntityPaginationFacade <Entity, Id, OneResultCommand, OneResultQuery, VoidResult, MultipleResult, MultiplePagedResult, Pageable, Sort> {
-    
-    protected final InterfaceEntityQueryPaginationFacade<Entity, Id, OneResultQuery, MultiplePagedResult, Pageable, Sort> entityQueryPaginationFacade;
-    
+		extends	AbstractEntityCommonFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
+		implements InterfaceEntityPaginationFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut, OneResult, MultiplePagedResult, Pageable, Sort> {
+
+    protected final InterfaceEntityQueryPaginationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> entityQueryPaginationFacade;
+
     /**
      * @param entityCommandFacade
      * @param entityQueryPaginationFacade
      */
     protected EntityPaginationFacade(
-		    final InterfaceEntityCommandFacade<Entity, Id, OneResultCommand, MultipleResult, VoidResult> entityCommandFacade, 
-		    final InterfaceEntityQueryPaginationFacade<Entity, Id, OneResultQuery, MultiplePagedResult, Pageable, Sort> entityQueryPaginationFacade) {
+		    final InterfaceEntityCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> entityCommandFacade,
+		    final InterfaceEntityQueryPaginationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> entityQueryPaginationFacade) {
 
 	super(entityCommandFacade);
 	this.entityQueryPaginationFacade = entityQueryPaginationFacade;
-    }
-    
-    protected EntityPaginationFacade( 
-		    final Function<Entity, OneResultCommand> saveFunction,
-		    final UnaryOperator<MultipleResult> saveAllFunction,
-		    //
-		    final Function<Entity, VoidResult> deleteFunction,
-		    final Function<MultipleResult, VoidResult> deleteAllFunction,
-		    final Function<Id, VoidResult> deleteByIdFunction,
-		    final Function<Iterable<Id>, VoidResult> deleteAllByIdFunction,
-		    //
-		    final Function<Id, ExistsResult> existsByIdFunction,
-		    final Predicate<ExistsResult> existsEntityFunction,
-		    //
-		    final Function<Pageable, MultiplePagedResult> findAllFunction,
-		    final Function<Sort, OneResultQuery> findFirstFunction) {
-	super(
-		saveFunction, 
-		saveAllFunction, 
-		deleteFunction, 
-		deleteAllFunction, 
-		deleteByIdFunction, 
-		deleteAllByIdFunction, 
-		existsByIdFunction, 
-		existsEntityFunction
-	);
-	
-	this.entityQueryPaginationFacade = new EntityQueryPaginationFacade<>(findAllFunction, findFirstFunction);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public MultiplePagedResult findAll(final Pageable pageable, final Map<String, String[]> directives) {
+    public MultiplePagedResult findAll(final Pageable pageable, final Object... directives) {
 	return entityQueryPaginationFacade.findAll(pageable, directives);
     }
 
@@ -79,7 +64,7 @@ public class EntityPaginationFacade
      * {@inheritDoc}
      */
     @Override
-    public OneResultQuery findFirst(final Sort sort) {
+    public OneResult findFirst(final Sort sort) {
 	return entityQueryPaginationFacade.findFirst(sort);
     }
 }

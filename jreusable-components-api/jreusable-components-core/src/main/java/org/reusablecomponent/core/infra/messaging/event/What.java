@@ -1,4 +1,4 @@
 package org.reusablecomponent.core.infra.messaging.event;
 
-public record What(String data) {
+public record What(String dataIn, String dataOut) {
 }

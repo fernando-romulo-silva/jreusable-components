@@ -11,7 +11,19 @@ import jakarta.transaction.Transactional;
 
 public interface InterfaceJakartaCommandFacade<Entity extends AbstractEntity<Id>, Id>
 		//
-		extends InterfaceEntityCommandFacade<Entity, Id, Entity, List<Entity>, Void> {
+		extends InterfaceEntityCommandFacade<Entity, Id,
+				// save
+				Entity, Entity, // save a entity
+				List<Entity>, List<Entity>, // save entities
+				// update
+				Entity, Entity, // update a entity
+				List<Entity>, List<Entity>, // update entities
+				// delete entity
+				Entity, Void, // delete a entity
+				List<Entity>, Void, // delete entities
+				// delete by id
+				Id, Void, // delete a entity by id
+				List<Id>, Void> { // delete entities by id		
 
     /**
      * {@inheritDoc}
@@ -25,7 +37,7 @@ public interface InterfaceJakartaCommandFacade<Entity extends AbstractEntity<Id>
      */
     @Override
     @Transactional(value = REQUIRED)
-    List<Entity> saveAll(final Iterable<Entity> entities);
+    List<Entity> saveAll(final List<Entity> entities);
     
     /**
      * {@inheritDoc}
@@ -39,14 +51,7 @@ public interface InterfaceJakartaCommandFacade<Entity extends AbstractEntity<Id>
      */
     @Override
     @Transactional(value = REQUIRED)
-    Entity update(final Id id, final Entity entity);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Transactional(value = REQUIRED)
-    List<Entity> updateAll(final Iterable<Entity> entities);
+    List<Entity> updateAll(final List<Entity> entities);
 
     /**
      * {@inheritDoc}
@@ -60,7 +65,7 @@ public interface InterfaceJakartaCommandFacade<Entity extends AbstractEntity<Id>
      */
     @Override
     @Transactional(value = REQUIRED)
-    Void deleteAll(final Iterable<Entity> entities);
+    Void deleteAll(final List<Entity> entities);
 
     /**
      * {@inheritDoc}
@@ -74,6 +79,6 @@ public interface InterfaceJakartaCommandFacade<Entity extends AbstractEntity<Id>
      */
     @Override
     @Transactional(value = REQUIRED)
-    Void deleteAllBy(final Iterable<Id> ids);
+    Void deleteAllBy(final List<Id> ids);
 
 }

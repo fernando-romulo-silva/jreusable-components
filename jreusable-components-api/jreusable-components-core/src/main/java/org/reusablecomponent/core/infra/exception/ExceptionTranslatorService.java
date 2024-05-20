@@ -18,5 +18,5 @@ public interface ExceptionTranslatorService {
      * @param I18nService
      * @return
      */
-    RuntimeException translate(@NotNull final Exception ex, @NotNull final InterfaceI18nService I18nService);
+    BaseApplicationException translate(@NotNull final Exception ex, @NotNull final InterfaceI18nService I18nService);
 }

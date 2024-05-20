@@ -8,8 +8,8 @@ import java.util.function.Function;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.reusablecomponent.core.infra.exception.ExceptionTranslatorService;
 import org.reusablecomponent.core.infra.i18n.InterfaceI18nService;
-import org.reusablecomponent.core.infra.messaging.InterfacePublisherSerice;
 import org.reusablecomponent.core.infra.security.InterfaceSecurityService;
+import org.reusablecomponent.messaging.InterfacePublisherSerice;
 
 public final class EntityCommandFacadeBuilder < // Generics spec
             Entity extends AbstractEntity<Id>, Id, // basic
@@ -42,6 +42,7 @@ public final class EntityCommandFacadeBuilder < // Generics spec
     
     public Function<DeleteEntityIn, DeleteEntityOut> deleteFunction;
     public Function<DeleteEntitiesIn, DeleteEntitiesOut> deleteAllFunction;
+    
     public Function<DeleteIdIn, DeleteIdOut> deleteByIdFunction;
     public Function<DeleteIdsIn, DeleteIdsOut> deleteAllByIdFunction;
 
