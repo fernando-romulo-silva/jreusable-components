@@ -20,7 +20,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class DtoCommandFacade // Operations on Dtos
 	//
-	extends AbstractEntiyBaseFacade  // Base facade
+//	extends AbstractEntiyBaseFacade  // Base facade
 	//
 //	implements InterfaceDtoCommandFacade 
 	

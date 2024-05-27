@@ -8,13 +8,11 @@ import org.reusablecomponent.core.domain.AbstractEntity;
  * @param <Id>
  * @param <Specification>
  */
-public interface InterfaceEntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, // basic
-			// results
+public non-sealed interface InterfaceEntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, // basic
 			OneResult, // One result type
-			MultiplePagedResult, // multiple result type
+			MultipleResult, // multiple result type
 			CountResult, // count result type
 			ExistsResult, // exists result type
-			// specification
 			Specification> // query specification (parameters, filters, orders, etc)
 	extends InterfaceEntityBaseFacade<Entity, Id> {
 
@@ -23,7 +21,7 @@ public interface InterfaceEntityQuerySpecificationFacade<Entity extends Abstract
      * @param directives
      * @return
      */
-    MultiplePagedResult findBy(final Specification specification, final Object... directives);
+    MultipleResult findBy(final Specification specification, final Object... directives);
     
     /**
      * @param specification

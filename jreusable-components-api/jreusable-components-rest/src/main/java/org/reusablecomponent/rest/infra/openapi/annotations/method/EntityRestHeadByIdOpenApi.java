@@ -6,9 +6,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.reusablecomponent.rest.infra.openapi.annotations.response.error.EntityResponseError404OpenApi;
 import org.reusablecomponent.rest.infra.openapi.annotations.response.error.EntityResponseError500OpenApi;
-import org.reusablecomponent.rest.infra.openapi.annotations.response.error.OpenApiEntityGetBySearchError400;
-import org.reusablecomponent.rest.infra.openapi.annotations.response.success.OpenApiEntityGet200;
+import org.reusablecomponent.rest.infra.openapi.annotations.response.success.OpenApiEntityGetById200;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,15 +17,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 //
-//
 @Tag(name = "BETA", description = "This API is currently in beta state")
-@Operation( //
-		summary = "Get entities by criteria search", //
-		description = "This method return entities that satisfy a certain condition" //
+@Operation(
+		summary = "Check a entity by id", 
+		description = "This method check if a entity exists by id"
 )
-@OpenApiEntityGet200
-@OpenApiEntityGetBySearchError400
+@OpenApiEntityGetById200
+@EntityResponseError404OpenApi
 @EntityResponseError500OpenApi
-public @interface EntityRestGetOpenApi {
+public @interface EntityRestHeadByIdOpenApi {
 
 }

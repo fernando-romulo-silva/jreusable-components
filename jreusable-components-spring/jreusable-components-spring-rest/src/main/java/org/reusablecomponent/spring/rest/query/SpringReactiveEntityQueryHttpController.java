@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import org.reactivestreams.Publisher;
 import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.rest.rest.query.entity.nonpaged.AbstractEntityQueryHttpController;
+import org.reusablecomponent.rest.rest.query.entity.nonpaged.EntityQueryHttpController;
 import org.reusablecomponent.spring.core.application.query.nonpaged.InterfaceSpringReactiveEntityQueryFacade;
 import org.reusablecomponent.spring.core.infra.logging.Loggable;
 import org.springframework.http.ResponseEntity;

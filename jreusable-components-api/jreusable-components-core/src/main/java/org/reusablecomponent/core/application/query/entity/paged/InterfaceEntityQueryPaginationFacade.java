@@ -11,11 +11,9 @@ import org.reusablecomponent.core.domain.AbstractEntity;
  * @param <Pageable>
  * @param <Sort>
  */
-public interface InterfaceEntityQueryPaginationFacade<Entity extends AbstractEntity<Id>, Id, // basic
-		// results
+public non-sealed interface InterfaceEntityQueryPaginationFacade<Entity extends AbstractEntity<Id>, Id, // basic
 		OneResult, // one result type
 		MultiplePagedResult, // multiple result type
-		// Pagination
 		Pageable, // pageable type
 		Sort> // sort type
 		extends InterfaceEntityBaseFacade<Entity, Id> {

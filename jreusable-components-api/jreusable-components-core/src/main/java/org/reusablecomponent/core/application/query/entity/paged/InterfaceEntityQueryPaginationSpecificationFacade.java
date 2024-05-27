@@ -14,14 +14,11 @@ import org.reusablecomponent.core.domain.AbstractEntity;
  * @param <Sort>
  * @param <Specification>
  */
-public interface InterfaceEntityQueryPaginationSpecificationFacade<Entity extends AbstractEntity<Id>, Id, // basic
-		// results
-		OneResult, 
-		MultiplePagedResult, 
-		// Pagination
-		Pageable, Sort, 
-		// Specification
-		Specification> 
+public non-sealed interface InterfaceEntityQueryPaginationSpecificationFacade<Entity extends AbstractEntity<Id>, Id, // basic
+		OneResult, // oneResult
+		MultiplePagedResult, // multiple paged 
+		Pageable, Sort, // pagination 
+		Specification> // specification 
 	// Base
 	extends InterfaceEntityBaseFacade<Entity, Id> {
 

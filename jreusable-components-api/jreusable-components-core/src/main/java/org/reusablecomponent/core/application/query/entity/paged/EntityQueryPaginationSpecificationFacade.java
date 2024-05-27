@@ -24,7 +24,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <Specification>
  * @param <Sort>
  */
-public class EntityQueryPaginationSpecificationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification>
+public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification>
 	extends AbstractEntiyBaseFacade<Entity, Id>
 	implements InterfaceEntityQueryPaginationSpecificationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification> {
     

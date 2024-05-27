@@ -10,8 +10,8 @@ import org.reusablecomponent.core.domain.AbstractEntity;
  * @param <OneResult>
  * @param <MultipleResult>
  */
-public interface InterfaceDtoCommandFacade<DTO, Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult> 
-	extends InterfaceEntityBaseFacade<Entity, Id> {
+public interface InterfaceDtoCommandFacade<DTO, Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult> {
+//	extends InterfaceEntityBaseFacade<Entity, Id> 
     
     /**
      * @param dto

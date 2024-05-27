@@ -18,7 +18,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <Id>
  * @param <Specification>
  */
-public class EntityQuerySpecificationFacade <Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> 
+public non-sealed class EntityQuerySpecificationFacade <Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> 
 	extends AbstractEntiyBaseFacade<Entity, Id> 
 	implements InterfaceEntityQuerySpecificationFacade<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> {
     

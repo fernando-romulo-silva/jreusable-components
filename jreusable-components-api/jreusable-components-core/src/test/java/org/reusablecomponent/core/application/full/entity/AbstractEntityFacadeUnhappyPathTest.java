@@ -1,20 +1,14 @@
 package org.reusablecomponent.core.application.full.entity;
 
-import static java.text.MessageFormat.format;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.reusablecomponent.core.application.full.entity.nonpaged.EntityFacade;
-import org.reusablecomponent.core.infra.exception.ElementAlreadyExistsException;
 
 @Tag("integration")
 public class AbstractEntityFacadeUnhappyPathTest {
     
-    protected EntityFacade entityFacade;
+//    protected EntityFacade entityFacade;
 
     @Test
     @Order(1)

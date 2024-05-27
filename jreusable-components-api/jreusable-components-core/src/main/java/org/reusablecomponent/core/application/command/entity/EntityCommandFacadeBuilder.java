@@ -82,39 +82,3 @@ public final class EntityCommandFacadeBuilder < // Generics spec
 	checkNotNull(deleteAllByIdFunction, "Please pass a non-null 'deleteAllByIdFunction'");
     }
 }
-
-//protected EntityCommandFacade(
-//@NotNull final Function<SaveEntityIn, SaveEntityOut> saveFunction, // function to save one entity 
-//@NotNull final Function<SaveEntitiesIn, SaveEntitiesOut> saveAllFunction, // save all Function
-////
-//@NotNull final Function<UpdateEntityIn, UpdateEntityOut> updateFunction, // function to update one entity
-//@NotNull final Function<UpdateEntitiesIn, UpdateEntitiesOut> updateAllFunction, // save all Function
-////
-//@NotNull final Function<DeleteEntityIn, DeleteEntityOut> deleteFunction, // function to delete one entity
-//@NotNull final Function<DeleteEntitiesIn, DeleteEntitiesOut> deleteAllFunction, // function to delete all entities
-//@NotNull final Function<DeleteIdIn, DeleteIdOut> deleteByIdFunction, // function to delete one by id
-//@NotNull final Function<DeleteIdsIn, DeleteIdsOut> deleteAllByIdFunction, // function to delete a entity's collection by id
-////
-//@NotNull final Function<Object, Entity> unwrapEntityFunction, // unwrapp whatever to entity
-//@NotNull final Function<Object, List<Entity>> unwrapEntitiesFunction, // unwrapp whatevers to entities
-//@NotNull final Function<Object, Id> unwrapIdFunction, // unwrapp whatever to id
-//@NotNull final Function<Object, List<Id>> unwrapIdsFunction // unwrapp whatevers to ids
-//){
-//super();
-////
-//this.saveFunction = saveFunction;
-//this.saveAllFunction = saveAllFunction;
-////
-//this.updateFunction = updateFunction;
-//this.updateAllFunction = updateAllFunction;
-////
-//this.deleteFunction = deleteFunction;
-//this.deleteAllFunction = deleteAllFunction;
-//this.deleteByIdFunction = deleteByIdFunction;
-//this.deleteAllByIdFunction = deleteAllByIdFunction;
-////
-//this.unWrapEntity = unwrapEntityFunction;
-//this.unWrapEntities = unwrapEntitiesFunction;
-//this.unWrapId = unwrapIdFunction;
-//this.unWrapIds = unwrapIdsFunction;
-//}

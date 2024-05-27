@@ -7,6 +7,11 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.reusablecomponent.core.application.command.entity.EntityCommandFacade;
+import org.reusablecomponent.core.application.query.entity.nonpaged.EntityQueryFacade;
+import org.reusablecomponent.core.application.query.entity.nonpaged.EntityQuerySpecificationFacade;
+import org.reusablecomponent.core.application.query.entity.paged.EntityQueryPaginationFacade;
+import org.reusablecomponent.core.application.query.entity.paged.EntityQueryPaginationSpecificationFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.reusablecomponent.core.infra.exception.ExceptionTranslatorService;
 import org.reusablecomponent.core.infra.exception.GenericException;
@@ -35,8 +40,10 @@ import jakarta.validation.constraints.NotNull;
  * @param <Entity>
  * @param <Id>
  */
-public abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>, Id> 
-	implements InterfaceEntityBaseFacade<Entity, Id> {
+public sealed abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>, Id> 
+	implements InterfaceEntityBaseFacade<Entity, Id> 
+	permits EntityCommandFacade, EntityQueryFacade, 
+		EntityQuerySpecificationFacade, EntityQueryPaginationFacade, EntityQueryPaginationSpecificationFacade {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractEntiyBaseFacade.class);
 

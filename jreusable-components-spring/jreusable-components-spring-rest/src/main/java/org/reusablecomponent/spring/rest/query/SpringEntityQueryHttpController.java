@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.rest.rest.query.entity.nonpaged.AbstractEntityQueryHttpController;
+import org.reusablecomponent.rest.rest.query.entity.nonpaged.EntityQueryHttpController;
 import org.reusablecomponent.spring.core.application.query.nonpaged.InterfaceSpringEntityQueryFacade;
 import org.reusablecomponent.spring.core.infra.logging.Loggable;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
  * @param <Id>
  */
 @Loggable
-public class SpringEntityQueryHttpController<Entity extends AbstractEntity<Id>, Id> extends AbstractEntityQueryHttpController<Entity, Id, //
+public class SpringEntityQueryHttpController<Entity extends AbstractEntity<Id>, Id> extends EntityQueryHttpController<Entity, Id, //
 		Id, // by id arg
 		// results
 		Optional<Entity>, // One result

@@ -20,12 +20,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 //
 @Tag(name = "BETA", description = "This API is currently in beta state")
 @Operation( //
-		summary = "Get entities by criteria search", //
-		description = "This method return entities that satisfy a certain condition" //
+		summary = "Check the entity exists by criteria search", //
+		description = "This method return don't return value only http status" //
 )
 @OpenApiEntityGet200
 @OpenApiEntityGetBySearchError400
 @EntityResponseError500OpenApi
-public @interface EntityRestGetOpenApi {
+public @interface EntityRestHeadOpenApi {
 
 }

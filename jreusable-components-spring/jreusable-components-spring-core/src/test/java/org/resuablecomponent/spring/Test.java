@@ -1,12 +1,7 @@
 package org.resuablecomponent.spring;
 
-import java.util.Optional;
-
-import org.reusablecomponent.core.application.command.entity.InterfaceEntityCommandFacade;
-import org.reusablecomponent.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.spring.core.application.full.entity.nonpaged.AbstractSpringEntityFacade;
-import org.reusablecomponent.spring.core.infra.i18n.SpringI18nService;
+import org.reusablecomponent.spring.core.application.full.entity.nonpaged.SpringEntityFacade;
 import org.springframework.stereotype.Service;
 
 public class Test {
@@ -16,10 +11,10 @@ public class Test {
     }
     
     @Service
-    static class PersonFacade extends AbstractSpringEntityFacade<Person, Long> {
-
+    static class PersonFacade extends SpringEntityFacade<Person, Long> {
+//
 	protected PersonFacade() {
-	    super(null, null, null);
+	    super(null, null);
 	    // TODO Auto-generated constructor stub
 	}
 	

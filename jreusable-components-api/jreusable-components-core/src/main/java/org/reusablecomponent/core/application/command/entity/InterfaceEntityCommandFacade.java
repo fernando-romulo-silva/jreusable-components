@@ -3,7 +3,7 @@ package org.reusablecomponent.core.application.command.entity;
 import org.reusablecomponent.core.application.base.InterfaceEntityBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 
-public interface InterfaceEntityCommandFacade<Entity extends AbstractEntity<Id>, Id, // basic
+public non-sealed interface InterfaceEntityCommandFacade<Entity extends AbstractEntity<Id>, Id, // basic
 		// save
 		SaveEntityIn, SaveEntityOut, // save a entity
 		SaveEntitiesIn, SaveEntitiesOut, // save entities

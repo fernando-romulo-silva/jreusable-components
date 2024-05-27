@@ -28,6 +28,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public interface InterfaceSpringEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id> 
 		extends InterfaceEntityCommandHttpController<Entity, Id,
+				Id,
 				// save
 				Entity, Entity, // save a entity
 				Iterable<Entity>, Iterable<Entity>, // save entities

@@ -22,7 +22,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <Pageable>
  * @param <Sort>
  */
-public class EntityQueryPaginationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort>
+public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort>
 	extends AbstractEntiyBaseFacade<Entity, Id>
 	implements InterfaceEntityQueryPaginationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> {
     

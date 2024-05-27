@@ -13,9 +13,8 @@ import org.reusablecomponent.core.domain.AbstractEntity;
  * @param <CountResult>
  * @param <ExistsResult>
  */
-public interface InterfaceEntityQueryFacade<Entity extends AbstractEntity<Id>, Id, // basic
+public non-sealed interface InterfaceEntityQueryFacade<Entity extends AbstractEntity<Id>, Id, // basic
 		QueryIdIn, // by id arg type
-		// results
 		OneResult, // One result type
 		MultipleResult, // multiple result type
 		CountResult, // count result type
@@ -42,6 +41,11 @@ public interface InterfaceEntityQueryFacade<Entity extends AbstractEntity<Id>, I
      * @return
      */
     ExistsResult existsBy(final QueryIdIn queryIdIn);
+    
+    /**
+     * @return
+     */
+    ExistsResult existsAll();
 
     /**
      *

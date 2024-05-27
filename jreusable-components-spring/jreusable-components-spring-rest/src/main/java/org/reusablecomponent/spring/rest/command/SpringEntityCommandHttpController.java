@@ -1,7 +1,7 @@
 package org.reusablecomponent.spring.rest.command;
 
 import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.rest.rest.command.AbstractEntityCommandHttpController;
+import org.reusablecomponent.rest.rest.command.EntityCommandHttpController;
 import org.reusablecomponent.spring.core.application.command.InterfaceSpringCommandFacade;
 import org.springframework.http.ResponseEntity;
 
@@ -9,7 +9,8 @@ import org.springframework.http.ResponseEntity;
  * @param <Entity>
  * @param <Id>
  */
-public class SpringEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id> extends AbstractEntityCommandHttpController<Entity, Id, // basic 				
+public class SpringEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id> extends EntityCommandHttpController<Entity, Id, // basic
+		Id, Entity,
 		Entity, Entity, // save a entity
 		Iterable<Entity>, Iterable<Entity>, // save entities
 		// update
@@ -25,11 +26,11 @@ public class SpringEntityCommandHttpController<Entity extends AbstractEntity<Id>
 	implements InterfaceSpringEntityCommandHttpController<Entity, Id> {
 
     /**
-     * @param interfaceEntityCommandFacade
+     * @param entityCommandFacade
      */
-    protected SpringEntityCommandHttpController(final InterfaceSpringCommandFacade<Entity, Id> interfaceEntityCommandFacade) {
-	super(interfaceEntityCommandFacade);
-    }
+//    protected SpringEntityCommandHttpController(final InterfaceSpringCommandFacade<Entity, Id> interfaceEntityCommandFacade) {
+//	super(interfaceEntityCommandFacade);
+//    }
    
     /**
      * {@inheritDoc}

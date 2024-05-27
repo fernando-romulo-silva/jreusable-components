@@ -1,20 +1,32 @@
 package org.reusablecomponent.rest.rest.query.entity.nonpaged;
 
-import org.reusablecomponent.core.domain.AbstractEntity;
 import org.reusablecomponent.rest.infra.openapi.annotations.method.EntityRestGetOpenApi;
+import org.reusablecomponent.rest.infra.openapi.annotations.method.EntityRestHeadOpenApi;
+import org.reusablecomponent.rest.rest.query.entity.base.InterfaceEntityQueryBaseController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public interface InterfaceEntityQuerySpecificationHttp<Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultiplePagedResult, CountResult, ExistsResult, Specification, HttpResponse> {
+public interface InterfaceEntityQuerySpecificationHttp <QueryIdIn, HttpResponseVoid, HttpResponseOne, HttpResponseMultiple, Specification> 
+	extends InterfaceEntityQueryBaseController<QueryIdIn, HttpResponseVoid, HttpResponseOne> {
+    
 
     /**
-     * @param <Response>
+     * @param specification
      * @param request
      * @param response
      * @return
      */
     @EntityRestGetOpenApi
-    HttpResponse getBy(final Specification specification, final HttpServletRequest request, final HttpServletResponse response);
+    HttpResponseMultiple getBy(final Specification specification, final HttpServletRequest request, final HttpServletResponse response);
+    
+    /**
+     * @param specification
+     * @param request
+     * @param response
+     * @return
+     */
+    @EntityRestHeadOpenApi
+    HttpResponseVoid headBy(final Specification specification, final HttpServletRequest request, final HttpServletResponse response);
 
 }

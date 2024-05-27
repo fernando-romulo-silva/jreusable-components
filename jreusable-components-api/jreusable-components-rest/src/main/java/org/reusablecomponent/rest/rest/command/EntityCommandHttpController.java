@@ -1,26 +1,19 @@
 package org.reusablecomponent.rest.rest.command;
 
-import static java.util.stream.Collectors.toMap;
-import static org.reusablecomponent.rest.infra.jsonpath.JsonPatchOperation.REPLACE;
-
 import java.util.List;
-import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.reusablecomponent.core.application.command.entity.InterfaceEntityCommandFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.reusablecomponent.rest.infra.jsonpath.JsonPatch;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotNull;
 
-public class AbstractEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id, // basic
+public class EntityCommandHttpController<Entity extends AbstractEntity<Id>, Id, // basic
 
 		QueryIdIn, OneResult,
-
 		// save
 		SaveEntityIn, SaveEntityOut, // save a entity
 		SaveEntitiesIn, SaveEntitiesOut, // save entities
@@ -48,27 +41,28 @@ public class AbstractEntityCommandHttpController<Entity extends AbstractEntity<I
 				DeleteIdIn, DeleteIdOut, // delete a entity by id
 				DeleteIdsIn, DeleteIdsOut, // delete entities by id
 				HttpResponse> { // httpResult
-
-    protected BiFunction<QueryIdIn, Object[], OneResult> findByIdFunction;
     
-    protected Function<SaveEntityOut, HttpResponse> createResponsePost;
+    protected final Function<SaveEntityOut, HttpResponse> createResponsePost;
     
-    protected Function<UpdateEntityOut, HttpResponse> createResponsePut;
+    protected final Function<UpdateEntityOut, HttpResponse> createResponsePut;
     
-    protected Function<UpdateEntityOut, HttpResponse> createResponsePatch;
+    protected final Function<UpdateEntityOut, HttpResponse> createResponsePatch;
     
-    protected Function<DeleteIdOut, HttpResponse> createResponseDelete;
+    protected final Function<DeleteIdOut, HttpResponse> createResponseDelete;
     
-    protected BiFunction<List<JsonPatch>, OneResult, UpdateEntityIn> applyPatchToJObject;
+    protected final BiFunction<List<JsonPatch>, QueryIdIn, UpdateEntityIn> applyPatchToJObject;
     
-    protected final InterfaceEntityCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> interfaceEntityCommandFacade;
+    protected final InterfaceEntityCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> entityCommandFacade;
     
-    /**
-     * @param interfaceEntityCommandFacade
-     */
-    protected AbstractEntityCommandHttpController(@NotNull final InterfaceEntityCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> interfaceEntityCommandFacade) {
-	super();
-	this.interfaceEntityCommandFacade = interfaceEntityCommandFacade;
+    protected EntityCommandHttpController(final EntityCommandHttpControllerBuilder<Entity, Id, QueryIdIn, OneResult, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut, HttpResponse> builder) {
+	//
+	this.createResponsePost = builder.createResponsePost;
+	this.createResponsePut = builder.createResponsePut;
+	this.createResponsePatch = builder.createResponsePatch;
+	this.createResponseDelete = builder.createResponseDelete;
+	this.applyPatchToJObject = builder.applyPatchToJObject;
+	//
+	this.entityCommandFacade = builder.entityCommandFacade;
     }
 
     /**
@@ -77,11 +71,10 @@ public class AbstractEntityCommandHttpController<Entity extends AbstractEntity<I
     @Override
     public HttpResponse post(final SaveEntityIn saveEntityIn, final HttpServletRequest request, final HttpServletResponse response) {
 
-	final var saveResult = interfaceEntityCommandFacade.save(saveEntityIn);
-	final var entityResult = getEntitySaveResult(saveResult);
+	final var saveResult = entityCommandFacade.save(saveEntityIn);
 	
-	final var url = request.getRequestURI();
-	response.addHeader("Location", url + "/" + entityResult.getId());
+//	final var url = request.getRequestURI();
+//	response.addHeader("Location", url + "/" + entityResult.getId());
 	response.setStatus(201);
 	
 	return createResponsePost.apply(saveResult);
@@ -93,9 +86,9 @@ public class AbstractEntityCommandHttpController<Entity extends AbstractEntity<I
     @Override
     public HttpResponse delete(final DeleteIdIn deleteIdIn, final HttpServletRequest request, final HttpServletResponse response) {
 	
-	response.setStatus(204);
+	final var deleteResult = entityCommandFacade.deleteBy(deleteIdIn);
 
-	final var deleteResult = interfaceEntityCommandFacade.deleteBy(deleteIdIn);
+	response.setStatus(204);
 	
 	return createResponseDelete.apply(deleteResult);
     }
@@ -106,7 +99,7 @@ public class AbstractEntityCommandHttpController<Entity extends AbstractEntity<I
     @Override
     public HttpResponse put(final QueryIdIn id, final UpdateEntityIn updateEntityIn, final HttpServletRequest request, final HttpServletResponse response) {
 	
-	final var updateResult = interfaceEntityCommandFacade.update(updateEntityIn);
+	final var updateResult = entityCommandFacade.update(updateEntityIn);
 
 	response.setStatus(204);
 	
@@ -117,17 +110,15 @@ public class AbstractEntityCommandHttpController<Entity extends AbstractEntity<I
      * {@inheritDoc}
      */
     @Override
-    public HttpResponse patch(
-		    final QueryIdIn id, 
-		    final List<JsonPatch> jsonPatchs, //
-		    final HttpServletRequest request, //
-		    final HttpServletResponse response) {
+    public HttpResponse patch( 
+		    final QueryIdIn id, // id
+		    final List<JsonPatch> jsonPatchs, // fields
+		    final HttpServletRequest request, // request http
+		    final HttpServletResponse response) { // response http
 	
-	final var findByIdResult = findByIdFunction.apply(id, new Object[] {});
+	final var entityPatched = applyPatchToJObject.apply(jsonPatchs, id);
 	
-	final var entityPatched = applyPatchToJObject.apply(jsonPatchs, findByIdResult);
-	
-	final var updateResult = interfaceEntityCommandFacade.update(entityPatched);
+	final var updateResult = entityCommandFacade.update(entityPatched);
 	
 	response.setStatus(204);
 	
@@ -156,16 +147,4 @@ public class AbstractEntityCommandHttpController<Entity extends AbstractEntity<I
 //
 //	return getUpdateEntityIn(targetObject);
 //    }
-    
-    // ----------------    
-    
-    private Entity getEntitySaveResult(final SaveEntityOut saveEntityOut) {
-	return null;
-    }
-    
-    private UpdateEntityIn getUpdateEntityIn(final OneResult oneResult) {
-	return null;
-    }
-    
-    // ---------------- 
 }

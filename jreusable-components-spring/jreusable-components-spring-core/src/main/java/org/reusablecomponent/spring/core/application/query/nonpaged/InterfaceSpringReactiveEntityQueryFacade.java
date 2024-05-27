@@ -19,9 +19,7 @@ import reactor.core.publisher.Mono;
  */
 public interface InterfaceSpringReactiveEntityQueryFacade<Entity extends AbstractEntity<Id>, Id> 
 	extends InterfaceEntityQueryFacade<Entity, Id,
-		//
 		Publisher<Id>, // by id arg
-		// results
 		Mono<Entity>, // One result
 		Flux<Entity>, // multiple result
 		Mono<Long>, // count result

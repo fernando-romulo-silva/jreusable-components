@@ -17,9 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface InterfaceSpringEntityQueryFacade<Entity extends AbstractEntity<Id>, Id> 
 	extends InterfaceEntityQueryFacade<Entity, Id,
-		//
 		Id, // by id arg
-		// results
 		Optional<Entity>, // One result
 		Iterable<Entity>, // multiple result
 		Long, // count result

@@ -20,7 +20,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <MultipleResult>
  */
 public class DtoQueryFacade <DTO, Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult> //
-	extends AbstractEntiyBaseFacade<Entity, Id>  // base
+	//extends AbstractEntiyBaseFacade<Entity, Id>  // base
 	implements InterfaceDtoQueryFacade<Id, OneResult, MultipleResult> {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(DtoQueryFacade.class);

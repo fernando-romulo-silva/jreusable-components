@@ -29,7 +29,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <CountResult>
  * @param <ExistsResult>
  */
-public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> 
+public non-sealed class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> 
 	extends AbstractEntiyBaseFacade<Entity, Id> 
 	implements InterfaceEntityQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> {
 
@@ -43,6 +43,8 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn
     
     protected final Supplier<CountResult> countAllFunction;
     
+    protected final Supplier<ExistsResult> existsAllFunction;
+    
     /**
      * @param existsByIdFunction
      * @param findByIdFunction
@@ -53,12 +55,14 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn
 		    @NotNull final Function<QueryIdIn, ExistsResult> existsByIdFunction,
 		    @NotNull final BiFunction<QueryIdIn, Object[], OneResult> findByIdFunction,
 		    @NotNull final Function<Object[], MultipleResult> findAllFunction,
-		    @NotNull final Supplier<CountResult> countAllFunction) {
+		    @NotNull final Supplier<CountResult> countAllFunction,
+		    @NotNull final Supplier<ExistsResult> existsAllFunction) {
 	super();
 	this.existsByIdFunction = existsByIdFunction;
 	this.findByIdFunction = findByIdFunction;
 	this.findAllFunction = findAllFunction;
 	this.countAllFunction = countAllFunction;
+	this.existsAllFunction = existsAllFunction;
     }
     
     // ---------------------------------------------------------------------------
@@ -264,6 +268,34 @@ public class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	publish(dataIn, dataOut, EXISTS_BY_ID);
 	
 	LOGGER.debug("Counted all '{}', result '{}', session '{}'", getEntityClazz().getSimpleName(), finalResult, session);
+	
+	return finalResult;
+    }
+
+    // ---------------------------------------------------------------------------
+    
+    @Override
+    public ExistsResult existsAll() {
+	
+	final var session = securityService.getSession();
+	
+	LOGGER.debug("Existing all '{}', session '{}'", getEntityClazz().getSimpleName(), session);
+	
+	final ExistsResult result;
+	
+	try { 
+	    result = existsAllFunction.get();
+	} catch (final Exception ex) {
+	    throw exceptionTranslatorService.translate(ex, i18nService);
+	}
+	
+	final var finalResult = posExistsBy(result);
+	
+	final var dataIn = StringUtils.EMPTY;
+	final var dataOut = convertExistsResultToPublishData(finalResult);
+	publish(dataIn, dataOut, EXISTS_BY_ID);
+	
+	LOGGER.debug("Existed all '{}', result '{}', session '{}'", getEntityClazz().getSimpleName(), finalResult, session);
 	
 	return finalResult;
     }

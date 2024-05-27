@@ -28,4 +28,9 @@ public interface InterfaceEntitySpecificationFacade<Entity extends AbstractEntit
 		InterfaceEntityCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>,
 		InterfaceEntityQuerySpecificationFacade<Entity, Id, OneResult, MultiplePagedResult, CountResult, ExistsResult, Specification> {
 
+    
+    InterfaceEntityCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> getEntityCommandFacade();
+    
+    InterfaceEntityQuerySpecificationFacade<Entity, Id, OneResult, MultiplePagedResult, CountResult, ExistsResult, Specification> getEntityQueryFacade();
+    
 }

@@ -16,10 +16,8 @@ import jakarta.transaction.Transactional;
  */
 public interface InterfaceJakartaEntityQueryFacade<Entity extends AbstractEntity<Id>, Id>
 		//
-		extends InterfaceEntityQueryFacade<Entity, Id,
-				//
+		extends InterfaceEntityQueryFacade<Entity, Id, // base
 				Id, // by id arg
-				// results
 				Optional<Entity>, // One result
 				Stream<Entity>, // multiple result
 				Long, // count result
@@ -38,13 +36,6 @@ public interface InterfaceJakartaEntityQueryFacade<Entity extends AbstractEntity
     @Override
     @Transactional(value = SUPPORTS)
     Stream<Entity> findAll(final Object... directives);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Transactional(value = SUPPORTS)
-    Boolean existsBy(final Id id);
     
     /**
      * {@inheritDoc}
@@ -52,4 +43,11 @@ public interface InterfaceJakartaEntityQueryFacade<Entity extends AbstractEntity
     @Override
     @Transactional(value = SUPPORTS)
     Long countAll();
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional(value = SUPPORTS)
+    Boolean existsBy(final Id id);
 }

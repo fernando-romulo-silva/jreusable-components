@@ -40,7 +40,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <DeleteIdsIn>
  * @param <DeleteIdsOut>
  */
-public class EntityCommandFacade <  // generics 
+public non-sealed class EntityCommandFacade <  // generics 
 		// default
                 Entity extends AbstractEntity<Id>, Id, // basic
                 // save

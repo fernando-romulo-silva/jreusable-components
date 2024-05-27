@@ -10,6 +10,7 @@ module org.reusablecomponent.rest {
     requires org.slf4j;
 
     // non-modules
+    requires com.google.common;
     requires org.apache.commons.lang3;
     requires io.swagger.v3.oas.models;
     requires io.swagger.v3.oas.annotations;
