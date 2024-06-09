@@ -1,5 +1,6 @@
 package org.reusablecomponent.core.infra.exception;
 
+import org.reusablecomponent.core.infra.exception.common.BaseApplicationException;
 import org.reusablecomponent.core.infra.i18n.InterfaceI18nService;
 
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <Out>
  */
 @FunctionalInterface
-public interface ExceptionTranslatorService {
+public interface InterfaceExceptionTranslatorService {
 
     /**
      * @param ex

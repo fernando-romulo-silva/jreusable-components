@@ -20,7 +20,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reusablecomponent.core.infra.exception.ElementAlreadyExistsException;
+import org.reusablecomponent.core.infra.exception.common.ElementAlreadyExistsException;
 
 @Tag("unit")
 @DisplayName("Test the EntityCommandFacade entity test, unhappy path :( ")

@@ -1,4 +1,4 @@
-package org.reusablecomponent.core.infra.exception;
+package org.reusablecomponent.core.infra.exception.common;
 
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
 

@@ -1,23 +1,23 @@
-package org.reusablecomponent.core.infra.exception;
+package org.reusablecomponent.core.infra.exception.common;
 
 import org.reusablecomponent.core.infra.i18n.InterfaceI18nService;
 
 /**
- * Element conflits exception, like delete a linked object.
+ * Element with invalid state/parameters.
  * 
  * @author Fernando Romulo da Silva
  */
-public class ElementConflictException extends BaseApplicationException {
+public class ElementInvalidException extends BaseApplicationException {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * Constructs a new ElementConflictException exception with the specified detail message.
+     * Constructs a new ConversionException exception with the specified detail message.
      * 
      * @param msg    The detail message
      * @param params The parameters used on message
      */
-    public ElementConflictException(final String msg, final Object... params) {
+    public ElementInvalidException(final String msg, final Object... params) {
 	super(msg, params);
     }
 
@@ -28,18 +28,18 @@ public class ElementConflictException extends BaseApplicationException {
      * @param ex     The cause
      * @param params The parameters used on message
      */
-    public ElementConflictException(final String msg, final Throwable ex, final Object... params) {
+    public ElementInvalidException(final String msg, final Throwable ex, final Object... params) {
 	super(msg, ex, params);
     }
-    
+
     /**
-     * Constructs a new ElementConflictException exception with the specified detail message.
+     * Constructs a new ConversionException exception with the specified detail message.
      * 
      * @param msg    The detail message
      * @param i18n   The msg translation function
      * @param params The parameters used on message
      */
-    public ElementConflictException(final String msg, final InterfaceI18nService i18n, final Object... params) {
+    public ElementInvalidException(final String msg, final InterfaceI18nService i18n, final Object... params) {
 	super(msg, i18n, params);
     }
 
@@ -51,7 +51,7 @@ public class ElementConflictException extends BaseApplicationException {
      * @param ex     The cause
      * @param params The parameters used on message
      */
-    public ElementConflictException(final String msg, final InterfaceI18nService i18n, final Throwable ex, final Object... params) {
-	super(msg, i18n, ex, params);
+    public ElementInvalidException(final String msg, final InterfaceI18nService i18n, final Throwable ex, final Object... params) {
+	super(msg, ex, i18n, params);
     }
 }

@@ -1,4 +1,4 @@
-package org.reusablecomponent.core.infra.exception;
+package org.reusablecomponent.core.infra.exception.common;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.reusablecomponent.core.infra.i18n.InterfaceI18nService;

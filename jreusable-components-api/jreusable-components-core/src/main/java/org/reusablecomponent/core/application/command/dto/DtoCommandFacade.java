@@ -12,7 +12,7 @@ import java.util.stream.StreamSupport;
 import org.reusablecomponent.core.application.base.EntiyBaseFacade;
 import org.reusablecomponent.core.application.command.entity.InterfaceEntityCommandFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.core.infra.exception.ElementWithIdNotFoundException;
+import org.reusablecomponent.core.infra.exception.common.ElementWithIdNotFoundException;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

@@ -1,11 +1,10 @@
 package org.reusablecomponent.core.application.base;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 import static java.util.Objects.nonNull;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reusablecomponent.core.application.command.entity.EntityCommandFacade;
 import org.reusablecomponent.core.application.empty.SimpleEntiyBaseFacade;
@@ -14,12 +13,12 @@ import org.reusablecomponent.core.application.query.entity.nonpaged.EntityQueryS
 import org.reusablecomponent.core.application.query.entity.paged.EntityQueryPaginationFacade;
 import org.reusablecomponent.core.application.query.entity.paged.EntityQueryPaginationSpecificationFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.core.infra.exception.ExceptionTranslatorService;
-import org.reusablecomponent.core.infra.exception.GenericException;
+import org.reusablecomponent.core.infra.exception.InterfaceExceptionTranslatorService;
+import org.reusablecomponent.core.infra.exception.common.GenericException;
 import org.reusablecomponent.core.infra.i18n.InterfaceI18nService;
 import org.reusablecomponent.core.infra.i18n.JavaSEI18nService;
+import org.reusablecomponent.core.infra.messaging.InterfaceOperationEvent;
 import org.reusablecomponent.core.infra.messaging.event.Event;
-import org.reusablecomponent.core.infra.messaging.event.InterfaceOperationEvent;
 import org.reusablecomponent.core.infra.messaging.event.What;
 import org.reusablecomponent.core.infra.messaging.event.When;
 import org.reusablecomponent.core.infra.messaging.event.Where;
@@ -56,8 +55,8 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 
     protected final InterfaceI18nService i18nService;
     
-    protected final ExceptionTranslatorService exceptionTranslatorService;
-
+    protected final InterfaceExceptionTranslatorService exceptionTranslatorService;
+    
     protected final Class<Entity> entityClazz;
 
     protected final Class<Id> idClazz;
@@ -68,7 +67,7 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 		    @Nullable final InterfacePublisherSerice publisherService, 
 		    @Nullable final InterfaceI18nService i18nService,
 		    @Nullable final InterfaceSecurityService securityService,
-		    @Nullable final ExceptionTranslatorService exceptionTranslatorService) {
+		    @Nullable final InterfaceExceptionTranslatorService exceptionTranslatorService) {
 
 	super();
 
@@ -136,19 +135,20 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 	final var realm = securityService.getUserRealm();
 	final var session = securityService.getSession();
 	final var application = securityService.getApplication();
+	final var machineName = securityService.getMachineName();
 
 	final var event = new Event.Builder().with($ -> {
 	    $.what = new What(dataIn, dataOut);
-	    $.when = new When(LocalDateTime.now(), ZoneId.systemDefault());
-	    $.where = new Where(application, session);
-	    $.who = new Who(realm, user);
-	    $.why = new Why(operation.toString());
+	    $.when = new When();
+	    $.where = new Where(application, machineName);
+	    $.who = new Who(realm, user, session);
+	    $.why = new Why(operation.getName(), operation.getDescription());
 	}).build();
 
-	final var eventString = event.toJson();
+	final var eventToPublish = prepareEventToPublisher(event);
 	
 	try {
-	    publisherService.publish(eventString);
+	    publisherService.publish(eventToPublish);
 	} catch (final Exception ex) {
 	    LOGGER.error(ExceptionUtils.getRootCauseMessage(ex), ex);
 	    return null;
@@ -157,6 +157,93 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 	LOGGER.debug("Published '{}' operation, event '{}'", event.getId());
 	
 	return event;
+    }
+    
+    /**
+     * @param event
+     * @return
+     */
+    protected String prepareEventToPublisher(final Event event) {
+	
+	final var layout = """
+		{
+		   "id": "${id}",
+		   "what": {
+			"dataIn" : "${dataIn}",
+			"dataOut" : "${dataOut}",	   
+		   },
+		   "when": {
+			"dateTime" : "${dateTime}",
+			"zoneId" : "${zoneId}"			   
+		   },
+		   "where": {
+			"application" : "${application}",
+			"machine" : "${machine}"
+		   },
+		   "who": {
+			"login" : "${login}",
+			"session" : "${session}",
+			"realm" : "${realm}"
+		   },
+		   "why": {
+		        "reason" : "${reason}",
+		        "description" : "${description}"
+		   }
+	        }""";
+	
+	var msg = StringUtils.deleteWhitespace(layout);
+
+	// -----------------------------------------
+	final var id = event.getId();
+	msg = StringUtils.replace(msg, "${id}", id);
+
+	// ------------------------------------------
+	final var what = event.getWhat();
+	final var dataIn = what.dataIn();
+	final var dataOut = what.dataOut();
+
+	msg = StringUtils.replaceEach(msg, 
+			new String[] { "${dataIn}", "${dataOut}" }, 
+			new String[] { dataIn, dataOut });
+
+	// ------------------------------------------
+	final var when = event.getWhen();
+	final var dateTime =  ISO_DATE_TIME.format(when.dateTime());
+	final var zoneId = when.zoneId().toString();
+	
+	msg = StringUtils.replaceEach(msg, 
+			new String[] { "${dateTime}", "${zoneId}" }, 
+			new String[] { dateTime, zoneId });
+	
+	// ------------------------------------------
+	final var where = event.getWhere();
+	final var application = where.application();
+	final var machine = where.machine();
+	
+	msg = StringUtils.replaceEach(msg, 
+			new String[] { "${application}", "${machine}" }, 
+			new String[] { application, machine });	
+	
+	// ------------------------------------------
+	final var who = event.getWho();
+	final var login = who.login();
+	final var session = who.session();
+	final var realm = who.realm();
+	
+	msg = StringUtils.replaceEach(msg, 
+			new String[] { "${login}", "${session}", "${realm}" }, 
+			new String[] { login, session, realm });		
+	
+	// ------------------------------------------
+	final var why = event.getWhy();
+	final var reason = why.reason();
+	final var description = why.description();
+	
+	msg = StringUtils.replaceEach(msg, 
+			new String[] { "${reason}", "${description}" }, 
+			new String[] { reason, description});
+	
+	return msg;
     }
 
     // ------
@@ -205,7 +292,7 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
      * @return
      */
     @NotNull
-    public final ExceptionTranslatorService getExceptionTranslatorService() {
+    public final InterfaceExceptionTranslatorService getExceptionTranslatorService() {
         return exceptionTranslatorService;
     }
 }

@@ -5,6 +5,9 @@ import java.net.UnknownHostException;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * 
+ */
 public class DefaultSecurityService implements InterfaceSecurityService {
 
     /**
@@ -20,6 +23,14 @@ public class DefaultSecurityService implements InterfaceSecurityService {
      */
     @Override
     public String getUserRealm() {
+	return "NOREALM";
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getMachineName() {
 	try {
 	    final var addr = InetAddress.getLocalHost();
 	    return addr.getHostName();

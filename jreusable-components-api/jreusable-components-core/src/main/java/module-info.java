@@ -12,7 +12,7 @@ open module org.reusablecomponent.core {
     requires com.google.common;
     requires org.apache.commons.lang3;
 //    requires com.google.gson;
-    requires gson.javatime.serialisers;
+//    requires gson.javatime.serialisers;
     
     // -- messaging
     requires transitive org.reusablecomponent.messaging;

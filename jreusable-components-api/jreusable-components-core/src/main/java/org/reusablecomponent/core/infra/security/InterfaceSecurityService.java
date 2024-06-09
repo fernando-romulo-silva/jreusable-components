@@ -24,4 +24,10 @@ public interface InterfaceSecurityService {
      * @return
      */
     String getApplication();
+
+    /**
+     * @return
+     */
+    String getMachineName();
+    
 }

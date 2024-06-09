@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import org.reusablecomponent.core.infra.messaging.ConverterBeanUtil;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -71,21 +71,9 @@ public class Event {
 	return why;
     }
 
-    public String toXml() {
-	return "";
-    }
-
-    public String toJson() {
-	return ConverterBeanUtil.converterBeanToJSon(this, Event.class);
-    }
-
-    public String toYaml() {
-	return "";
-    }
-
     @Override
     public String toString() {
-	return "";
+	return ToStringBuilder.reflectionToString(this);
     }
 
     // ---------------------------------------------

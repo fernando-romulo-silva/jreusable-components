@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ * JDK version of 
  */
 public class JavaSEI18nService implements InterfaceI18nService {
 

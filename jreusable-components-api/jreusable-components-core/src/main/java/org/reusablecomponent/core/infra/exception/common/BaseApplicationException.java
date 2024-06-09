@@ -1,4 +1,4 @@
-package org.reusablecomponent.core.infra.exception;
+package org.reusablecomponent.core.infra.exception.common;
 
 import java.util.Objects;
 

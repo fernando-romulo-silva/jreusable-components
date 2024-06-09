@@ -10,10 +10,10 @@ import java.util.Map;
 import javax.naming.ServiceUnavailableException;
 
 import org.apache.commons.lang3.RegExUtils;
-import org.reusablecomponent.core.infra.exception.BaseApplicationException;
-import org.reusablecomponent.core.infra.exception.ElementConflictException;
-import org.reusablecomponent.core.infra.exception.ElementInvalidException;
-import org.reusablecomponent.core.infra.exception.ElementNotFoundException;
+import org.reusablecomponent.core.infra.exception.common.BaseApplicationException;
+import org.reusablecomponent.core.infra.exception.common.ElementConflictException;
+import org.reusablecomponent.core.infra.exception.common.ElementInvalidException;
+import org.reusablecomponent.core.infra.exception.common.ElementNotFoundException;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

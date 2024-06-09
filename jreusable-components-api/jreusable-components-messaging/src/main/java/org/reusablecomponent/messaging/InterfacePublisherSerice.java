@@ -11,7 +11,7 @@ public interface InterfacePublisherSerice {
     /**
      * Publish a event.
      * 
-     * @param event The event object.
+     * @param eventString The event's string.
      */
-    void publish(final String event);
+    void publish(final String eventString);
 }

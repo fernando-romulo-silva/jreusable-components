@@ -23,8 +23,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.core.infra.exception.ExceptionTranslatorService;
-import org.reusablecomponent.core.infra.exception.GenericException;
+import org.reusablecomponent.core.infra.exception.InterfaceExceptionTranslatorService;
+import org.reusablecomponent.core.infra.exception.common.GenericException;
 import org.reusablecomponent.core.infra.i18n.InterfaceI18nService;
 import org.reusablecomponent.core.infra.i18n.JavaSEI18nService;
 import org.reusablecomponent.core.infra.messaging.event.CommonEvent;
@@ -54,7 +54,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 	final InterfacePublisherSerice publisherService = (event) -> out.println(event);
 	final InterfaceI18nService i18nService = (code, params) -> "translated!";
 	final InterfaceSecurityService interfaceSecurityService = new DummySecurityService();
-	final ExceptionTranslatorService exceptionTranslatorService = (ex, i18n) -> new GenericException(ex);
+	final InterfaceExceptionTranslatorService exceptionTranslatorService = (ex, i18n) -> new GenericException(ex);
 	
 	// when
 	final var facade = new TestEntiyBaseFacade(publisherService, i18nService, interfaceSecurityService, exceptionTranslatorService);

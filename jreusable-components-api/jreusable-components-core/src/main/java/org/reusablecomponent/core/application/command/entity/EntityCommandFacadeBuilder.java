@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.core.infra.exception.ExceptionTranslatorService;
+import org.reusablecomponent.core.infra.exception.InterfaceExceptionTranslatorService;
 import org.reusablecomponent.core.infra.i18n.InterfaceI18nService;
 import org.reusablecomponent.core.infra.security.InterfaceSecurityService;
 import org.reusablecomponent.messaging.InterfacePublisherSerice;
@@ -32,7 +32,7 @@ public final class EntityCommandFacadeBuilder < // Generics spec
 
     public InterfaceI18nService i18nService;
     
-    public ExceptionTranslatorService exceptionTranslatorService;
+    public InterfaceExceptionTranslatorService exceptionTranslatorService;
     
     public Function<SaveEntityIn, SaveEntityOut> saveFunction;
     public Function<SaveEntitiesIn, SaveEntitiesOut> saveAllFunction;

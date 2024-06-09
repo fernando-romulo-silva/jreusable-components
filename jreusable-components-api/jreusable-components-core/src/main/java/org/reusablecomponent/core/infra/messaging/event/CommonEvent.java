@@ -1,5 +1,7 @@
 package org.reusablecomponent.core.infra.messaging.event;
 
+import org.reusablecomponent.core.infra.messaging.InterfaceOperationEvent;
+
 public enum CommonEvent implements InterfaceOperationEvent {
 
     SAVE_ITEM,
@@ -27,5 +29,4 @@ public enum CommonEvent implements InterfaceOperationEvent {
     
     COUNT,
     COUNT_BY_SPECIFICATION,
-    
 }

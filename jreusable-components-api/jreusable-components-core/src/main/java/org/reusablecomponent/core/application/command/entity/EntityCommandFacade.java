@@ -116,7 +116,7 @@ public non-sealed class EntityCommandFacade <  // generics
      * @param saveEntityIn
      * @return
      */
-    protected String convertSaveEntityInToPublishData(final SaveEntityIn saveEntityIn) {
+    protected String convertSaveEntityInToPublishDataIn(final SaveEntityIn saveEntityIn) {
 	return Objects.toString(saveEntityIn);
     }
     
@@ -124,7 +124,7 @@ public non-sealed class EntityCommandFacade <  // generics
      * @param saveEntityOut
      * @return
      */
-    protected String convertSaveEntityOutToPublishData(final SaveEntityOut saveEntityOut) {
+    protected String convertSaveEntityOutToPublishDataOut(final SaveEntityOut saveEntityOut) {
 	return Objects.toString(saveEntityOut);
     } 
 
@@ -168,8 +168,8 @@ public non-sealed class EntityCommandFacade <  // generics
 
 	final var finalResult = posSave(result);
 	
-	final var dataIn = convertSaveEntityInToPublishData(finalSaveEntityIn);
-	final var dataOut = convertSaveEntityOutToPublishData(finalResult);
+	final var dataIn = convertSaveEntityInToPublishDataIn(finalSaveEntityIn);
+	final var dataOut = convertSaveEntityOutToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, SAVE_ITEM, finalSaveEntityIn, finalResult);
 
 	LOGGER.debug("Saved entity '{}', session '{}'", finalResult, session);
