@@ -15,7 +15,7 @@ open module org.reusablecomponent.core {
     requires gson.javatime.serialisers;
     
     // -- messaging
-    requires org.reusablecomponent.messaging;
+    requires transitive org.reusablecomponent.messaging;
 //    requires org.reusablecomponent.messaging.event;
 //    requires org.reusablecomponent.messaging.logger;
 //    requires org.reusablecomponent.messaging.flow;
@@ -34,8 +34,8 @@ open module org.reusablecomponent.core {
     exports org.reusablecomponent.core.application.query.entity.nonpaged;
     
     // -- full facades
-    exports org.reusablecomponent.core.application.full.entity.paged;
-    exports org.reusablecomponent.core.application.full.entity.nonpaged;
+    exports org.reusablecomponent.core.application.mix.entity.paged;
+    exports org.reusablecomponent.core.application.mix.entity.nonpaged;
     
     // -- exception
     exports org.reusablecomponent.core.infra.exception;

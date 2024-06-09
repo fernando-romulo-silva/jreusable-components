@@ -1,7 +1,7 @@
 package org.resuablecomponent.spring;
 
 import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.spring.core.application.full.entity.nonpaged.SpringEntityFacade;
+import org.reusablecomponent.spring.core.application.mix.entity.nonpaged.SpringEntityFacade;
 import org.springframework.stereotype.Service;
 
 public class Test {

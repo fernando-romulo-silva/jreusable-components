@@ -27,7 +27,21 @@ import jakarta.ws.rs.core.Response;
  * @param <Id>
  */
 public interface InterfaceJakartaEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id> 
-	extends InterfaceEntityCommandHttpController<Entity, Id, Response> {
+	extends InterfaceEntityCommandHttpController<Entity, Id,  
+				Id, // QueryIdIn
+				// save
+				Entity, Entity, // save a entity
+				List<Entity>, List<Entity>, // save entities
+				// update
+				Entity, Entity, // update a entity
+				List<Entity>, List<Entity>, // update entities
+				// delete entity
+				Entity, Void, // delete a entity
+				List<Entity>, Void, // delete entities
+				// delete by id
+				Id, Void, // delete a entity by id
+				List<Id>, Void, // delete entities by id	  
+				Response> {
 
     /**
      * {@inheritDoc}
@@ -36,7 +50,6 @@ public interface InterfaceJakartaEntityCommandHttpController<Entity extends Abst
     @Produces(value = {APPLICATION_JSON, APPLICATION_XML})
     @Consumes(value = {APPLICATION_JSON, APPLICATION_XML})
     Response post(
-		    
 		    final Entity entity, 
 		    
 		    final HttpServletRequest request, 
@@ -50,7 +63,6 @@ public interface InterfaceJakartaEntityCommandHttpController<Entity extends Abst
     @Produces(value = {APPLICATION_JSON, APPLICATION_XML})
     @Consumes(value = {APPLICATION_JSON, APPLICATION_XML})
     Response put(
-		    
 		    @PathParam("id") 
 		    final Id id, 
 		    
@@ -65,7 +77,6 @@ public interface InterfaceJakartaEntityCommandHttpController<Entity extends Abst
     @PATCH
     @Path("/{id}")
     Response patch(
-		    
 		    @PathParam("id") 
 		    final Id id, 
 		    
@@ -79,7 +90,6 @@ public interface InterfaceJakartaEntityCommandHttpController<Entity extends Abst
     @DELETE
     @Path("/{id}")
     Response delete(
-		    
 		    @PathParam("id") 
 		    final Id id, 
 		    

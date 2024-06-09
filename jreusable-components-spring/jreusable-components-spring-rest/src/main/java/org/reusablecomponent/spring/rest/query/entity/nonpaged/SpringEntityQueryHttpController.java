@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.reusablecomponent.rest.rest.query.entity.nonpaged.EntityQueryHttpController;
 import org.reusablecomponent.rest.rest.query.entity.nonpaged.EntityQueryHttpControllerBuilder;
-import org.reusablecomponent.spring.core.application.query.nonpaged.InterfaceSpringEntityQueryFacade;
+import org.reusablecomponent.spring.core.application.query.entity.nonpaged.InterfaceSpringEntityQueryFacade;
 import org.springframework.http.ResponseEntity;
 
 /**
