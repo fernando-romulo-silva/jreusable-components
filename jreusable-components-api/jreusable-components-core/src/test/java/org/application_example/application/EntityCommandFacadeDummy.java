@@ -122,7 +122,7 @@ public class EntityCommandFacadeDummy<Entity extends AbstractEntity<Id>, Id>
 	    
 	    // others --------------------------------
 	    $.securityService = new DummySecurityService();
-	    $.publisherSerice = new LoggerPublisherSerice();
+	    $.publisherService = new LoggerPublisherSerice();
 	    $.exceptionTranslatorService = new DummyExceptionTranslatorService();
 	    $.i18nService = new DummyI18nService();
 	}));

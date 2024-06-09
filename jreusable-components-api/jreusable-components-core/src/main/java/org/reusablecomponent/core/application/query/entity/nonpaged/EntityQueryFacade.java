@@ -10,7 +10,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.StringUtils;
-import org.reusablecomponent.core.application.base.AbstractEntiyBaseFacade;
+import org.reusablecomponent.core.application.base.EntiyBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <ExistsResult>
  */
 public non-sealed class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> 
-	extends AbstractEntiyBaseFacade<Entity, Id> 
+	extends EntiyBaseFacade<Entity, Id> 
 	implements InterfaceEntityQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityQueryFacade.class);

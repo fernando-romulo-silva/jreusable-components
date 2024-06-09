@@ -44,7 +44,7 @@ public interface InterfaceEntityPaginationFacade<Entity extends AbstractEntity<I
 				OneResult, // one result type
 				MultiplePagedResult, // multiple result type
 				Pageable, // pageable type
-				Sort> { // sort type{
+				Sort> { // sort type
 
     /**
      * {@inheritDoc}
@@ -115,7 +115,7 @@ public interface InterfaceEntityPaginationFacade<Entity extends AbstractEntity<I
      */
     @Override
     default MultiplePagedResult findAll(final Pageable pageable, final Object... directives){
-	return getEntityQueryFacade().findAll(pageable, directives);
+	return getEntityQueryPaginationFacade().findAll(pageable, directives);
     }
 
     /**
@@ -123,11 +123,11 @@ public interface InterfaceEntityPaginationFacade<Entity extends AbstractEntity<I
      */
     @Override
     default OneResult findFirst(final Sort sort){
-	return getEntityQueryFacade().findFirst(sort);
+	return getEntityQueryPaginationFacade().findFirst(sort);
     }
     
     InterfaceEntityCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> getEntityCommandFacade();
     
-    InterfaceEntityQueryPaginationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> getEntityQueryFacade();
+    InterfaceEntityQueryPaginationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> getEntityQueryPaginationFacade();
 
 }

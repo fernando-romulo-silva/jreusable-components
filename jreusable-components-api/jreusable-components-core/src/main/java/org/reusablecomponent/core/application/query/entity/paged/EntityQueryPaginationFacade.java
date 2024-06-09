@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.reusablecomponent.core.application.base.AbstractEntiyBaseFacade;
+import org.reusablecomponent.core.application.base.EntiyBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <Sort>
  */
 public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort>
-	extends AbstractEntiyBaseFacade<Entity, Id>
+	extends EntiyBaseFacade<Entity, Id>
 	implements InterfaceEntityQueryPaginationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityQueryPaginationFacade.class);

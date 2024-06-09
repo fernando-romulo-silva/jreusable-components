@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.reusablecomponent.core.application.base.AbstractEntiyBaseFacade;
+import org.reusablecomponent.core.application.base.EntiyBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <MultipleResult>
  */
 public class DtoQueryFacade <DTO, Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult> //
-	//extends AbstractEntiyBaseFacade<Entity, Id>  // base
+	//extends EntiyBaseFacade<Entity, Id>  // base
 	implements InterfaceDtoQueryFacade<Id, OneResult, MultipleResult> {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(DtoQueryFacade.class);

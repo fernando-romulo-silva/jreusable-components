@@ -11,7 +11,7 @@ open module org.reusablecomponent.core {
     // import non-modules
     requires com.google.common;
     requires org.apache.commons.lang3;
-//    requires com.google.gson;
+    requires com.google.gson;
     requires gson.javatime.serialisers;
     
     // -- messaging

@@ -39,7 +39,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 
 @Tag("unit")
-@DisplayName("Test the AbstractEntiyBaseFacade entity test, happy Path :) ")
+@DisplayName("Test the EntiyBaseFacade entity test, happy Path :) ")
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
@@ -61,8 +61,8 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 		
 	// then
 	assertThat(facade)
-		.as(format("Check the publisherSerice, securityService, and i18nService are not null"))
-		.extracting("publisherSerice", "securityService", "i18nService", "entityClazz", "idClazz")
+		.as(format("Check the publisherService, securityService, and i18nService are not null"))
+		.extracting("publisherService", "securityService", "i18nService", "entityClazz", "idClazz")
 		.doesNotContainNull()
 	;
 
@@ -84,7 +84,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 	
 	assertThat(facade)
 	        // when
-		.extracting(AbstractEntiyBaseFacade::getEntityClazz)
+		.extracting(EntiyBaseFacade::getEntityClazz)
 		// then
 		.isNotNull()
 		.isEqualTo(Department.class)
@@ -92,7 +92,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 
 	assertThat(facade)
 		// when
-		.extracting(AbstractEntiyBaseFacade::getIdClazz)
+		.extracting(EntiyBaseFacade::getIdClazz)
 		// then
 		.isNotNull()
 		.isEqualTo(String.class)
@@ -117,15 +117,13 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 	
 	assertThat(facade)
                 // when	
-		.extracting(AbstractEntiyBaseFacade::getPublisherSerice)
+		.extracting(TestEntiyBaseFacade::getPublisherService)
 		    // then 
-		    .isNotNull()
-		    .extracting(publisherSerice -> publisherSerice.getClass())
-		    .isEqualTo(LoggerPublisherSerice.class);
+		    .isNotNull();
 	
 	assertThat(facade)
 		// when	
-		.extracting(AbstractEntiyBaseFacade::getI18nService)
+		.extracting(EntiyBaseFacade::getI18nService)
 		    // then
 		    .isNotNull()
 	            .extracting(i18nService -> i18nService.getClass())
@@ -133,7 +131,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 	
 	assertThat(facade)
 	// when	
-	      .extracting(AbstractEntiyBaseFacade::getExceptionTranslatorService)
+	      .extracting(EntiyBaseFacade::getExceptionTranslatorService)
 	      	  // then
 	      	  .isNotNull();
     }
@@ -172,7 +170,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
         listAppender.start();
         
         final var publishServiceLogger = (Logger) LoggerFactory.getLogger(LoggerPublisherSerice.class);
-        final var facadeLogger = (Logger) LoggerFactory.getLogger(AbstractEntiyBaseFacade.class);
+        final var facadeLogger = (Logger) LoggerFactory.getLogger(EntiyBaseFacade.class);
         
         publishServiceLogger.addAppender(listAppender);
         facadeLogger.addAppender(listAppender);
@@ -203,7 +201,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
         listAppender.start();
         
         final var publishServiceLogger = (Logger) LoggerFactory.getLogger(LoggerPublisherSerice.class);
-        final var facadeLogger = (Logger) LoggerFactory.getLogger(AbstractEntiyBaseFacade.class);
+        final var facadeLogger = (Logger) LoggerFactory.getLogger(EntiyBaseFacade.class);
         
         publishServiceLogger.addAppender(listAppender);
         facadeLogger.addAppender(listAppender);

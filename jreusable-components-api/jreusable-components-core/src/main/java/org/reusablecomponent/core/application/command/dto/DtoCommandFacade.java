@@ -9,7 +9,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import org.reusablecomponent.core.application.base.AbstractEntiyBaseFacade;
+import org.reusablecomponent.core.application.base.EntiyBaseFacade;
 import org.reusablecomponent.core.application.command.entity.InterfaceEntityCommandFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.reusablecomponent.core.infra.exception.ElementWithIdNotFoundException;
@@ -20,7 +20,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class DtoCommandFacade // Operations on Dtos
 	//
-//	extends AbstractEntiyBaseFacade  // Base facade
+//	extends EntiyBaseFacade  // Base facade
 	//
 //	implements InterfaceDtoCommandFacade 
 	

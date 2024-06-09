@@ -26,7 +26,7 @@ public final class EntityCommandFacadeBuilder < // Generics spec
             DeleteIdIn, DeleteIdOut, // delete entity by id
             DeleteIdsIn, DeleteIdsOut > {// delete entities by ids
     
-    public InterfacePublisherSerice publisherSerice;
+    public InterfacePublisherSerice publisherService;
 
     public InterfaceSecurityService securityService;
 
@@ -65,7 +65,7 @@ public final class EntityCommandFacadeBuilder < // Generics spec
 	// load the functions
 	function.accept(this);
 
-	checkNotNull(publisherSerice, "Please pass a non-null 'publisherService'");
+	checkNotNull(publisherService, "Please pass a non-null 'publisherService'");
 	checkNotNull(securityService, "Please pass a non-null 'securityService'");
 	checkNotNull(i18nService, "Please pass a non-null 'i18nService'");
 	checkNotNull(exceptionTranslatorService, "Please pass a non-null 'exceptionTranslatorService'");

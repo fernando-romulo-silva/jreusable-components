@@ -1,8 +1,16 @@
 package org.reusablecomponent.spring.rest.command;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.reusablecomponent.core.domain.AbstractEntity;
+import org.reusablecomponent.rest.infra.jsonpath.JsonPatch;
+import org.reusablecomponent.rest.infra.jsonpath.JsonPatchOperation;
 import org.reusablecomponent.rest.rest.command.EntityCommandHttpController;
+import org.reusablecomponent.rest.rest.command.EntityCommandHttpControllerBuilder;
 import org.reusablecomponent.spring.core.application.command.InterfaceSpringCommandFacade;
+import org.reusablecomponent.spring.core.application.query.nonpaged.InterfaceSpringEntityQueryFacade;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -10,94 +18,53 @@ import org.springframework.http.ResponseEntity;
  * @param <Id>
  */
 public class SpringEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id> extends EntityCommandHttpController<Entity, Id, // basic
-		Id, Entity,
+		Id, Entity, // 
+		// save
 		Entity, Entity, // save a entity
 		Iterable<Entity>, Iterable<Entity>, // save entities
 		// update
 		Entity, Entity, // update a entity
 		Iterable<Entity>, Iterable<Entity>, // update entities
-		// delete entity
+		// delete
 		Entity, Void, // delete a entity
 		Iterable<Entity>, Void, // delete entities
 		// delete by id
 		Id, Void, // delete a entity by id
 		Iterable<Id>, Void, // delete entities by id>
-		ResponseEntity<?>> 
-	implements InterfaceSpringEntityCommandHttpController<Entity, Id> {
+		ResponseEntity<?>> implements InterfaceSpringEntityCommandHttpController<Entity, Id> {
 
-    /**
-     * @param entityCommandFacade
-     */
-//    protected SpringEntityCommandHttpController(final InterfaceSpringCommandFacade<Entity, Id> interfaceEntityCommandFacade) {
-//	super(interfaceEntityCommandFacade);
-//    }
-   
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected ResponseEntity<Entity> createResponsePut(final Entity entity) {
-	// TODO Auto-generated method stub
-	return null;
-    }
+    protected SpringEntityCommandHttpController(
+		    final InterfaceSpringEntityQueryFacade<Entity, Id> springEntityFacade,
+		    final InterfaceSpringCommandFacade<Entity, Id> springCommandFacade) {
+	
+	super(new EntityCommandHttpControllerBuilder<>($ -> {
+	    
+	    $.applyPatchToJObject = (jsonPatchs, id) -> {
+		
+		final var entity = springEntityFacade.findBy(id).orElseThrow(null);
+		
+		final var toReplace = jsonPatchs.stream()
+				.filter(jsonPatch -> Objects.equals(jsonPatch.op(), JsonPatchOperation.REPLACE))
+				.collect(Collectors.toMap(JsonPatch::path, JsonPatch::value));
+		
+		toReplace.forEach((key, value) -> {
+		    final var field = FieldUtils.getField(entity.getClass(), key, true);
+		    try {
+			FieldUtils.writeField(field, entity, value, true);
+		    } catch (final IllegalAccessException ex) {
+			throw new IllegalArgumentException(ex);
+		    }
+		});
+		
+		return entity;
+	    };
+	    
+	    $.createResponseDelete = (voidValue) -> ResponseEntity.noContent().build();
+	    $.createResponsePatch = (entity) -> ResponseEntity.noContent().build();
+	    $.createResponsePut = (entity) -> ResponseEntity.noContent().build();
+	    $.createResponsePost = (entity) -> ResponseEntity.ok(entity);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected ResponseEntity<Entity> createResponsePatch(final Entity entity) {
-	// TODO Auto-generated method stub
-	return null;
+	    $.entityCommandFacade = springCommandFacade;
+	}));
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected ResponseEntity<Entity> createResponsePost(final Entity entity) {
-	return ResponseEntity.ok().build();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Entity findById(final Id id) {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Entity getEntitySaveResult(final Entity saveEntityOut) {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Entity getEntityUpdateResult(final Entity saveEntityOut) {
-	return saveEntityOut;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Entity getUpdateEntityIn(final Entity entity) {
-	return entity;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected ResponseEntity<?> createResponseDelete(final Void deleteIdOut) {
-	// TODO Auto-generated method stub
-	return null;
-    }    
 }

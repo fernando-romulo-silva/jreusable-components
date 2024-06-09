@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 
 import org.apache.commons.lang3.function.TriFunction;
-import org.reusablecomponent.core.application.base.AbstractEntiyBaseFacade;
+import org.reusablecomponent.core.application.base.EntiyBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <Sort>
  */
 public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification>
-	extends AbstractEntiyBaseFacade<Entity, Id>
+	extends EntiyBaseFacade<Entity, Id>
 	implements InterfaceEntityQueryPaginationSpecificationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification> {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityQueryPaginationSpecificationFacade.class);

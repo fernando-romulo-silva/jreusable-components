@@ -14,6 +14,6 @@ import org.reusablecomponent.core.domain.AbstractEntity;
 public sealed interface InterfaceEntityBaseFacade<Entity extends AbstractEntity<Id>, Id> 
 	permits InterfaceEntityCommandFacade, InterfaceEntityQueryFacade, InterfaceEntityQuerySpecificationFacade,
 		InterfaceEntityQueryPaginationFacade, InterfaceEntityQueryPaginationSpecificationFacade,
-		AbstractEntiyBaseFacade {
+		EntiyBaseFacade {
 
 }

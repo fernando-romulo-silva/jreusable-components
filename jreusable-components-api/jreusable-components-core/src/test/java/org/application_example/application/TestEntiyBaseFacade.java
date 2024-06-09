@@ -1,7 +1,7 @@
 package org.application_example.application;
 
 import org.application_example.domain.Department;
-import org.reusablecomponent.core.application.base.AbstractEntiyBaseFacade;
+import org.reusablecomponent.core.application.empty.SimpleEntiyBaseFacade;
 import org.reusablecomponent.core.infra.exception.ExceptionTranslatorService;
 import org.reusablecomponent.core.infra.i18n.InterfaceI18nService;
 import org.reusablecomponent.core.infra.security.InterfaceSecurityService;
@@ -9,7 +9,7 @@ import org.reusablecomponent.messaging.InterfacePublisherSerice;
 
 import jakarta.annotation.Nullable;
 
-public class TestEntiyBaseFacade extends AbstractEntiyBaseFacade<Department, String> {
+public class TestEntiyBaseFacade extends SimpleEntiyBaseFacade<Department, String> {
 	
     public TestEntiyBaseFacade(
 		    @Nullable final InterfacePublisherSerice publisherService, 

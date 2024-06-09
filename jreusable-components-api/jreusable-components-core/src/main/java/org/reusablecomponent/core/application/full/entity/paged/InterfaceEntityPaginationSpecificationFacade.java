@@ -115,7 +115,7 @@ public interface InterfaceEntityPaginationSpecificationFacade<Entity extends Abs
      */
     @Override
     default MultiplePagedResult findBy(final Pageable pageable, final Specification specification, final Object... directives) {
-	return getEntityQueryFacade().findBy(pageable, specification, directives);
+	return getEntityQueryPaginationSpecificationFacade().findBy(pageable, specification, directives);
     }
 
     /**
@@ -123,10 +123,10 @@ public interface InterfaceEntityPaginationSpecificationFacade<Entity extends Abs
      */
     @Override
     default OneResult findOneBy(final Specification specification, final Sort sort) {
-	return getEntityQueryFacade().findOneBy(specification, sort);
+	return getEntityQueryPaginationSpecificationFacade().findOneBy(specification, sort);
     }
     
     InterfaceEntityCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> getEntityCommandFacade();
     
-    InterfaceEntityQueryPaginationSpecificationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification> getEntityQueryFacade();
+    InterfaceEntityQueryPaginationSpecificationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification> getEntityQueryPaginationSpecificationFacade();
 }

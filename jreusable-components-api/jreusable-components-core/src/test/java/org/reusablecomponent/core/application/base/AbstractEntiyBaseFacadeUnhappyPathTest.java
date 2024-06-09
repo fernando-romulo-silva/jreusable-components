@@ -16,7 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @Tag("unit")
-@DisplayName("Test the AbstractEntiyBaseFacade entity test, unhappy Path :( ")
+@DisplayName("Test the EntiyBaseFacade entity test, unhappy Path :( ")
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)

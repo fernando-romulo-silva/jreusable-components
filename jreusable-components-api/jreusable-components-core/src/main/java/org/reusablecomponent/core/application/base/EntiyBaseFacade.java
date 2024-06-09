@@ -8,6 +8,7 @@ import java.time.ZoneId;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reusablecomponent.core.application.command.entity.EntityCommandFacade;
+import org.reusablecomponent.core.application.empty.SimpleEntiyBaseFacade;
 import org.reusablecomponent.core.application.query.entity.nonpaged.EntityQueryFacade;
 import org.reusablecomponent.core.application.query.entity.nonpaged.EntityQuerySpecificationFacade;
 import org.reusablecomponent.core.application.query.entity.paged.EntityQueryPaginationFacade;
@@ -40,16 +41,16 @@ import jakarta.validation.constraints.NotNull;
  * @param <Entity>
  * @param <Id>
  */
-public sealed abstract class AbstractEntiyBaseFacade<Entity extends AbstractEntity<Id>, Id> 
+public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id> 
 	implements InterfaceEntityBaseFacade<Entity, Id> 
-	permits EntityCommandFacade, EntityQueryFacade, 
+	permits SimpleEntiyBaseFacade, EntityCommandFacade, EntityQueryFacade, 
 		EntityQuerySpecificationFacade, EntityQueryPaginationFacade, EntityQueryPaginationSpecificationFacade {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractEntiyBaseFacade.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntiyBaseFacade.class);
 
     // -------
     
-    protected final InterfacePublisherSerice publisherSerice;
+    protected final InterfacePublisherSerice publisherService;
 
     protected final InterfaceSecurityService securityService;
 
@@ -63,7 +64,7 @@ public sealed abstract class AbstractEntiyBaseFacade<Entity extends AbstractEnti
 
     // ------
 
-    protected AbstractEntiyBaseFacade(
+    protected EntiyBaseFacade(
 		    @Nullable final InterfacePublisherSerice publisherService, 
 		    @Nullable final InterfaceI18nService i18nService,
 		    @Nullable final InterfaceSecurityService securityService,
@@ -74,13 +75,13 @@ public sealed abstract class AbstractEntiyBaseFacade<Entity extends AbstractEnti
 	this.entityClazz = retrieveEntityClazz();
 	this.idClazz = retrieveIdClazz();
 
-	this.publisherSerice = nonNull(publisherService) ? publisherService : new LoggerPublisherSerice();
+	this.publisherService = nonNull(publisherService) ? publisherService : new LoggerPublisherSerice();
 	this.i18nService = nonNull(i18nService) ? i18nService : new JavaSEI18nService();
 	this.securityService = nonNull(securityService) ? securityService : new DefaultSecurityService();
 	this.exceptionTranslatorService = nonNull(exceptionTranslatorService) ? exceptionTranslatorService : (paramException, paramI18nService) -> new GenericException(paramException);
     }
 
-    protected AbstractEntiyBaseFacade() {
+    protected EntiyBaseFacade() {
 	this(null, null, null, null);
     }
 
@@ -147,7 +148,7 @@ public sealed abstract class AbstractEntiyBaseFacade<Entity extends AbstractEnti
 	final var eventString = event.toJson();
 	
 	try {
-	    publisherSerice.publish(eventString);
+	    publisherService.publish(eventString);
 	} catch (final Exception ex) {
 	    LOGGER.error(ExceptionUtils.getRootCauseMessage(ex), ex);
 	    return null;
@@ -180,8 +181,8 @@ public sealed abstract class AbstractEntiyBaseFacade<Entity extends AbstractEnti
      * @return
      */
     @NotNull
-    public final InterfacePublisherSerice getPublisherSerice() {
-	return publisherSerice;
+    public final InterfacePublisherSerice getPublisherService() {
+	return publisherService;
     }
 
     /**

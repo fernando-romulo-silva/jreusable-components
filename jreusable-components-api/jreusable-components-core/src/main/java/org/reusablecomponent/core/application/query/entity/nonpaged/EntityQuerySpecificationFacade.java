@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.reusablecomponent.core.application.base.AbstractEntiyBaseFacade;
+import org.reusablecomponent.core.application.base.EntiyBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <Specification>
  */
 public non-sealed class EntityQuerySpecificationFacade <Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> 
-	extends AbstractEntiyBaseFacade<Entity, Id> 
+	extends EntiyBaseFacade<Entity, Id> 
 	implements InterfaceEntityQuerySpecificationFacade<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityQuerySpecificationFacade.class);

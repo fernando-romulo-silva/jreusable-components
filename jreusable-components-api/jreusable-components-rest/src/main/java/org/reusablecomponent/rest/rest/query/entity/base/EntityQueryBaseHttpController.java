@@ -18,25 +18,18 @@ public class EntityQueryBaseHttpController<QueryIdIn, ExistsResult, OneResult, H
     
     protected final Function<OneResult, HttpResponseOne> createResponseGetOneFunction;
     
-    protected final Function<ExistsResult, HttpResponseVoid> createResponseHeadOneFunction;
-    
+    protected final Function<ExistsResult, HttpResponseVoid> createResponseHeadFunction;
     
     protected EntityQueryBaseHttpController(
 		    final InterfaceEntityQueryFacade<?, ?, QueryIdIn, OneResult, ?, ?, ExistsResult> entityQueryFacade, 
 		    final Function<OneResult, HttpResponseOne> createResponseGetOneFunction,
-		    final Function<ExistsResult, HttpResponseVoid> createResponseHeadOneFunction) {
+		    final Function<ExistsResult, HttpResponseVoid> createResponseHeadFunction) {
 	super();
 	this.entityQueryFacade = entityQueryFacade;
 	this.createResponseGetOneFunction = createResponseGetOneFunction;
-	this.createResponseHeadOneFunction = createResponseHeadOneFunction;
+	this.createResponseHeadFunction = createResponseHeadFunction;
     }
 
-    // ------------------------------------------------------------------------
-    
-    protected QueryIdIn preGet(final QueryIdIn queryIdIn) {
-	return queryIdIn;
-    }
-   
     /**
      * {@inheritDoc}
      */
@@ -45,23 +38,15 @@ public class EntityQueryBaseHttpController<QueryIdIn, ExistsResult, OneResult, H
 	
 	LOGGER.debug("Geting entity by '{}'", queryIdIn);
 	
-	final var finalQueryIdIn = preGet(queryIdIn);
+	final var findByResult = entityQueryFacade.findBy(queryIdIn);
 	
-	final var result = entityQueryFacade.findBy(finalQueryIdIn);
-	
-	final var finalResult = createResponseGetOneFunction.apply(result);
+	final var finalResult = createResponseGetOneFunction.apply(findByResult);
 	
 	LOGGER.debug("Got entity by '{}', result '{}'", queryIdIn, finalResult);
 	
 	return finalResult;
     }
     
-    
-    // ------------------------------------------------------------------------
-    
-    protected QueryIdIn preHead(final QueryIdIn queryIdIn) {
-	return queryIdIn;
-    }    
     
     /**
      * {@inheritDoc}
@@ -71,11 +56,9 @@ public class EntityQueryBaseHttpController<QueryIdIn, ExistsResult, OneResult, H
 	
 	LOGGER.debug("Check entity by '{}'", queryIdIn);
 	
-	final var finalQueryIdIn = preHead(queryIdIn);
+	final var existsByResult = entityQueryFacade.existsBy(queryIdIn);
 	
-	final var result = entityQueryFacade.existsBy(finalQueryIdIn);
-	
-	final var finalResult = createResponseHeadOneFunction.apply(result);
+	final var finalResult = createResponseHeadFunction.apply(existsByResult);
 	
 	LOGGER.debug("Checked entity by '{}', result '{}'", queryIdIn, finalResult);
 	

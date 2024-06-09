@@ -1,4 +1,4 @@
-package org.reusablecomponent.spring.rest.query;
+package org.reusablecomponent.spring.rest.query.entity.nonpaged;
 
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;

@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public interface InterfaceEntityQuerySpecificationHttp <QueryIdIn, HttpResponseVoid, HttpResponseOne, HttpResponseMultiple, Specification> 
 	extends InterfaceEntityQueryBaseController<QueryIdIn, HttpResponseVoid, HttpResponseOne> {
     
-
     /**
      * @param specification
      * @param request

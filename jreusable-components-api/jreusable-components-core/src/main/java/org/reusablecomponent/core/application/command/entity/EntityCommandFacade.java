@@ -12,7 +12,7 @@ import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.UPDAT
 import java.util.Objects;
 import java.util.function.Function;
 
-import org.reusablecomponent.core.application.base.AbstractEntiyBaseFacade;
+import org.reusablecomponent.core.application.base.EntiyBaseFacade;
 import org.reusablecomponent.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +57,7 @@ public non-sealed class EntityCommandFacade <  // generics
                 DeleteIdsIn, DeleteIdsOut // delete entities by id
 	    > 
 	// Base Facade
-	extends AbstractEntiyBaseFacade<Entity, Id>  
+	extends EntiyBaseFacade<Entity, Id>  
 	// Interface command facade
 	implements InterfaceEntityCommandFacade	<
             Entity, Id, // basic
@@ -91,7 +91,7 @@ public non-sealed class EntityCommandFacade <  // generics
     public EntityCommandFacade(final EntityCommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> builder) {
 	// super class parameters
 	super(
-		builder.publisherSerice, 
+		builder.publisherService, 
 		builder.i18nService, 
 		builder.securityService, 
 		builder.exceptionTranslatorService

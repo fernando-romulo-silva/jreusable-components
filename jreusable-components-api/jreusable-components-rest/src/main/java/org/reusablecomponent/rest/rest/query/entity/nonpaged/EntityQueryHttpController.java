@@ -30,31 +30,19 @@ public class EntityQueryHttpController<Entity extends AbstractEntity<Id>, Id, //
 		extends EntityQueryBaseHttpController<QueryIdIn, ExistsResult, OneResult, HttpResponseVoid, HttpResponseOne>
 		implements InterfaceEntityQueryHttpController<QueryIdIn, HttpResponseVoid, HttpResponseOne, HttpResponseMultiple> {
     
-    
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityQueryHttpController.class);
     
     protected final InterfaceEntityQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> entityQueryFacade;
     
     protected final Function<MultipleResult, HttpResponseMultiple> createResponseGetMultipleFunction;
     
-    protected final Function<ExistsResult, HttpResponseVoid> createResponseHeadFunction;    
-
     protected EntityQueryHttpController(final EntityQueryHttpControllerBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult, HttpResponseVoid, HttpResponseOne, HttpResponseMultiple> builder) {
 	
-	super(builder.entityQueryFacade, builder.createResponseGetOneFunction, builder.createResponseHeadOneFunction);
+	super(builder.entityQueryFacade, builder.createResponseGetOneFunction, builder.createResponseHeadFunction);
+	
+	this.createResponseGetMultipleFunction = builder.createResponseGetMultipleFunction;
 	
 	this.entityQueryFacade = builder.entityQueryFacade;
-	this.createResponseGetMultipleFunction = builder.createResponseGetMultipleFunction;
-	this.createResponseHeadFunction = builder.createResponseHeadFunction;
-    }
-
-    
-    /**
-     * @param directives
-     * @return
-     */
-    protected Object[] preGetAll(final Object[] directives) {
-	return directives;
     }
 
     /**
@@ -65,10 +53,8 @@ public class EntityQueryHttpController<Entity extends AbstractEntity<Id>, Id, //
 
 	final var directives = request.getParameterMap();
 	
-	LOGGER.debug("Geting all entities, directives '{}'", directives);
+	LOGGER.debug("Getting all entities, directives '{}'", directives);
 	
-	response.setStatus(200);
-
 	final var result = entityQueryFacade.findAll(directives);
 	
 	final var finalResult = createResponseGetMultipleFunction.apply(result);
@@ -83,15 +69,13 @@ public class EntityQueryHttpController<Entity extends AbstractEntity<Id>, Id, //
      */
     public HttpResponseVoid headAll(final HttpServletRequest request, final HttpServletResponse response) {
 
-	LOGGER.debug("Head all entities");
-	
-	response.setStatus(200);
+	LOGGER.debug("Check if there are any entities");
 	
 	final var result = entityQueryFacade.existsAll();
 	
-	final var finalResult = createResponseHeadOneFunction.apply(result);
+	final var finalResult = createResponseHeadFunction.apply(result);
 	
-	LOGGER.debug("Head all result '{}'", finalResult);
+	LOGGER.debug("Checked if there are any entities, result '{}'", finalResult);
 	
 	return finalResult;
     }
