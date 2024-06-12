@@ -10,6 +10,7 @@ import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.UPDAT
 import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.UPDATE_LIST;
 
 import java.util.Objects;
+import java.util.concurrent.Future;
 import java.util.function.Function;
 
 import org.reusablecomponent.core.application.base.EntiyBaseFacade;
@@ -180,11 +181,11 @@ public non-sealed class EntityCommandFacade <  // generics
     
     // ----------------------------------------------------------------------------------------------------------
     
-    protected String convertDataSaveEntitiesInToPublishData(final SaveEntitiesIn saveEntitiesIn) {
+    protected String convertDataSaveEntitiesInToPublishDataIn(final SaveEntitiesIn saveEntitiesIn) {
 	return Objects.toString(saveEntitiesIn);
     }
     
-    protected String convertSaveEntitiesOutToPublishData(final SaveEntitiesOut saveEntitiesOut) {
+    protected String convertSaveEntitiesOutToPublishDataOut(final SaveEntitiesOut saveEntitiesOut) {
 	return Objects.toString(saveEntitiesOut);
     } 
     
@@ -219,8 +220,8 @@ public non-sealed class EntityCommandFacade <  // generics
 	
 	final var finalResult = posSaveAll(result);
 	
-	final var dataIn = convertDataSaveEntitiesInToPublishData(finalSaveEntitiesIn);
-	final var dataOut = convertSaveEntitiesOutToPublishData(finalResult);
+	final var dataIn = convertDataSaveEntitiesInToPublishDataIn(finalSaveEntitiesIn);
+	final var dataOut = convertSaveEntitiesOutToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, SAVE_LIST, finalSaveEntitiesIn, finalResult);
 	
 	LOGGER.debug("Saved all entities '{}' with session '{}'", finalResult, session);	
@@ -230,11 +231,11 @@ public non-sealed class EntityCommandFacade <  // generics
     
     // ----------------------------------------------------------------------------------------------------------
     
-    protected String convertUpdateEntityInToPublishData(final UpdateEntityIn updateEntityIn) {
+    protected String convertUpdateEntityInToPublishDataIn(final UpdateEntityIn updateEntityIn) {
 	return Objects.toString(updateEntityIn);
     }
     
-    protected String convertUpdateEntityOutToPublishData(final UpdateEntityOut updateEntityOut) {
+    protected String convertUpdateEntityOutToPublishDataOut(final UpdateEntityOut updateEntityOut) {
 	return Objects.toString(updateEntityOut);
     }     
     
@@ -269,8 +270,8 @@ public non-sealed class EntityCommandFacade <  // generics
 	
 	final var finalResult = posUpdate(result);
 	
-	final var dataIn = convertUpdateEntityInToPublishData(finalUpdateEntityIn);
-	final var dataOut = convertUpdateEntityOutToPublishData(finalResult);
+	final var dataIn = convertUpdateEntityInToPublishDataIn(finalUpdateEntityIn);
+	final var dataOut = convertUpdateEntityOutToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, UPDATE_ITEM, finalUpdateEntityIn, finalResult);
 	
 	LOGGER.debug("Updated entity '{}' with session '{}'", finalResult, session);	
@@ -280,11 +281,11 @@ public non-sealed class EntityCommandFacade <  // generics
     
     // ----------------------------------------------------------------------------------------------------------
     
-    protected String convertUpdateEntitiesInToPublishData(final UpdateEntitiesIn updateEntitiesIn) {
+    protected String convertUpdateEntitiesInToPublishDataIn(final UpdateEntitiesIn updateEntitiesIn) {
 	return Objects.toString(updateEntitiesIn);
     }
     
-    protected String convertUpdateEntitiesOutToPublishData(final UpdateEntitiesOut updateEntitiesOut) {
+    protected String convertUpdateEntitiesOutToPublishDataOut(final UpdateEntitiesOut updateEntitiesOut) {
 	return Objects.toString(updateEntitiesOut);
     }
     
@@ -319,8 +320,8 @@ public non-sealed class EntityCommandFacade <  // generics
 	
 	final var finalResult = posUpdateAll(result);
 	
-	final var dataIn = convertUpdateEntitiesInToPublishData(finalUpdateEntitiesIn);
-	final var dataOut = convertUpdateEntitiesOutToPublishData(finalResult);
+	final var dataIn = convertUpdateEntitiesInToPublishDataIn(finalUpdateEntitiesIn);
+	final var dataOut = convertUpdateEntitiesOutToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, UPDATE_LIST, finalUpdateEntitiesIn, finalResult);
 	
 	LOGGER.debug("Updated all entities '{}' with session '{}'", finalResult, session);
@@ -330,11 +331,11 @@ public non-sealed class EntityCommandFacade <  // generics
 
     // ----------------------------------------------------------------------------------------------------------
     
-    protected String convertDeleteEntityInToPublishData(final DeleteEntityIn deleteEntityIn) {
+    protected String convertDeleteEntityInToPublishDataIn(final DeleteEntityIn deleteEntityIn) {
 	return Objects.toString(deleteEntityIn);
     }
     
-    protected String convertDeleteEntityOutToPublishData(final DeleteEntityOut deleteEntityOut) {
+    protected String convertDeleteEntityOutToPublishDataOut(final DeleteEntityOut deleteEntityOut) {
 	return Objects.toString(deleteEntityOut);
     }     
     
@@ -368,8 +369,8 @@ public non-sealed class EntityCommandFacade <  // generics
 	
 	final var finalResult = posDelete(result);
 
-	final var dataIn = convertDeleteEntityInToPublishData(finalDeleteEntityIn);
-	final var dataOut = convertDeleteEntityOutToPublishData(finalResult);
+	final var dataIn = convertDeleteEntityInToPublishDataIn(finalDeleteEntityIn);
+	final var dataOut = convertDeleteEntityOutToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, DELETE_ITEM, finalDeleteEntityIn, finalResult);
 	
 	LOGGER.debug("Deleted entity '{}' with session '{}'", finalResult, session);
@@ -380,11 +381,11 @@ public non-sealed class EntityCommandFacade <  // generics
     
     // ---------------------------------------------------------------------------------------------------------- 
     
-    protected String convertDeleteEntitiesInToPublishData(final DeleteEntitiesIn deleteEntitiesIn) {
+    protected String convertDeleteEntitiesInToPublishDataIn(final DeleteEntitiesIn deleteEntitiesIn) {
 	return Objects.toString(deleteEntitiesIn);
     }
     
-    protected String convertDeleteEntitiesOutOutToPublishData(final DeleteEntitiesOut deleteEntitiesOut) {
+    protected String convertDeleteEntitiesOutOutToPublishDataOut(final DeleteEntitiesOut deleteEntitiesOut) {
 	return Objects.toString(deleteEntitiesOut);
     } 
     
@@ -418,8 +419,8 @@ public non-sealed class EntityCommandFacade <  // generics
 	
 	final var finalResult = posDeleteAll(result);
 	
-	final var dataIn = convertDeleteEntitiesInToPublishData(finalDeleteEntitiesIn);
-	final var dataOut = convertDeleteEntitiesOutOutToPublishData(finalResult);
+	final var dataIn = convertDeleteEntitiesInToPublishDataIn(finalDeleteEntitiesIn);
+	final var dataOut = convertDeleteEntitiesOutOutToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, DELETE_LIST, finalDeleteEntitiesIn, finalResult);
 	
 	LOGGER.debug("Deleted entities '{}' with session '{}'", finalResult, session);
@@ -430,11 +431,11 @@ public non-sealed class EntityCommandFacade <  // generics
     
     // ----------------------------------------------------------------------------------------------------------
     
-    protected String convertDeleteIdInToPublishData(final DeleteIdIn deleteIdIn) {
+    protected String convertDeleteIdInToPublishDataIn(final DeleteIdIn deleteIdIn) {
 	return Objects.toString(deleteIdIn);
     }
     
-    protected String convertDeleteIdOutToPublishData(final DeleteIdOut deleteIdOut) {
+    protected String convertDeleteIdOutToPublishDataOut(final DeleteIdOut deleteIdOut) {
 	return Objects.toString(deleteIdOut);
     }     
     
@@ -468,8 +469,8 @@ public non-sealed class EntityCommandFacade <  // generics
 	
 	final var finalResult = posDeleteById(result);
 
-	final var dataIn = convertDeleteIdInToPublishData(finalDeleteIdIn);
-	final var dataOut = convertDeleteIdOutToPublishData(finalResult);
+	final var dataIn = convertDeleteIdInToPublishDataIn(finalDeleteIdIn);
+	final var dataOut = convertDeleteIdOutToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, DELETE_ID, finalDeleteIdIn, finalResult);
 	
 	LOGGER.debug("Deleted by id '{}' with session '{}'", finalResult, session);
@@ -480,11 +481,11 @@ public non-sealed class EntityCommandFacade <  // generics
     
     // ----------------------------------------------------------------------------------------------------------
     
-    protected String convertDeleteIdsInToPublishData(final DeleteIdsIn deleteIdsIn) {
+    protected String convertDeleteIdsInToPublishDataIn(final DeleteIdsIn deleteIdsIn) {
 	return Objects.toString(deleteIdsIn);
     }
     
-    protected String convertDeleteIdsOutToPublishData(final DeleteIdsOut deleteIdsOut) {
+    protected String convertDeleteIdsOutToPublishDataOut(final DeleteIdsOut deleteIdsOut) {
 	return Objects.toString(deleteIdsOut);
     }    
     
@@ -519,8 +520,8 @@ public non-sealed class EntityCommandFacade <  // generics
 	
 	final var finalResult = posDeleteEntitiesBy(result);
 	
-	final var dataIn = convertDeleteIdsInToPublishData(finalDeleteIdsIn);
-	final var dataOut = convertDeleteIdsOutToPublishData(finalResult);
+	final var dataIn = convertDeleteIdsInToPublishDataIn(finalDeleteIdsIn);
+	final var dataOut = convertDeleteIdsOutToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, DELETE_IDS, finalDeleteIdsIn, finalResult);
 	
 	LOGGER.debug("Deleted by ids '{}' with session '{}'", finalResult, session);

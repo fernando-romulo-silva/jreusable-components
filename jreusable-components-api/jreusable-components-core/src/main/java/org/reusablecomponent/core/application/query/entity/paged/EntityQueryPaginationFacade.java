@@ -45,11 +45,11 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
     }
 
     // ---------------------------------------------------------------------------
-    protected String convertPageableToPublishData(final Pageable pageable) {
+    protected String convertPageableToPublishDataIn(final Pageable pageable) {
 	return Objects.toString(pageable);
     }
     
-    protected String convertMultiplePagedResultToPublishData(final MultiplePagedResult multiplePagedResult) {
+    protected String convertMultiplePagedResultToPublishDataOut(final MultiplePagedResult multiplePagedResult) {
 	return Objects.toString(multiplePagedResult);
     }
     
@@ -84,8 +84,8 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	
 	final var finalResult = posFindAll(result);
 	
-	final var dataIn = convertPageableToPublishData(finalPageable);
-	final var dataOut = convertMultiplePagedResultToPublishData(finalResult);
+	final var dataIn = convertPageableToPublishDataIn(finalPageable);
+	final var dataOut = convertMultiplePagedResultToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, FIND_ALL_PAGEABLE);
 	
 	LOGGER.debug("Found all by '{}', session '{}'", finalPageable, session);
@@ -96,11 +96,11 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
     
     // ---------------------------------------------------------------------------
     
-    protected String convertSortToPublishData(final Sort sort) {
+    protected String convertSortToPublishDataIn(final Sort sort) {
 	return Objects.toString(sort);
     }
     
-    protected String convertOneResultResultToPublishData(final OneResult oneResult) {
+    protected String convertOneResultResultToPublishDataOut(final OneResult oneResult) {
 	return Objects.toString(oneResult);
     }
     
@@ -134,8 +134,8 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	
 	final var finalResult = posFindFirst(result);
 	
-	final var dataIn = convertSortToPublishData(finalSort);
-	final var dataOut = convertOneResultResultToPublishData(finalResult);
+	final var dataIn = convertSortToPublishDataIn(finalSort);
+	final var dataOut = convertOneResultResultToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, FIND_ALL_PAGEABLE);
 	
 	LOGGER.debug("Found first by '{}', session '{}'", finalSort, session);

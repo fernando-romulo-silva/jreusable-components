@@ -53,11 +53,11 @@ public non-sealed class EntityQuerySpecificationFacade <Entity extends AbstractE
 
     // ---------------------------------------------------------------------------
     
-    protected String convertSpecificationToPublishData(final Specification specification) {
+    protected String convertSpecificationToPublishDataIn(final Specification specification) {
 	return Objects.toString(specification);
     }
     
-    protected String convertMultipleResultToPublishData(final MultipleResult multipleResult) {
+    protected String convertMultipleResultToPublishDataOut(final MultipleResult multipleResult) {
 	return Objects.toString(multipleResult);
     }
     
@@ -91,8 +91,8 @@ public non-sealed class EntityQuerySpecificationFacade <Entity extends AbstractE
 	
 	final var finalResult = posFindBy(result);
 	
-	final var dataIn = convertSpecificationToPublishData(finalSpecification);
-	final var dataOut = convertMultipleResultToPublishData(finalResult);
+	final var dataIn = convertSpecificationToPublishDataIn(finalSpecification);
+	final var dataOut = convertMultipleResultToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, FIND_BY_SPECIFICATION);
 	
 	LOGGER.debug("Found by '{}', session '{}'", finalSpecification, session);
@@ -110,7 +110,7 @@ public non-sealed class EntityQuerySpecificationFacade <Entity extends AbstractE
 	return oneResult;
     }
     
-    protected String convertOneResultToPublishData(final OneResult oneResult) {
+    protected String convertOneResultToPublishDataOut(final OneResult oneResult) {
 	return Objects.toString(oneResult);
     }    
     
@@ -136,8 +136,8 @@ public non-sealed class EntityQuerySpecificationFacade <Entity extends AbstractE
 	
 	final var finalResult = posFindOneBy(result);
 	
-	final var dataIn = convertSpecificationToPublishData(finalSpecification);
-	final var dataOut = convertOneResultToPublishData(finalResult);
+	final var dataIn = convertSpecificationToPublishDataIn(finalSpecification);
+	final var dataOut = convertOneResultToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, FIND_ONE_BY_SPECIFICATION);
 	
 	LOGGER.debug("Found one by '{}', session '{}'", finalSpecification, session);
@@ -156,7 +156,7 @@ public non-sealed class EntityQuerySpecificationFacade <Entity extends AbstractE
 	return existsResult;
     }
     
-    protected String convertExistsResultToPublishData(final ExistsResult resultFinal) {
+    protected String convertExistsResultToPublishDataOut(final ExistsResult resultFinal) {
 	return Objects.toString(resultFinal);
     }    
     
@@ -182,8 +182,8 @@ public non-sealed class EntityQuerySpecificationFacade <Entity extends AbstractE
 	
 	final var finalResult = posExistsBy(result);
 	
-	final var dataIn = convertSpecificationToPublishData(finalSpecification);
-	final var dataOut = convertExistsResultToPublishData(finalResult);
+	final var dataIn = convertSpecificationToPublishDataIn(finalSpecification);
+	final var dataOut = convertExistsResultToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, EXISTS_BY_SPECIFICATION);
 	
 	LOGGER.debug("Existed by '{}', session '{}'", finalSpecification, session);
@@ -201,7 +201,7 @@ public non-sealed class EntityQuerySpecificationFacade <Entity extends AbstractE
 	return countResult;
     }
     
-    protected String convertCountResultToPublishData(final CountResult countResult) {
+    protected String convertCountResultToPublishDataOut(final CountResult countResult) {
 	return Objects.toString(countResult);
     }      
 
@@ -227,8 +227,8 @@ public non-sealed class EntityQuerySpecificationFacade <Entity extends AbstractE
 	
 	final var finalResult = posCountBy(result);
 	
-	final var dataIn = convertSpecificationToPublishData(finalSpecification);
-	final var dataOut = convertCountResultToPublishData(finalResult);
+	final var dataIn = convertSpecificationToPublishDataIn(finalSpecification);
+	final var dataOut = convertCountResultToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, COUNT_BY_SPECIFICATION);
 	
 	LOGGER.debug("Counted by '{}', session '{}'", finalSpecification, session);

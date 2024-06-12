@@ -119,8 +119,28 @@ public class Event {
 	}
 
 	public Event build() {
+	    
+	    if (Objects.isNull(when)) {
+		throw new IllegalArgumentException("");
+	    }
+	    
+	    if (Objects.isNull(who)) {
+		throw new IllegalArgumentException("");
+	    }
+	    
+	    if (Objects.isNull(what)) {
+		throw new IllegalArgumentException("");
+	    }
+	    
+	    if (Objects.isNull(where)) {
+		throw new IllegalArgumentException("");
+	    }
+	    
+	    if (Objects.isNull(why)) {
+		throw new IllegalArgumentException("");
+	    }
+
 	    return new Event(this);
 	}
     }
-
 }

@@ -2,7 +2,8 @@ package org.reusablecomponent.core.application.query.entity.nonpaged;
 
 import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.EXISTS_BY_ID;
 import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.FIND_ALL;
-import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.FIND_BY_ID;
+import static org.reusablecomponent.core.infra.messaging.event.CommonEvent.*;
+
 
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -67,25 +68,25 @@ public non-sealed class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id
     
     // ---------------------------------------------------------------------------
     
-    protected String convertMultipleResultToPublishData(final MultipleResult multipleResult) {
+    protected String convertMultipleResultToPublishDataOut(final MultipleResult multipleResult) {
 	return Objects.toString(multipleResult);
     }
     
-    protected String convertOneResultToPublishData(final OneResult oneResult) {
+    protected String convertOneResultToPublishDataOut(final OneResult oneResult) {
 	return Objects.toString(oneResult);
     }
     
-    protected String convertCountResultToPublishData(final CountResult countResult) {
+    protected String convertCountResultToPublishDataOut(final CountResult countResult) {
 	return Objects.toString(countResult);
     }
     
-    protected String convertQueryIdInToPublishData(final QueryIdIn queryIdIn) {
+    protected String convertQueryIdInToPublishDataIn(final QueryIdIn queryIdIn) {
 	return Objects.toString(queryIdIn);
     } 
     
     // ---------------------------------------------------------------------------
     
-    protected String convertDirectivesToPublishData(final Object... directives) {
+    protected String convertDirectivesToPublishDataIn(final Object... directives) {
 	return Objects.toString(directives);
     }
     
@@ -133,8 +134,8 @@ public non-sealed class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id
 	
 	final var finalResult = posFindAll(result);
 	
-	final var dataIn = convertDirectivesToPublishData(finalDirectives);
-	final var dataOut = convertMultipleResultToPublishData(finalResult);
+	final var dataIn = convertDirectivesToPublishDataIn(finalDirectives);
+	final var dataOut = convertMultipleResultToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, FIND_ALL);
 	
 	LOGGER.debug("Found all '{}', session '{}'", getEntityClazz().getSimpleName(), session);
@@ -182,8 +183,8 @@ public non-sealed class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id
 	
 	final var finalResult = posFindBy(result);
 	
-	final var dataIn = convertQueryIdInToPublishData(finalQueryIdIn);
-	final var dataOut = convertOneResultToPublishData(finalResult);
+	final var dataIn = convertQueryIdInToPublishDataIn(finalQueryIdIn);
+	final var dataOut = convertOneResultToPublishDataOut(finalResult);
 	publish(dataIn, dataOut, FIND_BY_ID);
 	
 	LOGGER.debug("Found by '{}', result '{}', session '{}'", queryIdIn, finalResult, session);
@@ -228,7 +229,7 @@ public non-sealed class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id
 	
 	final var finalResult = posExistsBy(result);
 	
-	final var dataIn = convertQueryIdInToPublishData(finalQueryIdIn);
+	final var dataIn = convertQueryIdInToPublishDataIn(finalQueryIdIn);
 	final var dataOut = convertExistsResultToPublishData(finalResult);
 	publish(dataIn, dataOut, EXISTS_BY_ID);
 	
@@ -264,8 +265,8 @@ public non-sealed class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id
 	final var finalResult = posCountAll(result);
 	
 	final var dataIn = StringUtils.EMPTY;
-	final var dataOut = convertCountResultToPublishData(finalResult);
-	publish(dataIn, dataOut, EXISTS_BY_ID);
+	final var dataOut = convertCountResultToPublishDataOut(finalResult);
+	publish(dataIn, dataOut, COUNT_ALL);
 	
 	LOGGER.debug("Counted all '{}', result '{}', session '{}'", getEntityClazz().getSimpleName(), finalResult, session);
 	
@@ -293,7 +294,7 @@ public non-sealed class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id
 	
 	final var dataIn = StringUtils.EMPTY;
 	final var dataOut = convertExistsResultToPublishData(finalResult);
-	publish(dataIn, dataOut, EXISTS_BY_ID);
+	publish(dataIn, dataOut, EXISTS_ALL);
 	
 	LOGGER.debug("Existed all '{}', result '{}', session '{}'", getEntityClazz().getSimpleName(), finalResult, session);
 	

@@ -25,8 +25,9 @@ public enum CommonEvent implements InterfaceOperationEvent {
     FIND_UNIQUE,
     
     EXISTS_BY_ID,
+    EXISTS_ALL,
     EXISTS_BY_SPECIFICATION,
     
-    COUNT,
+    COUNT_ALL,
     COUNT_BY_SPECIFICATION,
 }

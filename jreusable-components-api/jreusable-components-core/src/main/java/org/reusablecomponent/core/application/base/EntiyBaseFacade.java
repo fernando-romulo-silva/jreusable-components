@@ -119,10 +119,7 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
      * @param dataOut
      * @param operation
      */
-    protected final Event publish(final String dataIn, final String dataOut, final InterfaceOperationEvent operation, final Object... directives) {
-	
-	checkNotNull(operation, "The argument 'operation' cannot be null");
-	checkNotNull(directives, "The argument argument 'directives' cannot be null");
+    protected Event publish(final String dataIn, final String dataOut, final InterfaceOperationEvent operation, final Object... directives) {
 	
 	LOGGER.debug("Publishing {} operation", operation);
 	
@@ -130,6 +127,9 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 	    LOGGER.debug("Published {} operation avoided", operation);
 	    return null;
 	}
+	
+	checkNotNull(operation, "The argument 'operation' cannot be null");
+	checkNotNull(directives, "The argument argument 'directives' cannot be null");
 	
 	final var user = securityService.getUserName();
 	final var realm = securityService.getUserRealm();
