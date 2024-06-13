@@ -1,6 +1,6 @@
 package org.application_example.infra;
 
-import org.reusablecomponent.messaging.InterfacePublisherSerice;
+import org.reusablecomponents.messaging.InterfacePublisherSerice;
 
 public class DummyPublisherSerice implements InterfacePublisherSerice {
     

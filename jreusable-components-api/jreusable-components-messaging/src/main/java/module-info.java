@@ -10,7 +10,7 @@ open module org.reusablecomponent.messaging {
     
     //---------------------------------------------------
     // export
-    exports org.reusablecomponent.messaging;
-    exports org.reusablecomponent.messaging.logger;
-    exports org.reusablecomponent.messaging.flow;
+    exports org.reusablecomponents.messaging;
+    exports org.reusablecomponents.messaging.logger;
+    exports org.reusablecomponents.messaging.flow;
 }

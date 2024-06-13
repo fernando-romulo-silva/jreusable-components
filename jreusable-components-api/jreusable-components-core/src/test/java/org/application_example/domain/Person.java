@@ -1,6 +1,6 @@
 package org.application_example.domain;
 
-import static org.reusablecomponent.core.util.AbstractValidatorTest.VALIDATOR;
+import static org.reusablecomponents.core.util.AbstractValidatorTest.VALIDATOR;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,8 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.core.domain.AbstractEntityBuilder;
+import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.core.domain.AbstractEntityBuilder;
 
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;

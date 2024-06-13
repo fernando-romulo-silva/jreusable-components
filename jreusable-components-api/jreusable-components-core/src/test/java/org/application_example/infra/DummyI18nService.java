@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
-import org.reusablecomponent.core.infra.i18n.InterfaceI18nService;
+import org.reusablecomponents.core.infra.i18n.InterfaceI18nService;
 
 public class DummyI18nService implements InterfaceI18nService {
 

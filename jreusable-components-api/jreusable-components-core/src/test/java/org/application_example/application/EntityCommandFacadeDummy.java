@@ -9,10 +9,10 @@ import java.util.function.Function;
 import org.application_example.infra.DummyExceptionTranslatorService;
 import org.application_example.infra.DummyI18nService;
 import org.application_example.infra.DummySecurityService;
-import org.reusablecomponent.core.application.command.entity.EntityCommandFacade;
-import org.reusablecomponent.core.application.command.entity.EntityCommandFacadeBuilder;
-import org.reusablecomponent.core.domain.AbstractEntity;
-import org.reusablecomponent.messaging.logger.LoggerPublisherSerice;
+import org.reusablecomponents.core.application.command.entity.EntityCommandFacade;
+import org.reusablecomponents.core.application.command.entity.EntityCommandFacadeBuilder;
+import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.messaging.logger.LoggerPublisherSerice;
 
 public class EntityCommandFacadeDummy<Entity extends AbstractEntity<Id>, Id> 
 	//

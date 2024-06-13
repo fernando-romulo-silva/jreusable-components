@@ -1,0 +1,33 @@
+package org.reusablecomponents.core.infra.messaging.event;
+
+import org.reusablecomponents.core.infra.messaging.InterfaceOperationEvent;
+
+public enum CommonEvent implements InterfaceOperationEvent {
+
+    SAVE_ITEM,
+    UPDATE_ITEM,
+    DELETE_ITEM,
+    DELETE_ID,
+    
+    SAVE_LIST,
+    UPDATE_LIST,
+    DELETE_LIST,
+    DELETE_IDS,
+    
+    FIND_ALL,
+    FIND_BY_SPECIFICATION,
+    FIND_ALL_PAGEABLE,
+    FIND_BY_SPECIFICATION_PAGEABLE,
+    
+    FIND_ONE_BY_SPECIFICATION,
+
+    FIND_BY_ID,
+    FIND_UNIQUE,
+    
+    EXISTS_BY_ID,
+    EXISTS_ALL,
+    EXISTS_BY_SPECIFICATION,
+    
+    COUNT_ALL,
+    COUNT_BY_SPECIFICATION,
+}

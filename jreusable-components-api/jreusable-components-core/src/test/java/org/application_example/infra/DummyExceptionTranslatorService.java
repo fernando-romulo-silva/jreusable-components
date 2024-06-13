@@ -1,9 +1,9 @@
 package org.application_example.infra;
 
-import org.reusablecomponent.core.infra.exception.InterfaceExceptionTranslatorService;
-import org.reusablecomponent.core.infra.exception.common.BaseApplicationException;
-import org.reusablecomponent.core.infra.exception.common.GenericException;
-import org.reusablecomponent.core.infra.i18n.InterfaceI18nService;
+import org.reusablecomponents.core.infra.exception.InterfaceExceptionTranslatorService;
+import org.reusablecomponents.core.infra.exception.common.BaseApplicationException;
+import org.reusablecomponents.core.infra.exception.common.GenericException;
+import org.reusablecomponents.core.infra.i18n.InterfaceI18nService;
 
 import jakarta.validation.constraints.NotNull;
 

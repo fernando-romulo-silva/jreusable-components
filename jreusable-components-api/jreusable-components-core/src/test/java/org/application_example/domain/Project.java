@@ -1,10 +1,10 @@
 package org.application_example.domain;
 
-import static org.reusablecomponent.core.util.AbstractValidatorTest.VALIDATOR;
+import static org.reusablecomponents.core.util.AbstractValidatorTest.VALIDATOR;
 
 import java.util.Optional;
 
-import org.reusablecomponent.core.domain.AbstractEntity;
+import org.reusablecomponents.core.domain.AbstractEntity;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

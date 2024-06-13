@@ -1,4 +1,4 @@
-open module org.reusablecomponent.core {
+open module org.reusablecomponents.core {
     
     // import modules
     requires jakarta.validation;
@@ -15,36 +15,36 @@ open module org.reusablecomponent.core {
     requires gson.javatime.serialisers;
     
     // -- messaging
-    requires org.reusablecomponent.messaging;
-//    requires org.reusablecomponent.messaging.event;
-//    requires org.reusablecomponent.messaging.logger;
-//    requires org.reusablecomponent.messaging.flow;
-//    requires org.reusablecomponent.messaging.util;
+    requires org.reusablecomponents.messaging;
+//    requires org.reusablecomponents.messaging.event;
+//    requires org.reusablecomponents.messaging.logger;
+//    requires org.reusablecomponents.messaging.flow;
+//    requires org.reusablecomponents.messaging.util;
     
     //---------------------------------------------------
     // export
     // -- domain classes
-    exports org.reusablecomponent.core.domain;
+    exports org.reusablecomponents.core.domain;
     
     // -- command facades
-    exports org.reusablecomponent.core.application.command.entity;
+    exports org.reusablecomponents.core.application.command.entity;
 
     // -- queries facades
-    exports org.reusablecomponent.core.application.query.entity.paged;
-    exports org.reusablecomponent.core.application.query.entity.nonpaged;
+    exports org.reusablecomponents.core.application.query.entity.paged;
+    exports org.reusablecomponents.core.application.query.entity.nonpaged;
     
     // -- full facades
-    exports org.reusablecomponent.core.application.mix.entity.paged;
-    exports org.reusablecomponent.core.application.mix.entity.nonpaged;
+    exports org.reusablecomponents.core.application.mix.entity.paged;
+    exports org.reusablecomponents.core.application.mix.entity.nonpaged;
     
     // -- exception
-    exports org.reusablecomponent.core.infra.exception;
+    exports org.reusablecomponents.core.infra.exception;
     
     // -- i18n
-    exports org.reusablecomponent.core.infra.i18n;
+    exports org.reusablecomponents.core.infra.i18n;
     
     // -- security
-    exports org.reusablecomponent.core.infra.security;
+    exports org.reusablecomponents.core.infra.security;
     
     // -- messaging
 }

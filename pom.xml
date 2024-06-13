@@ -2,7 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>jreusablecomponents</groupId>
+	<groupId>org.reusablecomponents</groupId>
 	<artifactId>jreusable-components</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -21,9 +21,10 @@
     <url>https://${scm.platform}/${scm.account}/${project.artifactId}</url>		
 		
 	<modules>
+		<module>jreusable-components-api</module>
+		
 		<module>jreusable-components-spring</module>
 		<module>jreusable-components-jakarta</module>
-		<module>jreusable-components-api</module>
 		<module>jreusable-components-quarkus</module>
 		<module>jreusable-components-microprofile</module>
 		<module>jreusable-components-micronaut</module>

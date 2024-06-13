@@ -1,6 +1,6 @@
 package org.application_example.infra;
 
-import org.reusablecomponent.core.infra.security.InterfaceSecurityService;
+import org.reusablecomponents.core.infra.security.InterfaceSecurityService;
 
 public class DummySecurityService implements InterfaceSecurityService {
 

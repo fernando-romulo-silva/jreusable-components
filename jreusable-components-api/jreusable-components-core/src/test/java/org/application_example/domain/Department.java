@@ -2,7 +2,7 @@ package org.application_example.domain;
 
 import java.time.LocalDateTime;
 
-import org.reusablecomponent.core.domain.AbstractEntity;
+import org.reusablecomponents.core.domain.AbstractEntity;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

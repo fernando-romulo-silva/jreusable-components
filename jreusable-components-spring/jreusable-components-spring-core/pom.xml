@@ -4,31 +4,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
-		<groupId>jreusablecomponents</groupId>
+		<groupId>org.reusablecomponents</groupId>
 		<artifactId>jreusable-components-spring</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	
 	<artifactId>jreusable-components-spring-core</artifactId>
 
-	<dependencyManagement>
-		<dependencies>
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-dependencies</artifactId>
-				<version>${spring-boot.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			
-		</dependencies>
-	</dependencyManagement>
-
 	<dependencies>
 		
 		<dependency>
-			<groupId>jreusablecomponents</groupId>
+			<groupId>org.reusablecomponents</groupId>
 			<artifactId>jreusable-components-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>		
