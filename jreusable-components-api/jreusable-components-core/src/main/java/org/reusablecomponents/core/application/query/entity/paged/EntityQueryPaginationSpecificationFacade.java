@@ -91,7 +91,7 @@ public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends 
 	
 	final var dataIn = convertPageableToPublishData(finalPageable, finalSpecification);
 	final var dataOut = convertMultiplePagedResultToPublishData(finalResult);
-	publish(dataIn, dataOut, FIND_BY_SPECIFICATION_PAGEABLE);
+	publish(dataIn, dataOut, FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE);
 	
 	LOGGER.debug("Found by '{}', session '{}'", finalPageable, session);
 	
@@ -142,7 +142,7 @@ public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends 
 	
 	final var dataIn = convertSortToPublishData(finalSpecification, finalSort);
 	final var dataOut = convertOneResultResultToPublishData(finalResult);
-	publish(dataIn, dataOut, FIND_ALL_PAGEABLE);
+	publish(dataIn, dataOut, FIND_ALL_ENTITIES_PAGEABLE);
 	
 	LOGGER.debug("Found first by '{}' & '{}', session '{}'", finalSpecification, sort, session);
 	

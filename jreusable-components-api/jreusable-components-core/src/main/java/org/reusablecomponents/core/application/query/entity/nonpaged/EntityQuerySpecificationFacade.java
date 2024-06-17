@@ -93,7 +93,7 @@ public non-sealed class EntityQuerySpecificationFacade <Entity extends AbstractE
 	
 	final var dataIn = convertSpecificationToPublishDataIn(finalSpecification);
 	final var dataOut = convertMultipleResultToPublishDataOut(finalResult);
-	publish(dataIn, dataOut, FIND_BY_SPECIFICATION);
+	publish(dataIn, dataOut, FIND_ENTITIES_BY_SPECIFICATION);
 	
 	LOGGER.debug("Found by '{}', session '{}'", finalSpecification, session);
 	
@@ -138,7 +138,7 @@ public non-sealed class EntityQuerySpecificationFacade <Entity extends AbstractE
 	
 	final var dataIn = convertSpecificationToPublishDataIn(finalSpecification);
 	final var dataOut = convertOneResultToPublishDataOut(finalResult);
-	publish(dataIn, dataOut, FIND_ONE_BY_SPECIFICATION);
+	publish(dataIn, dataOut, FIND_ENTITY_BY_SPECIFICATION);
 	
 	LOGGER.debug("Found one by '{}', session '{}'", finalSpecification, session);
 	

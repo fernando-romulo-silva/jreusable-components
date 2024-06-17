@@ -13,6 +13,7 @@ import org.application_example.application.TestEntiyNoPublishBaseFacade;
 import org.application_example.domain.Department;
 import org.application_example.domain.Project;
 import org.application_example.infra.DummySecurityService;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -22,7 +23,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reusablecomponents.core.application.base.EntiyBaseFacade;
 import org.reusablecomponents.core.domain.AbstractEntity;
 import org.reusablecomponents.core.infra.exception.InterfaceExceptionTranslatorService;
 import org.reusablecomponents.core.infra.exception.common.GenericException;
@@ -152,13 +152,43 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 	final var facade = new TestEntiyBaseFacade();
 	
 	// when
-	facade.publish("SaveIn", null, CommonEvent.SAVE_ITEM);
+	facade.publish("SaveIn", null, CommonEvent.SAVE_ENTITY);
 	
 	// then
         assertThat(listAppender.list)
-        	.extracting(ILoggingEvent::getFormattedMessage, ILoggingEvent::getLevel)
-        	.containsExactly(tuple("Publish event [in:SaveIn],[out:null]", Level.DEBUG));
-	
+        	.extracting(ILoggingEvent::getFormattedMessage)
+        	.first()
+        	.asInstanceOf(InstanceOfAssertFactories.STRING)
+        	.contains("Publish event")
+        	.contains("\"what\":{\"dataIn\":\"SaveIn\",\"dataOut\":\"\"}")
+        ;
+
+        /**
+            {
+               "id":"c1c38345-45f1-4a26-81aa-d5d422c0b788",
+               "what":{
+                  "dataIn":"SaveIn",
+                  "dataOut":""
+               },
+               "when":{
+                  "dateTime":"2024-06-17T07:19:03.225291438",
+                  "zoneId":"America/Sao_Paulo"
+               },
+               "where":{
+                  "application":"NOAPPLICATION",
+                  "machine":"pc01"
+               },
+               "who":{
+                  "login":"fernando",
+                  "session":"NOSESSION",
+                  "realm":"NOREALM"
+               },
+               "why":{
+                  "reason":"SAVE_ENTITY",
+                  "description":"CommonEvent"
+               }
+            }         
+         */
     }
     
     @Test
@@ -179,15 +209,15 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 	final var facade = new TestEntiyNoPublishBaseFacade();
 	
 	// when
-	facade.publish("SaveIn", "SaveOut", CommonEvent.SAVE_ITEM);
+	facade.publish("SaveIn", "SaveOut", CommonEvent.SAVE_ENTITY);
 	
 	// then
         assertThat(listAppender.list)
         	.extracting(ILoggingEvent::getFormattedMessage, ILoggingEvent::getLevel)
         	.doesNotContain(tuple("Publish event [in:SaveIn],[out:SaveOut]", Level.DEBUG))
         	.containsExactly(
-        			 tuple("Publishing SAVE_ITEM operation", Level.DEBUG),
-        			 tuple("Published SAVE_ITEM operation avoided", Level.DEBUG)
+        			 tuple("Publishing SAVE_ENTITY operation", Level.DEBUG),
+        			 tuple("Published SAVE_ENTITY operation avoided", Level.DEBUG)
         			);
 	
     }
@@ -227,15 +257,15 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 	};
 	
 	// when
-	facade.publish("SaveIn", "SaveOut", CommonEvent.SAVE_ITEM, project);
+	facade.publish("SaveIn", "SaveOut", CommonEvent.SAVE_ENTITY, project);
 	
 	// then
         assertThat(listAppender.list)
         	.extracting(ILoggingEvent::getFormattedMessage, ILoggingEvent::getLevel)
         	.doesNotContain(tuple("Publish event [in:SaveIn],[out:SaveOut]", Level.DEBUG))
         	.containsExactly(
-        			 tuple("Publishing SAVE_ITEM operation", Level.DEBUG),
-        			 tuple("Published SAVE_ITEM operation avoided", Level.DEBUG)
+        			 tuple("Publishing SAVE_ENTITY operation", Level.DEBUG),
+        			 tuple("Published SAVE_ENTITY operation avoided", Level.DEBUG)
         			);
 	
     }

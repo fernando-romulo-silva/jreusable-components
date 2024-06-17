@@ -5,12 +5,12 @@ package org.reusablecomponents.messaging;
  * For example, please check the {@link JavaReactReaderService} implementation.
  */
 @FunctionalInterface
-public interface InterfaceReaderService {
+public interface InterfaceConsumerService {
 
     /**
      * Read a event.
      * 
      * @param event The event object.
      */
-    void read(final String event);
+    void consume(final String event);
 }

@@ -2,14 +2,14 @@ package org.reusablecomponents.messaging.flow;
 
 import java.util.concurrent.Flow.Subscription;
 
-import org.reusablecomponents.messaging.InterfaceReaderService;
+import org.reusablecomponents.messaging.InterfaceConsumerService;
 
 import jakarta.validation.constraints.NotNull;
 
 /**
  * 
  */
-public class JavaReactReaderService implements InterfaceReaderService {
+public class JavaReactReaderService implements InterfaceConsumerService {
 
     @SuppressWarnings("exports")
     public final EventSubscriber eventSubscriber = new EventSubscriber();
@@ -24,6 +24,6 @@ public class JavaReactReaderService implements InterfaceReaderService {
      * {@inheritDoc}
      */
     @Override
-    public void read(final String event) {
+    public void consume(final String event) {
     }
 }

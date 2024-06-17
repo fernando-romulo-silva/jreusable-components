@@ -1,6 +1,5 @@
 package org.reusablecomponents.core.application.command.dto;
 
-import org.reusablecomponents.core.application.base.InterfaceEntityBaseFacade;
 import org.reusablecomponents.core.domain.AbstractEntity;
 
 /**

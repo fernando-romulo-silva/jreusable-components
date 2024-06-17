@@ -133,7 +133,7 @@ public non-sealed class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id
 	
 	final var dataIn = convertDirectivesToPublishDataIn(finalDirectives);
 	final var dataOut = convertMultipleResultToPublishDataOut(finalResult);
-	publish(dataIn, dataOut, FIND_ALL);
+	publish(dataIn, dataOut, FIND_ALL_ENTITIES);
 	
 	LOGGER.debug("Found all '{}', session '{}'", getEntityClazz().getSimpleName(), session);
 	
@@ -182,7 +182,7 @@ public non-sealed class EntityQueryFacade <Entity extends AbstractEntity<Id>, Id
 	
 	final var dataIn = convertQueryIdInToPublishDataIn(finalQueryIdIn);
 	final var dataOut = convertOneResultToPublishDataOut(finalResult);
-	publish(dataIn, dataOut, FIND_BY_ID);
+	publish(dataIn, dataOut, FIND_ENTITY_BY_ID);
 	
 	LOGGER.debug("Found by '{}', result '{}', session '{}'", queryIdIn, finalResult, session);
 	

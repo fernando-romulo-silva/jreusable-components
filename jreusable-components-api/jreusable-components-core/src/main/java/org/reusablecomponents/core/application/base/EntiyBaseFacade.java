@@ -170,7 +170,7 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 		   "id": "${id}",
 		   "what": {
 			"dataIn" : "${dataIn}",
-			"dataOut" : "${dataOut}",	   
+			"dataOut" : "${dataOut}"
 		   },
 		   "when": {
 			"dateTime" : "${dateTime}",

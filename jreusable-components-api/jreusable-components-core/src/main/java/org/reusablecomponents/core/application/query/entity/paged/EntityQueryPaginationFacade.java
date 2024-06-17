@@ -86,7 +86,7 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	
 	final var dataIn = convertPageableToPublishDataIn(finalPageable);
 	final var dataOut = convertMultiplePagedResultToPublishDataOut(finalResult);
-	publish(dataIn, dataOut, FIND_ALL_PAGEABLE);
+	publish(dataIn, dataOut, FIND_ALL_ENTITIES_PAGEABLE);
 	
 	LOGGER.debug("Found all by '{}', session '{}'", finalPageable, session);
 	
@@ -136,7 +136,7 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	
 	final var dataIn = convertSortToPublishDataIn(finalSort);
 	final var dataOut = convertOneResultResultToPublishDataOut(finalResult);
-	publish(dataIn, dataOut, FIND_ALL_PAGEABLE);
+	publish(dataIn, dataOut, FIND_ALL_ENTITIES_PAGEABLE);
 	
 	LOGGER.debug("Found first by '{}', session '{}'", finalSort, session);
 	

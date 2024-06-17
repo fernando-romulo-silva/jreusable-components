@@ -10,8 +10,9 @@
 	<artifactId>jreusable-components-spring-messaging</artifactId>
 	<packaging>pom</packaging>
 	<modules>
-		<module>jreusable-components-spring-messaging-kafka</module>
-		<module>jreusable-components-spring-messaging-rabbitMQ</module>
+		<module>jreusable-components-spring-kafka</module>
+		<module>jreusable-components-spring-rabbitMQ</module>
+		<module>jreusable-components-spring-ActiveMQ</module>
 	</modules>
 
 

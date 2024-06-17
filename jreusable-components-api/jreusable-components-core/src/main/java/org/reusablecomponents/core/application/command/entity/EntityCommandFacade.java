@@ -1,16 +1,15 @@
 package org.reusablecomponents.core.application.command.entity;
 
-import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.DELETE_ID;
-import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.DELETE_IDS;
-import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.DELETE_ITEM;
-import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.DELETE_LIST;
-import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.SAVE_ITEM;
-import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.SAVE_LIST;
-import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.UPDATE_ITEM;
-import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.UPDATE_LIST;
+import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.DELETE_BY_ID;
+import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.DELETE_BY_IDS;
+import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.DELETE_ENTITIES;
+import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.DELETE_ENTITY;
+import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.SAVE_ENTITIES;
+import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.SAVE_ENTITY;
+import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.UPDATE_ENTITIES;
+import static org.reusablecomponents.core.infra.messaging.event.CommonEvent.UPDATE_ENTITY;
 
 import java.util.Objects;
-import java.util.concurrent.Future;
 import java.util.function.Function;
 
 import org.reusablecomponents.core.application.base.EntiyBaseFacade;
@@ -171,7 +170,7 @@ public non-sealed class EntityCommandFacade <  // generics
 	
 	final var dataIn = convertSaveEntityInToPublishDataIn(finalSaveEntityIn);
 	final var dataOut = convertSaveEntityOutToPublishDataOut(finalResult);
-	publish(dataIn, dataOut, SAVE_ITEM, finalSaveEntityIn, finalResult);
+	publish(dataIn, dataOut, SAVE_ENTITY, finalSaveEntityIn, finalResult);
 
 	LOGGER.debug("Saved entity '{}', session '{}'", finalResult, session);
 	
@@ -222,7 +221,7 @@ public non-sealed class EntityCommandFacade <  // generics
 	
 	final var dataIn = convertDataSaveEntitiesInToPublishDataIn(finalSaveEntitiesIn);
 	final var dataOut = convertSaveEntitiesOutToPublishDataOut(finalResult);
-	publish(dataIn, dataOut, SAVE_LIST, finalSaveEntitiesIn, finalResult);
+	publish(dataIn, dataOut, SAVE_ENTITIES, finalSaveEntitiesIn, finalResult);
 	
 	LOGGER.debug("Saved all entities '{}' with session '{}'", finalResult, session);	
 	
@@ -272,7 +271,7 @@ public non-sealed class EntityCommandFacade <  // generics
 	
 	final var dataIn = convertUpdateEntityInToPublishDataIn(finalUpdateEntityIn);
 	final var dataOut = convertUpdateEntityOutToPublishDataOut(finalResult);
-	publish(dataIn, dataOut, UPDATE_ITEM, finalUpdateEntityIn, finalResult);
+	publish(dataIn, dataOut, UPDATE_ENTITY, finalUpdateEntityIn, finalResult);
 	
 	LOGGER.debug("Updated entity '{}' with session '{}'", finalResult, session);	
 	
@@ -322,7 +321,7 @@ public non-sealed class EntityCommandFacade <  // generics
 	
 	final var dataIn = convertUpdateEntitiesInToPublishDataIn(finalUpdateEntitiesIn);
 	final var dataOut = convertUpdateEntitiesOutToPublishDataOut(finalResult);
-	publish(dataIn, dataOut, UPDATE_LIST, finalUpdateEntitiesIn, finalResult);
+	publish(dataIn, dataOut, UPDATE_ENTITIES, finalUpdateEntitiesIn, finalResult);
 	
 	LOGGER.debug("Updated all entities '{}' with session '{}'", finalResult, session);
 	
@@ -371,7 +370,7 @@ public non-sealed class EntityCommandFacade <  // generics
 
 	final var dataIn = convertDeleteEntityInToPublishDataIn(finalDeleteEntityIn);
 	final var dataOut = convertDeleteEntityOutToPublishDataOut(finalResult);
-	publish(dataIn, dataOut, DELETE_ITEM, finalDeleteEntityIn, finalResult);
+	publish(dataIn, dataOut, DELETE_ENTITY, finalDeleteEntityIn, finalResult);
 	
 	LOGGER.debug("Deleted entity '{}' with session '{}'", finalResult, session);
 	
@@ -421,7 +420,7 @@ public non-sealed class EntityCommandFacade <  // generics
 	
 	final var dataIn = convertDeleteEntitiesInToPublishDataIn(finalDeleteEntitiesIn);
 	final var dataOut = convertDeleteEntitiesOutOutToPublishDataOut(finalResult);
-	publish(dataIn, dataOut, DELETE_LIST, finalDeleteEntitiesIn, finalResult);
+	publish(dataIn, dataOut, DELETE_ENTITIES, finalDeleteEntitiesIn, finalResult);
 	
 	LOGGER.debug("Deleted entities '{}' with session '{}'", finalResult, session);
 	
@@ -471,7 +470,7 @@ public non-sealed class EntityCommandFacade <  // generics
 
 	final var dataIn = convertDeleteIdInToPublishDataIn(finalDeleteIdIn);
 	final var dataOut = convertDeleteIdOutToPublishDataOut(finalResult);
-	publish(dataIn, dataOut, DELETE_ID, finalDeleteIdIn, finalResult);
+	publish(dataIn, dataOut, DELETE_BY_ID, finalDeleteIdIn, finalResult);
 	
 	LOGGER.debug("Deleted by id '{}' with session '{}'", finalResult, session);
 
@@ -522,7 +521,7 @@ public non-sealed class EntityCommandFacade <  // generics
 	
 	final var dataIn = convertDeleteIdsInToPublishDataIn(finalDeleteIdsIn);
 	final var dataOut = convertDeleteIdsOutToPublishDataOut(finalResult);
-	publish(dataIn, dataOut, DELETE_IDS, finalDeleteIdsIn, finalResult);
+	publish(dataIn, dataOut, DELETE_BY_IDS, finalDeleteIdsIn, finalResult);
 	
 	LOGGER.debug("Deleted by ids '{}' with session '{}'", finalResult, session);
 	

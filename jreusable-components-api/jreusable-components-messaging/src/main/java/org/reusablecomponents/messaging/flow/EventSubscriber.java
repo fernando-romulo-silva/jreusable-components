@@ -5,7 +5,7 @@ import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMess
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 
-import org.reusablecomponents.messaging.InterfaceReaderService;
+import org.reusablecomponents.messaging.InterfaceConsumerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,9 +17,9 @@ class EventSubscriber implements Subscriber<String> {
     
     private Subscription subscription;
     
-    private InterfaceReaderService eventConsumer;
+    private InterfaceConsumerService eventConsumer;
     
-    void setConsumer(@NotNull final InterfaceReaderService eventConsumer) {
+    void setConsumer(@NotNull final InterfaceConsumerService eventConsumer) {
 	this.eventConsumer = eventConsumer;
     }
     
@@ -38,7 +38,7 @@ class EventSubscriber implements Subscriber<String> {
     @Override
     public void onNext(final String event) {
 	LOGGER.info("event #{}" , event);
-	eventConsumer.read(event);
+	eventConsumer.consume(event);
         subscription.request(1);
     }
 
