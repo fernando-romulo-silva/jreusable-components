@@ -5,7 +5,7 @@ import static java.lang.Boolean.TRUE;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.rest.rest.query.entity.nonpaged.EntityQueryHttpController;
 import org.reusablecomponents.rest.rest.query.entity.nonpaged.EntityQueryHttpControllerBuilder;
 import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringEntityQueryFacade;

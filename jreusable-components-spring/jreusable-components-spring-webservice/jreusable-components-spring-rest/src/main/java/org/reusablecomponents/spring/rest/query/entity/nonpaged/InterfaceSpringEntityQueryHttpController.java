@@ -3,7 +3,7 @@ package org.reusablecomponents.spring.rest.query.entity.nonpaged;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.rest.rest.query.entity.nonpaged.InterfaceEntityQueryHttpController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

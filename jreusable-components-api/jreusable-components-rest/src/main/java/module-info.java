@@ -1,7 +1,7 @@
 module org.reusablecomponent.rest {
     
     // modules
-    requires org.reusablecomponent.core;
+    requires org.reusablecomponent.base.core;
     
     // import modules
     requires jakarta.validation;

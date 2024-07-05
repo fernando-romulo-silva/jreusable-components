@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.reusablecomponents.core.application.mix.entity.nonpaged.InterfaceEntityFacade;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.application.mix.entity.nonpaged.InterfaceEntityFacade;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import jakarta.transaction.Transactional;
 

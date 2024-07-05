@@ -1,14 +1,6 @@
 package org.reusablecomponents.rest.rest.full.entity;
 
-import java.util.List;
-
-import org.reusablecomponents.core.domain.AbstractEntity;
-import org.reusablecomponents.rest.infra.jsonpath.JsonPatch;
-import org.reusablecomponents.rest.rest.command.InterfaceEntityCommandHttpController;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 public class EntityCommonHttpController <Entity extends AbstractEntity<Id>, Id, HttpResponse> {
 //      implements InterfaceEntityCommandHttpController<Entity, Id, HttpResponse> {

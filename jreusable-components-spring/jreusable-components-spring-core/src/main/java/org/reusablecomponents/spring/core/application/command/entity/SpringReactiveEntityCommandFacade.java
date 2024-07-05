@@ -1,9 +1,9 @@
 package org.reusablecomponents.spring.core.application.command.entity;
 
 import org.reactivestreams.Publisher;
-import org.reusablecomponents.core.application.command.entity.EntityCommandFacade;
-import org.reusablecomponents.core.application.command.entity.EntityCommandFacadeBuilder;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacade;
+import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacadeBuilder;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.spring.core.domain.InterfaceSpringReactiveRepository;
 import org.reusablecomponents.spring.core.infra.i18n.SpringI18nService;
 

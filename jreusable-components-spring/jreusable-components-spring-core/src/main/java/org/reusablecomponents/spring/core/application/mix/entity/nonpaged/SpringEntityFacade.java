@@ -1,6 +1,6 @@
 package org.reusablecomponents.spring.core.application.mix.entity.nonpaged;
 
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.spring.core.application.command.entity.InterfaceSpringCommandFacade;
 import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringEntityQueryFacade;
 

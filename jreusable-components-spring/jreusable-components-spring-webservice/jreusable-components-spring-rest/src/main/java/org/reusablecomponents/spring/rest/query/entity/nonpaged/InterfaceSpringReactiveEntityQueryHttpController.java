@@ -6,7 +6,7 @@ import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.HEAD;
 
 import org.reactivestreams.Publisher;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.rest.rest.query.entity.nonpaged.InterfaceEntityQueryHttpController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

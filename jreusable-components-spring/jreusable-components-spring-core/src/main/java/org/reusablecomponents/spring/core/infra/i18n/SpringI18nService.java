@@ -1,6 +1,6 @@
 package org.reusablecomponents.spring.core.infra.i18n;
 
-import org.reusablecomponents.core.infra.i18n.InterfaceI18nService;
+import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;

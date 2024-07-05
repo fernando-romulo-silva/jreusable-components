@@ -4,8 +4,8 @@ package org.reusablecomponents.spring.core.application.query.entity.nonpaged;
 import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 
 import org.reactivestreams.Publisher;
-import org.reusablecomponents.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 

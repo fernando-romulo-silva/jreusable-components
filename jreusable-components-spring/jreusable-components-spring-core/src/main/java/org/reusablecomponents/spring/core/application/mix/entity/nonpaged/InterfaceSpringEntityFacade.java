@@ -2,8 +2,8 @@ package org.reusablecomponents.spring.core.application.mix.entity.nonpaged;
 
 import java.util.Optional;
 
-import org.reusablecomponents.core.application.mix.entity.nonpaged.InterfaceEntityFacade;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.application.mix.entity.nonpaged.InterfaceEntityFacade;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 public interface InterfaceSpringEntityFacade <Entity extends AbstractEntity<Id>, Id>
 		extends InterfaceEntityFacade<Entity, Id, // basic

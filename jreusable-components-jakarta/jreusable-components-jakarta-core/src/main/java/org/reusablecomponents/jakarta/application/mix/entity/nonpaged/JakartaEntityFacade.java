@@ -1,6 +1,6 @@
 package org.reusablecomponents.jakarta.application.mix.entity.nonpaged;
 
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.jakarta.application.command.entity.InterfaceJakartaCommandFacade;
 import org.reusablecomponents.jakarta.application.query.entity.InterfaceJakartaEntityQueryFacade;
 import org.reusablecomponents.jakarta.domain.InterfaceJakartaRepository;

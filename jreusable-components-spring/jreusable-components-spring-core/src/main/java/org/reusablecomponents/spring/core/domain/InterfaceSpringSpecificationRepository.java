@@ -1,6 +1,6 @@
 package org.reusablecomponents.spring.core.domain;
 
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean

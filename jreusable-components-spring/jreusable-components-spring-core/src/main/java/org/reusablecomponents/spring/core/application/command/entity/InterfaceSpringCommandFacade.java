@@ -1,8 +1,8 @@
 package org.reusablecomponents.spring.core.application.command.entity;
 
 
-import org.reusablecomponents.core.application.command.entity.InterfaceEntityCommandFacade;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.application.command.entity.InterfaceEntityCommandFacade;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

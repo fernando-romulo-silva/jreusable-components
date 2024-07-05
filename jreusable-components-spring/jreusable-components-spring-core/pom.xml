@@ -15,7 +15,7 @@
 		
 		<dependency>
 			<groupId>org.reusablecomponents</groupId>
-			<artifactId>jreusable-components-core</artifactId>
+			<artifactId>jreusable-components-base-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>		
 		

@@ -1,6 +1,6 @@
 package org.reusablecomponents.jakarta.domain;
 
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import jakarta.data.repository.BasicRepository;
 import jakarta.enterprise.inject.Vetoed;

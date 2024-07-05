@@ -1,13 +1,6 @@
 package org.reusablecomponents.rest.rest.full.entity.nonpaged;
 
-import org.reusablecomponents.core.domain.AbstractEntity;
-import org.reusablecomponents.rest.rest.command.InterfaceEntityCommandHttpController;
-import org.reusablecomponents.rest.rest.full.entity.EntityCommonHttpController;
-import org.reusablecomponents.rest.rest.query.entity.nonpaged.InterfaceEntityQueryHttpController;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotNull;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 /**
  * @param <Entity>

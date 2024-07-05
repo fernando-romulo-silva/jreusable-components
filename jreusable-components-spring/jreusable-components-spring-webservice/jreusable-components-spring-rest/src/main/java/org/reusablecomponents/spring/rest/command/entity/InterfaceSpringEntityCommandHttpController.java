@@ -7,7 +7,7 @@ import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 import java.util.List;
 
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.rest.infra.jsonpath.JsonPatch;
 import org.reusablecomponents.rest.rest.command.InterfaceEntityCommandHttpController;
 import org.springframework.http.ResponseEntity;

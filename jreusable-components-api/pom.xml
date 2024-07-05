@@ -11,9 +11,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>jreusable-components-core</module>
+		<module>jreusable-components-base</module>
 		<module>jreusable-components-rest</module>
-		<module>jreusable-components-messaging</module>
 	</modules>
 
 	<properties>

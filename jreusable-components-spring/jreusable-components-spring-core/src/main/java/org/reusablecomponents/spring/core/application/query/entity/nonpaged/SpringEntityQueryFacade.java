@@ -2,8 +2,8 @@ package org.reusablecomponents.spring.core.application.query.entity.nonpaged;
 
 import java.util.Optional;
 
-import org.reusablecomponents.core.application.query.entity.nonpaged.EntityQueryFacade;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQueryFacade;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.spring.core.domain.InterfaceSpringRepository;
 
 public class SpringEntityQueryFacade<Entity extends AbstractEntity<Id>, Id>

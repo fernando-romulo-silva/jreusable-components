@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.reusablecomponents.core.infra.exception.common.BaseApplicationException;
+import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
 import org.slf4j.MDC;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;

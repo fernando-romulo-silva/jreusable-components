@@ -2,9 +2,9 @@ package org.reusablecomponents.jakarta.application.command.entity;
 
 import java.util.List;
 
-import org.reusablecomponents.core.application.command.entity.EntityCommandFacade;
-import org.reusablecomponents.core.application.command.entity.EntityCommandFacadeBuilder;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacade;
+import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacadeBuilder;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.jakarta.domain.InterfaceJakartaRepository;
 
 public class JakartaEntityCommandFacade<Entity extends AbstractEntity<Id>, Id> // basic types

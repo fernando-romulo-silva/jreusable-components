@@ -4,7 +4,7 @@ package org.reusablecomponents.jakarta.rest.query;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_XML;
 
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.rest.rest.query.entity.nonpaged.InterfaceEntityQueryHttpController;
 
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,7 +1,7 @@
 package org.reusablecomponents.rest.rest.query.entity.nonpaged;
 
-import org.reusablecomponents.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.rest.rest.query.entity.base.EntityQueryBaseHttpController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

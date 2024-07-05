@@ -5,8 +5,8 @@ import static jakarta.transaction.Transactional.TxType.SUPPORTS;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.reusablecomponents.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import jakarta.transaction.Transactional;
 

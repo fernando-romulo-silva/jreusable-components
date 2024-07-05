@@ -2,7 +2,7 @@ package org.reusablecomponents.rest.rest.command;
 
 import java.util.List;
 
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.rest.infra.jsonpath.JsonPatch;
 import org.reusablecomponents.rest.infra.openapi.annotations.CreateEntityRequestBody;
 import org.reusablecomponents.rest.infra.openapi.annotations.UpdateEntityRequestBody;

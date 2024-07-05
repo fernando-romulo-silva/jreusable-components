@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.function.Consumer;
 
-import org.reusablecomponents.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import com.google.common.base.Function;
 

@@ -4,8 +4,8 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.reusablecomponents.core.application.query.entity.nonpaged.EntityQuerySpecificationFacade;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQuerySpecificationFacade;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.spring.core.domain.InterfaceSpringSpecificationRepository;
 
 public class SpringEntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, Specification>

@@ -1,6 +1,6 @@
 package org.reusablecomponents.jakarta.domain;
 
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import jakarta.data.page.Page;
 import jakarta.data.page.PageRequest;

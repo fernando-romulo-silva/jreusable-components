@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import org.reusablecomponents.core.application.command.entity.InterfaceEntityCommandFacade;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.application.command.entity.InterfaceEntityCommandFacade;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.rest.infra.jsonpath.JsonPatch;
 
 import jakarta.servlet.http.HttpServletRequest;

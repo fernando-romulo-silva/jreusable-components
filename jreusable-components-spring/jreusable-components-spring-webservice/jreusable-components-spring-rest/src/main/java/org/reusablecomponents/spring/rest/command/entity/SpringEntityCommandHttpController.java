@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.rest.infra.jsonpath.JsonPatch;
 import org.reusablecomponents.rest.infra.jsonpath.JsonPatchOperation;
 import org.reusablecomponents.rest.rest.command.EntityCommandHttpController;

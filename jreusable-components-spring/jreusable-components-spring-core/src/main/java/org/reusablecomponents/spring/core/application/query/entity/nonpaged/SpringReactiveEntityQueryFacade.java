@@ -1,8 +1,8 @@
 package org.reusablecomponents.spring.core.application.query.entity.nonpaged;
 
 import org.reactivestreams.Publisher;
-import org.reusablecomponents.core.application.query.entity.nonpaged.EntityQueryFacade;
-import org.reusablecomponents.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQueryFacade;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.spring.core.domain.InterfaceSpringReactiveRepository;
 
 import reactor.core.publisher.Flux;
