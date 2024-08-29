@@ -17,7 +17,7 @@ public class Department extends AbstractEntity<String> {
 
     @NotEmpty
     private String sector;
-    
+
     @Min(0)
     @Max(1000)
     public Integer operation = 0;
@@ -25,46 +25,46 @@ public class Department extends AbstractEntity<String> {
     // ------------------- constructors
 
     Department() {
-	super();
+        super();
     }
 
     public Department(final String id, final String name, final String sector) {
-	super();
-	
-	this.id = id;
-	this.name = name;
-	this.sector = sector;
+        super();
+
+        this.id = id;
+        this.name = name;
+        this.sector = sector;
     }
-    
+
     // -------------------- update
 
     public void update(@NotEmpty final String name, @NotEmpty final String sector) {
-	this.updatedDate = LocalDateTime.now();
-	this.updatedReason = "update";
+        this.updatedDate = LocalDateTime.now();
+        this.updatedReason = "update";
 
-	this.name = name;
-	this.sector = sector;
+        this.name = name;
+        this.sector = sector;
     }
-    
+
     public void increaseOperation() {
-	operation++;
+        operation++;
     }
 
     // -------------------- getters
-    
+
     @NotEmpty
     public String getId() {
-	return id;
+        return id;
     }
 
     public String getName() {
-	return name;
+        return name;
     }
 
     public String getSector() {
-	return sector;
+        return sector;
     }
-    
+
     public Integer getOperation() {
         return operation;
     }

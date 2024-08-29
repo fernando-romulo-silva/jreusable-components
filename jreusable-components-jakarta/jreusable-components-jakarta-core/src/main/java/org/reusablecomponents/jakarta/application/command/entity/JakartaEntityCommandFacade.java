@@ -24,40 +24,40 @@ public class JakartaEntityCommandFacade<Entity extends AbstractEntity<Id>, Id> /
 				List<Id>, Void>
 		// jakarta interface
 		implements InterfaceJakartaCommandFacade<Entity, Id> {
-    
-    protected final InterfaceJakartaRepository<Entity, Id> repository;
 
-    protected JakartaEntityCommandFacade(final InterfaceJakartaRepository<Entity, Id> repository) {
-	super(new EntityCommandFacadeBuilder<>($ -> {
-	    // save
-	    $.saveFunction = repository::save; 
-	    $.saveAllFunction = repository::saveAll;
+	protected final InterfaceJakartaRepository<Entity, Id> repository;
 
-	    // update
-	    $.updateFunction = repository::update;
-	    $.updateAllFunction = repository::updateAll;
-	    
-	    // delete
-	    $.deleteFunction = entity -> {
-		repository.delete(entity);
-		return null;
-	    };
-	    $.deleteAllFunction = entities -> {
-		repository.deleteAll(entities);
-		return null;
-	    };
-	    
-	    // delete by id
-	    $.deleteByIdFunction = (id) -> {
-		repository.deleteById(id);
-		return null;
-	    };
-	    $.deleteAllByIdFunction = (ids) -> {
-		ids.forEach((id) -> repository.deleteById(id));
-		return null;
-	    };
-	}));
-	
-	this.repository = repository;
-    }
+	protected JakartaEntityCommandFacade(final InterfaceJakartaRepository<Entity, Id> repository) {
+		super(new EntityCommandFacadeBuilder<>($ -> {
+			// save
+			$.saveFunction = repository::save;
+			$.saveAllFunction = repository::saveAll;
+
+			// update
+			$.updateFunction = repository::update;
+			$.updateAllFunction = repository::updateAll;
+
+			// delete
+			$.deleteFunction = entity -> {
+				repository.delete(entity);
+				return null;
+			};
+			$.deleteAllFunction = entities -> {
+				repository.deleteAll(entities);
+				return null;
+			};
+
+			// delete by id
+			$.deleteByIdFunction = id -> {
+				repository.deleteById(id);
+				return null;
+			};
+			$.deleteAllByIdFunction = ids -> {
+				ids.forEach(repository::deleteById);
+				return null;
+			};
+		}));
+
+		this.repository = repository;
+	}
 }

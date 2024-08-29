@@ -15,7 +15,7 @@ public class DefaultSecurityService implements InterfaceSecurityService {
      */
     @Override
     public String getUserName() {
-	return System.getProperty("user.name");
+        return System.getProperty("user.name");
     }
 
     /**
@@ -23,20 +23,20 @@ public class DefaultSecurityService implements InterfaceSecurityService {
      */
     @Override
     public String getUserRealm() {
-	return "NOREALM";
+        return "NOREALM";
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public String getMachineName() {
-	try {
-	    final var addr = InetAddress.getLocalHost();
-	    return addr.getHostName();
-	} catch (final UnknownHostException ex) {
-	    return StringUtils.EMPTY;
-	}
+        try {
+            final var addr = InetAddress.getLocalHost();
+            return addr.getHostName();
+        } catch (final UnknownHostException ex) {
+            return StringUtils.EMPTY;
+        }
     }
 
     /**
@@ -44,7 +44,7 @@ public class DefaultSecurityService implements InterfaceSecurityService {
      */
     @Override
     public String getSession() {
-	return "NOSESSION";
+        return "NOSESSION";
     }
 
     /**
@@ -52,6 +52,6 @@ public class DefaultSecurityService implements InterfaceSecurityService {
      */
     @Override
     public String getApplication() {
-	return "NOAPPLICATION";
+        return "NOAPPLICATION";
     }
 }

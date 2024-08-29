@@ -46,93 +46,93 @@ public class Person extends AbstractEntity<Long> {
 
     // just for frameworks, like JPA
     Person() {
-	super();
+        super();
     }
 
     private Person(@NotNull final Builder builder) {
 
-	super();
+        super();
 
-	this.id = builder.id;
-	this.name = builder.name;
-	this.createdReason = builder.createdReason;
-	this.country = builder.country;
-	this.hobbies = builder.hobbies;
-	this.birthDate = builder.birthDate;
-	this.score = builder.score;
-	this.gender = builder.gender;
-	this.hobbies.addAll(builder.hobbies);
+        this.id = builder.id;
+        this.name = builder.name;
+        this.createdReason = builder.createdReason;
+        this.country = builder.country;
+        this.hobbies = builder.hobbies;
+        this.birthDate = builder.birthDate;
+        this.score = builder.score;
+        this.gender = builder.gender;
+        this.hobbies.addAll(builder.hobbies);
     }
 
     // -------------------- getters
     @NotNull
     @Min(value = 1)
     public Long getId() {
-	return id;
+        return id;
     }
 
     public String getName() {
-	return name;
+        return name;
     }
 
     public Integer getScore() {
-	return score;
+        return score;
     }
 
     public String getCountry() {
-	return country;
+        return country;
     }
 
     public List<Hobby> getHobbies() {
-	return Collections.unmodifiableList(hobbies);
+        return Collections.unmodifiableList(hobbies);
     }
 
     public LocalDate getBirthDate() {
-	return birthDate;
+        return birthDate;
     }
 
     public Gender getGender() {
-	return gender;
+        return gender;
     }
 
     // ------------------- Builder
 
     public static class Builder extends AbstractEntityBuilder<Long, Person> {
 
-	public Long id;
+        public Long id;
 
-	public String name;
+        public String name;
 
-	public Integer score;
+        public Integer score;
 
-	public String country;
+        public String country;
 
-	public List<Hobby> hobbies = new ArrayList<>();
+        public List<Hobby> hobbies = new ArrayList<>();
 
-	public LocalDate birthDate;
+        public LocalDate birthDate;
 
-	public Gender gender;
+        public Gender gender;
 
-	public Builder with(final Consumer<Builder> function) {
-	    function.accept(this);
-	    return this;
-	}
+        public Builder with(final Consumer<Builder> function) {
+            function.accept(this);
+            return this;
+        }
 
-//	    public Builder with(final BuilderConsumer<Long, Person, Builder> function) {
-//		function.accept(this);
-//		return this;
-//	    }
+        // public Builder with(final BuilderConsumer<Long, Person, Builder> function) {
+        // function.accept(this);
+        // return this;
+        // }
 
-	@Override
-	@Valid
-	@NotNull
-	public Person build() {
-	    return validate(new Person(this));
-	}
+        @Override
+        @Valid
+        @NotNull
+        public Person build() {
+            return validate(new Person(this));
+        }
 
-	@Override
-	protected Validator getValidator() {
-	    return VALIDATOR;
-	}
+        @Override
+        protected Validator getValidator() {
+            return VALIDATOR;
+        }
     }
 }

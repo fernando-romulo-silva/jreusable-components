@@ -14,7 +14,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reusablecomponents.base.messaging.operation.CommonOperationEvent;
+import org.reusablecomponents.base.messaging.operation.CommandOperation;
+import org.reusablecomponents.base.messaging.operation.QueryOperation;
 
 @Tag("unit")
 @DisplayName("Test the EntiyBaseFacade entity test, unhappy Path :( ")
@@ -22,42 +23,42 @@ import org.reusablecomponents.base.messaging.operation.CommonOperationEvent;
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 class AbstractEntiyBaseFacadeUnhappyPathTest {
-    
-    
-    @Test
-    @Order(1)
-    @DisplayName("Test the publish operation")
-    void publishInvalidOperationTest() {
-	
-	// given
-	final var facade = new TestEntiyBaseFacade();
-	
-	// when
-	assertThatThrownBy(() -> {
 
-	    facade.publishEvent("SaveIn", "SaveOut", null);
+	@Test
+	@Order(1)
+	@DisplayName("Test the publish operation")
+	void publishInvalidOperationTest() {
 
-	}) // then
-	.as(format("Check the null operation")) //
-	.isInstanceOf(NullPointerException.class);
-    }
+		// given
+		final var facade = new TestEntiyBaseFacade();
 
-    
-    @Test
-    @Order(2)
-    @DisplayName("Test the publish operation")
-    void publishInvalidDirectivesTest() {
-	
-	// given
-	final var facade = new TestEntiyBaseFacade();
-	
-	// when
-	assertThatThrownBy(() -> {
+		// when
+		assertThatThrownBy(() -> {
 
-	    facade.publishEvent("SaveIn", "SaveOut", CommonOperationEvent.SAVE_ENTITY, null);
+			facade.publishEvent("SaveIn", "SaveOut", null);
 
-	}) // then
-	.as(format("Check the null operation")) //
-	.isInstanceOf(NullPointerException.class);
-    }
+		}) // then
+				.as(format("Check the null operation")) //
+				.isInstanceOf(NullPointerException.class);
+	}
+
+	@Test
+	@Order(2)
+	@DisplayName("Test the publish operation")
+	void publishInvalidDirectivesTest() {
+
+		// given
+		final var facade = new TestEntiyBaseFacade();
+
+		final Object[] nullArray = null;
+
+		// when
+		assertThatThrownBy(() -> {
+
+			facade.publishEvent("SaveIn", "SaveOut", CommandOperation.SAVE_ENTITY, nullArray);
+
+		}) // then
+				.as(format("Check the null operation")) //
+				.isInstanceOf(NullPointerException.class);
+	}
 }

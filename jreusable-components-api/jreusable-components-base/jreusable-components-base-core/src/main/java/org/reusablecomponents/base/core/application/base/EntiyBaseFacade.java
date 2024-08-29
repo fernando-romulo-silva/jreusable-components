@@ -3,7 +3,11 @@ package org.reusablecomponents.base.core.application.base;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
+import static java.util.Optional.ofNullable;
+
 import static java.util.Objects.nonNull;
+
+import java.util.function.Supplier;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -14,7 +18,7 @@ import org.reusablecomponents.base.core.application.query.entity.nonpaged.Entity
 import org.reusablecomponents.base.core.application.query.entity.paged.EntityQueryPaginationFacade;
 import org.reusablecomponents.base.core.application.query.entity.paged.EntityQueryPaginationSpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
-import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionTranslatorService;
+import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.GenericException;
 import org.reusablecomponents.base.messaging.InterfaceEventPublisherSerice;
 import org.reusablecomponents.base.messaging.event.Event;
@@ -24,7 +28,7 @@ import org.reusablecomponents.base.messaging.event.Where;
 import org.reusablecomponents.base.messaging.event.Who;
 import org.reusablecomponents.base.messaging.event.Why;
 import org.reusablecomponents.base.messaging.logger.LoggerPublisherSerice;
-import org.reusablecomponents.base.messaging.operation.InterfaceOperationEvent;
+import org.reusablecomponents.base.messaging.operation.InterfaceOperation;
 import org.reusablecomponents.base.security.DefaultSecurityService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
@@ -38,315 +42,397 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * @param <Entity>
- * @param <Id>
+ * The <code>InterfaceEntityBaseFacade</code> common implementation using
+ * event-driven architecture.
+ * 
+ * @param <Entity> The facade entity type
+ * @param <Id>     The facade entity id type
  */
-public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id> 
-	implements InterfaceEntityBaseFacade<Entity, Id> 
-	permits SimpleEntiyBaseFacade, EntityCommandFacade, EntityQueryFacade, 
+public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
+		implements InterfaceEntityBaseFacade<Entity, Id>
+		permits SimpleEntiyBaseFacade, EntityCommandFacade, EntityQueryFacade,
 		EntityQuerySpecificationFacade, EntityQueryPaginationFacade, EntityQueryPaginationSpecificationFacade {
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(EntiyBaseFacade.class);
 
-    // -------
-    
-    protected final InterfaceEventPublisherSerice publisherService;
+	private static final Logger LOGGER = LoggerFactory.getLogger(EntiyBaseFacade.class);
 
-    protected final InterfaceSecurityService securityService;
+	// -------
 
-    protected final InterfaceI18nService i18nService;
-    
-    protected final InterfaceExceptionTranslatorService exceptionTranslatorService;
-    
-    protected final Class<Entity> entityClazz;
+	protected final InterfaceEventPublisherSerice<?> publisherService;
 
-    protected final Class<Id> idClazz;
+	protected final InterfaceSecurityService securityService;
 
-    // ------
+	protected final InterfaceI18nService i18nService;
 
-    protected EntiyBaseFacade(
-		    @Nullable final InterfaceEventPublisherSerice publisherService, 
-		    @Nullable final InterfaceI18nService i18nService,
-		    @Nullable final InterfaceSecurityService securityService,
-		    @Nullable final InterfaceExceptionTranslatorService exceptionTranslatorService) {
+	protected final InterfaceExceptionAdapterService exceptionAdapterService;
 
-	super();
+	protected final Class<Entity> entityClazz;
 
-	this.entityClazz = retrieveEntityClazz();
-	this.idClazz = retrieveIdClazz();
+	protected final Class<Id> idClazz;
 
-	this.publisherService = nonNull(publisherService) ? publisherService : new LoggerPublisherSerice();
-	this.i18nService = nonNull(i18nService) ? i18nService : new JavaSEI18nService();
-	this.securityService = nonNull(securityService) ? securityService : new DefaultSecurityService();
-	this.exceptionTranslatorService = nonNull(exceptionTranslatorService) ? exceptionTranslatorService : (paramException, paramI18nService) -> new GenericException(paramException);
-    }
+	// ------
 
-    protected EntiyBaseFacade() {
-	this(null, null, null, null);
-    }
+	/**
+	 * Default constructor
+	 * 
+	 * @param publisherService        Message event service, in case of null, the
+	 *                                <code>LoggerPublisherSerice</code> will be
+	 *                                used.
+	 * @param i18nService             Language translator service, in case of null,
+	 *                                the <code>JavaSEI18nService</code> will be
+	 *                                used.
+	 * @param securityService         Security service, in case of null,
+	 *                                the <code>DefaultSecurityService</code> will
+	 *                                be used.
+	 * @param exceptionAdapterService Exception adapter service, in case of null, a
+	 *                                lambda function that throws solely the
+	 *                                <code>GenericException</code>.
+	 */
+	protected EntiyBaseFacade(
+			@Nullable final InterfaceEventPublisherSerice<?> publisherService,
+			@Nullable final InterfaceI18nService i18nService,
+			@Nullable final InterfaceSecurityService securityService,
+			@Nullable final InterfaceExceptionAdapterService exceptionAdapterService) {
 
-    // ------
+		super();
 
-    @SuppressWarnings("unchecked")
-    private final Class<Entity> retrieveEntityClazz() {
+		this.entityClazz = retrieveEntityClazz();
+		this.idClazz = retrieveIdClazz();
 
-	final var entityTypeToken = new TypeToken<Entity>(getClass()) {
-	    private static final long serialVersionUID = 1L;
-	};
-
-	return (Class<Entity>) entityTypeToken.getRawType();
-    }
-
-    @SuppressWarnings("unchecked")
-    private final Class<Id> retrieveIdClazz() {
-
-	final var idTypeToken = new TypeToken<Id>(getClass()) {
-	    private static final long serialVersionUID = 1L;
-	};
-
-	return (Class<Id>) idTypeToken.getRawType();
-    }
-    
-    /**
-     * @param directives 
-     * @return
-     */
-    protected boolean isPublishEvents(final Object... directives) {
-	return true;
-    }
-    
-    protected Event createEvent(final String dataIn, final String dataOut, final InterfaceOperationEvent operation) {
-	
-	LOGGER.debug("Creating event with '{}' operation", operation);
-	
-	checkNotNull(operation, "The argument 'operation' cannot be null");
-	
-	final var user = securityService.getUserName();
-	final var realm = securityService.getUserRealm();
-	final var session = securityService.getSession();
-	final var application = securityService.getApplication();
-	final var machineName = securityService.getMachineName();
-
-	final var event = new Event.Builder().with($ -> {
-	    $.what = new What(dataIn, dataOut);
-	    $.when = new When();
-	    $.where = new Where(application, machineName);
-	    $.who = new Who(realm, user, session);
-	    $.why = new Why(operation.getName(), operation.getDescription());
-	}).build();
-
-	LOGGER.debug("Event '{}' created with operation '{}'", event.getId(), operation);
-	
-	return event;
-    }
-    
-    protected void publishEvent(final Event event, final Object... directives) {
-	
-	checkNotNull(event, "The argument 'event' cannot be null");	
-	
-	LOGGER.debug("Publishing event '{}'", event.getId());
-	
-	if (!isPublishEvents(directives)) {
-	    LOGGER.debug("Event publishing '{}' avoided", event.getId());
-	    return;
+		this.publisherService = nonNull(publisherService) ? publisherService : new LoggerPublisherSerice();
+		this.i18nService = nonNull(i18nService) ? i18nService : new JavaSEI18nService();
+		this.securityService = nonNull(securityService) ? securityService : new DefaultSecurityService();
+		this.exceptionAdapterService = nonNull(exceptionAdapterService)
+				? exceptionAdapterService
+				: (paramException, paramI18nService, directives) -> new GenericException(paramException);
 	}
-	
-	final var eventToPublish = prepareEventToPublisher(event);
-	
-	try {
-	    publisherService.publish(eventToPublish);
-	} catch (final Exception ex) {
-	    LOGGER.error(ExceptionUtils.getRootCauseMessage(ex), ex);
-	    return;
+
+	/**
+	 * Default constructor
+	 */
+	protected EntiyBaseFacade() {
+		this(null, null, null, null);
 	}
-	
-	LOGGER.debug("Published event '{}'", event.getId());
-    }
-    
-    protected void publishEvent(final String event, final Object... directives) {
-	
-	checkArgument(StringUtils.isBlank(event), "The argument 'event' cannot be null or blank");
-	
-	LOGGER.debug("Publishing event '{}'", event);
-	
-	if (!isPublishEvents(directives)) {
-	    LOGGER.debug("Event publishing {} avoided", event);
-	    return;
+
+	// ------
+
+	/**
+	 * Capture the entity class type
+	 * 
+	 * @return A <code>Class<Entity></code> object
+	 */
+	@SuppressWarnings("unchecked")
+	private final Class<Entity> retrieveEntityClazz() {
+
+		final var entityTypeToken = new TypeToken<Entity>(getClass()) {
+			private static final long serialVersionUID = 1L;
+		};
+
+		return (Class<Entity>) entityTypeToken.getRawType();
 	}
-	
-	try {
-	    publisherService.publish(event);
-	} catch (final Exception ex) {
-	    LOGGER.error(ExceptionUtils.getRootCauseMessage(ex), ex);
+
+	/**
+	 * Capture the entity id class type
+	 * 
+	 * @return A <code>Class<Id></code> object
+	 */
+	@SuppressWarnings("unchecked")
+	private final Class<Id> retrieveIdClazz() {
+
+		final var idTypeToken = new TypeToken<Id>(getClass()) {
+			private static final long serialVersionUID = 1L;
+		};
+
+		return (Class<Id>) idTypeToken.getRawType();
 	}
-	
-	LOGGER.debug("Published event '{}'", event);
-    }
-    
-    /**
-     * @param dataIn
-     * @param dataOut
-     * @param operation
-     */
-    protected void publishEvent(final String dataIn, final String dataOut, final InterfaceOperationEvent operation, final Object... directives) {
-	
-	LOGGER.debug("Publishing event with operation '{}'", operation);
-	
-	if (!isPublishEvents(directives)) {
-	    LOGGER.debug("Event publishing with operation '{}' avoided", operation);
-	    return;
+
+	/**
+	 * Check if it should send action events based on its directives.
+	 * 
+	 * @param directives Specific configurations are needed to validate whether it
+	 *                   sends events or not.
+	 * @return True if the caller wants to publish default events or false if not.
+	 */
+	protected boolean isPublishEvents(final Object... directives) {
+		return true;
 	}
-	
-	final var event = createEvent(dataIn, dataOut, operation);
-	
-	final var eventToPublish = prepareEventToPublisher(event);
-	
-	try {
-	    publisherService.publish(eventToPublish);
-	} catch (final Exception ex) {
-	    LOGGER.error(ExceptionUtils.getRootCauseMessage(ex), ex);
-	    return;
+
+	/**
+	 * Create an event to send it to a message service.
+	 * 
+	 * @param dataIn    The input data
+	 * @param dataOut   The output data
+	 * @param operation The operation performed
+	 * @return A <code>Event</code> object
+	 */
+	protected Event createEvent(final String dataIn, final String dataOut, final InterfaceOperation operation) {
+
+		LOGGER.debug("Creating event with '{}' operation", operation);
+
+		ofNullable(operation)
+				.orElseThrow(createNullPointerException("operation"));
+
+		final var user = securityService.getUserName();
+		final var realm = securityService.getUserRealm();
+		final var session = securityService.getSession();
+		final var application = securityService.getApplication();
+		final var machineName = securityService.getMachineName();
+
+		final var event = new Event.Builder().with($ -> {
+			$.what = new What(dataIn, dataOut);
+			$.when = new When();
+			$.where = new Where(application, machineName);
+			$.who = new Who(realm, user, session);
+			$.why = new Why(operation.getName(), operation.getDescription());
+		}).build();
+
+		LOGGER.debug("Event '{}' created with operation '{}'", event.getId(), operation);
+
+		return event;
 	}
-	
-	LOGGER.debug("Published event '{}' with operation '{}'", event.getId(), operation);
-	
-	return;
-    }
-    
-    /**
-     * @param event
-     * @return
-     */
-    protected String prepareEventToPublisher(final Event event) {
-	
-	final var layout = """
-		{
-		   "id": "${id}",
-		   "what": {
-			"dataIn" : "${dataIn}",
-			"dataOut" : "${dataOut}"
-		   },
-		   "when": {
-			"dateTime" : "${dateTime}",
-			"zoneId" : "${zoneId}"			   
-		   },
-		   "where": {
-			"application" : "${application}",
-			"machine" : "${machine}"
-		   },
-		   "who": {
-			"login" : "${login}",
-			"session" : "${session}",
-			"realm" : "${realm}"
-		   },
-		   "why": {
-		        "reason" : "${reason}",
-		        "description" : "${description}"
-		   }
-	        }""";
-	
-	var msg = StringUtils.deleteWhitespace(layout);
 
-	// -----------------------------------------
-	final var id = event.getId();
-	msg = StringUtils.replace(msg, "${id}", id);
+	/**
+	 * Publish the event on the messaging mechanism.
+	 * 
+	 * @param event      The object the caller wants publish
+	 * @param directives Specific configurations are needed to send the event
+	 */
+	protected void publishEvent(final Event event, final Object... directives) {
 
-	// ------------------------------------------
-	final var what = event.getWhat();
-	final var dataIn = what.dataIn();
-	final var dataOut = what.dataOut();
+		checkNotNull(event, i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "event"));
+		checkNotNull(directives, i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "directives"));
 
-	msg = StringUtils.replaceEach(msg, 
-			new String[] { "${dataIn}", "${dataOut}" }, 
-			new String[] { dataIn, dataOut });
+		LOGGER.debug("Publishing event '{}'", event.getId());
 
-	// ------------------------------------------
-	final var when = event.getWhen();
-	final var dateTime =  ISO_DATE_TIME.format(when.dateTime());
-	final var zoneId = when.zoneId().toString();
-	
-	msg = StringUtils.replaceEach(msg, 
-			new String[] { "${dateTime}", "${zoneId}" }, 
-			new String[] { dateTime, zoneId });
-	
-	// ------------------------------------------
-	final var where = event.getWhere();
-	final var application = where.application();
-	final var machine = where.machine();
-	
-	msg = StringUtils.replaceEach(msg, 
-			new String[] { "${application}", "${machine}" }, 
-			new String[] { application, machine });	
-	
-	// ------------------------------------------
-	final var who = event.getWho();
-	final var login = who.login();
-	final var session = who.session();
-	final var realm = who.realm();
-	
-	msg = StringUtils.replaceEach(msg, 
-			new String[] { "${login}", "${session}", "${realm}" }, 
-			new String[] { login, session, realm });		
-	
-	// ------------------------------------------
-	final var why = event.getWhy();
-	final var reason = why.reason();
-	final var description = why.description();
-	
-	msg = StringUtils.replaceEach(msg, 
-			new String[] { "${reason}", "${description}" }, 
-			new String[] { reason, description});
-	
-	return msg;
-    }
+		if (!isPublishEvents(directives)) {
+			LOGGER.debug("Event publishing '{}' avoided", event.getId());
+			return;
+		}
 
-    // ------
-    
-    /**
-     * @return
-     */
-    @NotNull
-    public final Class<Id> getIdClazz() {
-	return idClazz;
-    }
+		final var eventToPublish = prepareEventToPublisher(event);
 
-    /**
-     * @return
-     */
-    @NotNull
-    public final Class<Entity> getEntityClazz() {
-	return entityClazz;
-    }
+		try {
+			publisherService.publish(eventToPublish);
+		} catch (final Exception ex) {
+			LOGGER.error(ExceptionUtils.getRootCauseMessage(ex), ex);
+			return;
+		}
 
-    /**
-     * @return
-     */
-    @NotNull
-    public final InterfaceEventPublisherSerice getPublisherService() {
-	return publisherService;
-    }
+		LOGGER.debug("Published event '{}'", event.getId());
+	}
 
-    /**
-     * @return
-     */
-    @NotNull
-    public final InterfaceI18nService getI18nService() {
-	return i18nService;
-    }
+	/**
+	 * Publish the event on the messaging mechanism.
+	 * 
+	 * @param event      The string message supplier that produce the event the
+	 *                   caller want to send
+	 * @param directives Specific configurations are needed to send the event
+	 */
+	protected void publishEvent(final Supplier<String> event, final Object... directives) {
 
-    /**
-     * @return
-     */
-    @NotNull
-    public final InterfaceSecurityService getSecurityService() {
-	return securityService;
-    }
-    
-    /**
-     * @return
-     */
-    @NotNull
-    public final InterfaceExceptionTranslatorService getExceptionTranslatorService() {
-        return exceptionTranslatorService;
-    }
+		checkNotNull(event, i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "eventSupplier"));
+
+		checkNotNull(directives, i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "directives"));
+
+		LOGGER.debug("Publishing event '{}'", event);
+
+		if (!isPublishEvents(directives)) {
+			LOGGER.debug("Event publishing {} avoided", event);
+			return;
+		}
+
+		final var finalEvent = event.get();
+
+		checkArgument(StringUtils.isBlank(finalEvent), "The argument 'event' cannot be null or blank");
+
+		try {
+			publisherService.publish(finalEvent);
+		} catch (final Exception ex) {
+			LOGGER.error(ExceptionUtils.getRootCauseMessage(ex), ex);
+		}
+
+		LOGGER.debug("Published event '{}'", event);
+	}
+
+	/**
+	 * Send the event to publish on the messaging mechanism.
+	 * It's a async operation.
+	 * 
+	 * @param dataIn     The function that generates the input event data
+	 * @param dataOut    The function that generates the output event data
+	 * @param operation  The operation performed
+	 * @param directives Specific configurations are needed to publish the
+	 *                   event
+	 */
+	protected void publishEvent(
+			final Supplier<String> dataIn,
+			final Supplier<String> dataOut,
+			final InterfaceOperation operation,
+			final Object... directives) {
+
+		LOGGER.debug("Publishing event with operation '{}'", operation);
+
+		checkNotNull(operation, i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "operation"));
+		checkNotNull(directives, i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "directives"));
+
+		if (!isPublishEvents(directives)) {
+			LOGGER.debug("Event publishing with operation '{}' avoided", operation);
+			return;
+		}
+
+		final var event = createEvent(dataIn.get(), dataOut.get(), operation);
+
+		final var eventToPublish = prepareEventToPublisher(event);
+
+		try {
+			publisherService.publish(eventToPublish);
+		} catch (final Exception ex) {
+			LOGGER.error(ExceptionUtils.getRootCauseMessage(ex), ex);
+			return;
+		}
+
+		LOGGER.debug("Send event '{}' to publish with operation '{}'", event.getId(), operation);
+	}
+
+	/**
+	 * Convert an event to string, the default format is JSON.
+	 * You can override this method to produce string in another format.
+	 * 
+	 * @param event Object <code>Event</code>
+	 * 
+	 * @return A string formatted
+	 */
+	protected String prepareEventToPublisher(final Event event) {
+
+		final var layout = """
+				{
+				   "id": "${id}",
+				   "what": {
+					"dataIn" : "${dataIn}",
+					"dataOut" : "${dataOut}"
+				   },
+				   "when": {
+					"dateTime" : "${dateTime}",
+					"zoneId" : "${zoneId}"
+				   },
+				   "where": {
+					"application" : "${application}",
+					"machine" : "${machine}"
+				   },
+				   "who": {
+					"login" : "${login}",
+					"session" : "${session}",
+					"realm" : "${realm}"
+				   },
+				   "why": {
+				        "reason" : "${reason}",
+				        "description" : "${description}"
+				   }
+				}""";
+
+		var msg = StringUtils.deleteWhitespace(layout);
+
+		// -----------------------------------------
+		final var id = event.getId();
+		msg = StringUtils.replace(msg, "${id}", id);
+
+		// ------------------------------------------
+		final var what = event.getWhat();
+		final var dataIn = what.dataIn();
+		final var dataOut = what.dataOut();
+
+		msg = StringUtils.replaceEach(msg,
+				new String[] { "${dataIn}", "${dataOut}" },
+				new String[] { dataIn, dataOut });
+
+		// ------------------------------------------
+		final var when = event.getWhen();
+		final var dateTime = ISO_DATE_TIME.format(when.dateTime());
+		final var zoneId = when.zoneId().toString();
+
+		msg = StringUtils.replaceEach(msg,
+				new String[] { "${dateTime}", "${zoneId}" },
+				new String[] { dateTime, zoneId });
+
+		// ------------------------------------------
+		final var where = event.getWhere();
+		final var application = where.application();
+		final var machine = where.machine();
+
+		msg = StringUtils.replaceEach(msg,
+				new String[] { "${application}", "${machine}" },
+				new String[] { application, machine });
+
+		// ------------------------------------------
+		final var who = event.getWho();
+		final var login = who.login();
+		final var session = who.session();
+		final var realm = who.realm();
+
+		msg = StringUtils.replaceEach(msg,
+				new String[] { "${login}", "${session}", "${realm}" },
+				new String[] { login, session, realm });
+
+		// ------------------------------------------
+		final var why = event.getWhy();
+		final var reason = why.reason();
+		final var description = why.description();
+
+		msg = StringUtils.replaceEach(msg,
+				new String[] { "${reason}", "${description}" },
+				new String[] { reason, description });
+
+		return msg;
+	}
+
+	// ------
+
+	/**
+	 * Create a supplier function to generate null point exception when it's
+	 * necessary.
+	 * 
+	 * @param parameters Parameters to show on message error
+	 * @return An object <code>Supplier<NullPointerException></code>
+	 */
+	protected final Supplier<NullPointerException> createNullPointerException(final String... parameters) {
+		return () -> new NullPointerException(
+				i18nService.translate(NULL_POINTER_EXCEPTION_MSG, (Object[]) parameters));
+	}
+
+	// ------
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final Class<Id> getIdClazz() {
+		return idClazz;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final Class<Entity> getEntityClazz() {
+		return entityClazz;
+	}
+
+	@NotNull
+	public final InterfaceEventPublisherSerice<?> getPublisherService() {
+		return publisherService;
+	}
+
+	@NotNull
+	public final InterfaceI18nService getI18nService() {
+		return i18nService;
+	}
+
+	@NotNull
+	public final InterfaceSecurityService getSecurityService() {
+		return securityService;
+	}
+
+	@NotNull
+	public final InterfaceExceptionAdapterService getExceptionTranslatorService() {
+		return exceptionAdapterService;
+	}
 }

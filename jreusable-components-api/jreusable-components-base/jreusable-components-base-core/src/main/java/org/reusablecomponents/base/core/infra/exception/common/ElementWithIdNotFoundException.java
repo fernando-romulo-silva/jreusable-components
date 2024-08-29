@@ -17,29 +17,32 @@ public class ElementWithIdNotFoundException extends ElementNotFoundException {
      * @param id
      */
     public <T> ElementWithIdNotFoundException(final Class<T> cls, final Object id) {
-	super("{exception.elementIdNotFound}", new Object[] { cls.getSimpleName(), formatNumber(id) });
+        super("{exception.elementIdNotFound}", new Object[] { cls.getSimpleName(), formatNumber(id) });
     }
-    
+
     /**
      * @param <T>
      * @param cls
      * @param i18nService
      * @param id
      */
-    public <T> ElementWithIdNotFoundException(final Class<T> cls, final InterfaceI18nService i18nService, final Object id) {
-	super("{exception.elementIdNotFound}", i18nService, new Object[] { cls.getSimpleName(), formatNumber(id) });
-    }    
+    public <T> ElementWithIdNotFoundException(
+            final Class<T> cls,
+            final InterfaceI18nService i18nService,
+            final Object id) {
+        super("{exception.elementIdNotFound}", i18nService, new Object[] { cls.getSimpleName(), formatNumber(id) });
+    }
 
     private static Object formatNumber(final Object id) {
 
-	if (id instanceof Number number) {
+        if (id instanceof Number number) {
 
-	    final var format = NumberFormat.getInstance();
-	    format.setGroupingUsed(false);
+            final var format = NumberFormat.getInstance();
+            format.setGroupingUsed(false);
 
-	    return format.format(number);
-	}
+            return format.format(number);
+        }
 
-	return id;
+        return id;
     }
 }

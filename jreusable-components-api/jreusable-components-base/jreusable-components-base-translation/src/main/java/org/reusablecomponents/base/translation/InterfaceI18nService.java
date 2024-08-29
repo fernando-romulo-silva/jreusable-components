@@ -3,12 +3,13 @@ package org.reusablecomponents.base.translation;
 /**
  * 
  * Java SE
+ * 
  * <pre>
  *    final InterfaceI18nService i18n = (code, params)-> {
  *       
  *       // Java SE Locale
- *	 final var locale = Locale.getDefault();
- *	 final var resourceBundle = ResourceBundle.getBundle("messages", locale);
+ *	     final var locale = Locale.getDefault();
+ *	     final var resourceBundle = ResourceBundle.getBundle("messages", locale);
  *       
  *       // Java SE ResourceBundle service    
  *       final var rb = ResourceBundle.getBundle("messages", locale);
@@ -19,6 +20,7 @@ package org.reusablecomponents.base.translation;
  * 
  * 
  * Spring Web example:
+ * 
  * <pre>
  *    final InterfaceI18nService i18n = (code, params)-> {
  *       

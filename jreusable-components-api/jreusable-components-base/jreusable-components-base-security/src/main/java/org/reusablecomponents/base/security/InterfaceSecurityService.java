@@ -1,33 +1,43 @@
 package org.reusablecomponents.base.security;
 
 /**
- * 
+ * Service in charge for security matters.
  */
 public interface InterfaceSecurityService {
 
     /**
-     * @return
+     * Return the logged user name.
+     * 
+     * @return An String object
      */
     String getUserName();
-    
+
     /**
-     * @return
+     * Return the logged user realm.
+     * 
+     * @return An String object
      */
     String getUserRealm();
-    
+
     /**
-     * @return
+     * Return the logged user current session id.
+     * 
+     * @return An String object
      */
     String getSession();
-    
+
     /**
-     * @return
+     * Return the application name.
+     * 
+     * @return An String object
      */
     String getApplication();
 
     /**
-     * @return
+     * Return the machine name.
+     * 
+     * @return An String object
      */
     String getMachineName();
-    
+
 }

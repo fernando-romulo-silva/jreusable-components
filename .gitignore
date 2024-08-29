@@ -49,3 +49,6 @@ nb-configuration.xml
 .ant-targets-build.xml
 build.properties
 
+# Vscode
+.vscode/
+

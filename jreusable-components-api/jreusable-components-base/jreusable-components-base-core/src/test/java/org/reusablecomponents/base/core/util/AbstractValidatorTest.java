@@ -10,42 +10,42 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
 public abstract class AbstractValidatorTest {
-    
-    public final static ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
-    
-    public final static Validator VALIDATOR = VALIDATOR_FACTORY.getValidator();
-    
-    public static boolean updateValue(final Object object, final String fieldName, final Object fieldValue) {
 
-	Class<?> clazz = object.getClass();
+	public static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
 
-	while (clazz != null) {
+	public static final Validator VALIDATOR = VALIDATOR_FACTORY.getValidator();
 
-	    try {
+	public static boolean updateValue(final Object object, final String fieldName, final Object fieldValue) {
 
-		var field = clazz.getDeclaredField(fieldName);
-		field.setAccessible(true);
-		field.set(object, fieldValue);
-		
-		return true;
+		Class<?> clazz = object.getClass();
 
-	    } catch (final NoSuchFieldException ex) {
-		clazz = clazz.getSuperclass();
-	    } catch (final Exception ex) {
-		throw new IllegalStateException(ex);
-	    }
+		while (clazz != null) {
+
+			try {
+
+				var field = clazz.getDeclaredField(fieldName);
+				field.setAccessible(true);
+				field.set(object, fieldValue);
+
+				return true;
+
+			} catch (final NoSuchFieldException ex) {
+				clazz = clazz.getSuperclass();
+			} catch (final Exception ex) {
+				throw new IllegalStateException(ex);
+			}
+		}
+
+		return false;
 	}
 
-	return false;
-    }
-    
-    @BeforeEach
-    void setUp() {
-	Locale.setDefault(Locale.ENGLISH); // expecting english error messages
-    }
-    
-    @AfterAll
-    void tearDown() {
-	VALIDATOR_FACTORY.close();
-    }
+	@BeforeEach
+	void setUp() {
+		Locale.setDefault(Locale.ENGLISH); // expecting english error messages
+	}
+
+	@AfterAll
+	void tearDown() {
+		VALIDATOR_FACTORY.close();
+	}
 }
