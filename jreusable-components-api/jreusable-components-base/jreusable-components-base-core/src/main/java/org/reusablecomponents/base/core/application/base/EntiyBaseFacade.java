@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 import static java.util.Optional.ofNullable;
-
 import static java.util.Objects.nonNull;
+import static org.reusablecomponents.base.core.infra.messages.SystemMessages.NULL_POINTER_EXCEPTION_MSG;
 
 import java.util.function.Supplier;
 
@@ -54,6 +54,32 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 		EntityQuerySpecificationFacade, EntityQueryPaginationFacade, EntityQueryPaginationSpecificationFacade {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EntiyBaseFacade.class);
+
+	private static final String JSON_LAYOUT = """
+			{
+			   "id": "${id}",
+			   "what": {
+				"dataIn" : "${dataIn}",
+				"dataOut" : "${dataOut}"
+			   },
+			   "when": {
+				"dateTime" : "${dateTime}",
+				"zoneId" : "${zoneId}"
+			   },
+			   "where": {
+				"application" : "${application}",
+				"machine" : "${machine}"
+			   },
+			   "who": {
+				"login" : "${login}",
+				"session" : "${session}",
+				"realm" : "${realm}"
+			   },
+			   "why": {
+			        "reason" : "${reason}",
+			        "description" : "${description}"
+			   }
+			}""";
 
 	// -------
 
@@ -150,7 +176,9 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * 
 	 * @param directives Specific configurations are needed to validate whether it
 	 *                   sends events or not.
-	 * @return True if the caller wants to publish default events or false if not.
+	 * 
+	 * @return True (default) if the caller wants to publish default events or false
+	 *         if not.
 	 */
 	protected boolean isPublishEvents(final Object... directives) {
 		return true;
@@ -162,6 +190,7 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @param dataIn    The input data
 	 * @param dataOut   The output data
 	 * @param operation The operation performed
+	 * 
 	 * @return A <code>Event</code> object
 	 */
 	protected Event createEvent(final String dataIn, final String dataOut, final InterfaceOperation operation) {
@@ -303,33 +332,7 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 */
 	protected String prepareEventToPublisher(final Event event) {
 
-		final var layout = """
-				{
-				   "id": "${id}",
-				   "what": {
-					"dataIn" : "${dataIn}",
-					"dataOut" : "${dataOut}"
-				   },
-				   "when": {
-					"dateTime" : "${dateTime}",
-					"zoneId" : "${zoneId}"
-				   },
-				   "where": {
-					"application" : "${application}",
-					"machine" : "${machine}"
-				   },
-				   "who": {
-					"login" : "${login}",
-					"session" : "${session}",
-					"realm" : "${realm}"
-				   },
-				   "why": {
-				        "reason" : "${reason}",
-				        "description" : "${description}"
-				   }
-				}""";
-
-		var msg = StringUtils.deleteWhitespace(layout);
+		var msg = StringUtils.deleteWhitespace(JSON_LAYOUT);
 
 		// -----------------------------------------
 		final var id = event.getId();

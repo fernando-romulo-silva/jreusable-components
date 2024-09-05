@@ -10,25 +10,25 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 public interface InterfaceSpringEntityQueryPaginationFacade<Entity extends AbstractEntity<Id>, Id>
-	extends InterfaceEntityQueryPaginationFacade<Entity, Id, // basic
-		// results
-		Optional<Entity>, // one result type
-		Page<Entity>, // multiple result type
-		// Pagination
-		Pageable, // pageable type
-		Sort> { // sort type
+    extends InterfaceEntityQueryPaginationFacade<Entity, Id, // basic
+        // results
+        Optional<Entity>, // one result type
+        Page<Entity>, // multiple result type
+        // Pagination
+        Pageable, // pageable type
+        Sort> { // sort type
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Cacheable
-    Page<Entity> findAll(final Pageable pageable, final Object... directives);
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Cacheable
+  Page<Entity> findAll(final Pageable pageable, final Object... directives);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Cacheable
-    Optional<Entity> findFirst(final Sort sort);
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Cacheable
+  Optional<Entity> findFirst(final Sort sort);
 }

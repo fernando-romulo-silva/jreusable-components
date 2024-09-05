@@ -8,7 +8,6 @@ import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotF
  * @param <Entity>
  * @param <Id>
  * @param <QueryIdIn>
- * @param <Directives>
  * @param <OneResult>
  * @param <MultipleResult>
  * @param <CountResult>

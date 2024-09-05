@@ -35,7 +35,7 @@ class AbstractEntiyBaseFacadeUnhappyPathTest {
 		// when
 		assertThatThrownBy(() -> {
 
-			facade.publishEvent("SaveIn", "SaveOut", null);
+			facade.publishEvent(() -> "SaveIn", () -> "SaveOut", null);
 
 		}) // then
 				.as(format("Check the null operation")) //
@@ -55,7 +55,7 @@ class AbstractEntiyBaseFacadeUnhappyPathTest {
 		// when
 		assertThatThrownBy(() -> {
 
-			facade.publishEvent("SaveIn", "SaveOut", CommandOperation.SAVE_ENTITY, nullArray);
+			facade.publishEvent(() -> "SaveIn", () -> "SaveOut", CommandOperation.SAVE_ENTITY, nullArray);
 
 		}) // then
 				.as(format("Check the null operation")) //

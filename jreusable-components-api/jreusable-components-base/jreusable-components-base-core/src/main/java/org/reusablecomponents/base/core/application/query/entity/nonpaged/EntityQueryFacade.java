@@ -24,7 +24,6 @@ import jakarta.validation.constraints.NotNull;
  * @param <Entity>
  * @param <Id>
  * @param <QueryIdIn>
- * @param <Directives>
  * @param <OneResult>
  * @param <MultipleResult>
  * @param <CountResult>
@@ -69,26 +68,26 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 
 	// ---------------------------------------------------------------------------
 
-	protected String convertMultipleResultToPublishDataOut(final MultipleResult multipleResult) {
-		return Objects.toString(multipleResult);
+	protected Supplier<String> convertMultipleResultToPublishDataOut(final MultipleResult multipleResult) {
+		return () -> Objects.toString(multipleResult);
 	}
 
-	protected String convertOneResultToPublishDataOut(final OneResult oneResult) {
-		return Objects.toString(oneResult);
+	protected Supplier<String> convertOneResultToPublishDataOut(final OneResult oneResult) {
+		return () -> Objects.toString(oneResult);
 	}
 
-	protected String convertCountResultToPublishDataOut(final CountResult countResult) {
-		return Objects.toString(countResult);
+	protected Supplier<String> convertCountResultToPublishDataOut(final CountResult countResult) {
+		return () -> Objects.toString(countResult);
 	}
 
-	protected String convertQueryIdInToPublishDataIn(final QueryIdIn queryIdIn) {
-		return Objects.toString(queryIdIn);
+	protected Supplier<String> convertQueryIdInToPublishDataIn(final QueryIdIn queryIdIn) {
+		return () -> Objects.toString(queryIdIn);
 	}
 
 	// ---------------------------------------------------------------------------
 
-	protected String convertDirectivesToPublishDataIn(final Object... directives) {
-		return Objects.toString(directives);
+	protected Supplier<String> convertDirectivesToPublishDataIn(final Object... directives) {
+		return () -> Objects.toString(directives);
 	}
 
 	/**
@@ -195,14 +194,29 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 
 	// ---------------------------------------------------------------------------
 
+	/**
+	 * 
+	 * @param queryIdIn
+	 * @return
+	 */
 	protected QueryIdIn preExistsBy(final QueryIdIn queryIdIn) {
 		return queryIdIn;
 	}
 
+	/**
+	 * 
+	 * @param existsResult
+	 * @return
+	 */
 	protected ExistsResult posExistsBy(final ExistsResult existsResult) {
 		return existsResult;
 	}
 
+	/**
+	 * 
+	 * @param resultFinal
+	 * @return
+	 */
 	protected String convertExistsResultToPublishData(final ExistsResult resultFinal) {
 		return Objects.toString(resultFinal);
 	}
@@ -264,9 +278,8 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 
 		final var finalResult = posCountAll(result);
 
-		final var dataIn = StringUtils.EMPTY;
 		final var dataOut = convertCountResultToPublishDataOut(finalResult);
-		publishEvent(dataIn, dataOut, COUNT_ALL);
+		publishEvent(() -> StringUtils.EMPTY, dataOut, COUNT_ALL);
 
 		LOGGER.debug("Counted all '{}', result '{}', session '{}'", getEntityClazz().getSimpleName(), finalResult,
 				session);
@@ -293,9 +306,8 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 
 		final var finalResult = posExistsBy(result);
 
-		final var dataIn = StringUtils.EMPTY;
 		final var dataOut = convertExistsResultToPublishData(finalResult);
-		publishEvent(dataIn, dataOut, EXISTS_ALL);
+		publishEvent(() -> StringUtils.EMPTY, dataOut, EXISTS_ALL);
 
 		LOGGER.debug("Existed all '{}', result '{}', session '{}'", getEntityClazz().getSimpleName(), finalResult,
 				session);

@@ -26,7 +26,7 @@ public final class EntityCommandFacadeBuilder< // Generics spec
 		DeleteIdIn, DeleteIdOut, // delete entity by id
 		DeleteIdsIn, DeleteIdsOut> {// delete entities by ids
 
-	public InterfaceEventPublisherSerice publisherService;
+	public InterfaceEventPublisherSerice<?> publisherService;
 
 	public InterfaceSecurityService securityService;
 

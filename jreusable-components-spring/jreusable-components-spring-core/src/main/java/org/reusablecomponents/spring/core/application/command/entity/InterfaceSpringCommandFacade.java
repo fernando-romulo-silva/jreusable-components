@@ -1,6 +1,5 @@
 package org.reusablecomponents.spring.core.application.command.entity;
 
-
 import org.reusablecomponents.base.core.application.command.entity.InterfaceEntityCommandFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,20 +9,20 @@ import org.springframework.transaction.annotation.Transactional;
  * @param <Id>
  */
 public interface InterfaceSpringCommandFacade<Entity extends AbstractEntity<Id>, Id>
-		//
-		extends InterfaceEntityCommandFacade<Entity, Id,
-				// save
-				Entity, Entity, // save a entity
-				Iterable<Entity>, Iterable<Entity>, // save entities
-				// update
-				Entity, Entity, // update a entity
-				Iterable<Entity>, Iterable<Entity>, // update entities
-				// delete entity
-				Entity, Void, // delete a entity
-				Iterable<Entity>, Void, // delete entities
-				// delete by id
-				Id, Void, // delete a entity by id
-				Iterable<Id>, Void> { // delete entities by id
+        //
+        extends InterfaceEntityCommandFacade<Entity, Id,
+                // save
+                Entity, Entity, // save a entity
+                Iterable<Entity>, Iterable<Entity>, // save entities
+                // update
+                Entity, Entity, // update a entity
+                Iterable<Entity>, Iterable<Entity>, // update entities
+                // delete entity
+                Entity, Void, // delete a entity
+                Iterable<Entity>, Void, // delete entities
+                // delete by id
+                Id, Void, // delete a entity by id
+                Iterable<Id>, Void> { // delete entities by id
     /**
      * {@inheritDoc}
      */
@@ -37,7 +36,7 @@ public interface InterfaceSpringCommandFacade<Entity extends AbstractEntity<Id>,
     @Override
     @Transactional
     Iterable<Entity> saveAll(final Iterable<Entity> entities);
-    
+
     /**
      * {@inheritDoc}
      */

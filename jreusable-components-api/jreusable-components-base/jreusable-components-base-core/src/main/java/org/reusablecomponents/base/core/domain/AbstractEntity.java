@@ -29,80 +29,80 @@ public abstract class AbstractEntity<Id> implements InterfaceEntity<Id, Abstract
     // --------------------------------------------------------------------------
 
     protected AbstractEntity() {
-	super();
-	createdDate = LocalDateTime.now();
+        super();
+        createdDate = LocalDateTime.now();
     }
 
     protected final AbstractEntity<Id> validade(final Validator validator) {
 
-	checkNotNull(validator, "validator argument cannot be null");
+        checkNotNull(validator, "validator argument cannot be null");
 
-	final var violations = validator.validate(this);
+        final var violations = validator.validate(this);
 
-	if (ObjectUtils.isNotEmpty(violations)) {
-	    throw new ConstraintViolationException(violations);
-	}
+        if (ObjectUtils.isNotEmpty(violations)) {
+            throw new ConstraintViolationException(violations);
+        }
 
-	return this;
+        return this;
     }
 
     // --------------------------------------------------------------------------
 
     @Override
     public Id getId() {
-	return id;
+        return id;
     }
 
     @Override
     public LocalDateTime getCreatedDate() {
-	return createdDate;
+        return createdDate;
     }
 
     @Override
     public Optional<String> getCreatedReason() {
-	return Optional.ofNullable(createdReason);
+        return Optional.ofNullable(createdReason);
     }
 
     @Override
     public Optional<LocalDateTime> getUpdatedDate() {
-	return Optional.ofNullable(updatedDate);
+        return Optional.ofNullable(updatedDate);
     }
 
     @Override
     public Optional<String> getUpdatedReason() {
-	return Optional.ofNullable(updatedReason);
+        return Optional.ofNullable(updatedReason);
     }
 
     // --------------------------------------------------------------------------
 
     @Override
     public int hashCode() {
-	return Objects.hash(id);
+        return Objects.hash(id);
     }
 
     @Override
     public boolean equals(final Object obj) {
 
-	final boolean result;
+        final boolean result;
 
-	if (Objects.isNull(obj)) {
-	    result = false;
+        if (Objects.isNull(obj)) {
+            result = false;
 
-	} else if (this == obj) {
-	    result = true;
+        } else if (this == obj) {
+            result = true;
 
-	} else if (obj instanceof AbstractEntity<?> other) {
-	    result = Objects.equals(this.id, other.id);
+        } else if (obj instanceof AbstractEntity<?> other) {
+            result = Objects.equals(this.id, other.id);
 
-	} else {
-	    result = false;
-	}
+        } else {
+            result = false;
+        }
 
-	return result;
+        return result;
     }
 
     @Override
     public String toString() {
-	return ToStringBuilder.reflectionToString(this);
+        return ToStringBuilder.reflectionToString(this);
     }
 }

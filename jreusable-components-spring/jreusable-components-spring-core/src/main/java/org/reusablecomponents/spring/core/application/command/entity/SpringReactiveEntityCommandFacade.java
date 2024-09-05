@@ -27,33 +27,45 @@ public class SpringReactiveEntityCommandFacade<Entity extends AbstractEntity<Id>
 		// spring reactive interface
 		implements InterfaceSpringReactiveEntityCommandFacade<Entity, Id> {
 
-    public SpringReactiveEntityCommandFacade(
-		     final InterfaceSpringReactiveRepository<Entity, Id> repository, 
-		     final SpringI18nService i18Service) {
-	
-	// invoke super wih builder
-	super(new EntityCommandFacadeBuilder<>($ -> {
-	    // save
-	    $.saveFunction = repository::save;
-	    $.saveAllFunction = repository::saveAll;
-	    
-	    // update
-	    $.updateFunction = repository::save;
-	    $.updateAllFunction = repository::saveAll;
-	    
-	    // delete
-	    $.deleteFunction = entity -> { repository.delete(entity); return null;};
-	    $.deleteAllFunction = entities -> { repository.deleteAll(entities); return null; };
-	    
-	    // delete by id
-	    $.deleteByIdFunction = id -> { repository.deleteById(id); return null; };
-	    $.deleteAllByIdFunction = ids -> { repository.deleteById(ids); return null; };
-	    
-	    // services
-	    $.i18nService = i18Service;
-	    // $.publisherSerice =
-	    // $.exceptionTranslatorService =
-	    // $.securityService =
-	}));
-    }
+	public SpringReactiveEntityCommandFacade(
+			final InterfaceSpringReactiveRepository<Entity, Id> repository,
+			final SpringI18nService i18Service) {
+
+		// invoke super wih builder
+		super(new EntityCommandFacadeBuilder<>($ -> {
+			// save
+			$.saveFunction = repository::save;
+			$.saveAllFunction = repository::saveAll;
+
+			// update
+			$.updateFunction = repository::save;
+			$.updateAllFunction = repository::saveAll;
+
+			// delete
+			$.deleteFunction = entity -> {
+				repository.delete(entity);
+				return null;
+			};
+			$.deleteAllFunction = entities -> {
+				repository.deleteAll(entities);
+				return null;
+			};
+
+			// delete by id
+			$.deleteByIdFunction = id -> {
+				repository.deleteById(id);
+				return null;
+			};
+			$.deleteAllByIdFunction = ids -> {
+				repository.deleteById(ids);
+				return null;
+			};
+
+			// services
+			$.i18nService = i18Service;
+			// $.publisherSerice =
+			// $.exceptionTranslatorService =
+			// $.securityService =
+		}));
+	}
 }

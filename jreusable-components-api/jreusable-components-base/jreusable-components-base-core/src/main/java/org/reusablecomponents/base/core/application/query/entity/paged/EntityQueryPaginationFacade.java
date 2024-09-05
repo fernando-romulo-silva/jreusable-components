@@ -11,6 +11,8 @@ import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Supplier;
+
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
@@ -45,12 +47,13 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	}
 
 	// ---------------------------------------------------------------------------
-	protected String convertPageableToPublishDataIn(final Pageable pageable) {
-		return Objects.toString(pageable);
+	protected Supplier<String> convertPageableToPublishDataIn(final Pageable pageable) {
+		return () -> Objects.toString(pageable);
 	}
 
-	protected String convertMultiplePagedResultToPublishDataOut(final MultiplePagedResult multiplePagedResult) {
-		return Objects.toString(multiplePagedResult);
+	protected Supplier<String> convertMultiplePagedResultToPublishDataOut(
+			final MultiplePagedResult multiplePagedResult) {
+		return () -> Objects.toString(multiplePagedResult);
 	}
 
 	protected Pageable preFindAll(final Pageable pageable, @NotNull final Object... directives) {
@@ -95,12 +98,12 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 
 	// ---------------------------------------------------------------------------
 
-	protected String convertSortToPublishDataIn(final Sort sort) {
-		return Objects.toString(sort);
+	protected Supplier<String> convertSortToPublishDataIn(final Sort sort) {
+		return () -> Objects.toString(sort);
 	}
 
-	protected String convertOneResultResultToPublishDataOut(final OneResult oneResult) {
-		return Objects.toString(oneResult);
+	protected Supplier<String> convertOneResultResultToPublishDataOut(final OneResult oneResult) {
+		return () -> Objects.toString(oneResult);
 	}
 
 	protected Sort preFindFirst(final Sort sort) {

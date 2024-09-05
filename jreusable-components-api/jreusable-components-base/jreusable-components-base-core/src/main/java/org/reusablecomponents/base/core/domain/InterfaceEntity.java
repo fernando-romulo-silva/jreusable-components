@@ -7,24 +7,24 @@ import java.util.Optional;
 
 import jakarta.validation.constraints.NotNull;
 
-public interface InterfaceEntity <Id, Entity extends InterfaceEntity<Id, Entity>> {
-    
+public interface InterfaceEntity<Id, Entity extends InterfaceEntity<Id, Entity>> {
+
     Id getId();
-    
+
     @NotNull
     LocalDateTime getCreatedDate();
-    
+
     Optional<LocalDateTime> getUpdatedDate();
-    
+
     Optional<String> getCreatedReason();
-    
+
     Optional<String> getUpdatedReason();
-    
+
     default boolean isPublishable() {
-	return true;
+        return true;
     }
-    
+
     default String getRealmId() {
-	return EMPTY;
+        return EMPTY;
     }
 }

@@ -20,8 +20,6 @@ public sealed interface InterfaceEntityBaseFacade<Entity extends AbstractEntity<
 		InterfaceEntityQueryPaginationFacade, InterfaceEntityQueryPaginationSpecificationFacade,
 		EntiyBaseFacade {
 
-	static final String NULL_POINTER_EXCEPTION_MSG = "{exception.nullPointerException}";
-
 	/**
 	 * Return the id class type.
 	 * 

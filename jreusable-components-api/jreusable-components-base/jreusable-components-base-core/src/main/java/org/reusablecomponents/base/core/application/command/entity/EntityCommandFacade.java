@@ -21,57 +21,40 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @param <Entity>
- * @param <Id>
- * @param <SaveEntityIn>
- * @param <SaveEntityOut>
- * @param <SaveEntitiesIn>
- * @param <SaveEntitiesOut>
- * @param <UpdateEntityIn>
- * @param <UpdateEntityOut>
- * @param <UpdateEntitiesIn>
- * @param <UpdateEntitiesOut>
- * @param <DeleteEntityIn>
- * @param <DeleteEntityOut>
- * @param <DeleteEntitiesIn>
- * @param <DeleteEntitiesOut>
- * @param <DeleteIdIn>
- * @param <DeleteIdOut>
- * @param <DeleteIdsIn>
- * @param <DeleteIdsOut>
+ * The default <code>InterfaceEntityCommandFacade</code>'s implementation.
  */
 public non-sealed class EntityCommandFacade< // generics
 		// default
 		Entity extends AbstractEntity<Id>, Id, // basic
 		// save
-		SaveEntityIn, SaveEntityOut, // save a entity
-		SaveEntitiesIn, SaveEntitiesOut, // save entities
+		SaveEntityIn, SaveEntityOut, //
+		SaveEntitiesIn, SaveEntitiesOut, //
 		// update
-		UpdateEntityIn, UpdateEntityOut, // update a entity
-		UpdateEntitiesIn, UpdateEntitiesOut, // update entities
+		UpdateEntityIn, UpdateEntityOut, //
+		UpdateEntitiesIn, UpdateEntitiesOut, //
 		// delete
-		DeleteEntityIn, DeleteEntityOut, // delete a entity
-		DeleteEntitiesIn, DeleteEntitiesOut, // delete entities
+		DeleteEntityIn, DeleteEntityOut, //
+		DeleteEntitiesIn, DeleteEntitiesOut, //
 		// delete by id
-		DeleteIdIn, DeleteIdOut, // delete a entity by id
-		DeleteIdsIn, DeleteIdsOut // delete entities by id
+		DeleteIdIn, DeleteIdOut, //
+		DeleteIdsIn, DeleteIdsOut //
 >
 		// Base Facade
 		extends EntiyBaseFacade<Entity, Id>
 		// Interface command facade
 		implements InterfaceEntityCommandFacade<Entity, Id, // basic
-				//
-				SaveEntityIn, SaveEntityOut, // save a entity
-				SaveEntitiesIn, SaveEntitiesOut, // save entities
 
-				UpdateEntityIn, UpdateEntityOut, // update a entity
-				UpdateEntitiesIn, UpdateEntitiesOut, // update entities
+				SaveEntityIn, SaveEntityOut, //
+				SaveEntitiesIn, SaveEntitiesOut, //
 
-				DeleteEntityIn, DeleteEntityOut, // delete a entity
-				DeleteEntitiesIn, DeleteEntitiesOut, // delete entities
+				UpdateEntityIn, UpdateEntityOut, //
+				UpdateEntitiesIn, UpdateEntitiesOut, //
 
-				DeleteIdIn, DeleteIdOut, // delete a entity by id
-				DeleteIdsIn, DeleteIdsOut> { // delete entities by id
+				DeleteEntityIn, DeleteEntityOut, //
+				DeleteEntitiesIn, DeleteEntitiesOut, //
+
+				DeleteIdIn, DeleteIdOut, //
+				DeleteIdsIn, DeleteIdsOut> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EntityCommandFacade.class);
 
@@ -86,24 +69,29 @@ public non-sealed class EntityCommandFacade< // generics
 	protected final Function<DeleteIdIn, DeleteIdOut> deleteByIdFunction;
 	protected final Function<DeleteIdsIn, DeleteIdsOut> deleteAllByIdFunction;
 
+	/**
+	 * Default constructior
+	 * 
+	 * @param builder Object in charge to construct this one
+	 */
 	public EntityCommandFacade(
 			final EntityCommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> builder) {
-		// super class parameters
+
 		super(
 				builder.publisherService,
 				builder.i18nService,
 				builder.securityService,
 				builder.exceptionAdapterService);
-		//
+
 		this.saveFunction = builder.saveFunction;
 		this.saveAllFunction = builder.saveAllFunction;
-		//
+
 		this.updateFunction = builder.updateFunction;
 		this.updateAllFunction = builder.updateAllFunction;
-		//
+
 		this.deleteFunction = builder.deleteFunction;
 		this.deleteAllFunction = builder.deleteAllFunction;
-		//
+
 		this.deleteByIdFunction = builder.deleteByIdFunction;
 		this.deleteAllByIdFunction = builder.deleteAllByIdFunction;
 	}
@@ -164,15 +152,15 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			result = saveFunction.apply(finalSaveEntityIn);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService, SAVE_ENTITY);
+			throw exceptionAdapterService.convert(ex, i18nService, SAVE_ENTITY, getEntityClazz(), saveEntityIn);
 		}
 
 		LOGGER.debug("Saved result '{}'", result);
 
-		final var posSaveEntityIn = posSave(result);
+		final var posSaveEntityOut = posSave(result);
 
-		final var finalResult = ofNullable(posSaveEntityIn)
-				.orElseThrow(createNullPointerException("posSaveEntityIn"));
+		final var finalResult = ofNullable(posSaveEntityOut)
+				.orElseThrow(createNullPointerException("posSaveEntityOut"));
 
 		final var dataIn = convertSaveEntityInToPublishDataIn(finalSaveEntityIn);
 		final var dataOut = convertSaveEntityOutToPublishDataOut(finalResult);
@@ -228,10 +216,10 @@ public non-sealed class EntityCommandFacade< // generics
 
 		LOGGER.debug("Saved result '{}'", result);
 
-		final var posSaveEntitieIn = posSaveAll(result);
+		final var posSaveEntitiesOut = posSaveAll(result);
 
-		final var finalResult = ofNullable(posSaveEntitieIn)
-				.orElseThrow(createNullPointerException("posSaveEntitieIn"));
+		final var finalResult = ofNullable(posSaveEntitiesOut)
+				.orElseThrow(createNullPointerException("posSaveEntitiesOut"));
 
 		final var dataIn = convertDataSaveEntitiesInToPublishDataIn(finalSaveEntitiesIn);
 		final var dataOut = convertSaveEntitiesOutToPublishDataOut(finalResult);
@@ -287,7 +275,10 @@ public non-sealed class EntityCommandFacade< // generics
 
 		LOGGER.debug("Updated result '{}'", result);
 
-		final var finalResult = posUpdate(result);
+		final var posUpdateEntityOut = posUpdate(result);
+
+		final var finalResult = ofNullable(posUpdateEntityOut)
+				.orElseThrow(createNullPointerException("posUpdateEntityOut"));
 
 		final var dataIn = convertUpdateEntityInToPublishDataIn(finalUpdateEntityIn);
 		final var dataOut = convertUpdateEntityOutToPublishDataOut(finalResult);
@@ -326,7 +317,12 @@ public non-sealed class EntityCommandFacade< // generics
 
 		LOGGER.debug("Updating entities '{}' with session '{}'", updateEntitiesIn, session);
 
-		final var finalUpdateEntitiesIn = preUpdateAll(updateEntitiesIn);
+		final var preUpdateEntitiesIn = preUpdateAll(updateEntitiesIn);
+
+		final var finalUpdateEntitiesIn = ofNullable(preUpdateEntitiesIn)
+				.orElseThrow(createNullPointerException("preUpdateEntitiesIn"));
+
+		LOGGER.debug("Updating finalUpdateEntitiesIn '{}'", finalUpdateEntitiesIn);
 
 		final UpdateEntitiesOut result;
 
@@ -336,7 +332,12 @@ public non-sealed class EntityCommandFacade< // generics
 			throw exceptionAdapterService.convert(ex, i18nService);
 		}
 
-		final var finalResult = posUpdateAll(result);
+		LOGGER.debug("Updated result '{}'", result);
+
+		final var posUpdateEntitiesOut = posUpdateAll(result);
+
+		final var finalResult = ofNullable(posUpdateEntitiesOut)
+				.orElseThrow(createNullPointerException("posUpdateAllEntitiesOut"));
 
 		final var dataIn = convertUpdateEntitiesInToPublishDataIn(finalUpdateEntitiesIn);
 		final var dataOut = convertUpdateEntitiesOutToPublishDataOut(finalResult);
@@ -375,7 +376,12 @@ public non-sealed class EntityCommandFacade< // generics
 
 		LOGGER.debug("Deleting entity '{}' with session '{}'", deleteEntityIn, session);
 
-		final var finalDeleteEntityIn = preDelete(deleteEntityIn);
+		final var preDeleteEntityIn = preDelete(deleteEntityIn);
+
+		final var finalDeleteEntityIn = ofNullable(preDeleteEntityIn)
+				.orElseThrow(createNullPointerException("preUpdateEntitiesIn"));
+
+		LOGGER.debug("Deleting finalDeleteEntityIn '{}'", finalDeleteEntityIn);
 
 		final DeleteEntityOut result;
 
@@ -385,7 +391,12 @@ public non-sealed class EntityCommandFacade< // generics
 			throw exceptionAdapterService.convert(ex, i18nService);
 		}
 
-		final var finalResult = posDelete(result);
+		LOGGER.debug("Delete result '{}'", result);
+
+		final var posDeleteEntityOut = posDelete(result);
+
+		final var finalResult = ofNullable(posDeleteEntityOut)
+				.orElseThrow(createNullPointerException("posDeleteEntityOut"));
 
 		final var dataIn = convertDeleteEntityInToPublishDataIn(finalDeleteEntityIn);
 		final var dataOut = convertDeleteEntityOutToPublishDataOut(finalResult);
@@ -424,7 +435,10 @@ public non-sealed class EntityCommandFacade< // generics
 
 		LOGGER.debug("Deleting entities '{}' with session '{}'", deleteEntitiesIn, session);
 
-		final var finalDeleteEntitiesIn = preDeleteAll(deleteEntitiesIn);
+		final var preDeleteEntityIn = preDeleteAll(deleteEntitiesIn);
+
+		final var finalDeleteEntitiesIn = ofNullable(preDeleteEntityIn)
+				.orElseThrow(createNullPointerException("preDeleteEntityIn"));
 
 		final DeleteEntitiesOut result;
 
@@ -434,7 +448,12 @@ public non-sealed class EntityCommandFacade< // generics
 			throw exceptionAdapterService.convert(ex, i18nService);
 		}
 
-		final var finalResult = posDeleteAll(result);
+		LOGGER.debug("Delete all result '{}'", result);
+
+		final var posDeleteEntitiesOut = posDeleteAll(result);
+
+		final var finalResult = ofNullable(posDeleteEntitiesOut)
+				.orElseThrow(createNullPointerException("posDeleteEntitiesOut"));
 
 		final var dataIn = convertDeleteEntitiesInToPublishDataIn(finalDeleteEntitiesIn);
 		final var dataOut = convertDeleteEntitiesOutOutToPublishDataOut(finalResult);
@@ -473,7 +492,10 @@ public non-sealed class EntityCommandFacade< // generics
 
 		LOGGER.debug("Deleting by id '{}' with session '{}'", deleteIdIn, session);
 
-		final var finalDeleteIdIn = preDeleteById(deleteIdIn);
+		final var preDeleteIdIn = preDeleteById(deleteIdIn);
+
+		final var finalDeleteIdIn = ofNullable(preDeleteIdIn)
+				.orElseThrow(createNullPointerException("preDeleteIdIn"));
 
 		final DeleteIdOut result;
 
@@ -483,7 +505,12 @@ public non-sealed class EntityCommandFacade< // generics
 			throw exceptionAdapterService.convert(ex, i18nService);
 		}
 
-		final var finalResult = posDeleteById(result);
+		LOGGER.debug("Delete by id result '{}' with session '{}'", result, session);
+
+		final var posDeleteDeleteIdOut = posDeleteById(result);
+
+		final var finalResult = ofNullable(posDeleteDeleteIdOut)
+				.orElseThrow(createNullPointerException("posDeleteDeleteIdOut"));
 
 		final var dataIn = convertDeleteIdInToPublishDataIn(finalDeleteIdIn);
 		final var dataOut = convertDeleteIdOutToPublishDataOut(finalResult);
@@ -522,7 +549,10 @@ public non-sealed class EntityCommandFacade< // generics
 
 		LOGGER.debug("Deleting by ids '{}' with session '{}'", deleteIdsIn, session);
 
-		final var finalDeleteIdsIn = preDeleteEntitiesBy(deleteIdsIn);
+		final var preDeleteIdsIn = preDeleteEntitiesBy(deleteIdsIn);
+
+		final var finalDeleteIdsIn = ofNullable(preDeleteIdsIn)
+				.orElseThrow(createNullPointerException("preDeleteIdsIn"));
 
 		final DeleteIdsOut result;
 
@@ -532,7 +562,12 @@ public non-sealed class EntityCommandFacade< // generics
 			throw exceptionAdapterService.convert(ex, i18nService);
 		}
 
-		final var finalResult = posDeleteEntitiesBy(result);
+		LOGGER.debug("Delete all by id result '{}'", result);
+
+		final var posDeleteEntitiesOut = posDeleteEntitiesBy(result);
+
+		final var finalResult = ofNullable(posDeleteEntitiesOut)
+				.orElseThrow(createNullPointerException("posDeleteEntitiesOut"));
 
 		final var dataIn = convertDeleteIdsInToPublishDataIn(finalDeleteIdsIn);
 		final var dataOut = convertDeleteIdsOutToPublishDataOut(finalResult);

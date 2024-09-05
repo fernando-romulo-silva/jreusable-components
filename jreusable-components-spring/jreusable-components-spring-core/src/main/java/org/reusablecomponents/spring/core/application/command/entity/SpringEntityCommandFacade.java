@@ -24,36 +24,48 @@ public class SpringEntityCommandFacade<Entity extends AbstractEntity<Id>, Id> //
 		// spring interface
 		implements InterfaceSpringCommandFacade<Entity, Id> {
 
-    protected final InterfaceSpringRepository<Entity, Id> repository;
-    
-    public SpringEntityCommandFacade(
-		    final InterfaceSpringRepository<Entity, Id> repository, 
-		    final SpringI18nService i18Service) {
-	// invoke super wih builder
-	super(new EntityCommandFacadeBuilder<>($ -> {
-	    // save
-	    $.saveFunction = repository::save;
-	    $.saveAllFunction = repository::saveAll;
-	    
-	    // update
-	    $.updateFunction = repository::save;
-	    $.updateAllFunction = repository::saveAll;
-	    
-	    // delete
-	    $.deleteFunction = entity -> { repository.delete(entity); return null;};
-	    $.deleteAllFunction = entities -> { repository.deleteAll(entities); return null; };
-	    
-	    // delete by id
-	    $.deleteByIdFunction = id -> { repository.deleteById(id); return null; };
-	    $.deleteAllByIdFunction = ids -> { repository.deleteAllById(ids); return null; };
-	    
-	    // services
-	    $.i18nService = i18Service;
-	    // $.publisherSerice =
-	    // $.exceptionTranslatorService =
-	    // $.securityService =
-	}));
-	
-	this.repository = repository;
-    }
+	protected final InterfaceSpringRepository<Entity, Id> repository;
+
+	public SpringEntityCommandFacade(
+			final InterfaceSpringRepository<Entity, Id> repository,
+			final SpringI18nService i18Service) {
+		// invoke super wih builder
+		super(new EntityCommandFacadeBuilder<>($ -> {
+			// save
+			$.saveFunction = repository::save;
+			$.saveAllFunction = repository::saveAll;
+
+			// update
+			$.updateFunction = repository::save;
+			$.updateAllFunction = repository::saveAll;
+
+			// delete
+			$.deleteFunction = entity -> {
+				repository.delete(entity);
+				return null;
+			};
+			$.deleteAllFunction = entities -> {
+				repository.deleteAll(entities);
+				return null;
+			};
+
+			// delete by id
+			$.deleteByIdFunction = id -> {
+				repository.deleteById(id);
+				return null;
+			};
+			$.deleteAllByIdFunction = ids -> {
+				repository.deleteAllById(ids);
+				return null;
+			};
+
+			// services
+			$.i18nService = i18Service;
+			// $.publisherSerice =
+			// $.exceptionTranslatorService =
+			// $.securityService =
+		}));
+
+		this.repository = repository;
+	}
 }

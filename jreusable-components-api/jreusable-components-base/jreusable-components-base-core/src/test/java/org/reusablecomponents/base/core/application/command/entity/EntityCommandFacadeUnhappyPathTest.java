@@ -13,10 +13,9 @@ import java.util.stream.Stream;
 
 import org.application_example.application.DepartmentFacade;
 import org.application_example.domain.Department;
-import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.hibernate.validator.resourceloading.AggregateResourceBundleLocator;
-import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -92,7 +91,7 @@ class EntityCommandFacadeUnhappyPathTest {
 
                 return Stream.of(
                                 Arguments.of(nullDepartment, NullPointerException.class,
-                                                "The object cannot be null"),
+                                                "The object 'preSaveEntityIn' cannot be null"),
                                 Arguments.of(repeatedDepartment, ElementAlreadyExistsException.class,
                                                 "The entity 'saveEntityIn' with id 'x1' already exists"));
         }
@@ -101,7 +100,9 @@ class EntityCommandFacadeUnhappyPathTest {
         @MethodSource("createInvalidSaveData")
         @Order(1)
         @DisplayName("Try to save a invalid entity test")
-        void invalidSaveTest(final Department department, final Class<?> exceptionClass,
+        void invalidSaveTest(
+                        final Department department,
+                        final Class<?> exceptionClass,
                         final String exceptionMessage) {
 
                 // when
@@ -140,7 +141,8 @@ class EntityCommandFacadeUnhappyPathTest {
                 final var correctDepartment = new Department("x3", "Default 02", "Resource");
 
                 return Stream.of(
-                                Arguments.of(nullList, NullPointerException.class, "The object cannot be null"),
+                                Arguments.of(nullList, NullPointerException.class,
+                                                "The object 'saveEntitiesIn' cannot be null"),
                                 Arguments.of(List.of(repeatedDepartment, correctDepartment),
                                                 ElementAlreadyExistsException.class, ""));
         }

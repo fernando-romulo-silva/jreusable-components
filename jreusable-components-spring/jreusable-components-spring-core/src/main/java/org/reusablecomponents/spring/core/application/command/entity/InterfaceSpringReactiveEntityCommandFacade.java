@@ -8,21 +8,21 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface InterfaceSpringReactiveEntityCommandFacade <Entity extends AbstractEntity<Id>, Id>
-		//
-		extends InterfaceEntityCommandFacade<Entity, Id,
-				// save
-				Entity, Mono<Entity>, // save a entity
-				Publisher<Entity>, Flux<Entity>, // save entities
-				// update
-				Entity, Mono<Entity>, // update a entity
-				Publisher<Entity>, Flux<Entity>, // update entities
-				// delete entity
-				Entity, Mono<Void>, // delete a entity
-				Publisher<Entity>, Mono<Void>, // delete entities
-				// delete by id
-				Id, Mono<Void>, // delete a entity by id
-				Publisher<Id>, Mono<Void>> { // delete entities by id
+public interface InterfaceSpringReactiveEntityCommandFacade<Entity extends AbstractEntity<Id>, Id>
+        //
+        extends InterfaceEntityCommandFacade<Entity, Id,
+                // save
+                Entity, Mono<Entity>, // save a entity
+                Publisher<Entity>, Flux<Entity>, // save entities
+                // update
+                Entity, Mono<Entity>, // update a entity
+                Publisher<Entity>, Flux<Entity>, // update entities
+                // delete entity
+                Entity, Mono<Void>, // delete a entity
+                Publisher<Entity>, Mono<Void>, // delete entities
+                // delete by id
+                Id, Mono<Void>, // delete a entity by id
+                Publisher<Id>, Mono<Void>> { // delete entities by id
 
     /**
      * {@inheritDoc}
@@ -37,7 +37,7 @@ public interface InterfaceSpringReactiveEntityCommandFacade <Entity extends Abst
     @Override
     @Transactional
     Flux<Entity> saveAll(final Publisher<Entity> entities);
-    
+
     /**
      * {@inheritDoc}
      */

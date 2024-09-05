@@ -14,6 +14,8 @@ import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Supplier;
+
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -57,12 +59,12 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 
 	// ---------------------------------------------------------------------------
 
-	protected String convertSpecificationToPublishDataIn(final Specification specification) {
-		return Objects.toString(specification);
+	protected Supplier<String> convertSpecificationToPublishDataIn(final Specification specification) {
+		return () -> Objects.toString(specification);
 	}
 
-	protected String convertMultipleResultToPublishDataOut(final MultipleResult multipleResult) {
-		return Objects.toString(multipleResult);
+	protected Supplier<String> convertMultipleResultToPublishDataOut(final MultipleResult multipleResult) {
+		return () -> Objects.toString(multipleResult);
 	}
 
 	protected Specification preFindBy(final Specification specification) {

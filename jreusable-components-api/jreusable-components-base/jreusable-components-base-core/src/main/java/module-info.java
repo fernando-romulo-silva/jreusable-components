@@ -19,11 +19,6 @@ open module org.reusablecomponent.base.core {
 
     requires transitive org.reusablecomponents.base.translation;
 
-    // requires org.reusablecomponents.base.messaging.event;
-    // requires org.reusablecomponents.base.messaging.logger;
-    // requires org.reusablecomponents.base.messaging.flow;
-    // requires org.reusablecomponents.base.messaging.util;
-
     // ---------------------------------------------------
     // export
     // -- domain classes
@@ -41,6 +36,7 @@ open module org.reusablecomponent.base.core {
     exports org.reusablecomponents.base.core.application.mix.entity.nonpaged;
 
     // -- exception
+    exports org.reusablecomponents.base.core.infra.exception;
     exports org.reusablecomponents.base.core.infra.exception.common;
 
 }

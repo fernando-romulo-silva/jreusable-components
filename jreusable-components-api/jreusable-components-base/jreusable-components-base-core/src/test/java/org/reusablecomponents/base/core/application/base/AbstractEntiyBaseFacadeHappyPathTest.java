@@ -9,6 +9,7 @@ import static org.reusablecomponents.base.messaging.operation.CommandOperation.S
 
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.concurrent.ConcurrentUtils;
 import org.application_example.application.TestEntiyBaseFacade;
 import org.application_example.application.TestEntiyNoPublishBaseFacade;
 import org.application_example.domain.Department;
@@ -53,7 +54,10 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 	void constructorValuesTest() {
 
 		// given
-		final InterfaceEventPublisherSerice publisherService = event -> out.println(event);
+		final InterfaceEventPublisherSerice<String> publisherService = event -> {
+			out.println(event);
+			return ConcurrentUtils.constantFuture(event);
+		};
 		final InterfaceI18nService i18nService = (code, params) -> "translated!";
 		final InterfaceSecurityService interfaceSecurityService = new DummySecurityService();
 		final InterfaceExceptionAdapterService exceptionTranslatorService = (ex, i18n,
@@ -151,7 +155,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 		final var facade = new TestEntiyBaseFacade();
 
 		// when
-		facade.publishEvent("SaveIn", null, SAVE_ENTITY);
+		facade.publishEvent(() -> "SaveIn", () -> null, SAVE_ENTITY);
 
 		// then
 		assertThat(listAppender.list)
@@ -180,7 +184,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 		final var facade = new TestEntiyNoPublishBaseFacade();
 
 		// when
-		facade.publishEvent("SaveIn", "SaveOut", SAVE_ENTITY);
+		facade.publishEvent(() -> "SaveIn", () -> "SaveOut", SAVE_ENTITY);
 
 		// then
 		assertThat(listAppender.list)
@@ -226,7 +230,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 		};
 
 		// when
-		facade.publishEvent("SaveIn", "SaveOut", SAVE_ENTITY, project);
+		facade.publishEvent(() -> "SaveIn", () -> "SaveOut", SAVE_ENTITY, project);
 
 		// then
 		assertThat(listAppender.list)
