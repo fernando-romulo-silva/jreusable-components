@@ -8,7 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>jreusable-components-base-core</artifactId>
-	
+
 	<dependencyManagement>
 		<dependencies>
 
@@ -19,38 +19,38 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-		
+
 			<dependency>
-			    <groupId>org.mockito</groupId>
-			    <artifactId>mockito-bom</artifactId>
-			    <version>${mockito-platform.version}</version>
-			    <type>pom</type>
-			    <scope>import</scope>
-			</dependency>		
-			
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-bom</artifactId>
+				<version>${mockito-platform.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
 		</dependencies>
-	</dependencyManagement>	
-	
+	</dependencyManagement>
+
 	<dependencies>
-			
+
 		<dependency>
 			<groupId>org.reusablecomponents</groupId>
 			<artifactId>jreusable-components-base-messaging</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.reusablecomponents</groupId>
 			<artifactId>jreusable-components-base-security</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.reusablecomponents</groupId>
 			<artifactId>jreusable-components-base-translation</artifactId>
 			<version>${project.version}</version>
-		</dependency>						
-			
+		</dependency>
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -98,9 +98,9 @@
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.9.4</version>
 		</dependency>
-		
+
 		<!-- Test -->
-		
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
@@ -121,18 +121,18 @@
 			<version>0.1.2</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
-		</dependency>		
+		</dependency>
 
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -157,14 +157,14 @@
 			<artifactId>mockito-junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.25.2</version>
+			<version>3.25.3</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.github.jsqlparser</groupId>
 			<artifactId>jsqlparser</artifactId>
@@ -185,15 +185,15 @@
 			<version>1.4.8</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>ch.qos.logback</groupId>
-		    <artifactId>logback-classic</artifactId>
-		    <version>1.5.5</version>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.5.5</version>
 			<!-- <scope>test</scope> <type>test-jar</type> -->
 		</dependency>
-		
-		
+
+
 	</dependencies>
 
 </project>

@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 import org.application_example.infra.DummyExceptionTranslatorService;
 import org.application_example.infra.DummySecurityService;
+import org.application_example.infra.ExceptionAdapterListService;
 import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacade;
 import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
@@ -123,7 +124,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 			// others --------------------------------
 			$.securityService = new DummySecurityService();
 			$.publisherService = new LoggerPublisherSerice();
-			$.exceptionAdapterService = new DummyExceptionTranslatorService();
+			$.exceptionAdapterService = new ExceptionAdapterListService();
 			$.i18nService = new JavaSEI18nService();
 		}));
 

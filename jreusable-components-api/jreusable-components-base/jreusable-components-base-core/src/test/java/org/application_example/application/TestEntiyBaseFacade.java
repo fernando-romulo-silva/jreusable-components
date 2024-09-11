@@ -12,7 +12,7 @@ import jakarta.annotation.Nullable;
 public class TestEntiyBaseFacade extends SimpleEntiyBaseFacade<Department, String> {
 
 	public TestEntiyBaseFacade(
-			@Nullable final InterfaceEventPublisherSerice publisherService,
+			@Nullable final InterfaceEventPublisherSerice<?> publisherService,
 			@Nullable final InterfaceI18nService i18nService,
 			@Nullable final InterfaceSecurityService securityService,
 			@Nullable final InterfaceExceptionAdapterService exceptionTranslatorService) {

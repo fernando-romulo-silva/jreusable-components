@@ -152,7 +152,7 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			result = saveFunction.apply(finalSaveEntityIn);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService, SAVE_ENTITY, getEntityClazz(), saveEntityIn);
+			throw exceptionAdapterService.convert(ex, i18nService, SAVE_ENTITY, getEntityClazz(), finalSaveEntityIn);
 		}
 
 		LOGGER.debug("Saved result '{}'", result);
@@ -211,7 +211,9 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			result = saveAllFunction.apply(finalSaveEntitiesIn);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService, SAVE_ENTITIES);
+			throw exceptionAdapterService.convert(ex, i18nService, SAVE_ENTITIES, getEntityClazz(),
+					finalSaveEntitiesIn);
+
 		}
 
 		LOGGER.debug("Saved result '{}'", result);

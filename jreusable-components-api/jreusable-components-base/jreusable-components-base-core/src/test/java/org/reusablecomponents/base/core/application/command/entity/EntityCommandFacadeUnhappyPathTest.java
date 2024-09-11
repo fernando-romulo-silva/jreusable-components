@@ -1,6 +1,7 @@
 package org.reusablecomponents.base.core.application.command.entity;
 
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.apache.commons.lang3.ArrayUtils.addAll;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static java.text.MessageFormat.format;
@@ -46,7 +47,7 @@ import jakarta.validation.executable.ExecutableValidator;
 class EntityCommandFacadeUnhappyPathTest {
 
         static final ResourceBundleMessageInterpolator INTERPOLATOR = new ResourceBundleMessageInterpolator(
-                        new AggregateResourceBundleLocator(Arrays.asList("messages")));
+                        new AggregateResourceBundleLocator(Arrays.asList("ValidationMessages")));
 
         static final ValidatorFactory VALIDATOR_FACTORY = Validation
                         .byDefaultProvider()
@@ -89,11 +90,18 @@ class EntityCommandFacadeUnhappyPathTest {
                 final Department nullDepartment = null;
                 final Department repeatedDepartment = new Department("x1", "Development 01", "Technology");
 
+                final var elementAlreadyExistsParams = List.of(
+                                "Department",
+                                "org.application_example.domain.Department");
+
+                final var nullPointerParams = List.of("preSaveEntityIn");
+
                 return Stream.of(
                                 Arguments.of(nullDepartment, NullPointerException.class,
-                                                "The object 'preSaveEntityIn' cannot be null"),
+                                                "The object '%s' cannot be null", nullPointerParams),
                                 Arguments.of(repeatedDepartment, ElementAlreadyExistsException.class,
-                                                "The entity 'saveEntityIn' with id 'x1' already exists"));
+                                                "The object '%s' with value(s) '%s",
+                                                elementAlreadyExistsParams));
         }
 
         @ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
@@ -103,14 +111,17 @@ class EntityCommandFacadeUnhappyPathTest {
         void invalidSaveTest(
                         final Department department,
                         final Class<?> exceptionClass,
-                        final String exceptionMessage) {
+                        final String exceptionMessage,
+                        final List<Object> exceptionParams) {
 
                 // when
                 assertThatThrownBy(() -> defaultFacade.save(department))
                                 // then
                                 .as(format("Check the invalid department ''{0}''", department))
                                 .isInstanceOf(exceptionClass)
-                                .hasMessage(exceptionMessage);
+                                .hasMessageContaining(exceptionMessage, exceptionParams.stream().toArray(Object[]::new))
+
+                ;
         }
 
         @Test
@@ -154,7 +165,8 @@ class EntityCommandFacadeUnhappyPathTest {
         void invalidSaveAllTest(
                         final List<Department> departments,
                         final Class<?> exceptionClass,
-                        final String exceptionMessage) {
+                        final String exceptionMessage,
+                        final List<Object> exceptionParams) {
 
                 // when
                 assertThatThrownBy(() -> defaultFacade.saveAll(departments))

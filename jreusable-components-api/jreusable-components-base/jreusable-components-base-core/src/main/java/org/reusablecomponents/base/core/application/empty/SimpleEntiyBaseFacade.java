@@ -11,7 +11,7 @@ public non-sealed class SimpleEntiyBaseFacade<Entity extends AbstractEntity<Id>,
 		extends EntiyBaseFacade<Entity, Id> {
 
 	public SimpleEntiyBaseFacade(
-			final InterfaceEventPublisherSerice publisherService,
+			final InterfaceEventPublisherSerice<?> publisherService,
 			final InterfaceI18nService i18nService,
 			final InterfaceSecurityService securityService,
 			final InterfaceExceptionAdapterService exceptionTranslatorService) {

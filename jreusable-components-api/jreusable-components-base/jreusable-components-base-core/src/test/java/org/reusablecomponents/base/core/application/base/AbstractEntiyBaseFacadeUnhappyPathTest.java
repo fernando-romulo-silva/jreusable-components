@@ -15,7 +15,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.reusablecomponents.base.messaging.operation.CommandOperation;
-import org.reusablecomponents.base.messaging.operation.QueryOperation;
 
 @Tag("unit")
 @DisplayName("Test the EntiyBaseFacade entity test, unhappy Path :( ")

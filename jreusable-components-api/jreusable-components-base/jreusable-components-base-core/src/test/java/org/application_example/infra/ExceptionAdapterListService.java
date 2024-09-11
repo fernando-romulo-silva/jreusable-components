@@ -1,6 +1,7 @@
 package org.application_example.infra;
 
 import static org.reusablecomponents.base.messaging.operation.CommandOperation.*;
+import static org.reusablecomponents.base.messaging.operation.QueryOperation.*;
 
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
@@ -17,24 +18,25 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
             final Object... directives) {
 
         if (ex instanceof IllegalArgumentException
-                && directives.length > 1
+                && directives.length == 3
                 && directives[0] instanceof CommandOperation commandOperation
-                && directives[1] instanceof Class clazz) {
+                && directives[1] instanceof Class clazz
+                && directives[2] instanceof Object object) {
+
+            // (ex, i18nService, *SAVE_ENTITY, getEntityClazz(), saveEntityIn)
 
             return switch (commandOperation) {
-                case SAVE_ENTITY -> new ElementAlreadyExistsException(clazz, null);
-                case SAVE_ENTITIES -> new ElementAlreadyExistsException(null, directives);
-                case DELETE_BY_ID -> throw new UnsupportedOperationException("Unimplemented case: " + commandOperation);
-                case DELETE_BY_IDS ->
+                case SAVE_ENTITY, SAVE_ENTITIES -> new ElementAlreadyExistsException(clazz, i18nService, object);
+
+                case DELETE_BY_ID, DELETE_BY_IDS ->
                     throw new UnsupportedOperationException("Unimplemented case: " + commandOperation);
-                case DELETE_ENTITIES ->
+
+                case DELETE_ENTITY, DELETE_ENTITIES ->
                     throw new UnsupportedOperationException("Unimplemented case: " + commandOperation);
-                case DELETE_ENTITY ->
+
+                case UPDATE_ENTITY, UPDATE_ENTITIES ->
                     throw new UnsupportedOperationException("Unimplemented case: " + commandOperation);
-                case UPDATE_ENTITIES ->
-                    throw new UnsupportedOperationException("Unimplemented case: " + commandOperation);
-                case UPDATE_ENTITY ->
-                    throw new UnsupportedOperationException("Unimplemented case: " + commandOperation);
+
                 default -> throw new IllegalArgumentException("Unexpected value: " + commandOperation);
             };
         }
