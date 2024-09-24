@@ -1,5 +1,8 @@
 package org.reusablecomponents.base.core.infra.exception.common;
 
+import static org.apache.commons.lang3.StringUtils.endsWith;
+import static org.apache.commons.lang3.StringUtils.startsWith;
+
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,78 +18,77 @@ public abstract class BaseApplicationException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Constructs a new BaseApplicationException exception with the specified detail
-     * message.
+     * Constructs a new BaseApplicationException exception.
      * 
-     * @param msg    The detail message
-     * @param params The parameters used on message
+     * @param msg The exception's message
      */
-    protected BaseApplicationException(final String msg, final Object... params) {
-        super(getFinalMessage(msg, null, params));
+    protected BaseApplicationException(final String msg) {
+        super(msg);
     }
 
     /**
-     * Constructs a new runtime exception with the specified detail message and
-     * cause.
+     * Constructs a new BaseApplicationException exception.
      * 
-     * @param msg    The detail message
-     * @param ex     The cause
-     * @param params The parameters used on message
+     * @param msg The exception's message
+     * @param ex  The exception's cause
      */
-    protected BaseApplicationException(final String msg, final Throwable ex, final Object... params) {
-        super(getFinalMessage(msg, null, params), ex);
+    protected BaseApplicationException(final String msg, final Throwable ex) {
+        super(msg, ex);
     }
 
     /**
-     * Constructs a new BaseApplicationException exception with the specified detail
-     * message.
+     * Constructs a new BaseApplicationException exception.
      * 
-     * @param msg         The detail message
-     * @param i18nService The msg translation function
+     * @param code        The message code
+     * @param i18nService The message translation service
      * @param params      The parameters used on message
      */
     protected BaseApplicationException(
-            final String msg,
+            final String code,
             final InterfaceI18nService i18nService,
             final Object... params) {
-        super(getFinalMessage(msg, i18nService, params));
+        super(getFinalMessage(code, i18nService, params));
     }
 
     /**
-     * Constructs a new runtime exception with the specified detail message and
-     * cause.
+     * Constructs a new BaseApplicationException exception.
      * 
-     * @param msg         The detail message
-     * @param i18nService The msg translation function
-     * @param ex          The error cause
+     * @param code        The message code
+     * @param i18nService The message translation service
+     * @param ex          The exception's cause
      * @param params      The parameters used on message
      */
     protected BaseApplicationException(
-            final String msg,
+            final String code,
             final InterfaceI18nService i18nService,
             final Throwable ex,
             final Object... params) {
-        super(getFinalMessage(msg, i18nService, params), ex);
+        super(getFinalMessage(code, i18nService, params), ex);
     }
 
     /**
-     * Check if is a message code or a real message, if it is a code (contains '{'
-     * and '}') translate it, if not jus return the param msg.
+     * Check if is a message code or a real message, if it is a code (starts with
+     * '{' and finishes with '}') translate it, if not jus return the param msg.
      * 
-     * @param msg         The msg or code to show
+     * @param code        The msg or code to show
      * @param i18nService The translator service
      * @param params      The parameters used on message
      * @return A string message (translated or not)
      */
     private static String getFinalMessage(
-            final String msg,
+            final String code,
             final InterfaceI18nService i18nService,
             final Object... params) {
 
-        if (StringUtils.containsNone(msg, '{', '}') || Objects.isNull(i18nService)) {
-            return msg;
+        if (StringUtils.isBlank(code)) {
+            return code;
         }
 
-        return i18nService.translate(msg, params);
+        // StringUtils.containsNone(msg, '{', '}')
+        if (!(startsWith(code, "{") && endsWith(code, "}")) || Objects.isNull(i18nService)) {
+            return code;
+        }
+
+        return i18nService.translate(code, params);
     }
 }

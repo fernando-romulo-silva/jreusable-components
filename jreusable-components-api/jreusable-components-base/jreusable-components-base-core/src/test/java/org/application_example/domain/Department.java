@@ -1,12 +1,14 @@
 package org.application_example.domain;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class Department extends AbstractEntity<String> {
 
@@ -18,6 +20,9 @@ public class Department extends AbstractEntity<String> {
     @NotEmpty
     private String sector;
 
+    @NotNull
+    private Manager manager;
+
     @Min(0)
     @Max(1000)
     public Integer operation = 0;
@@ -28,12 +33,17 @@ public class Department extends AbstractEntity<String> {
         super();
     }
 
-    public Department(final String id, final String name, final String sector) {
+    public Department(final String id, final String name, final String sector, final Manager manager) {
         super();
 
         this.id = id;
         this.name = name;
         this.sector = sector;
+        this.manager = manager;
+
+        if (Objects.nonNull(manager)) {
+            this.manager.selectDepartment(this);
+        }
     }
 
     // -------------------- update
@@ -67,5 +77,18 @@ public class Department extends AbstractEntity<String> {
 
     public Integer getOperation() {
         return operation;
+    }
+
+    public Manager getManager() {
+        return manager;
+    }
+
+    public void removeManager() {
+
+        if (Objects.nonNull(manager)) {
+            manager.clearDepartment();
+        }
+
+        manager = null;
     }
 }

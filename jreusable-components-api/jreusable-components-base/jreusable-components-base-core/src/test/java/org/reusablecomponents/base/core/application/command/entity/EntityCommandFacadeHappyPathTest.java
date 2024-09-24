@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.application_example.application.DepartmentFacade;
+import org.application_example.domain.Manager;
 import org.application_example.domain.Department;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,12 +35,16 @@ class EntityCommandFacadeHappyPathTest {
 	Department department01;
 	Department department02;
 
+	Manager company;
+
 	@BeforeEach
 	void setUp() {
 		defaultData.clear();
 
-		department01 = new Department("x1", "Default 01", "Peopple");
-		department02 = new Department("x2", "Default 02", "Resource");
+		company = new Manager("x2", "Business Happy");
+
+		department01 = new Department("x1", "Default 01", "Peopple", company);
+		department02 = new Department("x2", "Default 02", "Resource", company);
 
 		defaultData.addAll(List.of(department01, department02));
 	}
@@ -57,7 +62,7 @@ class EntityCommandFacadeHappyPathTest {
 		final var data = new ArrayList<Department>();
 
 		final var departmentFacade = new DepartmentFacade(data);
-		final var department = new Department("00001", "Development 01", "Technology");
+		final var department = new Department("00001", "Development 01", "Technology", company);
 
 		// when
 		final var result = departmentFacade.save(department);
@@ -78,8 +83,8 @@ class EntityCommandFacadeHappyPathTest {
 		final var departmentFacade = new DepartmentFacade(data);
 
 		final var departments = List.of(
-				new Department("00001", "Development 01", "Technology"),
-				new Department("00002", "Development 02", "HR"));
+				new Department("00001", "Development 01", "Technology", company),
+				new Department("00002", "Development 02", "HR", company));
 
 		// when
 		final var result = departmentFacade.saveAll(departments);
@@ -152,6 +157,8 @@ class EntityCommandFacadeHappyPathTest {
 		assertThat(defaultData)
 				.contains(department01);
 
+		department01.removeManager();
+
 		// when
 		defaultFacade.delete(department01);
 
@@ -169,6 +176,9 @@ class EntityCommandFacadeHappyPathTest {
 		// given
 		assertThat(defaultData)
 				.contains(department01, department02);
+
+		department01.removeManager();
+		department02.removeManager();
 
 		// when
 		defaultFacade.deleteAll(List.of(department01, department02));

@@ -99,6 +99,10 @@ public non-sealed class EntityCommandFacade< // generics
 	// ----------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Create a supplier function that convert a {@code SaveEntityIn} object to
+	 * String in order to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
 	 * @param saveEntityIn
 	 * @return
 	 */
@@ -211,9 +215,12 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			result = saveAllFunction.apply(finalSaveEntitiesIn);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService, SAVE_ENTITIES, getEntityClazz(),
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					SAVE_ENTITIES,
+					getEntityClazz(),
 					finalSaveEntitiesIn);
-
 		}
 
 		LOGGER.debug("Saved result '{}'", result);
@@ -265,14 +272,19 @@ public non-sealed class EntityCommandFacade< // generics
 		final var finalUpdateEntityIn = ofNullable(preUpdateEntityIn)
 				.orElseThrow(createNullPointerException("preUpdateEntityIn"));
 
-		LOGGER.debug("Updating finalSaveEntityIn '{}'", finalUpdateEntityIn);
+		LOGGER.debug("Updating finalUpdateEntityIn '{}'", finalUpdateEntityIn);
 
 		final UpdateEntityOut result;
 
 		try {
 			result = updateFunction.apply(finalUpdateEntityIn);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					UPDATE_ENTITY,
+					getEntityClazz(),
+					finalUpdateEntityIn);
 		}
 
 		LOGGER.debug("Updated result '{}'", result);
@@ -331,7 +343,12 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			result = updateAllFunction.apply(finalUpdateEntitiesIn);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					UPDATE_ENTITIES,
+					getEntityClazz(),
+					finalUpdateEntitiesIn);
 		}
 
 		LOGGER.debug("Updated result '{}'", result);
@@ -381,7 +398,7 @@ public non-sealed class EntityCommandFacade< // generics
 		final var preDeleteEntityIn = preDelete(deleteEntityIn);
 
 		final var finalDeleteEntityIn = ofNullable(preDeleteEntityIn)
-				.orElseThrow(createNullPointerException("preUpdateEntitiesIn"));
+				.orElseThrow(createNullPointerException("preDeleteEntityIn"));
 
 		LOGGER.debug("Deleting finalDeleteEntityIn '{}'", finalDeleteEntityIn);
 
@@ -390,7 +407,12 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			result = deleteFunction.apply(finalDeleteEntityIn);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					DELETE_ENTITY,
+					getEntityClazz(),
+					finalDeleteEntityIn);
 		}
 
 		LOGGER.debug("Delete result '{}'", result);
@@ -440,14 +462,19 @@ public non-sealed class EntityCommandFacade< // generics
 		final var preDeleteEntityIn = preDeleteAll(deleteEntitiesIn);
 
 		final var finalDeleteEntitiesIn = ofNullable(preDeleteEntityIn)
-				.orElseThrow(createNullPointerException("preDeleteEntityIn"));
+				.orElseThrow(createNullPointerException("preDeleteEntitiesIn"));
 
 		final DeleteEntitiesOut result;
 
 		try {
 			result = deleteAllFunction.apply(finalDeleteEntitiesIn);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					DELETE_ENTITIES,
+					getEntityClazz(),
+					finalDeleteEntitiesIn);
 		}
 
 		LOGGER.debug("Delete all result '{}'", result);

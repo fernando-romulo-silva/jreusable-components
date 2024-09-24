@@ -1,6 +1,5 @@
 package org.reusablecomponents.base.core.infra.exception.common;
 
-import static org.apache.commons.lang3.ArrayUtils.addAll;
 import static org.reusablecomponents.base.core.infra.messages.SystemMessages.ELEMENT_ALREADY_EXITS_EXCEPTION_MSG;
 
 import org.reusablecomponents.base.translation.InterfaceI18nService;
@@ -10,36 +9,64 @@ import org.reusablecomponents.base.translation.InterfaceI18nService;
  * 
  * @author Fernando Romulo da Silva
  */
-public class ElementAlreadyExistsException extends ElementConflictException {
+public class ElementAlreadyExistsException extends BaseApplicationException {
 
-    private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-    /**
-     * Constructs a new ElementAlreadyExistsException exception and create detail
-     * message regard of parameters. </br>
-     * 
-     * @param clazz Class element
-     * @param msg   The specific message
-     */
-    public ElementAlreadyExistsException(final Class<?> clazz, final Object... params) {
-        super(ELEMENT_ALREADY_EXITS_EXCEPTION_MSG, addAll(new Object[] { clazz.getSimpleName() }, params));
-    }
+        /**
+         * Constructs a new ElementAlreadyExistsException exception.
+         * 
+         * @param code   The message code
+         * @param i18n   The message translation service
+         * @param params The parameters used on message
+         */
+        protected ElementAlreadyExistsException(
+                        final String code,
+                        final InterfaceI18nService i18n,
+                        final Object... params) {
+                super(
+                                code,
+                                i18n,
+                                params);
+        }
 
-    /**
-     * Constructs a new ElementAlreadyExistsException exception and create detail
-     * message regard of parameters. </br>
-     * 
-     * @param clazz Class element
-     * @param i18n  The msg translation function
-     * @param msg   The specific message
-     */
-    public ElementAlreadyExistsException(
-            final Class<?> clazz,
-            final InterfaceI18nService i18n,
-            final Object... params) {
-        super(
-                ELEMENT_ALREADY_EXITS_EXCEPTION_MSG,
-                i18n,
-                addAll(new Object[] { clazz.getSimpleName() }, params));
-    }
+        /**
+         * Constructs a new ElementAlreadyExistsException exception.
+         * 
+         * @param code   The message code
+         * @param i18n   The message translation service
+         * @param ex     The exception's cause
+         * @param params The parameters used on message
+         */
+        protected ElementAlreadyExistsException(
+                        final String code,
+                        final InterfaceI18nService i18n,
+                        final Throwable ex,
+                        final Object... params) {
+                super(
+                                code,
+                                i18n,
+                                ex,
+                                params);
+        }
+
+        /**
+         * Constructs a new ElementAlreadyExistsException exception.
+         * 
+         * @param clazz  Class element
+         * @param i18n   The message translation service
+         * @param ex     The exception's cause
+         * @param object The object in exception
+         */
+        public <T> ElementAlreadyExistsException(
+                        final InterfaceI18nService i18n,
+                        final Throwable ex,
+                        final Object object) {
+                super(
+                                ELEMENT_ALREADY_EXITS_EXCEPTION_MSG,
+                                i18n,
+                                ex,
+                                object);
+        }
+
 }

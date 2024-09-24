@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
-import org.application_example.infra.DummyExceptionTranslatorService;
+import org.apache.commons.collections4.CollectionUtils;
+import org.application_example.domain.Department;
 import org.application_example.infra.DummySecurityService;
 import org.application_example.infra.ExceptionAdapterListService;
 import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacade;
@@ -40,9 +40,32 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 		super(new EntityCommandFacadeBuilder<>($ -> {
 
 			// save --------------------------------
-			$.saveFunction = new SaveFunction<Entity>(repository);
+			$.saveFunction = entity -> {
+
+				if (Objects.isNull(entity.getId())) {
+					throw new IllegalStateException("Entity with invalid id: " + entity);
+				}
+
+				if (repository.contains(entity)) {
+					throw new IllegalArgumentException("Entity already stored: " + entity);
+				}
+
+				repository.add(entity);
+
+				return entity;
+
+			};
 
 			$.saveAllFunction = entities -> {
+
+				if (entities.stream().anyMatch(e -> Objects.isNull(e.getId()))) {
+					throw new IllegalStateException("There are invalid entity " + entities);
+				}
+
+				if (CollectionUtils.containsAny(repository, entities)) {
+					throw new IllegalArgumentException("Some entities already stored");
+				}
+
 				repository.addAll(entities);
 				return entities;
 			};
@@ -51,6 +74,10 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 			$.updateFunction = entity -> {
 
 				final var index = repository.indexOf(entity);
+
+				if (Objects.isNull(entity.getId())) {
+					throw new IllegalStateException("Entity with invalid id: " + entity);
+				}
 
 				if (index < 0) {
 					throw new IllegalArgumentException("Entity not found: " + entity);
@@ -62,12 +89,29 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 			};
 
 			$.updateAllFunction = entities -> {
+
+				if (entities.stream().anyMatch(e -> Objects.isNull(e.getId()))) {
+					throw new IllegalStateException("There are invalid entity " + entities);
+				}
+
+				if (!CollectionUtils.containsAll(repository, entities)) {
+					throw new IllegalArgumentException("Entity not found: " + entities);
+				}
+
 				repository.addAll(repository);
 				return entities;
 			};
 
 			// delete --------------------------------
 			$.deleteFunction = entity -> {
+
+				if (Objects.isNull(entity.getId())) {
+					throw new IllegalStateException("Entity with invalid id: " + entity);
+				}
+
+				if (entity instanceof Department deparment && Objects.nonNull(deparment.getManager())) {
+					throw new ArrayStoreException("Entity cannot be excluded " + entity);
+				}
 
 				if (!repository.remove(entity)) {
 					throw new IllegalArgumentException("Entity not found: " + entity);
@@ -77,6 +121,17 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 			};
 
 			$.deleteAllFunction = entities -> {
+
+				if (entities.stream().anyMatch(e -> Objects.isNull(e.getId()))) {
+					throw new IllegalStateException("There are invalid entity " + entities);
+				}
+
+				entities.forEach(entity -> {
+
+					if (entity instanceof Department deparment && Objects.nonNull(deparment.getManager())) {
+						throw new ArrayStoreException("Entity cannot be excluded " + entity);
+					}
+				});
 
 				if (!repository.removeAll(entities)) {
 					throw new IllegalArgumentException("Invalid entity: " + entities);
@@ -129,28 +184,6 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 		}));
 
 		this.repository = (List<AbstractEntity<Id>>) repository;
-	}
-
-	static class SaveFunction<Entity> implements Function<Entity, Entity> {
-
-		private final List<Entity> data;
-
-		SaveFunction(final List<Entity> data) {
-			super();
-			this.data = data;
-		}
-
-		@Override
-		public Entity apply(final Entity entity) {
-
-			if (data.contains(entity)) {
-				throw new IllegalArgumentException("Entity already stored: " + entity);
-			}
-
-			data.add(entity);
-
-			return entity;
-		}
 	}
 
 	public List<AbstractEntity<Id>> getData() {

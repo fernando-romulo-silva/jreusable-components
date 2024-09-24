@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.application_example.domain.Manager;
 import org.application_example.domain.Department;
 import org.application_example.domain.Gender;
 import org.application_example.domain.Hobby;
@@ -68,7 +69,9 @@ class AbstractEntiyUnhappyPathTest extends AbstractValidatorTest {
 	@DisplayName("Test entity without builder creation, without exception")
 	void checkEntityWithoutBuilderNoExceptionTest(final String id, final String name, final String sector) {
 
-		final var department = new Department(id, name, sector);
+		final var company = new Manager("x2", "Business Happy");
+
+		final var department = new Department(id, name, sector, company);
 
 		final var violations = VALIDATOR.validate(department);
 
@@ -81,7 +84,9 @@ class AbstractEntiyUnhappyPathTest extends AbstractValidatorTest {
 
 		final var id = 1L;
 		final var name = "XPTO";
-		final var department = new Department("00001", "Development 01", "Technology");
+		final var company = new Manager("x2", "Business Happy");
+
+		final var department = new Department("00001", "Development 01", "Technology", company);
 
 		// given
 		return Stream.of(

@@ -1,5 +1,7 @@
 package org.reusablecomponents.base.core.infra.exception.common;
 
+import static org.reusablecomponents.base.core.infra.messages.SystemMessages.ELEMENT_WITH_ID_NOT_FOUND_MSG;
+
 import java.text.NumberFormat;
 
 import org.reusablecomponents.base.translation.InterfaceI18nService;
@@ -7,18 +9,9 @@ import org.reusablecomponents.base.translation.InterfaceI18nService;
 /**
  * 
  */
-public class ElementWithIdNotFoundException extends ElementNotFoundException {
+public class ElementWithIdNotFoundException extends BaseApplicationException {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * @param <T>
-     * @param cls
-     * @param id
-     */
-    public <T> ElementWithIdNotFoundException(final Class<T> cls, final Object id) {
-        super("{exception.elementIdNotFound}", new Object[] { cls.getSimpleName(), formatNumber(id) });
-    }
 
     /**
      * @param <T>
@@ -30,7 +23,10 @@ public class ElementWithIdNotFoundException extends ElementNotFoundException {
             final Class<T> cls,
             final InterfaceI18nService i18nService,
             final Object id) {
-        super("{exception.elementIdNotFound}", i18nService, new Object[] { cls.getSimpleName(), formatNumber(id) });
+        super(
+                ELEMENT_WITH_ID_NOT_FOUND_MSG,
+                i18nService,
+                new Object[] { cls.getSimpleName(), formatNumber(id) });
     }
 
     private static Object formatNumber(final Object id) {

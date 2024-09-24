@@ -18,17 +18,6 @@ public class IdAlreadyExistsException extends ElementConflictException {
      * Constructs a new IdAlreadyExistsException exception and create detail
      * message regard of parameters. </br>
      * 
-     * @param clazz Class element
-     * @param id    The id parameter
-     */
-    public IdAlreadyExistsException(final Class<?> clazz, final Object id) {
-        super(ID_ALREADY_EXITS_EXCEPTION_MSG, addAll(new Object[] { clazz.getSimpleName() }, id));
-    }
-
-    /**
-     * Constructs a new IdAlreadyExistsException exception and create detail
-     * message regard of parameters. </br>
-     * 
      * @param <T>  The class type
      * @param cls  Class element
      * @param i18n The msg translation function
