@@ -10,8 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.application_example.application.DepartmentFacade;
 import org.application_example.domain.Manager;
+import org.checkerframework.checker.units.qual.s;
+import org.application_example.application.command.DepartmentCommandFacade;
 import org.application_example.domain.Department;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.hibernate.validator.resourceloading.AggregateResourceBundleLocator;
@@ -34,11 +35,13 @@ import org.reusablecomponents.base.core.infra.exception.common.ElementAlreadyExi
 import org.reusablecomponents.base.core.infra.exception.common.ElementConflictException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementInvalidException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementNotFoundException;
+import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.executable.ExecutableValidator;
 
 @Tag("unit")
@@ -65,7 +68,7 @@ class EntityCommandFacadeUnhappyPathTest {
                         .getValidator().forExecutables();
 
         final List<Department> defaultData = new ArrayList<>();
-        final DepartmentFacade defaultFacade = new DepartmentFacade(defaultData);
+        final DepartmentCommandFacade defaultFacade = new DepartmentCommandFacade(defaultData);
 
         Department department01;
         Department department02;
@@ -91,6 +94,24 @@ class EntityCommandFacadeUnhappyPathTest {
         void tearDown() {
                 // No requirements yet
                 VALIDATOR_FACTORY.close();
+        }
+
+        @Order(0)
+        @ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
+        @MethodSource("createInvalidSaveAllData")
+        @DisplayName("Try to save invalid entities test")
+        void invalidSaveAllTest(
+                        final List<Department> departments,
+                        final Class<?> exceptionClass,
+                        final String exceptionMessage,
+                        final List<Object> exceptionParams) {
+
+                // when
+                assertThatThrownBy(() -> defaultFacade.saveAll(departments))
+                                // then
+                                .isInstanceOf(exceptionClass)
+                                .hasMessageContaining(exceptionMessage,
+                                                exceptionParams.stream().toArray(Object[]::new));
         }
 
         // given
@@ -183,24 +204,6 @@ class EntityCommandFacadeUnhappyPathTest {
                 );
         }
 
-        @Order(3)
-        @ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
-        @MethodSource("createInvalidSaveAllData")
-        @DisplayName("Try to save invalid entities test")
-        void invalidSaveAllTest(
-                        final List<Department> departments,
-                        final Class<?> exceptionClass,
-                        final String exceptionMessage,
-                        final List<Object> exceptionParams) {
-
-                // when
-                assertThatThrownBy(() -> defaultFacade.saveAll(departments))
-                                // then
-                                .isInstanceOf(exceptionClass)
-                                .hasMessageContaining(exceptionMessage,
-                                                exceptionParams.stream().toArray(Object[]::new));
-        }
-
         // given
         Stream<Arguments> createInvalidUpdateData() {
 
@@ -224,7 +227,7 @@ class EntityCommandFacadeUnhappyPathTest {
                                                 "The object '%s", elementNotExistsParams));
         }
 
-        @Order(4)
+        @Order(3)
         @ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
         @MethodSource("createInvalidUpdateData")
         @DisplayName("Try to update an invalid entity test")
@@ -274,7 +277,7 @@ class EntityCommandFacadeUnhappyPathTest {
                 );
         }
 
-        @Order(5)
+        @Order(4)
         @ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
         @MethodSource("createInvalidUpdateAllData")
         @DisplayName("Try to update invalid entities test")
@@ -323,7 +326,7 @@ class EntityCommandFacadeUnhappyPathTest {
 
         }
 
-        @Order(6)
+        @Order(5)
         @ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
         @MethodSource("createInvalidDeleteData")
         @DisplayName("Try to delete entity test")
@@ -385,7 +388,7 @@ class EntityCommandFacadeUnhappyPathTest {
                 );
         }
 
-        @Order(7)
+        @Order(6)
         @ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
         @MethodSource("createInvalidDeleteAllData")
         @DisplayName("Try to delete all entities test")
@@ -401,6 +404,117 @@ class EntityCommandFacadeUnhappyPathTest {
                                 .isInstanceOf(exceptionClass)
                                 .hasMessageContaining(exceptionMessage,
                                                 exceptionParams.stream().toArray(Object[]::new));
+        }
+
+        // given
+        Stream<Arguments> createInvalidDeleteByIdData() {
+
+                final String nullDepartmentId = null;
+                final var unknownDepartment = new Department("x34", "Development 01", "Technology", manager);
+                unknownDepartment.removeManager();
+
+                final var elementNotExistsParams = List.of(unknownDepartment.getId(), "Department");
+
+                final var nullPointerParams = List.of("preDeleteIdIn");
+
+                final var invalidDepartment = new Department("", "Development 01", "Technology", manager);
+                invalidDepartment.removeManager();
+
+                final var conflictDepartment = new Department("x1", "Development 01", "Technology", manager);
+                final var elementHasConflictParams = List.of(conflictDepartment.getId());
+
+                return Stream.of(
+                                Arguments.of(nullDepartmentId, NullPointerException.class,
+                                                "The object '%s' cannot be null", nullPointerParams),
+
+                                Arguments.of(unknownDepartment.getId(), ElementWithIdNotFoundException.class,
+                                                "The id '%s' not found for '%s' type", elementNotExistsParams),
+
+                                Arguments.of(invalidDepartment.getId(), ElementInvalidException.class,
+                                                "The object '%s' is invalid", List.of(invalidDepartment.getId())),
+
+                                Arguments.of(conflictDepartment.getId(), ElementConflictException.class,
+                                                "The object '%s' has conflict(s)", elementHasConflictParams));
+        }
+
+        @Order(7)
+        @ParameterizedTest(name = "Pos {index} : id department ''{0}'', exception ''{1}''")
+        @MethodSource("createInvalidDeleteByIdData")
+        @DisplayName("Try to delete entity by id test")
+        void invalidDeleteByIdTest(
+                        final String departmentId,
+                        final Class<?> exceptionClass,
+                        final String exceptionMessage,
+                        final List<Object> exceptionParams) {
+
+                // when
+                assertThatThrownBy(() -> defaultFacade.deleteBy(departmentId))
+                                // then
+                                .isInstanceOf(exceptionClass)
+                                .hasMessageContaining(exceptionMessage, exceptionParams.stream().toArray(Object[]::new))
+
+                ;
+        }
+
+        // given
+        Stream<Arguments> createInvalidDeleteAllByIdData() {
+
+                final var correctDepartment = new Department("x3", "Default 02", "Resource", manager);
+
+                final List<Department> nullList = null;
+
+                final var unknownDepartment = new Department("x34", "Development 01", "Technology", manager);
+                unknownDepartment.removeManager();
+
+                final var elementNotExistsParams = List.of(unknownDepartment.getId() + ", " + correctDepartment.getId(),
+                                "Department");
+
+                final var nullPointerParams = List.of("preDeleteIdsIn");
+
+                final var invalidDepartment = new Department("", "Development 01", "Technology", manager);
+                invalidDepartment.removeManager();
+
+                final var conflictDepartment = new Department("x1", "Development 01", "Technology", manager);
+
+                final var elementHasConflictParams = List
+                                .of(conflictDepartment.getId() + ", " + correctDepartment.getId());
+
+                final var elementInvalidParams = List.of(invalidDepartment.getId() + ", " + correctDepartment.getId());
+
+                return Stream.of(
+                                Arguments.of(nullList, NullPointerException.class,
+                                                "The object '%s' cannot be null", nullPointerParams),
+
+                                Arguments.of(List.of(unknownDepartment.getId(), correctDepartment.getId()),
+                                                ElementWithIdNotFoundException.class,
+                                                "The id '[%s]' not found for '%s' type", elementNotExistsParams),
+
+                                Arguments.of(List.of(invalidDepartment.getId(), correctDepartment.getId()),
+                                                ElementInvalidException.class,
+                                                "The object '[%s]' is invalid", elementInvalidParams),
+
+                                Arguments.of(List.of(conflictDepartment.getId(), correctDepartment.getId()),
+                                                ElementConflictException.class, "The object '[%s]' has conflict(s)",
+                                                elementHasConflictParams));
+        }
+
+        @Order(7)
+        @ParameterizedTest(name = "Pos {index} : id department ''{0}'', exception ''{1}''")
+        @MethodSource("createInvalidDeleteAllByIdData")
+        @DisplayName("Try to delete all entities by id test")
+        void invalidDeleteAllByIdTest(
+                        final List<String> departmentIds,
+                        final Class<?> exceptionClass,
+                        final String exceptionMessage,
+                        final List<Object> exceptionParams) {
+
+                // when
+                assertThatThrownBy(() -> defaultFacade.deleteAllBy(departmentIds))
+                                // then
+                                .isInstanceOf(exceptionClass)
+                                .hasMessageContaining(exceptionMessage, exceptionParams.stream().toArray(Object[]::new))
+
+                ;
         }
 
 }

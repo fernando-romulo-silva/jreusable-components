@@ -99,36 +99,47 @@ public non-sealed class EntityCommandFacade< // generics
 	// ----------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Create a supplier function that convert a {@code SaveEntityIn} object to
-	 * String in order to show in logs, the default is the
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code SaveEntityIn} object to String to show in logs, the default is the
 	 * <code>java.util.Objects.toString</code>
 	 * 
-	 * @param saveEntityIn
-	 * @return
+	 * @param saveEntityIn The entity to transform
+	 * 
+	 * @return A Supplier object
 	 */
 	protected Supplier<String> convertSaveEntityInToPublishDataIn(final SaveEntityIn saveEntityIn) {
 		return () -> Objects.toString(saveEntityIn);
 	}
 
 	/**
-	 * @param saveEntityOut
-	 * @return
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code SaveEntityOut} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param saveEntityOut The entity to transform
+	 * @return A Supplier object
 	 */
 	protected Supplier<String> convertSaveEntityOutToPublishDataOut(final SaveEntityOut saveEntityOut) {
 		return () -> Objects.toString(saveEntityOut);
 	}
 
 	/**
-	 * @param saveEntityIn
-	 * @return
+	 * Method used to change an entity before save it.
+	 * 
+	 * @param saveEntityIn The object to be changed
+	 * 
+	 * @return A new {@code SaveEntityIn} object
 	 */
 	protected SaveEntityIn preSave(final SaveEntityIn saveEntityIn) {
 		return saveEntityIn;
 	}
 
 	/**
-	 * @param saveEntityOut
-	 * @return
+	 * Method used to change an entity after save it.
+	 * 
+	 * @param saveEntityOut The object to be changed
+	 * 
+	 * @return A new {@code SaveEntityOut} object
 	 */
 	protected SaveEntityOut posSave(final SaveEntityOut saveEntityOut) {
 		return saveEntityOut;
@@ -177,18 +188,50 @@ public non-sealed class EntityCommandFacade< // generics
 
 	// ----------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code SaveEntitiesIn} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param saveEntitiesIn The entity to transform
+	 * 
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertDataSaveEntitiesInToPublishDataIn(final SaveEntitiesIn saveEntitiesIn) {
 		return () -> Objects.toString(saveEntitiesIn);
 	}
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code SaveEntitiesOut} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param SaveEntitiesOut The entity to transform
+	 * 
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertSaveEntitiesOutToPublishDataOut(final SaveEntitiesOut saveEntitiesOut) {
 		return () -> Objects.toString(saveEntitiesOut);
 	}
 
+	/**
+	 * Method used to change a group of entities before save it.
+	 * 
+	 * @param saveEntiesIn The object to be changed
+	 * 
+	 * @return A new {@code SaveEntitiesIn} object
+	 */
 	protected SaveEntitiesIn preSaveAll(final SaveEntitiesIn saveEntiesIn) {
 		return saveEntiesIn;
 	}
 
+	/**
+	 * Method used to change a group of entities after save it.
+	 * 
+	 * @param saveEntiesOut The group of objects to be changed
+	 * 
+	 * @return A new {@code SaveEntitiesOut} object
+	 */
 	protected SaveEntitiesOut posSaveAll(final SaveEntitiesOut saveEntiesOut) {
 		return saveEntiesOut;
 	}
@@ -241,18 +284,50 @@ public non-sealed class EntityCommandFacade< // generics
 
 	// ----------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code UpdateEntityIn} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param updateEntityIn The entity to transform
+	 * 
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertUpdateEntityInToPublishDataIn(final UpdateEntityIn updateEntityIn) {
 		return () -> Objects.toString(updateEntityIn);
 	}
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code UpdateEntityOut} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param updateEntityOut The entity to transform
+	 * 
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertUpdateEntityOutToPublishDataOut(final UpdateEntityOut updateEntityOut) {
 		return () -> Objects.toString(updateEntityOut);
 	}
 
+	/**
+	 * Method used to change an entity before update it.
+	 * 
+	 * @param updateEntityIn The object to be changed
+	 * 
+	 * @return A new {@code UpdateEntityIn} object
+	 */
 	protected UpdateEntityIn preUpdate(final UpdateEntityIn updateEntityIn) {
 		return updateEntityIn;
 	}
 
+	/**
+	 * Method used to change an entity after update it.
+	 * 
+	 * @param updateEntityOut The object to be changed
+	 * 
+	 * @return A new {@code UpdateEntityOut} object
+	 */
 	protected UpdateEntityOut posUpdate(final UpdateEntityOut updateEntityOut) {
 		return updateEntityOut;
 	}
@@ -305,18 +380,47 @@ public non-sealed class EntityCommandFacade< // generics
 
 	// ----------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code UpdateEntitiesIn} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param updateEntitiesIn The group of entities to transform
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertUpdateEntitiesInToPublishDataIn(final UpdateEntitiesIn updateEntitiesIn) {
 		return () -> Objects.toString(updateEntitiesIn);
 	}
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code UpdateEntitiesOut} object to String to show in logs, the default is
+	 * the <code>java.util.Objects.toString</code>
+	 * 
+	 * @param updateEntitiesOut The group of entities to transform
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertUpdateEntitiesOutToPublishDataOut(final UpdateEntitiesOut updateEntitiesOut) {
 		return () -> Objects.toString(updateEntitiesOut);
 	}
 
+	/**
+	 * Method used to change a group of entities before update it.
+	 * 
+	 * @param updateEntitiesIn The object to be changed
+	 * @return A new {@code UpdateEntitiesIn} object
+	 */
 	protected UpdateEntitiesIn preUpdateAll(final UpdateEntitiesIn updateEntitiesIn) {
 		return updateEntitiesIn;
 	}
 
+	/**
+	 * Method used to change a group of entities after update it.
+	 * 
+	 * @param updateEntitiesOut The object to be changed
+	 * 
+	 * @return A new {@code UpdateEntitiesOut} object
+	 */
 	protected UpdateEntitiesOut posUpdateAll(final UpdateEntitiesOut updateEntitiesOut) {
 		return updateEntitiesOut;
 	}
@@ -369,18 +473,49 @@ public non-sealed class EntityCommandFacade< // generics
 
 	// ----------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code DeleteEntityIn} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param deleteEntityIn The entity to transform
+	 * 
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertDeleteEntityInToPublishDataIn(final DeleteEntityIn deleteEntityIn) {
 		return () -> Objects.toString(deleteEntityIn);
 	}
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code DeleteEntityOut} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param deleteEntityOut The entity to transform
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertDeleteEntityOutToPublishDataOut(final DeleteEntityOut deleteEntityOut) {
 		return () -> Objects.toString(deleteEntityOut);
 	}
 
+	/**
+	 * Method used to change an entity before delete it.
+	 * 
+	 * @param deleteEntityIn The object to be changed
+	 * 
+	 * @return A new {@code DeleteEntityIn} object
+	 */
 	protected DeleteEntityIn preDelete(final DeleteEntityIn deleteEntityIn) {
 		return deleteEntityIn;
 	}
 
+	/**
+	 * Method used to change an entity after delete it.
+	 * 
+	 * @param deleteEntityOut The object to be changed
+	 * 
+	 * @return A new {@code DeleteEntityOut} object
+	 */
 	protected DeleteEntityOut posDelete(final DeleteEntityOut deleteEntityOut) {
 		return deleteEntityOut;
 	}
@@ -432,19 +567,49 @@ public non-sealed class EntityCommandFacade< // generics
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code DeleteEntitiesIn} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param deleteEntitiesIn The entity to transform
+	 * 
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertDeleteEntitiesInToPublishDataIn(final DeleteEntitiesIn deleteEntitiesIn) {
 		return () -> Objects.toString(deleteEntitiesIn);
 	}
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code DeleteEntitiesOut} object to String to show in logs, the default is
+	 * the <code>java.util.Objects.toString</code>
+	 * 
+	 * @param deleteEntitiesOut The entity to transform
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertDeleteEntitiesOutOutToPublishDataOut(final DeleteEntitiesOut deleteEntitiesOut) {
 		return () -> Objects.toString(deleteEntitiesOut);
 	}
 
+	/**
+	 * Method used to change a group of entities before delete it.
+	 * 
+	 * @param deleteEntitiesIn The object to be changed
+	 * 
+	 * @return A new {@code DeleteEntitiesIn} object
+	 */
 	protected DeleteEntitiesIn preDeleteAll(final DeleteEntitiesIn deleteEntitiesIn) {
 		return deleteEntitiesIn;
 	}
 
+	/**
+	 * Method used to change a group of entities after delete it.
+	 * 
+	 * @param deleteEntitiesOut The object to be changed
+	 * 
+	 * @return A new {@code DeleteEntitiesOut} object
+	 */
 	protected DeleteEntitiesOut posDeleteAll(final DeleteEntitiesOut deleteEntitiesOut) {
 		return deleteEntitiesOut;
 	}
@@ -495,18 +660,49 @@ public non-sealed class EntityCommandFacade< // generics
 
 	// ----------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code DeleteIdIn} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param deleteIdIn The entity to transform
+	 * 
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertDeleteIdInToPublishDataIn(final DeleteIdIn deleteIdIn) {
 		return () -> Objects.toString(deleteIdIn);
 	}
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code DeleteIdOut} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param deleteIdOut The entity to transform
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertDeleteIdOutToPublishDataOut(final DeleteIdOut deleteIdOut) {
 		return () -> Objects.toString(deleteIdOut);
 	}
 
+	/**
+	 * Method used to change an id object before delete it.
+	 * 
+	 * @param deleteIdIn The object to be changed
+	 * 
+	 * @return A new {@code DeleteIdIn} object
+	 */
 	protected DeleteIdIn preDeleteById(final DeleteIdIn deleteIdIn) {
 		return deleteIdIn;
 	}
 
+	/**
+	 * Method used to change an id object after delete it.
+	 * 
+	 * @param deleteIdOut The object to be changed
+	 * 
+	 * @return A new {@code DeleteIdOut} object
+	 */
 	protected DeleteIdOut posDeleteById(final DeleteIdOut deleteIdOut) {
 		return deleteIdOut;
 	}
@@ -531,7 +727,12 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			result = deleteByIdFunction.apply(finalDeleteIdIn);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					DELETE_BY_ID,
+					getEntityClazz(),
+					finalDeleteIdIn);
 		}
 
 		LOGGER.debug("Delete by id result '{}' with session '{}'", result, session);
@@ -551,19 +752,49 @@ public non-sealed class EntityCommandFacade< // generics
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code DeleteIdsIn} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param deleteIdsIn The ids to transform
+	 * 
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertDeleteIdsInToPublishDataIn(final DeleteIdsIn deleteIdsIn) {
 		return () -> Objects.toString(deleteIdsIn);
 	}
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code DeleteIdsOut} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param deleteIdsOut The ids to transform
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertDeleteIdsOutToPublishDataOut(final DeleteIdsOut deleteIdsOut) {
 		return () -> Objects.toString(deleteIdsOut);
 	}
 
+	/**
+	 * Method used to change a group of ids before save it.
+	 * 
+	 * @param deleteIdsIn The object to be changed
+	 * 
+	 * @return A new {@code DeleteIdsIn} object
+	 */
 	protected DeleteIdsIn preDeleteEntitiesBy(final DeleteIdsIn deleteIdsIn) {
 		return deleteIdsIn;
 	}
 
+	/**
+	 * Method used to change a group of ids after save it.
+	 * 
+	 * @param deleteIdsOut The object to be changed
+	 * 
+	 * @return A new {@code DeleteIdsOut} object
+	 */
 	protected DeleteIdsOut posDeleteEntitiesBy(final DeleteIdsOut deleteIdsOut) {
 		return deleteIdsOut;
 	}
@@ -588,7 +819,12 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			result = deleteAllByIdFunction.apply(finalDeleteIdsIn);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					DELETE_BY_IDS,
+					getEntityClazz(),
+					finalDeleteIdsIn);
 		}
 
 		LOGGER.debug("Delete all by id result '{}'", result);

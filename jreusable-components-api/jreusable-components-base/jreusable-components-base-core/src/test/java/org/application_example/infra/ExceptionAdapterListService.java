@@ -1,14 +1,12 @@
 package org.application_example.infra;
 
-import static org.reusablecomponents.base.messaging.operation.CommandOperation.*;
-import static org.reusablecomponents.base.messaging.operation.QueryOperation.*;
-
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementAlreadyExistsException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementConflictException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementInvalidException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementNotFoundException;
+import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
 import org.reusablecomponents.base.messaging.operation.CommandOperation;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 
@@ -38,7 +36,7 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
                     deleteEntityAndDeleteEntitiesExceptionHandler(ex, i18nService, object);
 
                 case DELETE_BY_ID, DELETE_BY_IDS ->
-                    throw new UnsupportedOperationException("Unimplemented case: " + commandOperation);
+                    deleteByIdAndDeleteByIdsExceptionHandler(ex, clazz, i18nService, object);
 
                 default -> throw new IllegalArgumentException("Unexpected value: " + commandOperation);
             };
@@ -53,6 +51,7 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
             final Object object) {
 
         return switch (ex) {
+
             case IllegalArgumentException ex2 -> new ElementAlreadyExistsException(i18nService, ex, object);
             case IllegalStateException ex2 -> new ElementInvalidException(i18nService, ex, object);
 
@@ -66,6 +65,7 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
             final Object object) {
 
         return switch (ex) {
+
             case IllegalArgumentException ex2 -> new ElementNotFoundException(i18nService, ex, object);
             case IllegalStateException ex2 -> new ElementInvalidException(i18nService, ex, object);
 
@@ -80,6 +80,21 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
 
         return switch (ex) {
             case IllegalArgumentException ex2 -> new ElementNotFoundException(i18nService, ex, object);
+            case IllegalStateException ex2 -> new ElementInvalidException(i18nService, ex, object);
+            case ArrayStoreException ex2 -> new ElementConflictException(i18nService, ex, object);
+
+            default -> throw new IllegalArgumentException("Unexpected exception", ex);
+        };
+    }
+
+    private BaseApplicationException deleteByIdAndDeleteByIdsExceptionHandler(
+            final Exception ex,
+            final Class<?> clazz,
+            final InterfaceI18nService i18nService,
+            final Object object) {
+
+        return switch (ex) {
+            case IllegalArgumentException ex2 -> new ElementWithIdNotFoundException(clazz, i18nService, ex, object);
             case IllegalStateException ex2 -> new ElementInvalidException(i18nService, ex, object);
             case ArrayStoreException ex2 -> new ElementConflictException(i18nService, ex, object);
 

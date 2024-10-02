@@ -7,26 +7,33 @@ import java.text.NumberFormat;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 
 /**
+ * Element not found on search by Id.
  * 
+ * @author Fernando Romulo da Silva
  */
 public class ElementWithIdNotFoundException extends BaseApplicationException {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * @param <T>
-     * @param cls
-     * @param i18nService
-     * @param id
+     * Constructs a new ElementWithIdNotFoundException exception and create detail
+     * message regard of parameters. </br>
+     * 
+     * @param <T>         The class type
+     * @param clazz       Class element
+     * @param i18nService The msg translation service
+     * @param object      The object not found
      */
     public <T> ElementWithIdNotFoundException(
-            final Class<T> cls,
+            final Class<T> clazz,
             final InterfaceI18nService i18nService,
+            final Exception ex,
             final Object id) {
         super(
                 ELEMENT_WITH_ID_NOT_FOUND_MSG,
                 i18nService,
-                new Object[] { cls.getSimpleName(), formatNumber(id) });
+                ex,
+                new Object[] { formatNumber(id), clazz.getSimpleName() });
     }
 
     private static Object formatNumber(final Object id) {

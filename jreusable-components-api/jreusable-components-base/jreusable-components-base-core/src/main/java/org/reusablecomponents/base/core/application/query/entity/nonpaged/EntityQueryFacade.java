@@ -47,23 +47,24 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 	protected final Supplier<ExistsResult> existsAllFunction;
 
 	/**
-	 * @param existsByIdFunction
-	 * @param findByIdFunction
-	 * @param findAllFunction
-	 * @param countAllFunction
+	 * Default constructior
+	 * 
+	 * @param builder Object in charge to construct this one
 	 */
 	public EntityQueryFacade(
-			@NotNull final Function<QueryIdIn, ExistsResult> existsByIdFunction,
-			@NotNull final BiFunction<QueryIdIn, Object[], OneResult> findByIdFunction,
-			@NotNull final Function<Object[], MultipleResult> findAllFunction,
-			@NotNull final Supplier<CountResult> countAllFunction,
-			@NotNull final Supplier<ExistsResult> existsAllFunction) {
-		super();
-		this.existsByIdFunction = existsByIdFunction;
-		this.findByIdFunction = findByIdFunction;
-		this.findAllFunction = findAllFunction;
-		this.countAllFunction = countAllFunction;
-		this.existsAllFunction = existsAllFunction;
+			@NotNull final EntityQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> builder) {
+
+		super(
+				builder.publisherService,
+				builder.i18nService,
+				builder.securityService,
+				builder.exceptionAdapterService);
+
+		this.existsByIdFunction = builder.existsByIdFunction;
+		this.findByIdFunction = builder.findByIdFunction;
+		this.findAllFunction = builder.findAllFunction;
+		this.countAllFunction = builder.countAllFunction;
+		this.existsAllFunction = builder.existsAllFunction;
 	}
 
 	// ---------------------------------------------------------------------------
@@ -217,8 +218,8 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 	 * @param resultFinal
 	 * @return
 	 */
-	protected String convertExistsResultToPublishData(final ExistsResult resultFinal) {
-		return Objects.toString(resultFinal);
+	protected Supplier<String> convertExistsResultToPublishData(final ExistsResult resultFinal) {
+		return () -> Objects.toString(resultFinal);
 	}
 
 	/**
@@ -288,7 +289,9 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 	}
 
 	// ---------------------------------------------------------------------------
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ExistsResult existsAll() {
 

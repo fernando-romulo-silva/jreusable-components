@@ -11,6 +11,9 @@ import org.reusablecomponents.base.messaging.InterfaceEventPublisherSerice;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 
+/**
+ * 
+ */
 public final class EntityCommandFacadeBuilder< // Generics spec
 		Entity extends AbstractEntity<Id>, Id, // basic
 		// save

@@ -9,6 +9,7 @@ import org.reusablecomponents.base.core.infra.exception.common.ElementAlreadyExi
 import org.reusablecomponents.base.core.infra.exception.common.ElementConflictException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementInvalidException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementNotFoundException;
+import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
@@ -78,7 +79,7 @@ public non-sealed interface InterfaceEntityCommandFacade<Entity extends Abstract
 
   /**
    * Save a group of entities at the same time.
-   * The collection version of {@link #save(E e) save method}.
+   * The batch version of {@link #save(E e) save method}.
    * 
    * @param saveEntitiesIn  The objects you want to save on the persistence
    *                        mechanism
@@ -120,7 +121,7 @@ public non-sealed interface InterfaceEntityCommandFacade<Entity extends Abstract
 
   /**
    * Update a group of entities at the same time.
-   * The collection version of {@link #update(E e) update method}.
+   * The batch version of {@link #update(E e) update method}.
    * 
    * @param UpdateEntitiesIn  The objects you want to update on the persistence
    *                          mechanism
@@ -151,7 +152,7 @@ public non-sealed interface InterfaceEntityCommandFacade<Entity extends Abstract
    * @return An deleted object or status or even null.
    * 
    * @throws NullPointerException     If the parameter is null
-   * @throws ElementNotFoundException If you try update an entity that doesn't
+   * @throws ElementNotFoundException If you try delete an entity that doesn't
    *                                  exist
    * @throws ElementConflictException If the object has an unbroken connection
    *                                  with another one
@@ -164,7 +165,7 @@ public non-sealed interface InterfaceEntityCommandFacade<Entity extends Abstract
 
   /**
    * Delete a group of entities at the same time.
-   * The collection version of {@link #delete(E e) delete method}.
+   * The batch version of {@link #delete(E e) delete method}.
    * 
    * @param DeleteEntitiesIn  The object you want to delete on the persistence
    *                          mechanism
@@ -174,7 +175,7 @@ public non-sealed interface InterfaceEntityCommandFacade<Entity extends Abstract
    * @return An deleted object or status or even null.
    * 
    * @throws NullPointerException     If the parameter is null
-   * @throws ElementNotFoundException If you try update an entity that doesn't
+   * @throws ElementNotFoundException If you try delete an entity that doesn't
    *                                  exist
    * @throws ElementConflictException If the object has an unbroken connection
    *                                  with another one
@@ -186,17 +187,48 @@ public non-sealed interface InterfaceEntityCommandFacade<Entity extends Abstract
   DeleteEntitiesOut deleteAll(@NotNull(message = NULL_POINTER_EXCEPTION_MSG) final DeleteEntitiesIn deleteEntitiesIn);
 
   /**
-   * @param deleteIdIn
-   * @return
+   * Delete an entity using a {@code DeleteIdIn} object on the persistence
+   * mechanism and return a {@code DeleteIdOut} object, a status operation object.
+   * 
+   * @param DeleteIdIn  The entity id
+   * @param DeleteIdOut The persistence mechanism resulted in a delete
+   *                    operation
+   * 
+   * @return An deleted object or status or even null.
+   * 
+   * @throws NullPointerException           If the parameter is null
+   * @throws ElementWithIdNotFoundException If you try update an entity that
+   *                                        doesn't exist
+   * @throws ElementConflictException       If the object has an unbroken
+   *                                        connection
+   *                                        with another one
+   * @throws ElementInvalidException        If the entity has constraints errors
+   * @throws BaseApplicationException       If an unidentified error happened
    */
   @Valid
+  @Nullable
   DeleteIdOut deleteBy(@NotNull(message = NULL_POINTER_EXCEPTION_MSG) final DeleteIdIn deleteIdIn);
 
   /**
-   * @param deleteIdsIn
-   * @return
+   * Delete a group of entities at the same time using its ids.
+   * The batch version of {@link #deleteBy(Id id) delete method}.
+   * 
+   * @param DeleteIdsIn  The entity ids
+   * @param DeleteIdsOut The persistence mechanism resulted in a delete
+   *                     operation
+   * 
+   * @return An deleted object or status or even null.
+   * 
+   * @throws NullPointerException           If the parameter is null
+   * @throws ElementWithIdNotFoundException If you try delete an entity that
+   *                                        doesn't exist
+   * @throws ElementConflictException       If the object has an unbroken
+   *                                        connection with another one
+   * @throws ElementInvalidException        If the entity has constraints errors
+   * @throws BaseApplicationException       If an unidentified error happened
    */
   @Valid
+  @Nullable
   DeleteIdsOut deleteAllBy(@NotNull(message = NULL_POINTER_EXCEPTION_MSG) @Valid final DeleteIdsIn deleteIdsIn);
 
 }

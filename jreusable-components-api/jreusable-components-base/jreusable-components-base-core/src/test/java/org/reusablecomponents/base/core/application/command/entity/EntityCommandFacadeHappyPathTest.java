@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.application_example.application.DepartmentFacade;
 import org.application_example.domain.Manager;
+import org.application_example.application.command.DepartmentCommandFacade;
 import org.application_example.domain.Department;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +30,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class EntityCommandFacadeHappyPathTest {
 
 	final List<Department> defaultData = new ArrayList<>();
-	final DepartmentFacade defaultFacade = new DepartmentFacade(defaultData);
+	final DepartmentCommandFacade defaultFacade = new DepartmentCommandFacade(defaultData);
 
 	Department department01;
 	Department department02;
@@ -61,7 +61,7 @@ class EntityCommandFacadeHappyPathTest {
 		// given
 		final var data = new ArrayList<Department>();
 
-		final var departmentFacade = new DepartmentFacade(data);
+		final var departmentFacade = new DepartmentCommandFacade(data);
 		final var department = new Department("00001", "Development 01", "Technology", company);
 
 		// when
@@ -80,7 +80,7 @@ class EntityCommandFacadeHappyPathTest {
 		// given
 		final var data = new ArrayList<Department>();
 
-		final var departmentFacade = new DepartmentFacade(data);
+		final var departmentFacade = new DepartmentCommandFacade(data);
 
 		final var departments = List.of(
 				new Department("00001", "Development 01", "Technology", company),
@@ -197,6 +197,8 @@ class EntityCommandFacadeHappyPathTest {
 		assertThat(defaultData)
 				.contains(department01);
 
+		department01.removeManager();
+
 		// when
 		defaultFacade.deleteBy(department01.getId());
 
@@ -214,6 +216,9 @@ class EntityCommandFacadeHappyPathTest {
 		// given
 		assertThat(defaultData)
 				.contains(department01, department02);
+
+		department01.removeManager();
+		department02.removeManager();
 
 		// when
 		defaultFacade.deleteAllBy(List.of(department01.getId(), department02.getId()));
