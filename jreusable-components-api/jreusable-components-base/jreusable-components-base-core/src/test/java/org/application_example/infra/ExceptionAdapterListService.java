@@ -8,6 +8,7 @@ import org.reusablecomponents.base.core.infra.exception.common.ElementInvalidExc
 import org.reusablecomponents.base.core.infra.exception.common.ElementNotFoundException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
 import org.reusablecomponents.base.messaging.operation.CommandOperation;
+import org.reusablecomponents.base.messaging.operation.QueryOperation;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 
 public class ExceptionAdapterListService implements InterfaceExceptionAdapterService {
@@ -40,6 +41,16 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
 
                 default -> throw new IllegalArgumentException("Unexpected value: " + commandOperation);
             };
+
+        } else if (directives.length >= 1
+                && directives[0] instanceof QueryOperation queryOperation) {
+
+            return switch (queryOperation) {
+                case FIND_ENTITY_BY_ID -> null;
+
+                default -> throw new IllegalArgumentException("Unexpected value: " + queryOperation);
+            };
+
         }
 
         throw new UnsupportedOperationException("Unimplemented method 'convert'");

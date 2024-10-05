@@ -86,13 +86,13 @@ public non-sealed interface InterfaceEntityCommandFacade<Entity extends Abstract
    * @param SaveEntitiesOut The persistence mechanism resulted in a saveAll
    *                        operation
    * 
-   * @return An a collection of updated object with the persistence mechanism
-   * 
    * @throws NullPointerException          If the parameter is null
    * @throws ElementAlreadyExistsException If you try store an entity with same
    *                                       {@code Id}
    * @throws ElementInvalidException       If an entity has constraints errors
    * @throws BaseApplicationException      If an unidentified error happened
+   * 
+   * @return An a collection of updated object with the persistence mechanism
    */
   @Valid
   @NotNull(message = NULL_POINTER_EXCEPTION_MSG)

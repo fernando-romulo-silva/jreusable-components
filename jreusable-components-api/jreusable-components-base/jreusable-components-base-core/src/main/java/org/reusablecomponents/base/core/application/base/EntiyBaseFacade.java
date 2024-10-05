@@ -1,12 +1,12 @@
 package org.reusablecomponents.base.core.application.base;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
-import static java.util.Optional.ofNullable;
 import static java.util.Objects.nonNull;
+import static java.util.Optional.ofNullable;
 import static org.reusablecomponents.base.core.infra.messages.SystemMessages.NULL_POINTER_EXCEPTION_MSG;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.StringUtils;
@@ -227,12 +227,15 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 */
 	protected void publishEvent(final Event event, final Object... directives) {
 
-		checkNotNull(event, i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "event"));
-		checkNotNull(directives, i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "directives"));
+		final var finalEvent = Optional.of(event).orElseThrow(
+				() -> new NullPointerException(i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "event")));
 
-		LOGGER.debug("Publishing event '{}'", event.getId());
+		final var finalDirectives = Optional.of(directives).orElseThrow(
+				() -> new NullPointerException(i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "directives")));
 
-		if (!isPublishEvents(directives)) {
+		LOGGER.debug("Publishing event '{}'", finalEvent.getId());
+
+		if (!isPublishEvents(finalDirectives)) {
 			LOGGER.debug("Event publishing '{}' avoided", event.getId());
 			return;
 		}
@@ -246,7 +249,7 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 			return;
 		}
 
-		LOGGER.debug("Published event '{}'", event.getId());
+		LOGGER.debug("Published event '{}'", finalEvent.getId());
 	}
 
 	/**
@@ -258,23 +261,23 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 */
 	protected void publishEvent(final Supplier<String> event, final Object... directives) {
 
-		checkNotNull(event, i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "eventSupplier"));
+		final var finalEvent = Optional.of(event).orElseThrow(
+				() -> new NullPointerException(i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "event")));
 
-		checkNotNull(directives, i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "directives"));
+		final var finalDirectives = Optional.of(directives).orElseThrow(
+				() -> new NullPointerException(i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "directives")));
 
 		LOGGER.debug("Publishing event '{}'", event);
 
-		if (!isPublishEvents(directives)) {
+		if (!isPublishEvents(finalDirectives)) {
 			LOGGER.debug("Event publishing {} avoided", event);
 			return;
 		}
 
-		final var finalEvent = event.get();
-
-		checkArgument(StringUtils.isBlank(finalEvent), "The argument 'event' cannot be null or blank");
+		checkArgument(StringUtils.isBlank(finalEvent.get()), "The argument 'event' cannot be null or blank");
 
 		try {
-			publisherService.publish(finalEvent);
+			publisherService.publish(finalEvent.get());
 		} catch (final Exception ex) {
 			LOGGER.error(ExceptionUtils.getRootCauseMessage(ex), ex);
 		}
@@ -300,15 +303,18 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 		LOGGER.debug("Publishing event with operation '{}'", operation);
 
-		checkNotNull(operation, i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "operation"));
-		checkNotNull(directives, i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "directives"));
+		final var finalOperation = Optional.of(operation).orElseThrow(
+				() -> new NullPointerException(i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "operation")));
 
-		if (!isPublishEvents(directives)) {
-			LOGGER.debug("Event publishing with operation '{}' avoided", operation);
+		final var finalDirectives = Optional.of(directives).orElseThrow(
+				() -> new NullPointerException(i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "directives")));
+
+		if (!isPublishEvents(finalDirectives)) {
+			LOGGER.debug("Event publishing with operation '{}' avoided", finalOperation);
 			return;
 		}
 
-		final var event = createEvent(dataIn.get(), dataOut.get(), operation);
+		final var event = createEvent(dataIn.get(), dataOut.get(), finalOperation);
 
 		final var eventToPublish = prepareEventToPublisher(event);
 

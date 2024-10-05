@@ -10,8 +10,6 @@ open module org.reusablecomponent.base.core {
     // import non-modules
     requires com.google.common;
     requires org.apache.commons.lang3;
-    // requires com.google.gson;
-    // requires gson.javatime.serialisers;
 
     // -- messaging
     requires transitive org.reusablecomponent.base.messaging;

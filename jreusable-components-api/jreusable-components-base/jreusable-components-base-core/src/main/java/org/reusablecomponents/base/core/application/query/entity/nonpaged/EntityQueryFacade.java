@@ -5,6 +5,7 @@ import static org.reusablecomponents.base.messaging.operation.QueryOperation.EXI
 import static org.reusablecomponents.base.messaging.operation.QueryOperation.EXISTS_BY_ID;
 import static org.reusablecomponents.base.messaging.operation.QueryOperation.FIND_ALL_ENTITIES;
 import static org.reusablecomponents.base.messaging.operation.QueryOperation.FIND_ENTITY_BY_ID;
+import static java.util.Optional.ofNullable;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -21,13 +22,7 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * @param <Entity>
- * @param <Id>
- * @param <QueryIdIn>
- * @param <OneResult>
- * @param <MultipleResult>
- * @param <CountResult>
- * @param <ExistsResult>
+ * The default <code>InterfaceEntityQueryFacade</code>'s implementation.
  */
 public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
 		extends EntiyBaseFacade<Entity, Id>
@@ -68,31 +63,72 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 	}
 
 	// ---------------------------------------------------------------------------
-
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code MultipleResult} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param multipleResult The entity to transform
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertMultipleResultToPublishDataOut(final MultipleResult multipleResult) {
 		return () -> Objects.toString(multipleResult);
 	}
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code OneResult} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param oneResult The entity to transform
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertOneResultToPublishDataOut(final OneResult oneResult) {
 		return () -> Objects.toString(oneResult);
 	}
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code CountResult} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param countResult The entity to transform
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertCountResultToPublishDataOut(final CountResult countResult) {
 		return () -> Objects.toString(countResult);
 	}
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code QueryIdIn} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param queryIdIn The entity to transform
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertQueryIdInToPublishDataIn(final QueryIdIn queryIdIn) {
 		return () -> Objects.toString(queryIdIn);
 	}
 
-	// ---------------------------------------------------------------------------
-
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code Object...} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param directives The entity to transform
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertDirectivesToPublishDataIn(final Object... directives) {
 		return () -> Objects.toString(directives);
 	}
 
 	/**
-	 * @param entity
+	 * Method used to change directives object before use it (findAll method).
+	 * 
+	 * @param directives The object to be changed
+	 * 
+	 * @return A new {@code Object[]} object
 	 */
 	protected Object[] preFindAll(final Object... directives) {
 
@@ -107,7 +143,11 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 	}
 
 	/**
-	 * @param entity
+	 * Method used to change multipleResult object after use it (findAll method).
+	 * 
+	 * @param multipleResult The object to be changed
+	 * 
+	 * @return A new {@code MultipleResult} object
 	 */
 	protected MultipleResult posFindAll(final MultipleResult multipleResult) {
 		return multipleResult;
@@ -130,7 +170,11 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		try {
 			result = findAllFunction.apply(directives);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService, FIND_ALL_ENTITIES,
+					getEntityClazz(),
+					finalDirectives);
 		}
 
 		final var finalResult = posFindAll(result);
@@ -144,8 +188,15 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		return finalResult;
 	}
 
-	// ---------------------------------------------------------------------------
-
+	/**
+	 * Method used to change queryIdIn and directives (interns) object before use it
+	 * (findBy method).
+	 * 
+	 * @param queryIdIn  The object to be changed
+	 * @param directives The object to be changed
+	 * 
+	 * @return A new {@code QueryIdIn} object
+	 */
 	protected QueryIdIn preFindBy(final QueryIdIn queryIdIn, final Object... directives) {
 
 		// final var formatDirectives = Optional.ofNullable(directives)
@@ -158,6 +209,13 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		return queryIdIn;
 	}
 
+	/**
+	 * Method used to change oneResult object after use it (findBy method).
+	 * 
+	 * @param oneResult The object to be changed
+	 * 
+	 * @return A new {@code QueryIdIn} object
+	 */
 	protected OneResult posFindBy(final OneResult oneResult) {
 		return oneResult;
 	}
@@ -172,15 +230,26 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 
 		LOGGER.debug("Findind by '{}', directives '{}', session '{}'", queryIdIn, directives, session);
 
-		final var finalQueryIdIn = preFindBy(queryIdIn, directives);
+		final var preQueryIdIn = preFindBy(queryIdIn, directives);
+
+		final var finalQueryIdIn = ofNullable(preQueryIdIn).orElseThrow(createNullPointerException("preQueryIdIn"));
+
+		LOGGER.debug("Findind by finalQueryIdIn '{}' ", finalQueryIdIn);
 
 		final OneResult result;
 
 		try {
 			result = findByIdFunction.apply(queryIdIn, directives);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					FIND_ENTITY_BY_ID,
+					getEntityClazz(),
+					finalQueryIdIn);
 		}
+
+		LOGGER.debug("Find by result '{}'", result);
 
 		final var finalResult = posFindBy(result);
 
@@ -193,30 +262,35 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		return finalResult;
 	}
 
-	// ---------------------------------------------------------------------------
-
 	/**
+	 * Method used to change queryIdIn object before use it (existsBy method).
 	 * 
-	 * @param queryIdIn
-	 * @return
+	 * @param queryIdIn The object to be changed
+	 * 
+	 * @return A new {@code QueryIdIn} object
 	 */
 	protected QueryIdIn preExistsBy(final QueryIdIn queryIdIn) {
 		return queryIdIn;
 	}
 
 	/**
+	 * Method used to change existsResult object after use it (existsBy method).
 	 * 
-	 * @param existsResult
-	 * @return
+	 * @param existsResult The object to be changed
+	 * 
+	 * @return A new {@code ExistsResult} object
 	 */
 	protected ExistsResult posExistsBy(final ExistsResult existsResult) {
 		return existsResult;
 	}
 
 	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code ExistsResult} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
 	 * 
-	 * @param resultFinal
-	 * @return
+	 * @param resultFinal The entity to transform
+	 * @return A Supplier object
 	 */
 	protected Supplier<String> convertExistsResultToPublishData(final ExistsResult resultFinal) {
 		return () -> Objects.toString(resultFinal);
@@ -239,7 +313,12 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		try {
 			result = existsByIdFunction.apply(finalQueryIdIn);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					EXISTS_BY_ID,
+					getEntityClazz(),
+					finalQueryIdIn);
 		}
 
 		final var finalResult = posExistsBy(result);
@@ -252,8 +331,6 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 
 		return finalResult;
 	}
-
-	// ---------------------------------------------------------------------------
 
 	protected CountResult posCountAll(final CountResult countResult) {
 		return countResult;
@@ -274,7 +351,11 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		try {
 			result = countAllFunction.get();
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					COUNT_ALL,
+					getEntityClazz());
 		}
 
 		final var finalResult = posCountAll(result);
@@ -288,7 +369,6 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		return finalResult;
 	}
 
-	// ---------------------------------------------------------------------------
 	/**
 	 * {@inheritDoc}
 	 */
@@ -304,7 +384,11 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		try {
 			result = existsAllFunction.get();
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					EXISTS_ALL,
+					getEntityClazz());
 		}
 
 		final var finalResult = posExistsBy(result);
@@ -312,7 +396,10 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		final var dataOut = convertExistsResultToPublishData(finalResult);
 		publishEvent(() -> StringUtils.EMPTY, dataOut, EXISTS_ALL);
 
-		LOGGER.debug("Existed all '{}', result '{}', session '{}'", getEntityClazz().getSimpleName(), finalResult,
+		LOGGER.debug(
+				"Existed all '{}', result '{}', session '{}'",
+				getEntityClazz().getSimpleName(),
+				finalResult,
 				session);
 
 		return finalResult;

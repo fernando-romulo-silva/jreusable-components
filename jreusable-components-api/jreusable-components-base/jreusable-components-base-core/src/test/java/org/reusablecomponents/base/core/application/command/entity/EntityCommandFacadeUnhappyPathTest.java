@@ -10,10 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.application_example.domain.Manager;
-import org.checkerframework.checker.units.qual.s;
 import org.application_example.application.command.DepartmentCommandFacade;
 import org.application_example.domain.Department;
+import org.application_example.domain.Manager;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.hibernate.validator.resourceloading.AggregateResourceBundleLocator;
 import org.junit.jupiter.api.AfterAll;
@@ -41,7 +40,6 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.executable.ExecutableValidator;
 
 @Tag("unit")

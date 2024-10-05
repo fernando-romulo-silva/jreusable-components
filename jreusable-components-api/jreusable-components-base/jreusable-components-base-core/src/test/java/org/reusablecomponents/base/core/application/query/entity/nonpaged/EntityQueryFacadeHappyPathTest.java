@@ -29,7 +29,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class EntityQueryFacadeHappyPathTest {
 
     final List<Department> defaultData = new ArrayList<>();
-    final DeparmentQueryFacade defaultFacade = new DeparmentQueryFacade(defaultData);
+    final DeparmentQueryFacade defaultQueryFacade = new DeparmentQueryFacade(defaultData);
 
     Department department01;
     Department department02;
@@ -61,7 +61,7 @@ class EntityQueryFacadeHappyPathTest {
         final var id = "x1";
 
         // when
-        final var result = defaultFacade.findBy(id);
+        final var result = defaultQueryFacade.findBy(id);
 
         // then
         assertThat(department01).isEqualTo(result);
@@ -77,7 +77,7 @@ class EntityQueryFacadeHappyPathTest {
         final var currentData = defaultData;
 
         // when
-        final var result = defaultFacade.findAll();
+        final var result = defaultQueryFacade.findAll();
 
         // then
         assertThat(currentData).containsAll(result);
@@ -91,7 +91,7 @@ class EntityQueryFacadeHappyPathTest {
         final var currentSize = defaultData.size();
 
         // when
-        final var result = defaultFacade.countAll().intValue();
+        final var result = defaultQueryFacade.countAll().intValue();
 
         // then
         assertThat(currentSize).isEqualTo(result);
@@ -105,14 +105,14 @@ class EntityQueryFacadeHappyPathTest {
         final var existsAll = defaultData.size() > 0;
 
         // when
-        final var result = defaultFacade.existsAll();
+        final var result = defaultQueryFacade.existsAll();
 
         // then
         assertThat(existsAll)
                 .isEqualTo(result)
                 .matches(e -> {
                     defaultData.clear();
-                    return defaultFacade.existsAll() != existsAll;
+                    return defaultQueryFacade.existsAll() != existsAll;
                 });
     }
 
@@ -124,12 +124,12 @@ class EntityQueryFacadeHappyPathTest {
         final var id = "x1";
 
         // when
-        final var result = defaultFacade.existsBy(id);
+        final var result = defaultQueryFacade.existsBy(id);
 
         // then
         assertThat(result)
                 .isTrue()
-                .matches(e -> defaultFacade.existsBy("whatever") != result);
+                .matches(e -> defaultQueryFacade.existsBy("whatever") != result);
     }
 
 }
