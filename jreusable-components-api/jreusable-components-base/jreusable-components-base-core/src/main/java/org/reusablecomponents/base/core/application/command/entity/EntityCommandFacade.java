@@ -37,8 +37,8 @@ public non-sealed class EntityCommandFacade< // generics
 		DeleteEntitiesIn, DeleteEntitiesOut, //
 		// delete by id
 		DeleteIdIn, DeleteIdOut, //
-		DeleteIdsIn, DeleteIdsOut //
->
+		DeleteIdsIn, DeleteIdsOut> //
+
 		// Base Facade
 		extends EntiyBaseFacade<Entity, Id>
 		// Interface command facade
@@ -77,11 +77,7 @@ public non-sealed class EntityCommandFacade< // generics
 	public EntityCommandFacade(
 			final EntityCommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> builder) {
 
-		super(
-				builder.publisherService,
-				builder.i18nService,
-				builder.securityService,
-				builder.exceptionAdapterService);
+		super(builder);
 
 		this.saveFunction = builder.saveFunction;
 		this.saveAllFunction = builder.saveAllFunction;
@@ -117,6 +113,7 @@ public non-sealed class EntityCommandFacade< // generics
 	 * <code>java.util.Objects.toString</code>
 	 * 
 	 * @param saveEntityOut The entity to transform
+	 * 
 	 * @return A Supplier object
 	 */
 	protected Supplier<String> convertSaveEntityOutToPublishDataOut(final SaveEntityOut saveEntityOut) {
@@ -386,6 +383,7 @@ public non-sealed class EntityCommandFacade< // generics
 	 * <code>java.util.Objects.toString</code>
 	 * 
 	 * @param updateEntitiesIn The group of entities to transform
+	 * 
 	 * @return A Supplier object
 	 */
 	protected Supplier<String> convertUpdateEntitiesInToPublishDataIn(final UpdateEntitiesIn updateEntitiesIn) {
@@ -398,6 +396,7 @@ public non-sealed class EntityCommandFacade< // generics
 	 * the <code>java.util.Objects.toString</code>
 	 * 
 	 * @param updateEntitiesOut The group of entities to transform
+	 * 
 	 * @return A Supplier object
 	 */
 	protected Supplier<String> convertUpdateEntitiesOutToPublishDataOut(final UpdateEntitiesOut updateEntitiesOut) {
@@ -408,6 +407,7 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change a group of entities before update it.
 	 * 
 	 * @param updateEntitiesIn The object to be changed
+	 * 
 	 * @return A new {@code UpdateEntitiesIn} object
 	 */
 	protected UpdateEntitiesIn preUpdateAll(final UpdateEntitiesIn updateEntitiesIn) {
@@ -492,6 +492,7 @@ public non-sealed class EntityCommandFacade< // generics
 	 * <code>java.util.Objects.toString</code>
 	 * 
 	 * @param deleteEntityOut The entity to transform
+	 * 
 	 * @return A Supplier object
 	 */
 	protected Supplier<String> convertDeleteEntityOutToPublishDataOut(final DeleteEntityOut deleteEntityOut) {
@@ -771,6 +772,7 @@ public non-sealed class EntityCommandFacade< // generics
 	 * <code>java.util.Objects.toString</code>
 	 * 
 	 * @param deleteIdsOut The ids to transform
+	 * 
 	 * @return A Supplier object
 	 */
 	protected Supplier<String> convertDeleteIdsOutToPublishDataOut(final DeleteIdsOut deleteIdsOut) {

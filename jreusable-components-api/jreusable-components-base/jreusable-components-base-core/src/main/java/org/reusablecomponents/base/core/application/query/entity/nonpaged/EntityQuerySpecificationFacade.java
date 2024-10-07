@@ -19,9 +19,7 @@ import com.google.common.base.Supplier;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * @param <Entity>
- * @param <Id>
- * @param <Specification>
+ * 
  */
 public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>
 		extends EntiyBaseFacade<Entity, Id>
@@ -39,22 +37,18 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 	protected final Function<Specification, CountResult> countBySpecificationFunction;
 
 	/**
-	 * @param saveFunction
-	 * @param deleteFunction
-	 * @param existsByIdFunction
-	 * @param findByIdFunction
-	 * @param findAllFunction
+	 * 
+	 * @param builder
 	 */
 	public EntityQuerySpecificationFacade(
-			@NotNull final BiFunction<Specification, Object[], MultipleResult> findBySpecificationFunction,
-			@NotNull final BiFunction<Specification, Object[], OneResult> findOneByFunction,
-			@NotNull final Function<Specification, ExistsResult> existsBySpecificationFunction,
-			@NotNull final Function<Specification, CountResult> countBySpecificationFunction) {
+			@NotNull final EntityQuerySpecificationFacadeBuilder<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> builder) {
 
-		this.findBySpecificationFunction = findBySpecificationFunction;
-		this.findOneByFunction = findOneByFunction;
-		this.existsBySpecificationFunction = existsBySpecificationFunction;
-		this.countBySpecificationFunction = countBySpecificationFunction;
+		super(builder);
+
+		this.findBySpecificationFunction = builder.findBySpecificationFunction;
+		this.findOneByFunction = builder.findOneByFunction;
+		this.existsBySpecificationFunction = builder.existsBySpecificationFunction;
+		this.countBySpecificationFunction = builder.countBySpecificationFunction;
 	}
 
 	// ---------------------------------------------------------------------------

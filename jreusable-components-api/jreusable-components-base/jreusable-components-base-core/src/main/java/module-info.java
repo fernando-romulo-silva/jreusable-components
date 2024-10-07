@@ -8,7 +8,7 @@ open module org.reusablecomponent.base.core {
     requires ch.qos.logback.classic;
 
     // import non-modules
-    requires com.google.common;
+    requires transitive com.google.common;
     requires org.apache.commons.lang3;
 
     // -- messaging

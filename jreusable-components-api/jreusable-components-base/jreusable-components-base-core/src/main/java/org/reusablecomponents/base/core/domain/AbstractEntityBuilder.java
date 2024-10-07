@@ -12,6 +12,16 @@ public abstract class AbstractEntityBuilder<Id, Entity extends AbstractEntity<Id
 
     public String createdReason;
 
+    protected AbstractEntityBuilder() {
+        super();
+    }
+
+    protected abstract Validator getValidator();
+
+    @Valid
+    @NotNull
+    public abstract Entity build();
+
     protected Entity validate(final Entity entity) {
 
         checkNotNull(entity, "Entity argument cannot be null");
@@ -23,20 +33,16 @@ public abstract class AbstractEntityBuilder<Id, Entity extends AbstractEntity<Id
         return entity;
     }
 
-    protected abstract Validator getValidator();
+    // protected abstract AbstractEntityBuilder<Id, Entity> with(
+    // @NotNull final Consumer<? extends AbstractEntityBuilder<Id, Entity>>
+    // function);
 
-    @Valid
-    @NotNull
-    public abstract Entity build();
+    // @FunctionalInterface
+    // public static interface BuilderConsumer<Id, Entity extends
+    // AbstractEntity<Id>, Builder extends AbstractEntityBuilder<Id, Entity>>
+    // extends Consumer<Builder> {
 
-    // protected abstract <Builder extends AbstractEntityBuilder<Id, Entity>>
-    // Builder with(@NotNull final BuilderConsumer<Id, Entity, Builder> function);
-
-    @FunctionalInterface
-    static interface BuilderConsumer<Id, Entity extends AbstractEntity<Id>, Builder extends AbstractEntityBuilder<Id, Entity>>
-            extends Consumer<Builder> {
-
-        void accept(final Builder builder);
-    }
+    // void accept(final Builder builder);
+    // }
 
 }

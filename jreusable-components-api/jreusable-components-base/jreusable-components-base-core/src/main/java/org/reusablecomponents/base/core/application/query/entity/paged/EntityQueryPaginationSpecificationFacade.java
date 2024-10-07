@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.function.TriFunction;
 import org.reusablecomponents.base.core.application.base.EntiyBaseFacade;
+import org.reusablecomponents.base.core.application.base.EntiyBaseFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,12 +43,17 @@ public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends 
 	 * @param findBySpecificationFunction
 	 * @param findOneByFunctionWithOrder
 	 */
-	public EntityQueryPaginationSpecificationFacade(
-			@NotNull final TriFunction<Specification, Pageable, Object[], MultiplePagedResult> findBySpecificationFunction,
-			@NotNull final TriFunction<Specification, Sort, Object[], OneResult> findOneByFunctionWithOrder) {
-		super();
-		this.findBySpecificationFunction = findBySpecificationFunction;
-		this.findOneByFunctionWithOrder = findOneByFunctionWithOrder;
+	public EntityQueryPaginationSpecificationFacade() {
+		super(new EntiyBaseFacadeBuilder($ -> {
+
+		}));
+
+		// @NotNull final TriFunction<Specification, Pageable, Object[],
+		// MultiplePagedResult> findBySpecificationFunction,
+		// @NotNull final TriFunction<Specification, Sort, Object[], OneResult>
+		// findOneByFunctionWithOrder
+		this.findBySpecificationFunction = null;
+		this.findOneByFunctionWithOrder = null;
 	}
 
 	// ---------------------------------------------------------------------------

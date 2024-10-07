@@ -5,11 +5,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.reusablecomponents.base.core.application.base.EntiyBaseFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
-import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.messaging.InterfaceEventPublisherSerice;
-import org.reusablecomponents.base.security.InterfaceSecurityService;
-import org.reusablecomponents.base.translation.InterfaceI18nService;
 
 /**
  * 
@@ -27,15 +24,8 @@ public final class EntityCommandFacadeBuilder< // Generics spec
 		DeleteEntitiesIn, DeleteEntitiesOut, // delete entities
 		// delete by id
 		DeleteIdIn, DeleteIdOut, // delete entity by id
-		DeleteIdsIn, DeleteIdsOut> {// delete entities by ids
-
-	public InterfaceEventPublisherSerice<?> publisherService;
-
-	public InterfaceSecurityService securityService;
-
-	public InterfaceI18nService i18nService;
-
-	public InterfaceExceptionAdapterService exceptionAdapterService;
+		DeleteIdsIn, DeleteIdsOut> // delete entities by ids
+		extends EntiyBaseFacadeBuilder {
 
 	public Function<SaveEntityIn, SaveEntityOut> saveFunction;
 	public Function<SaveEntitiesIn, SaveEntitiesOut> saveAllFunction;
@@ -57,15 +47,11 @@ public final class EntityCommandFacadeBuilder< // Generics spec
 					UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut,
 					//
 					DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>> function) {
-		super();
+
+		super(function);
 
 		// load the functions
 		function.accept(this);
-
-		checkNotNull(publisherService, "Please pass a non-null 'publisherService'");
-		checkNotNull(securityService, "Please pass a non-null 'securityService'");
-		checkNotNull(i18nService, "Please pass a non-null 'i18nService'");
-		checkNotNull(exceptionAdapterService, "Please pass a non-null 'exceptionTranslatorService'");
 
 		checkNotNull(saveFunction, "Please pass a non-null 'saveFunction'");
 		checkNotNull(saveAllFunction, "Please pass a non-null 'saveAllFunction'");

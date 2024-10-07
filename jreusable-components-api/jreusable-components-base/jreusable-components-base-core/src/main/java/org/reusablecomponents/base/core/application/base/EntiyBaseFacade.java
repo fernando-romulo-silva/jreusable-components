@@ -1,8 +1,6 @@
 package org.reusablecomponents.base.core.application.base;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
-import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static org.reusablecomponents.base.core.infra.messages.SystemMessages.NULL_POINTER_EXCEPTION_MSG;
 
@@ -10,6 +8,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacade;
 import org.reusablecomponents.base.core.application.empty.SimpleEntiyBaseFacade;
@@ -19,7 +18,6 @@ import org.reusablecomponents.base.core.application.query.entity.paged.EntityQue
 import org.reusablecomponents.base.core.application.query.entity.paged.EntityQueryPaginationSpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.core.infra.exception.common.GenericException;
 import org.reusablecomponents.base.messaging.InterfaceEventPublisherSerice;
 import org.reusablecomponents.base.messaging.event.Event;
 import org.reusablecomponents.base.messaging.event.What;
@@ -27,18 +25,14 @@ import org.reusablecomponents.base.messaging.event.When;
 import org.reusablecomponents.base.messaging.event.Where;
 import org.reusablecomponents.base.messaging.event.Who;
 import org.reusablecomponents.base.messaging.event.Why;
-import org.reusablecomponents.base.messaging.logger.LoggerPublisherSerice;
 import org.reusablecomponents.base.messaging.operation.InterfaceOperation;
-import org.reusablecomponents.base.security.DefaultSecurityService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
-import org.reusablecomponents.base.translation.JavaSEI18nService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.reflect.TypeToken;
 
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -99,44 +93,19 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 	/**
 	 * Default constructor
+	 *
 	 * 
-	 * @param publisherService        Message event service, in case of null, the
-	 *                                <code>LoggerPublisherSerice</code> will be
-	 *                                used.
-	 * @param i18nService             Language translator service, in case of null,
-	 *                                the <code>JavaSEI18nService</code> will be
-	 *                                used.
-	 * @param securityService         Security service, in case of null,
-	 *                                the <code>DefaultSecurityService</code> will
-	 *                                be used.
-	 * @param exceptionAdapterService Exception adapter service, in case of null, a
-	 *                                lambda function that throws solely the
-	 *                                <code>GenericException</code>.
 	 */
-	protected EntiyBaseFacade(
-			@Nullable final InterfaceEventPublisherSerice<?> publisherService,
-			@Nullable final InterfaceI18nService i18nService,
-			@Nullable final InterfaceSecurityService securityService,
-			@Nullable final InterfaceExceptionAdapterService exceptionAdapterService) {
-
+	protected EntiyBaseFacade(final EntiyBaseFacadeBuilder builder) {
 		super();
 
 		this.entityClazz = retrieveEntityClazz();
 		this.idClazz = retrieveIdClazz();
 
-		this.publisherService = nonNull(publisherService) ? publisherService : new LoggerPublisherSerice();
-		this.i18nService = nonNull(i18nService) ? i18nService : new JavaSEI18nService();
-		this.securityService = nonNull(securityService) ? securityService : new DefaultSecurityService();
-		this.exceptionAdapterService = nonNull(exceptionAdapterService)
-				? exceptionAdapterService
-				: (paramException, paramI18nService, directives) -> new GenericException(paramException);
-	}
-
-	/**
-	 * Default constructor
-	 */
-	protected EntiyBaseFacade() {
-		this(null, null, null, null);
+		this.publisherService = builder.publisherService;
+		this.i18nService = builder.i18nService;
+		this.securityService = builder.securityService;
+		this.exceptionAdapterService = builder.exceptionAdapterService;
 	}
 
 	// ------
@@ -274,7 +243,7 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 			return;
 		}
 
-		checkArgument(StringUtils.isBlank(finalEvent.get()), "The argument 'event' cannot be null or blank");
+		Validate.isTrue(!StringUtils.isBlank(finalEvent.get()), "The argument 'event' cannot be null or blank");
 
 		try {
 			publisherService.publish(finalEvent.get());
@@ -400,6 +369,7 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * necessary.
 	 * 
 	 * @param parameters Parameters to show on message error
+	 * 
 	 * @return An object <code>Supplier<NullPointerException></code>
 	 */
 	protected final Supplier<NullPointerException> createNullPointerException(final String... parameters) {

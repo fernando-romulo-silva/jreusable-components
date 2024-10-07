@@ -98,4 +98,17 @@ class EntityQueryFacadeUnhappyPathTest {
 
         ;
     }
+
+    @Test
+    @Order(2)
+    @DisplayName("find by id test")
+    void existsByTest() {
+        // given
+        assertThatThrownBy(() -> defaultQueryFacade.existsBy(null))
+                // then
+                .isInstanceOf(NullPointerException.class)
+                .hasMessageContaining("The object '%s' cannot be null", "preQueryIdIn")
+
+        ;
+    }
 }

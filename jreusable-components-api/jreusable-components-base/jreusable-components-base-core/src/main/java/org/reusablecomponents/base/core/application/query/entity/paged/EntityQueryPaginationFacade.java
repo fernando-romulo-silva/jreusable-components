@@ -7,6 +7,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.reusablecomponents.base.core.application.base.EntiyBaseFacade;
+import org.reusablecomponents.base.core.application.base.EntiyBaseFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,15 +36,19 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	protected final Function<Sort, OneResult> findFirstFunction;
 
 	/**
+	 * 
 	 * @param findAllFunction
 	 * @param findFirstFunction
 	 */
-	public EntityQueryPaginationFacade(
-			@NotNull final BiFunction<Pageable, Object[], MultiplePagedResult> findAllFunction,
-			@NotNull final Function<Sort, OneResult> findFirstFunction) {
-		super();
-		this.findAllFunction = findAllFunction;
-		this.findFirstFunction = findFirstFunction;
+	public EntityQueryPaginationFacade() {
+		super(new EntiyBaseFacadeBuilder($ -> {
+		}));
+
+		// @NotNull final BiFunction<Pageable, Object[], MultiplePagedResult>
+		// findAllFunction,
+		// @NotNull final Function<Sort, OneResult> findFirstFunction
+		this.findAllFunction = null;
+		this.findFirstFunction = null;
 	}
 
 	// ---------------------------------------------------------------------------

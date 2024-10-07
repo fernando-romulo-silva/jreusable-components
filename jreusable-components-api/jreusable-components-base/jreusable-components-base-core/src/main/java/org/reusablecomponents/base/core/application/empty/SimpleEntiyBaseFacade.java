@@ -1,6 +1,7 @@
 package org.reusablecomponents.base.core.application.empty;
 
 import org.reusablecomponents.base.core.application.base.EntiyBaseFacade;
+import org.reusablecomponents.base.core.application.base.EntiyBaseFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.messaging.InterfaceEventPublisherSerice;
@@ -16,10 +17,16 @@ public non-sealed class SimpleEntiyBaseFacade<Entity extends AbstractEntity<Id>,
 			final InterfaceSecurityService securityService,
 			final InterfaceExceptionAdapterService exceptionTranslatorService) {
 
-		super(publisherService, i18nService, securityService, exceptionTranslatorService);
+		super(new EntiyBaseFacadeBuilder($ -> {
+			$.publisherService = publisherService;
+			$.i18nService = i18nService;
+			$.securityService = securityService;
+			$.exceptionAdapterService = exceptionTranslatorService;
+		}));
 	}
 
 	public SimpleEntiyBaseFacade() {
-		super();
+		super(new EntiyBaseFacadeBuilder($ -> {
+		}));
 	}
 }

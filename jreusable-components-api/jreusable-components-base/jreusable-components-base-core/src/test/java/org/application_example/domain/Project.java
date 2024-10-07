@@ -15,37 +15,36 @@ public class Project extends AbstractEntity<Long> {
 
     @NotEmpty
     private String name;
-    
+
     private Department department;
-    
+
     // ------------------- constructors
 
-
     Project() {
-	super();
+        super();
     }
 
     public Project(final Long id, final String name, final Department department) {
-	super();
-	
-	this.id = id;
-	this.name = name;
-	this.department = department;
-	
-	validade(VALIDATOR);
+        super();
+
+        this.id = id;
+        this.name = name;
+        this.department = department;
+
+        validade(VALIDATOR);
     }
-    
+
     public boolean isPublishable() {
-	return false;
+        return false;
     }
-    
+
     // -------------------- getters
-    
+
     @NotNull
     public Long getId() {
-	return id;
+        return id;
     }
-    
+
     public String getName() {
         return name;
     }

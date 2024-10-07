@@ -49,11 +49,7 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 	public EntityQueryFacade(
 			@NotNull final EntityQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> builder) {
 
-		super(
-				builder.publisherService,
-				builder.i18nService,
-				builder.securityService,
-				builder.exceptionAdapterService);
+		super(builder);
 
 		this.existsByIdFunction = builder.existsByIdFunction;
 		this.findByIdFunction = builder.findByIdFunction;
@@ -232,7 +228,8 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 
 		final var preQueryIdIn = preFindBy(queryIdIn, directives);
 
-		final var finalQueryIdIn = ofNullable(preQueryIdIn).orElseThrow(createNullPointerException("preQueryIdIn"));
+		final var finalQueryIdIn = ofNullable(preQueryIdIn)
+				.orElseThrow(createNullPointerException("preQueryIdIn"));
 
 		LOGGER.debug("Findind by finalQueryIdIn '{}' ", finalQueryIdIn);
 
@@ -306,7 +303,12 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 
 		LOGGER.debug("Existing by '{}', session '{}'", queryIdIn, session);
 
-		final var finalQueryIdIn = preExistsBy(queryIdIn);
+		final var preQueryIdIn = preExistsBy(queryIdIn);
+
+		final var finalQueryIdIn = ofNullable(preQueryIdIn)
+				.orElseThrow(createNullPointerException("preQueryIdIn"));
+
+		LOGGER.debug("Existing by finalQueryIdIn '{}' ", finalQueryIdIn);
 
 		final ExistsResult result;
 
@@ -322,6 +324,8 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		}
 
 		final var finalResult = posExistsBy(result);
+
+		LOGGER.debug("Existing by result '{}'", result);
 
 		final var dataIn = convertQueryIdInToPublishDataIn(finalQueryIdIn);
 		final var dataOut = convertExistsResultToPublishData(finalResult);
