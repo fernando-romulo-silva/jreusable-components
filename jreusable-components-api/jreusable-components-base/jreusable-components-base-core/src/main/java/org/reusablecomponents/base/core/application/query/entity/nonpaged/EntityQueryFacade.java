@@ -42,11 +42,11 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 	protected final Supplier<ExistsResult> existsAllFunction;
 
 	/**
-	 * Default constructior
+	 * Default constructor
 	 * 
 	 * @param builder Object in charge to construct this one
 	 */
-	public EntityQueryFacade(
+	protected EntityQueryFacade(
 			@NotNull final EntityQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> builder) {
 
 		super(builder);

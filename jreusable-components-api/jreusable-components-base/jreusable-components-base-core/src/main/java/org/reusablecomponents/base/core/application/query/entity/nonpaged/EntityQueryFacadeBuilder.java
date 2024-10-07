@@ -10,19 +10,42 @@ import java.util.function.Supplier;
 import org.reusablecomponents.base.core.application.base.EntiyBaseFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
+/**
+ * The <code>InterfaceEntityQueryFacade</code> builder's class.
+ */
 public class EntityQueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
         extends EntiyBaseFacadeBuilder {
 
+    /**
+     * Function that executes exists by id algorithm
+     */
     public Function<QueryIdIn, ExistsResult> existsByIdFunction;
 
+    /**
+     * Function that executes find by id algorithm
+     */
     public BiFunction<QueryIdIn, Object[], OneResult> findByIdFunction;
 
+    /**
+     * Function that executes find all algorithm
+     */
     public Function<Object[], MultipleResult> findAllFunction;
 
+    /**
+     * Function that executes count all algorithm
+     */
     public Supplier<CountResult> countAllFunction;
 
+    /**
+     * Function that executes exist all algorithm
+     */
     public Supplier<ExistsResult> existsAllFunction;
 
+    /**
+     * Default constructor.
+     * 
+     * @param function Consumer function
+     */
     public EntityQueryFacadeBuilder(
             final Consumer<EntityQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>> function) {
 

@@ -19,7 +19,8 @@ import com.google.common.base.Supplier;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * 
+ * The default <code>InterfaceEntityQuerySpecificationFacade</code>'s
+ * implementation.
  */
 public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>
 		extends EntiyBaseFacade<Entity, Id>
@@ -37,8 +38,9 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 	protected final Function<Specification, CountResult> countBySpecificationFunction;
 
 	/**
+	 * Default constructor
 	 * 
-	 * @param builder
+	 * @param builder Object in charge to construct this one
 	 */
 	public EntityQuerySpecificationFacade(
 			@NotNull final EntityQuerySpecificationFacadeBuilder<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> builder) {

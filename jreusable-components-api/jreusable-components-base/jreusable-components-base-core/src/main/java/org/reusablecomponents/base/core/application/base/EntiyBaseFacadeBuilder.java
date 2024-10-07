@@ -13,6 +13,9 @@ import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
 
+/**
+ * The <code>EntiyBaseFacade</code> builder's class.
+ */
 public class EntiyBaseFacadeBuilder {
 
     /**
@@ -40,12 +43,16 @@ public class EntiyBaseFacadeBuilder {
      */
     public InterfaceExceptionAdapterService exceptionAdapterService;
 
+    /**
+     * Default constructor
+     * 
+     * @param function Consumer function
+     */
     public EntiyBaseFacadeBuilder(final Consumer<? extends EntiyBaseFacadeBuilder> function) {
 
         @SuppressWarnings("unchecked")
         final var finalFunction = (Consumer<EntiyBaseFacadeBuilder>) function;
 
-        // load the functions
         finalFunction.accept(this);
 
         publisherService = nonNull(publisherService) ? publisherService : new LoggerPublisherSerice();
@@ -58,10 +65,5 @@ public class EntiyBaseFacadeBuilder {
                 ? exceptionAdapterService
                 : (paramException, paramI18nService, directives) -> new GenericException(paramException);
 
-        // checkNotNull(publisherService, "Please pass a non-null 'publisherService'");
-        // checkNotNull(securityService, "Please pass a non-null 'securityService'");
-        // checkNotNull(i18nService, "Please pass a non-null 'i18nService'");
-        // checkNotNull(exceptionAdapterService, "Please pass a non-null
-        // 'exceptionTranslatorService'");
     }
 }

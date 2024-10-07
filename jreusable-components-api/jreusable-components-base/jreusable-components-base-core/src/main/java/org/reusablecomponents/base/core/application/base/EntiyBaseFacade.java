@@ -93,8 +93,8 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 	/**
 	 * Default constructor
-	 *
 	 * 
+	 * @param builder Object attribute constructor.
 	 */
 	protected EntiyBaseFacade(final EntiyBaseFacadeBuilder builder) {
 		super();

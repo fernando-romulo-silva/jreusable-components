@@ -24,13 +24,11 @@ import jakarta.validation.constraints.NotNull;
  * @param <ExistsResult>   The exist-result type
  */
 public non-sealed interface InterfaceEntityQueryFacade<Entity extends AbstractEntity<Id>, Id, // basic
-
     QueryIdIn, //
     OneResult, //
     MultipleResult, //
     CountResult, //
     ExistsResult> //
-    //
     extends InterfaceEntityBaseFacade<Entity, Id> {
 
   /**
