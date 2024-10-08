@@ -336,6 +336,13 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		return finalResult;
 	}
 
+	/**
+	 * Method used to change countResult object after use it (countAll method).
+	 * 
+	 * @param countResult The object to be changed
+	 * 
+	 * @return A new {@code CountResult} object
+	 */
 	protected CountResult posCountAll(final CountResult countResult) {
 		return countResult;
 	}

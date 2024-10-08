@@ -9,17 +9,18 @@ import org.reusablecomponents.base.core.infra.exception.common.ElementNotFoundEx
  * Interface responsible for establishing contracts to retrieve objects using
  * specification.
  * 
- * @param <Entity>
- * @param <Id>
- * @param <Specification>
+ * @param <Entity>         The facade entity type
+ * @param <Id>             The facade entity id type
+ * 
  * @param <OneResult>      One result type
  * @param <MultipleResult> multiple result type
  * @param <CountResult>    count result type
  * @param <ExistsResult>   exists result type
- * @param <Specification>  query specification (parameters, filters, orders,
- *                         etc)
+ * 
+ * @param <Specification>  The specification is a strutucte used to filter and
+ *                         ordered queries
  */
-public non-sealed interface InterfaceEntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, // basic
+public non-sealed interface InterfaceEntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, //
         OneResult, //
         MultipleResult, //
         CountResult, //
@@ -31,7 +32,7 @@ public non-sealed interface InterfaceEntityQuerySpecificationFacade<Entity exten
      * Find and retrieve a {@code MultipleResult} object by id
      * 
      * @param specification The query specification, how to filter
-     * @param directives    Params used to configure the query
+     * @param directives    Params used to configure the query's result
      * 
      * @throws NullPointerException     If the parameter 'specification' is
      *                                  null
@@ -47,7 +48,7 @@ public non-sealed interface InterfaceEntityQuerySpecificationFacade<Entity exten
      * Find and retrieve a {@code OneResult} object by id
      * 
      * @param specification The query specification
-     * @param directives    Params used to configure the query
+     * @param directives    Params used to configure the query's result
      * 
      * @throws NullPointerException     If the parameter 'specification' is
      *                                  null

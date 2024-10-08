@@ -35,7 +35,7 @@ public non-sealed interface InterfaceEntityQueryFacade<Entity extends AbstractEn
    * Find and retrieve a {@code OneResult} object by id
    * 
    * @param queryIdIn  The entity id
-   * @param directives Params used to configure the query
+   * @param directives Params used to configure the query's result
    * 
    * @throws NullPointerException           If the parameter 'queryIdIn' is null
    * @throws ElementWithIdNotFoundException If you try to retrieve an entity that
@@ -51,7 +51,7 @@ public non-sealed interface InterfaceEntityQueryFacade<Entity extends AbstractEn
   /**
    * Find and retrieve all objects, be carefull with it.
    * 
-   * @param directives Params used to configure the query
+   * @param directives Params used to configure the query's result
    * 
    * @throws NullPointerException     If the parameter 'queryIdIn' is null
    * @throws BaseApplicationException If an unidentified error happened
@@ -61,11 +61,12 @@ public non-sealed interface InterfaceEntityQueryFacade<Entity extends AbstractEn
   MultipleResult findAll(final Object... directives);
 
   /**
-   * Check if there exists an entity with the provided id.
+   * Check if an entity exists with the provided ID.
    * 
    * @param queryIdIn The entity id
    * 
    * @throws NullPointerException     If the parameter 'queryIdIn' is null
+   * 
    * @throws BaseApplicationException If an unidentified error happened
    * 
    * @return Return a {@code ExistsResult} object
@@ -76,6 +77,7 @@ public non-sealed interface InterfaceEntityQueryFacade<Entity extends AbstractEn
    * Check if there exists at least an entity.
    * 
    * @throws NullPointerException     If the parameter 'queryIdIn' is null
+   * 
    * @throws BaseApplicationException If an unidentified error happened
    * 
    * @return Return a {@code ExistsResult} object

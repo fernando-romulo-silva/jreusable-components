@@ -55,18 +55,48 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 
 	// ---------------------------------------------------------------------------
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code Specification} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param specification The object to transform
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertSpecificationToPublishDataIn(final Specification specification) {
 		return () -> Objects.toString(specification);
 	}
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code MultipleResult} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param multipleResult The entity group to transform
+	 * @return A Supplier object
+	 */
 	protected Supplier<String> convertMultipleResultToPublishDataOut(final MultipleResult multipleResult) {
 		return () -> Objects.toString(multipleResult);
 	}
 
+	/**
+	 * Method used to change specification object before use it (FindBy method).
+	 * 
+	 * @param specification The object to be changed
+	 * 
+	 * @return A new {@code Specification} object
+	 */
 	protected Specification preFindBy(final Specification specification) {
 		return specification;
 	}
 
+	/**
+	 * Method used to change multipleResult object after use it (posFindBy method).
+	 * 
+	 * @param multipleResult The object to be changed
+	 * 
+	 * @return A new {@code MultipleResult} object
+	 */
 	protected MultipleResult posFindBy(final MultipleResult multipleResult) {
 		return multipleResult;
 	}
@@ -104,16 +134,39 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 
 	// ---------------------------------------------------------------------------
 
+	/**
+	 * Method used to change specification object before use it (findOneBy
+	 * method).
+	 * 
+	 * @param specification The object to be changed
+	 * 
+	 * @return A new {@code Specification} object
+	 */
 	protected Specification preFindOneBy(final Specification specification) {
 		return specification;
 	}
 
+	/**
+	 * Method used to change OneResult object after use it (findOneBy method).
+	 * 
+	 * @param oneResult The object to be changed
+	 * 
+	 * @return A new {@code OneResult} object
+	 */
 	protected OneResult posFindOneBy(final OneResult oneResult) {
 		return oneResult;
 	}
 
-	protected String convertOneResultToPublishDataOut(final OneResult oneResult) {
-		return Objects.toString(oneResult);
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code OneResult} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param oneResult The entity group to transform
+	 * @return A Supplier object
+	 */
+	protected Supplier<String> convertOneResultToPublishDataOut(final OneResult oneResult) {
+		return () -> Objects.toString(oneResult);
 	}
 
 	/**
@@ -149,16 +202,38 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 
 	// ---------------------------------------------------------------------------
 
+	/**
+	 * Method used to change specification object before use it (existsBy method).
+	 * 
+	 * @param specification The object to be changed
+	 * 
+	 * @return A new {@code Specification} object
+	 */
 	protected Specification preExistsBy(final Specification specification) {
 		return specification;
 	}
 
+	/**
+	 * Method used to change existsResult object after use it (existsBy method).
+	 * 
+	 * @param existsResult The object to be changed
+	 * 
+	 * @return A new {@code ExistsResult} object
+	 */
 	protected ExistsResult posExistsBy(final ExistsResult existsResult) {
 		return existsResult;
 	}
 
-	protected String convertExistsResultToPublishDataOut(final ExistsResult resultFinal) {
-		return Objects.toString(resultFinal);
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code ExistsResult} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param resultFinal The entity group to transform
+	 * @return A Supplier object
+	 */
+	protected Supplier<String> convertExistsResultToPublishDataOut(final ExistsResult resultFinal) {
+		return () -> Objects.toString(resultFinal);
 	}
 
 	/**
@@ -194,14 +269,36 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 
 	// ---------------------------------------------------------------------------
 
+	/**
+	 * Method used to change specification object before use it (countBy method).
+	 * 
+	 * @param specification The object to be changed
+	 * 
+	 * @return A new {@code Specification} object
+	 */
 	protected Specification preCountBy(final Specification specification) {
 		return specification;
 	}
 
+	/**
+	 * Method used to change countResult object after use it (countBy method).
+	 * 
+	 * @param countResult The object to be changed
+	 * 
+	 * @return A new {@code CountResult} object
+	 */
 	protected CountResult posCountBy(final CountResult countResult) {
 		return countResult;
 	}
 
+	/**
+	 * Create a supplier function (deferred execution) that converts a
+	 * {@code CountResult} object to String to show in logs, the default is the
+	 * <code>java.util.Objects.toString</code>
+	 * 
+	 * @param countResult The entity to transform
+	 * @return A Supplier object
+	 */
 	protected String convertCountResultToPublishDataOut(final CountResult countResult) {
 		return Objects.toString(countResult);
 	}
