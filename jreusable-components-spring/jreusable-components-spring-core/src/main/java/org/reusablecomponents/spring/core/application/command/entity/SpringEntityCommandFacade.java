@@ -32,7 +32,7 @@ public class SpringEntityCommandFacade<Entity extends AbstractEntity<Id>, Id> //
 		// invoke super wih builder
 		super(new EntityCommandFacadeBuilder<>($ -> {
 			// save
-			$.saveFunction = repository::save;
+			$.saveFunction = (entity, directives) -> repository.save(entity);
 			$.saveAllFunction = repository::saveAll;
 
 			// update

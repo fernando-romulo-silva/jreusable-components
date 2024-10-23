@@ -15,26 +15,26 @@ import org.springframework.data.domain.Sort;
  * @param <Specification>
  */
 public interface InterfaceSpringEntityQueryPaginationSpecificationFacade<Entity extends AbstractEntity<Id>, Id, Specification>
-	extends InterfaceEntityQueryPaginationSpecificationFacade<Entity, Id, // basic
-		// results
-		Optional<Entity>, // one result type
-		Page<Entity>, // multiple result type
-		// Pagination
-		Pageable, // pageable type
-		Sort, // sort type
-		Specification> { // query spec
+    extends InterfaceEntityQueryPaginationSpecificationFacade<Entity, Id, // basic
+        // results
+        Optional<Entity>, // one result type
+        Page<Entity>, // multiple result type
+        // Pagination
+        Pageable, // pageable type
+        Sort, // sort type
+        Specification> { // query spec
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Cacheable
-    Page<Entity> findBy(final Pageable pageable, final Specification specification, final Object... directives);
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Cacheable
+  Page<Entity> findBy(final Pageable pageable, final Specification specification, final Object... directives);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Cacheable
-    Optional<Entity> findOneBy(final Specification specification, final Sort sort);
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Cacheable
+  Optional<Entity> findOneBy(final Specification specification, final Sort sort, final Object... directives);
 }

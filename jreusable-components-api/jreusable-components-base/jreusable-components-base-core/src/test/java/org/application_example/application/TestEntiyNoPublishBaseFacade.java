@@ -22,9 +22,4 @@ public class TestEntiyNoPublishBaseFacade extends SimpleEntiyBaseFacade<Departme
     public TestEntiyNoPublishBaseFacade() {
         super();
     }
-
-    @Override
-    protected boolean isPublishEvents(final Object... directives) {
-        return false; // dont publish it
-    }
 }

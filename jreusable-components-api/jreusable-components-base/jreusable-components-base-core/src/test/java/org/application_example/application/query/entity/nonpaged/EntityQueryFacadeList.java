@@ -8,7 +8,6 @@ import org.application_example.infra.ExceptionAdapterListService;
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQueryFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
-import org.reusablecomponents.base.messaging.logger.LoggerPublisherSerice;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
 
 public class EntityQueryFacadeList<Entity extends AbstractEntity<Id>, Id>
@@ -34,7 +33,7 @@ public class EntityQueryFacadeList<Entity extends AbstractEntity<Id>, Id>
 
             // others --------------------------------
             $.securityService = new DummySecurityService();
-            $.publisherService = new LoggerPublisherSerice();
+            // $.publisherService = new LoggerPublisherSerice();
             $.exceptionAdapterService = new ExceptionAdapterListService();
             $.i18nService = new JavaSEI18nService();
         }));

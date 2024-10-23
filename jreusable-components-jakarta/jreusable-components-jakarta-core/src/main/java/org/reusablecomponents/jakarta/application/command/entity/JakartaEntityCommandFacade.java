@@ -30,7 +30,7 @@ public class JakartaEntityCommandFacade<Entity extends AbstractEntity<Id>, Id> /
 	protected JakartaEntityCommandFacade(final InterfaceJakartaRepository<Entity, Id> repository) {
 		super(new EntityCommandFacadeBuilder<>($ -> {
 			// save
-			$.saveFunction = repository::save;
+			$.saveFunction = (entity, directives) -> repository.save(entity);
 			$.saveAllFunction = repository::saveAll;
 
 			// update

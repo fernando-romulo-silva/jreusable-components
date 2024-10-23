@@ -17,8 +17,8 @@ import org.reusablecomponents.base.core.infra.exception.common.ElementNotFoundEx
  * @param <CountResult>    count result type
  * @param <ExistsResult>   exists result type
  * 
- * @param <Specification>  The specification is a strutucte used to filter and
- *                         ordered queries
+ * @param <Specification>  The specification is a strutucte used to filter
+ *                         queries
  */
 public non-sealed interface InterfaceEntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, //
         OneResult, //
@@ -31,7 +31,9 @@ public non-sealed interface InterfaceEntityQuerySpecificationFacade<Entity exten
     /**
      * Find and retrieve a {@code MultipleResult} object by id
      * 
-     * @param specification The query specification, how to filter
+     * @param specification Object {@code Specification} used to filter query's
+     *                      result
+     * 
      * @param directives    Params used to configure the query's result
      * 
      * @throws NullPointerException     If the parameter 'specification' is
@@ -40,14 +42,15 @@ public non-sealed interface InterfaceEntityQuerySpecificationFacade<Entity exten
      *                                  doesn't exist
      * @throws BaseApplicationException If an unidentified error happened
      * 
-     * @return Return a {@code OneResult} object
+     * @return Return a {@code MultipleResult} object
      */
     MultipleResult findBy(final Specification specification, final Object... directives);
 
     /**
-     * Find and retrieve a {@code OneResult} object by id
+     * Find and retrieve a {@code OneResult} object by specification
      * 
-     * @param specification The query specification
+     * @param specification Object {@code Specification} used to filter query's
+     *                      result
      * @param directives    Params used to configure the query's result
      * 
      * @throws NullPointerException     If the parameter 'specification' is
@@ -63,7 +66,8 @@ public non-sealed interface InterfaceEntityQuerySpecificationFacade<Entity exten
     /**
      * Check if there exists an entity with the provided specification.
      * 
-     * @param specification The query specification
+     * @param specification Object {@code Specification} used to filter query's
+     *                      result
      * 
      * @throws NullPointerException     If the parameter 'specification' is null
      * 
@@ -75,6 +79,9 @@ public non-sealed interface InterfaceEntityQuerySpecificationFacade<Entity exten
 
     /**
      * Count how many entities there are by specification
+     * 
+     * @param specification Object {@code Specification} used to filter query's
+     *                      result
      * 
      * @throws NullPointerException     If the parameter 'specification' is null
      * 

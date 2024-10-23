@@ -1,6 +1,6 @@
 package org.reusablecomponents.base.core.infra.exception.common;
 
-import static org.reusablecomponents.base.core.infra.messages.SystemMessages.ELEMENT_CONFLICT_EXCEPTION_MSG;
+import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.ELEMENT_CONFLICT_EXCEPTION_MSG;
 
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 

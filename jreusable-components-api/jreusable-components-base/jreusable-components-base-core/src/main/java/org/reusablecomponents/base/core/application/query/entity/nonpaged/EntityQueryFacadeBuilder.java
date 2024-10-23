@@ -11,7 +11,7 @@ import org.reusablecomponents.base.core.application.base.EntiyBaseFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 /**
- * The <code>InterfaceEntityQueryFacade</code> builder's class.
+ * The <code>EntityQueryFacade</code> builder's class.
  */
 public class EntityQueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
         extends EntiyBaseFacadeBuilder {

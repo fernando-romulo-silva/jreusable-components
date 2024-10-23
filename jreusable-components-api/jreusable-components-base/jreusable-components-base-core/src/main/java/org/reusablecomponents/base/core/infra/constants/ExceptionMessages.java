@@ -1,9 +1,9 @@
-package org.reusablecomponents.base.core.infra.messages;
+package org.reusablecomponents.base.core.infra.constants;
 
 /**
  * Class with message code exceptions.
  */
-public final class SystemMessages {
+public final class ExceptionMessages {
 
     public static final String ELEMENT_ALREADY_EXITS_EXCEPTION_MSG = "{exception.elementAlreadyExistsException}";
 
@@ -21,7 +21,7 @@ public final class SystemMessages {
 
     public static final String ID_ALREADY_EXITS_EXCEPTION_MSG = "{exception.idAlreadyExistsException}";
 
-    private SystemMessages() {
+    private ExceptionMessages() {
         throw new IllegalStateException("You cannot instanciate this class");
     }
 }

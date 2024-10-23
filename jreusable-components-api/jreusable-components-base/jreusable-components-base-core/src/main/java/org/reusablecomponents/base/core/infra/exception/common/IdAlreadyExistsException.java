@@ -1,7 +1,7 @@
 package org.reusablecomponents.base.core.infra.exception.common;
 
 import static org.apache.commons.lang3.ArrayUtils.addAll;
-import static org.reusablecomponents.base.core.infra.messages.SystemMessages.ID_ALREADY_EXITS_EXCEPTION_MSG;
+import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.ID_ALREADY_EXITS_EXCEPTION_MSG;
 
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 

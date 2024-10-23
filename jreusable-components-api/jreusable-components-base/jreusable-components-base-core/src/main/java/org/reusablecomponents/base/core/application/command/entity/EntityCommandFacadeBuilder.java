@@ -2,6 +2,7 @@ package org.reusablecomponents.base.core.application.command.entity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -27,7 +28,7 @@ public final class EntityCommandFacadeBuilder< // Generics spec
 		DeleteIdsIn, DeleteIdsOut> // delete entities by ids
 		extends EntiyBaseFacadeBuilder {
 
-	public Function<SaveEntityIn, SaveEntityOut> saveFunction;
+	public BiFunction<SaveEntityIn, Object[], SaveEntityOut> saveFunction;
 	public Function<SaveEntitiesIn, SaveEntitiesOut> saveAllFunction;
 
 	public Function<UpdateEntityIn, UpdateEntityOut> updateFunction;

@@ -6,8 +6,6 @@ import java.util.function.Consumer;
 
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.GenericException;
-import org.reusablecomponents.base.messaging.InterfaceEventPublisherSerice;
-import org.reusablecomponents.base.messaging.logger.LoggerPublisherSerice;
 import org.reusablecomponents.base.security.DefaultSecurityService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
@@ -17,13 +15,6 @@ import org.reusablecomponents.base.translation.JavaSEI18nService;
  * The <code>EntiyBaseFacade</code> builder's class.
  */
 public class EntiyBaseFacadeBuilder {
-
-    /**
-     * 
-     * Message event service, in case of null, the
-     * <code>LoggerPublisherSerice</code> will be used.
-     */
-    public InterfaceEventPublisherSerice<?> publisherService;
 
     /**
      * Security service, in case of null, the <code>DefaultSecurityService</code>
@@ -54,8 +45,6 @@ public class EntiyBaseFacadeBuilder {
         final var finalFunction = (Consumer<EntiyBaseFacadeBuilder>) function;
 
         finalFunction.accept(this);
-
-        publisherService = nonNull(publisherService) ? publisherService : new LoggerPublisherSerice();
 
         i18nService = nonNull(i18nService) ? i18nService : new JavaSEI18nService();
 

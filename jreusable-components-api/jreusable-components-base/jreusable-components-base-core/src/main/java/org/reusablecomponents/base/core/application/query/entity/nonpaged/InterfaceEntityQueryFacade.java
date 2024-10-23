@@ -1,6 +1,6 @@
 package org.reusablecomponents.base.core.application.query.entity.nonpaged;
 
-import static org.reusablecomponents.base.core.infra.messages.SystemMessages.NULL_POINTER_EXCEPTION_MSG;
+import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.NULL_POINTER_EXCEPTION_MSG;
 
 import org.reusablecomponents.base.core.application.base.InterfaceEntityBaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;

@@ -18,6 +18,10 @@ public enum QueryOperation implements InterfaceOperation {
 
     FIND_ENTITY_BY_SPECIFICATION,
 
+    FIND_ENTITY_SORTED,
+
+    FIND_ENTITY_BY_SPECIFICATION_SORTED,
+
     FIND_ENTITY_BY_ID,
 
     EXISTS_BY_ID,

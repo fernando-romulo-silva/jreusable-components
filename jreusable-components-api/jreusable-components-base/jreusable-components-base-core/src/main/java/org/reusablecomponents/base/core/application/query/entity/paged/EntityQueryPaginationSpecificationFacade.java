@@ -1,32 +1,23 @@
 package org.reusablecomponents.base.core.application.query.entity.paged;
 
-import static org.apache.commons.lang3.StringUtils.SPACE;
-import static org.reusablecomponents.base.messaging.operation.QueryOperation.FIND_ALL_ENTITIES_PAGEABLE;
 import static org.reusablecomponents.base.messaging.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE;
+import static org.reusablecomponents.base.messaging.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION_SORTED;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
-import java.util.Objects;
 
 import org.apache.commons.lang3.function.TriFunction;
 import org.reusablecomponents.base.core.application.base.EntiyBaseFacade;
-import org.reusablecomponents.base.core.application.base.EntiyBaseFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Supplier;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * @param <Entity>
- * @param <Id>
- * @param <MultiplePagedResult>
- * @param <Pageable>
- * @param <Specification>
- * @param <Sort>
+ * Interface responsible for establishing contracts to retrieve objects, common
+ * operations to all projects.
  */
 public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification>
 		extends EntiyBaseFacade<Entity, Id>
@@ -40,37 +31,38 @@ public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends 
 	protected final TriFunction<Specification, Sort, Object[], OneResult> findOneByFunctionWithOrder;
 
 	/**
-	 * @param findBySpecificationFunction
-	 * @param findOneByFunctionWithOrder
+	 * Default constructor
+	 * 
+	 * @param builder Object in charge to construct this one
 	 */
-	public EntityQueryPaginationSpecificationFacade() {
-		super(new EntiyBaseFacadeBuilder($ -> {
+	protected EntityQueryPaginationSpecificationFacade(
+			@NotNull final EntityQueryPaginationSpecificationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification> builder) {
+		super(builder);
 
-		}));
-
-		// @NotNull final TriFunction<Specification, Pageable, Object[],
-		// MultiplePagedResult> findBySpecificationFunction,
-		// @NotNull final TriFunction<Specification, Sort, Object[], OneResult>
-		// findOneByFunctionWithOrder
-		this.findBySpecificationFunction = null;
-		this.findOneByFunctionWithOrder = null;
+		this.findBySpecificationFunction = builder.findBySpecificationFunction;
+		this.findOneByFunctionWithOrder = builder.findOneByFunctionWithOrder;
 	}
 
 	// ---------------------------------------------------------------------------
 
-	protected Supplier<String> convertPageableToPublishData(final Pageable pageable,
-			final Specification specification) {
-		return () -> Objects.toString(pageable).concat(SPACE).concat(Objects.toString(specification));
-	}
-
-	protected String convertMultiplePagedResultToPublishData(final MultiplePagedResult multiplePagedResult) {
-		return Objects.toString(multiplePagedResult);
-	}
-
+	/**
+	 * 
+	 * @param pageable
+	 * 
+	 * @param specification
+	 * 
+	 * @return
+	 */
 	protected Entry<Pageable, Specification> preFindBy(final Pageable pageable, final Specification specification) {
 		return new SimpleEntry<>(pageable, specification);
 	}
 
+	/**
+	 * 
+	 * @param multiplePagedResult
+	 * 
+	 * @return
+	 */
 	protected MultiplePagedResult posFindBy(final MultiplePagedResult multiplePagedResult) {
 		return multiplePagedResult;
 	}
@@ -79,7 +71,9 @@ public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public MultiplePagedResult findBy(@Nullable final Pageable pageable, @Nullable final Specification specification,
+	public MultiplePagedResult findBy(
+			@Nullable final Pageable pageable,
+			@Nullable final Specification specification,
 			@NotNull final Object... directives) {
 
 		final var session = securityService.getSession();
@@ -91,39 +85,46 @@ public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends 
 		final var finalPageable = finalEntry.getKey();
 		final var finalSpecification = finalEntry.getValue();
 
-		final MultiplePagedResult result;
+		final MultiplePagedResult multiplePagedResult;
 
 		try {
-			result = findBySpecificationFunction.apply(finalSpecification, finalPageable, directives);
+			multiplePagedResult = findBySpecificationFunction.apply(finalSpecification, finalPageable, directives);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE,
+					getEntityClazz(),
+					directives);
 		}
 
-		final var finalResult = posFindBy(result);
-
-		final var dataIn = convertPageableToPublishData(finalPageable, finalSpecification);
-		final var dataOut = convertMultiplePagedResultToPublishData(finalResult);
-		publishEvent(dataIn, dataOut, FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE);
+		final var finalMultiplePagedResult = posFindBy(multiplePagedResult);
 
 		LOGGER.debug("Found by '{}', session '{}'", finalPageable, session);
 
-		return finalResult;
+		return finalMultiplePagedResult;
 	}
 
 	// ---------------------------------------------------------------------------
 
-	protected Supplier<String> convertSortToPublishData(final Specification specification, final Sort sort) {
-		return () -> Objects.toString(specification).concat(SPACE).concat(Objects.toString(sort));
-	}
-
-	protected Supplier<String> convertOneResultResultToPublishData(final OneResult oneResult) {
-		return () -> Objects.toString(oneResult);
-	}
-
+	/**
+	 * 
+	 * @param specification
+	 * 
+	 * @param sort
+	 * 
+	 * @return
+	 */
 	protected Entry<Specification, Sort> preFindOneBy(final Specification specification, final Sort sort) {
 		return new SimpleEntry<>(specification, sort);
 	}
 
+	/**
+	 * 
+	 * @param oneResult
+	 * 
+	 * @return
+	 */
 	protected OneResult posFindOneBy(final OneResult oneResult) {
 		return oneResult;
 	}
@@ -132,7 +133,10 @@ public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public OneResult findOneBy(@Nullable final Specification specification, @Nullable final Sort sort) {
+	public OneResult findOneBy(
+			@Nullable final Specification specification,
+			@Nullable final Sort sort,
+			final Object... directives) {
 
 		final var session = securityService.getSession();
 
@@ -142,22 +146,23 @@ public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends 
 		final var finalSpecification = finalEntry.getKey();
 		final var finalSort = finalEntry.getValue();
 
-		final OneResult result;
+		final OneResult oneResult;
 
 		try {
-			result = findOneByFunctionWithOrder.apply(finalSpecification, finalSort, null);
+			oneResult = findOneByFunctionWithOrder.apply(finalSpecification, finalSort, null);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					FIND_ENTITY_BY_SPECIFICATION_SORTED,
+					getEntityClazz(),
+					directives);
 		}
 
-		final var finalResult = posFindOneBy(result);
-
-		final var dataIn = convertSortToPublishData(finalSpecification, finalSort);
-		final var dataOut = convertOneResultResultToPublishData(finalResult);
-		publishEvent(dataIn, dataOut, FIND_ALL_ENTITIES_PAGEABLE);
+		final var finalOneResult = posFindOneBy(oneResult);
 
 		LOGGER.debug("Found first by '{}' & '{}', session '{}'", finalSpecification, sort, session);
 
-		return finalResult;
+		return finalOneResult;
 	}
 }

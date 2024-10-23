@@ -160,10 +160,10 @@ class EntityCommandFacadeUnhappyPathTest {
         void saveEntityWithErrorsBeanValidationTest() throws NoSuchMethodException, SecurityException {
 
                 final var method = defaultFacade.getClass()
-                                .getMethod("save", Object.class);
+                                .getMethod("save", Object.class, Object[].class);
 
                 final var violations = EXECUTABLE_VALIDATOR
-                                .validateParameters(defaultFacade, method, new Object[] { null });
+                                .validateParameters(defaultFacade, method, new Object[] { null, new Object[] {} });
 
                 assertThat(violations)
                                 .hasSize(1)

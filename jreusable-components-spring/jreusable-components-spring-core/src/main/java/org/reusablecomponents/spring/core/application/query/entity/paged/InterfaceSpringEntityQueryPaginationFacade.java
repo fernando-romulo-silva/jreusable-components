@@ -30,5 +30,5 @@ public interface InterfaceSpringEntityQueryPaginationFacade<Entity extends Abstr
    */
   @Override
   @Cacheable
-  Optional<Entity> findFirst(final Sort sort);
+  Optional<Entity> findFirst(final Sort sort, final Object... directives);
 }

@@ -40,7 +40,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 		super(new EntityCommandFacadeBuilder<>($ -> {
 
 			// save --------------------------------
-			$.saveFunction = entity -> {
+			$.saveFunction = (entity, directives) -> {
 
 				if (Objects.isNull(entity.getId())) {
 					throw new IllegalStateException("Entity with invalid id: " + entity);
@@ -197,7 +197,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 
 			// others --------------------------------
 			$.securityService = new DummySecurityService();
-			$.publisherService = new LoggerPublisherSerice();
+			// $.publisherService = new LoggerPublisherSerice();
 			$.exceptionAdapterService = new ExceptionAdapterListService();
 			$.i18nService = new JavaSEI18nService();
 		}));

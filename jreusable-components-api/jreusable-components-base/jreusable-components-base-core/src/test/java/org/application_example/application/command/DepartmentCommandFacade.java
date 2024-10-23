@@ -12,7 +12,7 @@ public class DepartmentCommandFacade extends EntityCommandFacadeList<Department,
     }
 
     @Override
-    protected Department preSave(final Department saveEntityIn) {
+    protected Department preSave(final Department saveEntityIn, final Object... directives) {
 
         if (ObjectUtils.allNull(saveEntityIn)) {
             return saveEntityIn;

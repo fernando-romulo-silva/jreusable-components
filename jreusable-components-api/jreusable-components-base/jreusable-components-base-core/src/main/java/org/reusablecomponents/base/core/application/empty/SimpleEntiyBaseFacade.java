@@ -18,7 +18,7 @@ public non-sealed class SimpleEntiyBaseFacade<Entity extends AbstractEntity<Id>,
 			final InterfaceExceptionAdapterService exceptionTranslatorService) {
 
 		super(new EntiyBaseFacadeBuilder($ -> {
-			$.publisherService = publisherService;
+
 			$.i18nService = i18nService;
 			$.securityService = securityService;
 			$.exceptionAdapterService = exceptionTranslatorService;

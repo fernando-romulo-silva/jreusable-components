@@ -1,29 +1,22 @@
 package org.reusablecomponents.base.core.application.query.entity.paged;
 
 import static org.reusablecomponents.base.messaging.operation.QueryOperation.FIND_ALL_ENTITIES_PAGEABLE;
+import static org.reusablecomponents.base.messaging.operation.QueryOperation.FIND_ENTITY_SORTED;
 
-import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.reusablecomponents.base.core.application.base.EntiyBaseFacade;
-import org.reusablecomponents.base.core.application.base.EntiyBaseFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Supplier;
 
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * @param <Entity>
- * @param <Id>
- * @param <OneResult>
- * @param <MultiplePagedResult>
- * @param <Pageable>
- * @param <Sort>
+ * The default <code>InterfaceEntityQueryPaginationFacade</code>'s
+ * implementation.
  */
 public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort>
 		extends EntiyBaseFacade<Entity, Id>
@@ -36,35 +29,40 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	protected final Function<Sort, OneResult> findFirstFunction;
 
 	/**
+	 * Default constructor
 	 * 
-	 * @param findAllFunction
-	 * @param findFirstFunction
+	 * @param builder Object in charge to construct this one
 	 */
-	public EntityQueryPaginationFacade() {
-		super(new EntiyBaseFacadeBuilder($ -> {
-		}));
+	protected EntityQueryPaginationFacade(
+			@NotNull final EntityQueryPaginationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> builder) {
 
-		// @NotNull final BiFunction<Pageable, Object[], MultiplePagedResult>
-		// findAllFunction,
-		// @NotNull final Function<Sort, OneResult> findFirstFunction
-		this.findAllFunction = null;
-		this.findFirstFunction = null;
+		super(builder);
+
+		this.findAllFunction = builder.findAllFunction;
+		this.findFirstFunction = builder.findFirstFunction;
 	}
 
-	// ---------------------------------------------------------------------------
-	protected Supplier<String> convertPageableToPublishDataIn(final Pageable pageable) {
-		return () -> Objects.toString(pageable);
-	}
-
-	protected Supplier<String> convertMultiplePagedResultToPublishDataOut(
-			final MultiplePagedResult multiplePagedResult) {
-		return () -> Objects.toString(multiplePagedResult);
-	}
-
+	/**
+	 * Method used to change directives object before use it (findAll method).
+	 * 
+	 * @param pageable   The object to be changed
+	 * 
+	 * @param directives The object to be changed
+	 * 
+	 * @return A new {@code Pageable} object
+	 */
 	protected Pageable preFindAll(final Pageable pageable, @NotNull final Object... directives) {
 		return pageable;
 	}
 
+	/**
+	 * Method used to change multiplePagedResult object after use it (findAll
+	 * method).
+	 * 
+	 * @param multiplePagedResult The object to be changed
+	 * 
+	 * @return A new {@code MultiplePagedResult} object
+	 */
 	protected MultiplePagedResult posFindAll(final MultiplePagedResult multiplePagedResult) {
 		return multiplePagedResult;
 	}
@@ -82,39 +80,47 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 
 		final var finalPageable = preFindAll(pageable, directives);
 
-		final MultiplePagedResult result;
+		final MultiplePagedResult multiplePagedResult;
 
 		try {
-			result = findAllFunction.apply(finalPageable, directives);
+			multiplePagedResult = findAllFunction.apply(finalPageable, directives);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					FIND_ALL_ENTITIES_PAGEABLE,
+					getEntityClazz(),
+					finalPageable,
+					directives);
 		}
 
-		final var finalResult = posFindAll(result);
-
-		final var dataIn = convertPageableToPublishDataIn(finalPageable);
-		final var dataOut = convertMultiplePagedResultToPublishDataOut(finalResult);
-		publishEvent(dataIn, dataOut, FIND_ALL_ENTITIES_PAGEABLE);
+		final var finalMultiplePagedResult = posFindAll(multiplePagedResult);
 
 		LOGGER.debug("Found all by '{}', session '{}'", finalPageable, session);
 
-		return finalResult;
+		return finalMultiplePagedResult;
 	}
 
 	// ---------------------------------------------------------------------------
 
-	protected Supplier<String> convertSortToPublishDataIn(final Sort sort) {
-		return () -> Objects.toString(sort);
-	}
-
-	protected Supplier<String> convertOneResultResultToPublishDataOut(final OneResult oneResult) {
-		return () -> Objects.toString(oneResult);
-	}
-
-	protected Sort preFindFirst(final Sort sort) {
+	/**
+	 * 
+	 * @param sort
+	 * 
+	 * @param directives
+	 * 
+	 * @return
+	 */
+	protected Sort preFindFirst(final Sort sort, final Object... directives) {
 		return sort;
 	}
 
+	/**
+	 * 
+	 * @param oneResult
+	 * 
+	 * @return
+	 */
 	protected OneResult posFindFirst(final OneResult oneResult) {
 		return oneResult;
 	}
@@ -123,30 +129,32 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final OneResult findFirst(@Nullable final Sort sort) {
+	public OneResult findFirst(@Nullable final Sort sort, final Object... directives) {
 
 		final var session = securityService.getSession();
 
 		LOGGER.debug("Finding first by '{}', session '{}'", sort, session);
 
-		final var finalSort = preFindFirst(sort);
+		final var finalSort = preFindFirst(sort, directives);
 
-		final OneResult result;
+		final OneResult oneResult;
 
 		try {
-			result = findFirstFunction.apply(finalSort);
+			oneResult = findFirstFunction.apply(finalSort);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					FIND_ENTITY_SORTED,
+					getEntityClazz(),
+					sort,
+					directives);
 		}
 
-		final var finalResult = posFindFirst(result);
-
-		final var dataIn = convertSortToPublishDataIn(finalSort);
-		final var dataOut = convertOneResultResultToPublishDataOut(finalResult);
-		publishEvent(dataIn, dataOut, FIND_ALL_ENTITIES_PAGEABLE);
+		final var finalOneResult = posFindFirst(oneResult);
 
 		LOGGER.debug("Found first by '{}', session '{}'", finalSort, session);
 
-		return finalResult;
+		return finalOneResult;
 	}
 }

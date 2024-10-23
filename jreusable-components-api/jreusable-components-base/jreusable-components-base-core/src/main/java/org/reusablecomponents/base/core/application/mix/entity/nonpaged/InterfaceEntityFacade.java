@@ -60,15 +60,15 @@ public interface InterfaceEntityFacade<Entity extends AbstractEntity<Id>, Id, //
      * {@inheritDoc}
      */
     @Override
-    default SaveEntityOut save(final SaveEntityIn saveEntityIn) {
-        return getEntityCommandFacade().save(saveEntityIn);
+    default SaveEntityOut save(final SaveEntityIn saveEntityIn, final Object... directives) {
+        return getEntityCommandFacade().save(saveEntityIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default SaveEntitiesOut saveAll(SaveEntitiesIn saveEntitiesIn) {
+    default SaveEntitiesOut saveAll(SaveEntitiesIn saveEntitiesIn, final Object... directives) {
         return getEntityCommandFacade().saveAll(saveEntitiesIn);
     }
 
@@ -76,48 +76,48 @@ public interface InterfaceEntityFacade<Entity extends AbstractEntity<Id>, Id, //
      * {@inheritDoc}
      */
     @Override
-    default UpdateEntityOut update(final UpdateEntityIn updateEntityIn) {
-        return getEntityCommandFacade().update(updateEntityIn);
+    default UpdateEntityOut update(final UpdateEntityIn updateEntityIn, final Object... directives) {
+        return getEntityCommandFacade().update(updateEntityIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default UpdateEntitiesOut updateAll(final UpdateEntitiesIn updateEntitiesIn) {
-        return getEntityCommandFacade().updateAll(updateEntitiesIn);
+    default UpdateEntitiesOut updateAll(final UpdateEntitiesIn updateEntitiesIn, final Object... directives) {
+        return getEntityCommandFacade().updateAll(updateEntitiesIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default DeleteEntityOut delete(final DeleteEntityIn deleteEntityIn) {
-        return getEntityCommandFacade().delete(deleteEntityIn);
+    default DeleteEntityOut delete(final DeleteEntityIn deleteEntityIn, final Object... directives) {
+        return getEntityCommandFacade().delete(deleteEntityIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default DeleteEntitiesOut deleteAll(final DeleteEntitiesIn deleteEntitiesIn) {
-        return getEntityCommandFacade().deleteAll(deleteEntitiesIn);
+    default DeleteEntitiesOut deleteAll(final DeleteEntitiesIn deleteEntitiesIn, final Object... directives) {
+        return getEntityCommandFacade().deleteAll(deleteEntitiesIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default DeleteIdOut deleteBy(final DeleteIdIn deleteIdIn) {
-        return getEntityCommandFacade().deleteBy(deleteIdIn);
+    default DeleteIdOut deleteBy(final DeleteIdIn deleteIdIn, final Object... directives) {
+        return getEntityCommandFacade().deleteBy(deleteIdIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default DeleteIdsOut deleteAllBy(final DeleteIdsIn deleteIdsIn) {
-        return getEntityCommandFacade().deleteAllBy(deleteIdsIn);
+    default DeleteIdsOut deleteAllBy(final DeleteIdsIn deleteIdsIn, final Object... directives) {
+        return getEntityCommandFacade().deleteAllBy(deleteIdsIn, directives);
     }
 
     /**

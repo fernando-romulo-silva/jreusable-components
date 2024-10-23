@@ -54,63 +54,63 @@ public abstract class AbstractEntityCommonFacade<Entity extends AbstractEntity<I
      * {@inheritDoc}
      */
     @Override
-    public SaveEntityOut save(final SaveEntityIn saveEntityIn) {
-        return entityCommandFacade.save(saveEntityIn);
+    public SaveEntityOut save(final SaveEntityIn saveEntityIn, final Object... directives) {
+        return entityCommandFacade.save(saveEntityIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public SaveEntitiesOut saveAll(final SaveEntitiesIn saveEntitiesIn) {
-        return entityCommandFacade.saveAll(saveEntitiesIn);
+    public SaveEntitiesOut saveAll(final SaveEntitiesIn saveEntitiesIn, final Object... directives) {
+        return entityCommandFacade.saveAll(saveEntitiesIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public UpdateEntityOut update(final UpdateEntityIn updateEntityIn) {
-        return entityCommandFacade.update(updateEntityIn);
+    public UpdateEntityOut update(final UpdateEntityIn updateEntityIn, final Object... directives) {
+        return entityCommandFacade.update(updateEntityIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public UpdateEntitiesOut updateAll(final UpdateEntitiesIn updateEntitiesIn) {
-        return entityCommandFacade.updateAll(updateEntitiesIn);
+    public UpdateEntitiesOut updateAll(final UpdateEntitiesIn updateEntitiesIn, final Object... directives) {
+        return entityCommandFacade.updateAll(updateEntitiesIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public DeleteEntityOut delete(final DeleteEntityIn deleteEntityIn) {
-        return entityCommandFacade.delete(deleteEntityIn);
+    public DeleteEntityOut delete(final DeleteEntityIn deleteEntityIn, final Object... directives) {
+        return entityCommandFacade.delete(deleteEntityIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public DeleteEntitiesOut deleteAll(final DeleteEntitiesIn deleteEntitiesIn) {
-        return entityCommandFacade.deleteAll(deleteEntitiesIn);
+    public DeleteEntitiesOut deleteAll(final DeleteEntitiesIn deleteEntitiesIn, final Object... directives) {
+        return entityCommandFacade.deleteAll(deleteEntitiesIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public DeleteIdOut deleteBy(final DeleteIdIn deleteIdIn) {
-        return entityCommandFacade.deleteBy(deleteIdIn);
+    public DeleteIdOut deleteBy(final DeleteIdIn deleteIdIn, final Object... directives) {
+        return entityCommandFacade.deleteBy(deleteIdIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public DeleteIdsOut deleteAllBy(DeleteIdsIn deleteIdsIn) {
-        return entityCommandFacade.deleteAllBy(deleteIdsIn);
+    public DeleteIdsOut deleteAllBy(DeleteIdsIn deleteIdsIn, final Object... directives) {
+        return entityCommandFacade.deleteAllBy(deleteIdsIn, directives);
     }
 }

@@ -42,7 +42,7 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 	 * 
 	 * @param builder Object in charge to construct this one
 	 */
-	public EntityQuerySpecificationFacade(
+	protected EntityQuerySpecificationFacade(
 			@NotNull final EntityQuerySpecificationFacadeBuilder<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> builder) {
 
 		super(builder);
@@ -54,30 +54,6 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 	}
 
 	// ---------------------------------------------------------------------------
-
-	/**
-	 * Create a supplier function (deferred execution) that converts a
-	 * {@code Specification} object to String to show in logs, the default is the
-	 * <code>java.util.Objects.toString</code>
-	 * 
-	 * @param specification The object to transform
-	 * @return A Supplier object
-	 */
-	protected Supplier<String> convertSpecificationToPublishDataIn(final Specification specification) {
-		return () -> Objects.toString(specification);
-	}
-
-	/**
-	 * Create a supplier function (deferred execution) that converts a
-	 * {@code MultipleResult} object to String to show in logs, the default is the
-	 * <code>java.util.Objects.toString</code>
-	 * 
-	 * @param multipleResult The entity group to transform
-	 * @return A Supplier object
-	 */
-	protected Supplier<String> convertMultipleResultToPublishDataOut(final MultipleResult multipleResult) {
-		return () -> Objects.toString(multipleResult);
-	}
 
 	/**
 	 * Method used to change specification object before use it (FindBy method).
@@ -113,23 +89,27 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 
 		final var finalSpecification = preFindBy(specification);
 
-		final MultipleResult result;
+		LOGGER.debug("Findind by finalSpecification '{}' ", finalSpecification);
+
+		final MultipleResult multipleResult;
 
 		try {
-			result = findBySpecificationFunction.apply(specification, directives);
+			multipleResult = findBySpecificationFunction.apply(specification, directives);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					FIND_ENTITIES_BY_SPECIFICATION,
+					getEntityClazz());
 		}
 
-		final var finalResult = posFindBy(result);
+		LOGGER.debug("Find by result '{}'", multipleResult);
 
-		final var dataIn = convertSpecificationToPublishDataIn(finalSpecification);
-		final var dataOut = convertMultipleResultToPublishDataOut(finalResult);
-		publishEvent(dataIn, dataOut, FIND_ENTITIES_BY_SPECIFICATION);
+		final var finalMultipleResult = posFindBy(multipleResult);
 
 		LOGGER.debug("Found by '{}', session '{}'", finalSpecification, session);
 
-		return finalResult;
+		return finalMultipleResult;
 	}
 
 	// ---------------------------------------------------------------------------
@@ -158,18 +138,6 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 	}
 
 	/**
-	 * Create a supplier function (deferred execution) that converts a
-	 * {@code OneResult} object to String to show in logs, the default is the
-	 * <code>java.util.Objects.toString</code>
-	 * 
-	 * @param oneResult The entity group to transform
-	 * @return A Supplier object
-	 */
-	protected Supplier<String> convertOneResultToPublishDataOut(final OneResult oneResult) {
-		return () -> Objects.toString(oneResult);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -181,23 +149,27 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 
 		final var finalSpecification = preFindOneBy(specification);
 
-		final OneResult result;
+		LOGGER.debug("Findind by finalSpecification '{}' ", finalSpecification);
+
+		final OneResult oneResult;
 
 		try {
-			result = findOneByFunction.apply(finalSpecification, directives);
+			oneResult = findOneByFunction.apply(finalSpecification, directives);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					FIND_ENTITY_BY_SPECIFICATION,
+					getEntityClazz());
 		}
 
-		final var finalResult = posFindOneBy(result);
+		LOGGER.debug("Find by result '{}'", oneResult);
 
-		final var dataIn = convertSpecificationToPublishDataIn(finalSpecification);
-		final var dataOut = convertOneResultToPublishDataOut(finalResult);
-		publishEvent(dataIn, dataOut, FIND_ENTITY_BY_SPECIFICATION);
+		final var finalOneResult = posFindOneBy(oneResult);
 
 		LOGGER.debug("Found one by '{}', session '{}'", finalSpecification, session);
 
-		return finalResult;
+		return finalOneResult;
 	}
 
 	// ---------------------------------------------------------------------------
@@ -225,18 +197,6 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 	}
 
 	/**
-	 * Create a supplier function (deferred execution) that converts a
-	 * {@code ExistsResult} object to String to show in logs, the default is the
-	 * <code>java.util.Objects.toString</code>
-	 * 
-	 * @param resultFinal The entity group to transform
-	 * @return A Supplier object
-	 */
-	protected Supplier<String> convertExistsResultToPublishDataOut(final ExistsResult resultFinal) {
-		return () -> Objects.toString(resultFinal);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -248,19 +208,23 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 
 		final var finalSpecification = preExistsBy(specification);
 
-		final ExistsResult result;
+		LOGGER.debug("Existing by finalSpecification '{}' ", finalSpecification);
+
+		final ExistsResult existsResult;
 
 		try {
-			result = existsBySpecificationFunction.apply(finalSpecification);
+			existsResult = existsBySpecificationFunction.apply(finalSpecification);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					EXISTS_BY_SPECIFICATION,
+					getEntityClazz());
 		}
 
-		final var finalResult = posExistsBy(result);
+		LOGGER.debug("Exists by result '{}'", existsResult);
 
-		final var dataIn = convertSpecificationToPublishDataIn(finalSpecification);
-		final var dataOut = convertExistsResultToPublishDataOut(finalResult);
-		publishEvent(dataIn, dataOut, EXISTS_BY_SPECIFICATION);
+		final var finalResult = posExistsBy(existsResult);
 
 		LOGGER.debug("Existed by '{}', session '{}'", finalSpecification, session);
 
@@ -292,18 +256,6 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 	}
 
 	/**
-	 * Create a supplier function (deferred execution) that converts a
-	 * {@code CountResult} object to String to show in logs, the default is the
-	 * <code>java.util.Objects.toString</code>
-	 * 
-	 * @param countResult The entity to transform
-	 * @return A Supplier object
-	 */
-	protected String convertCountResultToPublishDataOut(final CountResult countResult) {
-		return Objects.toString(countResult);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -315,22 +267,26 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 
 		final var finalSpecification = preCountBy(specification);
 
-		final CountResult result;
+		LOGGER.debug("Counting by finalSpecification '{}' ", finalSpecification);
+
+		final CountResult countResult;
 
 		try {
-			result = countBySpecificationFunction.apply(finalSpecification);
+			countResult = countBySpecificationFunction.apply(finalSpecification);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService);
+			throw exceptionAdapterService.convert(
+					ex,
+					i18nService,
+					COUNT_BY_SPECIFICATION,
+					getEntityClazz());
 		}
 
-		final var finalResult = posCountBy(result);
+		LOGGER.debug("Count by result '{}'", countResult);
 
-		final var dataIn = convertSpecificationToPublishDataIn(finalSpecification);
-		final var dataOut = convertCountResultToPublishDataOut(finalResult);
-		publishEvent(dataIn, dataOut, COUNT_BY_SPECIFICATION);
+		final var finalCountResult = posCountBy(countResult);
 
 		LOGGER.debug("Counted by '{}', session '{}'", finalSpecification, session);
 
-		return finalResult;
+		return finalCountResult;
 	}
 }

@@ -1,6 +1,6 @@
 package org.reusablecomponents.base.core.infra.exception.common;
 
-import static org.reusablecomponents.base.core.infra.messages.SystemMessages.ELEMENT_WITH_ID_NOT_FOUND_MSG;
+import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.ELEMENT_WITH_ID_NOT_FOUND_MSG;
 
 import java.text.NumberFormat;
 
