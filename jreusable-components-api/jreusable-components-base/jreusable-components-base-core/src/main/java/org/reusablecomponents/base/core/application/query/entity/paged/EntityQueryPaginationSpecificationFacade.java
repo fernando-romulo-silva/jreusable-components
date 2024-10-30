@@ -1,7 +1,7 @@
 package org.reusablecomponents.base.core.application.query.entity.paged;
 
-import static org.reusablecomponents.base.messaging.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE;
-import static org.reusablecomponents.base.messaging.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION_SORTED;
+import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE;
+import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION_SORTED;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;

@@ -2,11 +2,11 @@ package org.reusablecomponents.base.core.application.query.entity.nonpaged;
 
 import static java.util.Optional.ofNullable;
 import static org.reusablecomponents.base.core.infra.util.Functions.createNullPointerException;
-import static org.reusablecomponents.base.messaging.operation.QueryOperation.COUNT_ALL;
-import static org.reusablecomponents.base.messaging.operation.QueryOperation.EXISTS_ALL;
-import static org.reusablecomponents.base.messaging.operation.QueryOperation.EXISTS_BY_ID;
-import static org.reusablecomponents.base.messaging.operation.QueryOperation.FIND_ALL_ENTITIES;
-import static org.reusablecomponents.base.messaging.operation.QueryOperation.FIND_ENTITY_BY_ID;
+import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.COUNT_ALL;
+import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_ALL;
+import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_BY_ID;
+import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ALL_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_ID;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

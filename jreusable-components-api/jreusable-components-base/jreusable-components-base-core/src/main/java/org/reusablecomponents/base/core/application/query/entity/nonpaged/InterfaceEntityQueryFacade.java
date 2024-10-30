@@ -76,8 +76,6 @@ public non-sealed interface InterfaceEntityQueryFacade<Entity extends AbstractEn
   /**
    * Check if there exists at least an entity.
    * 
-   * @throws NullPointerException     If the parameter 'queryIdIn' is null
-   * 
    * @throws BaseApplicationException If an unidentified error happened
    * 
    * @return Return a {@code ExistsResult} object

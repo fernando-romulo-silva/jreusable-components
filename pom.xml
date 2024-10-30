@@ -6,39 +6,33 @@
 	<artifactId>jreusable-components</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+
 	<parent>
 		<groupId>org.allset.java</groupId>
 		<artifactId>allset-java</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	
+
 	<name>Java Resuable Components</name>
-  	<description>
+	<description>
 		A set of reusable Java components (services, HTTP controllers, JMS, and others) for Spring, Jakarta EE, Quarkus, etc.
     </description>
-    <inceptionYear>2023</inceptionYear>
-    <url>https://${scm.platform}/${scm.account}/${project.artifactId}</url>		
-		
+	<inceptionYear>2023</inceptionYear>
+	<url>https://${scm.platform}/${scm.account}/${project.artifactId}</url>
+
 	<modules>
 		<module>jreusable-components-api</module>
-		
-		<module>jreusable-components-spring</module>
-		<module>jreusable-components-jakarta</module>
-		<module>jreusable-components-quarkus</module>
-		<module>jreusable-components-microprofile</module>
-		<module>jreusable-components-micronaut</module>
-		<module>jreusable-components-helidon</module>
+		<module>jreusable-components-technology</module>
 	</modules>
-	
+
 	<build>
 		<plugins>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-scm-publish-plugin</artifactId>
-			</plugin>			
-			
+			</plugin>
+
 		</plugins>
 	</build>
 

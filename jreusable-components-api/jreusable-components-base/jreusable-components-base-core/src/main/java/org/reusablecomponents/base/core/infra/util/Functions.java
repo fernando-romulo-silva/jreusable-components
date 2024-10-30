@@ -9,7 +9,7 @@ import org.reusablecomponents.base.translation.InterfaceI18nService;
 public class Functions {
 
     private Functions() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("You can't instanciate this class");
     }
 
     /**

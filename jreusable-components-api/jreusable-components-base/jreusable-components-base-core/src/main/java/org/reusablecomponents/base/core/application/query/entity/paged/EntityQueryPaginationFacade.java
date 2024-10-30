@@ -1,7 +1,7 @@
 package org.reusablecomponents.base.core.application.query.entity.paged;
 
-import static org.reusablecomponents.base.messaging.operation.QueryOperation.FIND_ALL_ENTITIES_PAGEABLE;
-import static org.reusablecomponents.base.messaging.operation.QueryOperation.FIND_ENTITY_SORTED;
+import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ALL_ENTITIES_PAGEABLE;
+import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_SORTED;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

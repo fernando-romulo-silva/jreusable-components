@@ -12,7 +12,6 @@
 
 	<modules>
 		<module>jreusable-components-base-core</module>
-		<module>jreusable-components-base-messaging</module>
 		<module>jreusable-components-base-security</module>
 		<module>jreusable-components-base-translation</module>
 		<module>jreusable-components-base-featuretoggles</module>

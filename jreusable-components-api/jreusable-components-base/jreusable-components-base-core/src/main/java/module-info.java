@@ -12,15 +12,16 @@ open module org.reusablecomponent.base.core {
     requires org.apache.commons.lang3;
 
     // -- messaging
-    requires transitive org.reusablecomponent.base.messaging;
     requires transitive org.reusablecomponent.base.security;
-
     requires transitive org.reusablecomponents.base.translation;
 
     // ---------------------------------------------------
     // export
     // -- domain classes
     exports org.reusablecomponents.base.core.domain;
+
+    // -- base facade
+    exports org.reusablecomponents.base.core.application.base;
 
     // -- command facades
     exports org.reusablecomponents.base.core.application.command.entity;
@@ -36,5 +37,10 @@ open module org.reusablecomponent.base.core {
     // -- exception
     exports org.reusablecomponents.base.core.infra.exception;
     exports org.reusablecomponents.base.core.infra.exception.common;
+
+    // -- infra
+    exports org.reusablecomponents.base.core.infra.constants;
+    exports org.reusablecomponents.base.core.infra.util;
+    exports org.reusablecomponents.base.core.infra.util.operation;
 
 }

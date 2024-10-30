@@ -13,7 +13,6 @@ import org.application_example.infra.ExceptionAdapterListService;
 import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacade;
 import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
-import org.reusablecomponents.base.messaging.logger.LoggerPublisherSerice;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
 
 public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>

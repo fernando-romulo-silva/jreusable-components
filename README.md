@@ -10,7 +10,7 @@ I change this project constantly improving and adding new features, click [here]
 
 # The Problem
 
-We could say 90% of our code are CRUD (Create, Read, Update, and Delete), so I realized (and the universe) these operations are repeated on projects, and they do the same thing. Example:  <br />
+We could say 90% of our code are CRUD (Create, Read, Update, and Delete), so I realized (and the universe) these operations are repeated on projects, and they do the same thing. Example: <br />
 
 ```text
 PersonControler (post, put, delete, patch, get)
@@ -21,11 +21,13 @@ PersonRepository (okay, here we have great solutions like Spring Data, Jakarta D
      |
 WhatEverDataBase
 ```
+
 It works for other entities, so we tend to repeat this code.
 
 # About
 
 My intention on this project is to creat a CRUD maker using as background well known frameworks (Spring Frameworks
+
 # Technologies
 
 - Java
@@ -42,7 +44,7 @@ These are the requirements:
 git --version
 ```
 
-- Java version >= 21 
+- Java version >= 21
 
 ```bash
 # check the Java version

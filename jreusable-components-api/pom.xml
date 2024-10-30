@@ -13,6 +13,7 @@
 	<modules>
 		<module>jreusable-components-base</module>
 		<module>jreusable-components-rest</module>
+		<module>jreusable-components-cqrs</module>
 	</modules>
 
 	<properties>

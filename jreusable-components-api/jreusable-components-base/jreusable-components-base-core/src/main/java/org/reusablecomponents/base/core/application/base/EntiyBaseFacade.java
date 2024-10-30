@@ -1,7 +1,5 @@
 package org.reusablecomponents.base.core.application.base;
 
-import java.util.function.Supplier;
-
 import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacade;
 import org.reusablecomponents.base.core.application.empty.SimpleEntiyBaseFacade;
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQueryFacade;
@@ -10,7 +8,6 @@ import org.reusablecomponents.base.core.application.query.entity.paged.EntityQue
 import org.reusablecomponents.base.core.application.query.entity.paged.EntityQueryPaginationSpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.messaging.operation.QueryOperation;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.slf4j.Logger;

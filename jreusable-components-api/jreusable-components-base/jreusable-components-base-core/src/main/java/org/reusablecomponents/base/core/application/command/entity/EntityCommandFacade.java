@@ -2,14 +2,14 @@ package org.reusablecomponents.base.core.application.command.entity;
 
 import static java.util.Optional.ofNullable;
 import static org.reusablecomponents.base.core.infra.util.Functions.createNullPointerException;
-import static org.reusablecomponents.base.messaging.operation.CommandOperation.DELETE_BY_ID;
-import static org.reusablecomponents.base.messaging.operation.CommandOperation.DELETE_BY_IDS;
-import static org.reusablecomponents.base.messaging.operation.CommandOperation.DELETE_ENTITIES;
-import static org.reusablecomponents.base.messaging.operation.CommandOperation.DELETE_ENTITY;
-import static org.reusablecomponents.base.messaging.operation.CommandOperation.SAVE_ENTITIES;
-import static org.reusablecomponents.base.messaging.operation.CommandOperation.SAVE_ENTITY;
-import static org.reusablecomponents.base.messaging.operation.CommandOperation.UPDATE_ENTITIES;
-import static org.reusablecomponents.base.messaging.operation.CommandOperation.UPDATE_ENTITY;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_ID;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_IDS;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_ENTITY;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.SAVE_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.SAVE_ENTITY;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.UPDATE_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.UPDATE_ENTITY;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
