@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.concurrent.ConcurrentUtils;
-import org.application_example.application.TestEntiyBaseFacade;
-import org.application_example.application.TestEntiyNoPublishBaseFacade;
-import org.application_example.domain.Department;
-import org.application_example.domain.Project;
-import org.application_example.infra.DummySecurityService;
+import org.apptest.application.TestEntiyBaseFacade;
+import org.apptest.application.TestEntiyNoPublishBaseFacade;
+import org.apptest.domain.Department;
+import org.apptest.domain.Project;
+import org.apptest.infra.DummySecurityService;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -60,13 +60,17 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 			out.println(event);
 			return ConcurrentUtils.constantFuture(event);
 		};
+
 		final InterfaceI18nService i18nService = (code, params) -> "translated!";
 		final InterfaceSecurityService interfaceSecurityService = new DummySecurityService();
 		final InterfaceExceptionAdapterService exceptionTranslatorService = (ex, i18n,
 				directives) -> new GenericException(ex);
 
 		// when
-		final var facade = new TestEntiyBaseFacade(publisherService, i18nService, interfaceSecurityService,
+		final var facade = new TestEntiyBaseFacade(
+				publisherService,
+				i18nService,
+				interfaceSecurityService,
 				exceptionTranslatorService);
 
 		// then

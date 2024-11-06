@@ -9,5 +9,4 @@ public class DeparmentQueryFacade extends EntityQueryFacadeList<Department, Stri
     public DeparmentQueryFacade(final List<Department> data) {
         super(data);
     }
-
 }

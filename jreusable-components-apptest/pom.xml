@@ -5,18 +5,17 @@
 
 	<parent>
 		<groupId>org.reusablecomponents</groupId>
-		<artifactId>jreusable-components-base</artifactId>
+		<artifactId>jreusable-components</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>jreusable-components-base-security</artifactId>
+	<artifactId>jreusable-components-apptest</artifactId>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commons-lang3.version}</version>
+			<groupId>org.reusablecomponents</groupId>
+			<artifactId>jreusable-components-base-core</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
-
 </project>

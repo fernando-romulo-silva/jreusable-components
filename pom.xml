@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.reusablecomponents</groupId>
+	<packaging>pom</packaging>
 	<artifactId>jreusable-components</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>org.allset.java</groupId>
@@ -23,9 +23,44 @@
 	<modules>
 		<module>jreusable-components-api</module>
 		<module>jreusable-components-technology</module>
+		<module>jreusable-components-apptest</module>
 	</modules>
 
+	<properties>
+		<junit-platform.version>5.11.2</junit-platform.version>
+		<mockito-platform.version>5.14.1</mockito-platform.version>
+		<equalsverifier.version>3.17.1</equalsverifier.version>
+		<to-string-verifier.version>1.4.8</to-string-verifier.version>
+		<assertj-core.version>3.26.3</assertj-core.version>
+
+		<slf4j-api.version>2.0.16</slf4j-api.version>
+		<logback-classic.version>1.5.8</logback-classic.version>
+
+		<commons-lang3.version>3.17.0</commons-lang3.version>
+		<commons-collections4.version>4.4</commons-collections4.version>
+		<commons-text.version>1.12.0</commons-text.version>
+		<commons-beanutils.version>1.9.4</commons-beanutils.version>
+
+		<guava.version>33.3.1-jre</guava.version>
+
+		<jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
+		<jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
+		<jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
+
+		<hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
+	</properties>
+
+
 	<build>
+		<extensions>
+			<!-- Plugin configs -->
+			<extension>
+				<groupId>org.default.extensions</groupId>
+				<artifactId>default-extensions-files</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</extension>
+		</extensions>
+
 		<plugins>
 
 			<plugin>
@@ -33,7 +68,131 @@
 				<artifactId>maven-scm-publish-plugin</artifactId>
 			</plugin>
 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<configuration>
+					<rulesets>
+						<ruleset>default-extensions/pmd/java/pmd-ruleset.xml</ruleset>
+					</rulesets>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<configuration>
+					<excludeBugsFile>default-extensions/spotbugs/spotbugs-excludes.xml</excludeBugsFile>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<configuration>
+					<configLocation>default-extensions/checkstyle/checkstyle-checks.xml</configLocation>
+					<suppressionsLocation>default-extensions/checkstyle/checkstyle-suppressions.xml</suppressionsLocation>
+					<suppressionsFileExpression>default-extensions/checkstyle/checkstyle-xpath-suppressions.xml</suppressionsFileExpression>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+
 		</plugins>
 	</build>
+
+	<reporting>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<configuration>
+					<rulesets>
+						<ruleset>default-extensions/pmd/java/pmd-ruleset.xml</ruleset>
+					</rulesets>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<configuration>
+					<excludeFilterFile>src/main/resources/spotbugs/spotbugs-excludes.xml</excludeFilterFile>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<configuration>
+					<configLocation>default-extensions/checkstyle/checkstyle-checks.xml</configLocation>
+					<suppressionsLocation>default-extensions/checkstyle/checkstyle-suppressions.xml</suppressionsLocation>
+					<suppressionsFileExpression>default-extensions/checkstyle/checkstyle-xpath-suppressions.xml</suppressionsFileExpression>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>taglist-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jdepend-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+			</plugin>
+
+		</plugins>
+
+	</reporting>
 
 </project>

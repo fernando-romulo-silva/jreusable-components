@@ -16,6 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * 
+ */
 public class EntityCommandEvent< // generics
         // default
         Entity extends AbstractEntity<Id>, Id, // basic

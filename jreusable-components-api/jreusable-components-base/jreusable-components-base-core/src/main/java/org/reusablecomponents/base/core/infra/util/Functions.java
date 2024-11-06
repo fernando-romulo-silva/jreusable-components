@@ -6,6 +6,9 @@ import java.util.function.Supplier;
 
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 
+/**
+ * Util class used to stores functions
+ */
 public class Functions {
 
     private Functions() {
@@ -26,5 +29,18 @@ public class Functions {
 
         return () -> new NullPointerException(
                 i18nService.translate(NULL_POINTER_EXCEPTION_MSG, (Object[]) parameters));
+    }
+
+    /**
+     * Create a supplier function to generate null pointer exception when it's
+     * necessary.
+     * 
+     * @param parameter Parameters to show on message error
+     * 
+     * @return An object <code>Supplier<NullPointerException></code>
+     */
+    public static final Supplier<NullPointerException> createNullPointerException(final String parameter) {
+
+        return () -> new NullPointerException("The object '".concat(parameter).concat("' cannot be null"));
     }
 }

@@ -111,7 +111,6 @@ public non-sealed interface InterfaceEntityCommandFacade<Entity extends Abstract
          * 
          * @param updateEntityIn The object you want to save on the persistence
          *                       mechanism
-         * 
          * @param directives     Objects used to configure the save all action
          * 
          * @throws NullPointerException     If the parameter is null
@@ -134,7 +133,6 @@ public non-sealed interface InterfaceEntityCommandFacade<Entity extends Abstract
          * 
          * @param updateEntitiesIn The objects you want to update on the persistence
          *                         mechanism
-         * 
          * @param directives       Objects used to configure the update all action
          * 
          * @throws NullPointerException     If the parameter is null
@@ -157,7 +155,6 @@ public non-sealed interface InterfaceEntityCommandFacade<Entity extends Abstract
          * 
          * @param deleteEntityIn The object you want to delete on the persistence
          *                       mechanism
-         * 
          * @param directives     Objects used to configure the delete action
          * 
          * @throws NullPointerException     If the parameter is null
@@ -182,7 +179,6 @@ public non-sealed interface InterfaceEntityCommandFacade<Entity extends Abstract
          * 
          * @param deleteEntitiesIn The object you want to delete on the persistence
          *                         mechanism
-         * 
          * @param directives       Objects used to configure the delete all action
          * 
          * @throws NullPointerException     If the parameter is null
@@ -206,7 +202,6 @@ public non-sealed interface InterfaceEntityCommandFacade<Entity extends Abstract
          * mechanism and return a {@code DeleteIdOut} object, a status operation object.
          * 
          * @param deleteIdIn The entity id
-         * 
          * @param directives Objects used to configure the delete by action
          * 
          * @throws NullPointerException           If the parameter is null
@@ -231,7 +226,6 @@ public non-sealed interface InterfaceEntityCommandFacade<Entity extends Abstract
          * The batch version of {@link #deleteBy(Id id) delete method}.
          * 
          * @param DeleteIdsIn The entity ids
-         * 
          * @param directives  Objects used to configure the delete by action
          * 
          * @throws NullPointerException           If the parameter is null

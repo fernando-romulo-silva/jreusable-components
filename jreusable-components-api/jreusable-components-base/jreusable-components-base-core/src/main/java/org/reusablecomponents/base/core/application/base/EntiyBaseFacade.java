@@ -1,5 +1,8 @@
 package org.reusablecomponents.base.core.application.base;
 
+import static java.util.Optional.ofNullable;
+import static org.reusablecomponents.base.core.infra.util.Functions.*;
+
 import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacade;
 import org.reusablecomponents.base.core.application.empty.SimpleEntiyBaseFacade;
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQueryFacade;
@@ -50,15 +53,18 @@ public sealed class EntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * 
 	 * @param builder Object attribute constructor.
 	 */
-	protected EntiyBaseFacade(final EntiyBaseFacadeBuilder builder) {
+	protected EntiyBaseFacade(@NotNull final EntiyBaseFacadeBuilder builder) {
 		super();
+
+		final var finalBuilder = ofNullable(builder)
+				.orElseThrow(createNullPointerException("builder"));
 
 		this.entityClazz = retrieveEntityClazz();
 		this.idClazz = retrieveIdClazz();
 
-		this.i18nService = builder.i18nService;
-		this.securityService = builder.securityService;
-		this.exceptionAdapterService = builder.exceptionAdapterService;
+		this.i18nService = finalBuilder.i18nService;
+		this.securityService = finalBuilder.securityService;
+		this.exceptionAdapterService = finalBuilder.exceptionAdapterService;
 	}
 
 	// ------

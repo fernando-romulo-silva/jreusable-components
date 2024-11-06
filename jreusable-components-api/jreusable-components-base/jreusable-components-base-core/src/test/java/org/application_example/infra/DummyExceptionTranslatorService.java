@@ -12,9 +12,9 @@ public class DummyExceptionTranslatorService implements InterfaceExceptionAdapte
      */
     @Override
     public BaseApplicationException convert(
-            final Exception in,
+            final Exception ex,
             final InterfaceI18nService i18nService,
             final Object... directives) {
-        return new GenericException(in);
+        return new GenericException(ex);
     }
 }

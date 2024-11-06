@@ -4,7 +4,7 @@ import static java.text.MessageFormat.format;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
-import org.application_example.application.TestEntiyBaseFacade;
+import org.apptest.application.TestEntiyBaseFacade;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;

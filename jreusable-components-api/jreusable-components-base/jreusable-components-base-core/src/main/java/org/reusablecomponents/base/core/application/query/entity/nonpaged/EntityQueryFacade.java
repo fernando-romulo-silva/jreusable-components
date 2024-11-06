@@ -1,5 +1,6 @@
 package org.reusablecomponents.base.core.application.query.entity.nonpaged;
 
+import static java.text.MessageFormat.format;
 import static java.util.Optional.ofNullable;
 import static org.reusablecomponents.base.core.infra.util.Functions.createNullPointerException;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.COUNT_ALL;
@@ -12,6 +13,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reusablecomponents.base.core.application.base.EntiyBaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
@@ -89,6 +91,21 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 	}
 
 	/**
+	 * Method used to handle find all errors.
+	 * 
+	 * @param exception  Exception thrown by find all operation
+	 * @param directives Objects used to configure the find all operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorFindAll(
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -106,10 +123,16 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		final MultipleResult multipleResult;
 
 		try {
-			multipleResult = findAllFunction.apply(directives);
+			multipleResult = findAllFunction.apply(finalDirectives);
 		} catch (final Exception ex) {
+
+			final var finalException = errorFindAll(ex, finalDirectives);
+
+			final var errorMsg = format("Error find all directives '{}', session '{}'", finalDirectives, session);
+			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+
 			throw exceptionAdapterService.convert(
-					ex,
+					finalException,
 					i18nService,
 					FIND_ALL_ENTITIES,
 					getEntityClazz(),
@@ -119,9 +142,6 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		LOGGER.debug("Find all result '{}'", multipleResult);
 
 		final var finalMultipleResult = posFindAll(multipleResult);
-
-		// TODO
-		// findAllPublishEvent(finalMultipleResult, finalDirectives);
 
 		LOGGER.debug("Found all '{}', session '{}'", getEntityClazz().getSimpleName(), session);
 
@@ -162,6 +182,23 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 	}
 
 	/**
+	 * Method used to handle find by id operation.
+	 * 
+	 * @param queryIdIn  The object used to find by id
+	 * @param exception  Exception thrown by save operation
+	 * @param directives Objects used to configure the save operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorFindBy(
+			final QueryIdIn queryIdIn,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -181,10 +218,16 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		final OneResult oneResult;
 
 		try {
-			oneResult = findByIdFunction.apply(queryIdIn, directives);
+			oneResult = findByIdFunction.apply(finalQueryIdIn, directives);
 		} catch (final Exception ex) {
+
+			final var finalException = errorFindBy(finalQueryIdIn, ex, directives);
+
+			final var errorMsg = format("Error find by id '{}', session '{}'", finalQueryIdIn, session);
+			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+
 			throw exceptionAdapterService.convert(
-					ex,
+					finalException,
 					i18nService,
 					FIND_ENTITY_BY_ID,
 					getEntityClazz(),
@@ -194,9 +237,6 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		LOGGER.debug("Find by id result '{}'", oneResult);
 
 		final var finalOneResult = posFindBy(oneResult);
-
-		// TODO
-		// findByPublishEvent(finalQueryIdIn, finalOneResult, directives);
 
 		LOGGER.debug("Found by id '{}', result '{}', session '{}'", finalQueryIdIn, finalOneResult, session);
 
@@ -226,6 +266,21 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 	}
 
 	/**
+	 * Method used to handle exists by id operation.
+	 * 
+	 * @param queryIdIn The object used to exists by id
+	 * @param exception Exception thrown by exists by id operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorExistBy(
+			final QueryIdIn queryIdIn,
+			final Exception exception) {
+
+		return exception;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -247,8 +302,14 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		try {
 			existsResult = existsByIdFunction.apply(finalQueryIdIn);
 		} catch (final Exception ex) {
+
+			final var finalException = errorExistBy(finalQueryIdIn, ex);
+
+			final var errorMsg = format("Error exists by id '{}', session '{}'", finalQueryIdIn, session);
+			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+
 			throw exceptionAdapterService.convert(
-					ex,
+					finalException,
 					i18nService,
 					EXISTS_BY_ID,
 					getEntityClazz(),
@@ -258,9 +319,6 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		LOGGER.debug("Existing by id, existsResult '{}'", existsResult);
 
 		final var finalExistsResult = posExistsBy(existsResult);
-
-		// TODO
-		// existsByPublishEvent(finalQueryIdIn, finalExistsResult);
 
 		LOGGER.debug("Existed by '{}', result '{}', session '{}'", finalQueryIdIn, finalExistsResult, session);
 
@@ -279,6 +337,17 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 	}
 
 	/**
+	 * Method used to handle count all operation.
+	 * 
+	 * @param exception Exception thrown by count all operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorCountAll(final Exception exception) {
+		return exception;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -293,8 +362,15 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		try {
 			countResult = countAllFunction.get();
 		} catch (final Exception ex) {
+
+			final var finalException = errorCountAll(ex);
+
+			final var errorMsg = format("Error counting all, entity '{}', session '{}'",
+					getEntityClazz().getSimpleName(), session);
+			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+
 			throw exceptionAdapterService.convert(
-					ex,
+					finalException,
 					i18nService,
 					COUNT_ALL,
 					getEntityClazz());
@@ -304,15 +380,23 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 
 		final var finalCountResult = posCountAll(countResult);
 
-		// TODO
-		// countAllPublishEvent(finalCountResult);
-
 		LOGGER.debug("Counted all entity '{}', result '{}', and session '{}'",
 				getEntityClazz().getSimpleName(),
 				finalCountResult,
 				session);
 
 		return finalCountResult;
+	}
+
+	/**
+	 * Method used to handle exists all operation.
+	 * 
+	 * @param exception Exception thrown by exists all operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorExistAll(final Exception exception) {
+		return exception;
 	}
 
 	/**
@@ -330,8 +414,14 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		try {
 			existsResult = existsAllFunction.get();
 		} catch (final Exception ex) {
+			final var finalException = errorExistAll(ex);
+
+			final var errorMsg = format("Error exists all, entity '{}', session '{}'",
+					getEntityClazz().getSimpleName(), session);
+			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+
 			throw exceptionAdapterService.convert(
-					ex,
+					finalException,
 					i18nService,
 					EXISTS_ALL,
 					getEntityClazz());
@@ -340,9 +430,6 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		LOGGER.debug("Exists all result '{}'", existsResult);
 
 		final var finalExistsResult = posExistsBy(existsResult);
-
-		// TODO
-		// existsAllPublishEvent(finalExistsResult);
 
 		LOGGER.debug(
 				"Existed all '{}', result '{}', session '{}'",

@@ -70,11 +70,16 @@ public class EntiyBaseEvent {
      * 
      * @param dataIn    The input data
      * @param dataOut   The output data
+     * @param status    The operation status: failure or success
      * @param operation The operation performed
      * 
      * @return A <code>Event</code> object
      */
-    public Event createEvent(final String dataIn, final String dataOut, final InterfaceOperation operation) {
+    public Event createEvent(
+            final String dataIn,
+            final String dataOut,
+            final String status,
+            final InterfaceOperation operation) {
 
         LOGGER.debug("Creating event with '{}' operation", operation);
 
@@ -88,7 +93,7 @@ public class EntiyBaseEvent {
         final var machineName = securityService.getMachineName();
 
         final var event = new Event.Builder().with($ -> {
-            $.what = new What(dataIn, dataOut);
+            $.what = new What(dataIn, dataOut, status);
             $.when = new When();
             $.where = new Where(application, machineName);
             $.who = new Who(realm, user, session);
@@ -131,19 +136,22 @@ public class EntiyBaseEvent {
      * 
      * @param dataIn    The function that generates the input event data
      * @param dataOut   The function that generates the output event data
+     * @param status    The operation status: failure or success
      * @param operation The operation performed
      */
     public void publishEvent(
             final String dataIn,
             final String dataOut,
+            final String status,
             final InterfaceOperation operation) {
 
         LOGGER.debug("Publishing event with operation '{}'", operation);
 
-        final var finalOperation = Optional.of(operation).orElseThrow(
-                () -> new NullPointerException(i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "operation")));
+        final var finalOperation = Optional.of(operation)
+                .orElseThrow(
+                        () -> new NullPointerException(i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "operation")));
 
-        final var event = createEvent(dataIn, dataOut, finalOperation);
+        final var event = createEvent(dataIn, dataOut, status, finalOperation);
 
         final var eventToPublish = prepareEventToPublisher(event);
 
@@ -177,10 +185,11 @@ public class EntiyBaseEvent {
         final var what = event.getWhat();
         final var dataIn = what.dataIn();
         final var dataOut = what.dataOut();
+        final var status = what.status();
 
         msg = StringUtils.replaceEach(msg,
-                new String[] { "${dataIn}", "${dataOut}" },
-                new String[] { dataIn, dataOut });
+                new String[] { "${dataIn}", "${dataOut}", "${status}" },
+                new String[] { dataIn, dataOut, status });
 
         // ------------------------------------------
         final var when = event.getWhen();

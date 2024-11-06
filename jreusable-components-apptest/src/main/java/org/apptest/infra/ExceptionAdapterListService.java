@@ -1,4 +1,4 @@
-package org.application_example.infra;
+package org.apptest.infra;
 
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;

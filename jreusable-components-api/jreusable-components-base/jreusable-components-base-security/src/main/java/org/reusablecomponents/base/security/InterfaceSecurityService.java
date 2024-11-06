@@ -1,7 +1,17 @@
 package org.reusablecomponents.base.security;
 
 /**
- * Service in charge for security matters.
+ * Interface service in charge for security matters. <br />
+ * Implementations should use its technology to retrieve information about:
+ * 
+ * <ul>
+ * <li>User name</li>
+ * <li>User realm</li>
+ * <li>Session</li>
+ * <li>Application</li>
+ * <li>Machine name</li>
+ * </ul>
+ * 
  */
 public interface InterfaceSecurityService {
 

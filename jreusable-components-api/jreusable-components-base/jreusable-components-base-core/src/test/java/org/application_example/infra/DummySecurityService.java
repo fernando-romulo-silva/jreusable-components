@@ -9,7 +9,7 @@ public class DummySecurityService implements InterfaceSecurityService {
      */
     @Override
     public String getUserName() {
-	return "DummyUser";
+        return "DummyUser";
     }
 
     /**
@@ -17,7 +17,7 @@ public class DummySecurityService implements InterfaceSecurityService {
      */
     @Override
     public String getUserRealm() {
-	return "DummyRealm";
+        return "DummyRealm";
     }
 
     /**
@@ -25,7 +25,7 @@ public class DummySecurityService implements InterfaceSecurityService {
      */
     @Override
     public String getApplication() {
-	return "DummyApplication";
+        return "DummyApplication";
     }
 
     /**
@@ -33,7 +33,7 @@ public class DummySecurityService implements InterfaceSecurityService {
      */
     @Override
     public String getSession() {
-	return "550e8400-e29b-41d4-a716-446655440000";
+        return "550e8400-e29b-41d4-a716-446655440000";
     }
 
     /**
@@ -41,6 +41,6 @@ public class DummySecurityService implements InterfaceSecurityService {
      */
     @Override
     public String getMachineName() {
-	return "DummyMachine";
+        return "DummyMachine";
     }
 }

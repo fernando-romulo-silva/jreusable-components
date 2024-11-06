@@ -10,25 +10,26 @@ public class MessagingConst {
       {
          "id": "${id}",
          "what": {
-      	"dataIn" : "${dataIn}",
-      	"dataOut" : "${dataOut}"
-         },
+            "dataIn" : "${dataIn}",
+            "dataOut" : "${dataOut}",
+            "status" : "${status}"
+          },
          "when": {
-      	"dateTime" : "${dateTime}",
-      	"zoneId" : "${zoneId}"
+            "dateTime" : "${dateTime}",
+            "zoneId" : "${zoneId}"
          },
          "where": {
-      	"application" : "${application}",
-      	"machine" : "${machine}"
+            "application" : "${application}",
+            "machine" : "${machine}"
          },
          "who": {
-      	"login" : "${login}",
-      	"session" : "${session}",
-      	"realm" : "${realm}"
+            "login" : "${login}",
+            "session" : "${session}",
+            "realm" : "${realm}"
          },
          "why": {
-              "reason" : "${reason}",
-              "description" : "${description}"
+            "reason" : "${reason}",
+            "description" : "${description}"
          }
       }""";
 
@@ -39,6 +40,7 @@ public class MessagingConst {
           <what>
               <dataIn>${dataIn}</dataIn>
               <dataOut>${dataOut}</dataOut>
+              <status>${status}</status>
           </what>
           <when>
               <dateTime>${dateTime}</dateTime>
@@ -65,6 +67,7 @@ public class MessagingConst {
       what:
         dataIn: "${dataIn}"
         dataOut: "${dataOut}"
+        status: "${status}
       when:
         dateTime: "${dateTime}"
         zoneId: "${zoneId}"

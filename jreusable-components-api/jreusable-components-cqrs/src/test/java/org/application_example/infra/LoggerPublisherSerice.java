@@ -1,4 +1,4 @@
-package org.reusablecomponents.messaging.logger;
+package org.application_example.infra;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

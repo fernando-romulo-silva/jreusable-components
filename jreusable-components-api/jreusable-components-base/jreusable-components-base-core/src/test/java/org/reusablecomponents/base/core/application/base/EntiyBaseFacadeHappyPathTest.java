@@ -30,7 +30,7 @@ import org.reusablecomponents.base.translation.JavaSEI18nService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class AbstractEntiyBaseFacadeHappyPathTest {
+class EntiyBaseFacadeHappyPathTest {
 
 	@Test
 	@Order(1)

@@ -10,17 +10,17 @@ import org.reusablecomponents.base.translation.InterfaceI18nService;
 
 public class DummyI18nService implements InterfaceI18nService {
 
-    @Override
-    public String translate(final String code, final Object... params) {
-	
-	if (Objects.isNull(code)) {
-	    return StringUtils.EMPTY;
+	@Override
+	public String translate(final String code, final Object... params) {
+
+		if (Objects.isNull(code)) {
+			return StringUtils.EMPTY;
+		}
+
+		final var paramsString = Stream.of(params)
+				.map(Object::toString)
+				.collect(joining(","));
+
+		return code.concat(" ").concat(paramsString);
 	}
-	
-	final var paramsString = Stream.of(params)
-			.map(Object::toString)
-			.collect(joining(","));
-	
-	return code.concat(" ").concat(paramsString);
-    }
 }

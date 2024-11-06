@@ -1,5 +1,6 @@
 package org.reusablecomponents.base.core.application.command.entity;
 
+import static java.text.MessageFormat.format;
 import static java.util.Optional.ofNullable;
 import static org.reusablecomponents.base.core.infra.util.Functions.createNullPointerException;
 import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_ID;
@@ -14,6 +15,7 @@ import static org.reusablecomponents.base.core.infra.util.operation.CommandOpera
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reusablecomponents.base.core.application.base.EntiyBaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
@@ -98,7 +100,6 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change an entity before save it.
 	 * 
 	 * @param saveEntityIn The object to be changed
-	 * 
 	 * @param directives   Objects used to configure the save
 	 *                     operation
 	 * 
@@ -112,13 +113,29 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change an entity after save it.
 	 * 
 	 * @param saveEntityOut The object to be changed
-	 * 
 	 * @param directives    Objects used to configure the save operation
 	 * 
 	 * @return A new {@code SaveEntityOut} object
 	 */
 	protected SaveEntityOut posSave(final SaveEntityOut saveEntityOut, final Object... directives) {
 		return saveEntityOut;
+	}
+
+	/**
+	 * Method used to handle save errors.
+	 * 
+	 * @param saveEntityIn The object tried to save
+	 * @param exception    Exception thrown by save operation
+	 * @param directives   Objects used to configure the save operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorSave(
+			final SaveEntityIn saveEntityIn,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
 	}
 
 	/**
@@ -143,7 +160,14 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			saveEntityOut = saveFunction.apply(finalSaveEntityIn, directives);
 		} catch (final Exception ex) {
-			throw exceptionAdapterService.convert(ex, i18nService, SAVE_ENTITY, getEntityClazz(), finalSaveEntityIn);
+
+			final var finalException = errorSave(finalSaveEntityIn, ex, directives);
+			final var errorMsg = format("Error save entity '{}', session '{}'", finalSaveEntityIn, session);
+
+			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+
+			throw exceptionAdapterService.convert(
+					finalException, i18nService, SAVE_ENTITY, getEntityClazz(), finalSaveEntityIn);
 		}
 
 		LOGGER.debug("Saved saveEntityOut '{}'", saveEntityOut);
@@ -164,7 +188,6 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change a group of entities before save it.
 	 * 
 	 * @param saveEntiesIn The object to be changed
-	 * 
 	 * @param directives   Objects used to configure the save operation
 	 * 
 	 * @return A new {@code SaveEntitiesIn} object
@@ -177,13 +200,29 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change a group of entities after save it.
 	 * 
 	 * @param saveEntiesOut The group of objects to be changed
-	 * 
 	 * @param directives    Objects used to configure the save operation
 	 * 
 	 * @return A new {@code SaveEntitiesOut} object
 	 */
 	protected SaveEntitiesOut posSaveAll(final SaveEntitiesOut saveEntiesOut, final Object... directives) {
 		return saveEntiesOut;
+	}
+
+	/**
+	 * Method used to handle save all errors.
+	 * 
+	 * @param saveEntitiesIn The object tried to save
+	 * @param exception      Exception thrown by save operation
+	 * @param directives     Objects used to configure the save operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorSaveAll(
+			final SaveEntitiesIn saveEntitiesIn,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
 	}
 
 	/**
@@ -208,8 +247,14 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			saveEntitiesOut = saveAllFunction.apply(finalSaveEntitiesIn);
 		} catch (final Exception ex) {
+
+			final var finalException = errorSaveAll(finalSaveEntitiesIn, ex, directives);
+			final var errorMsg = format("Error save all entities '{}', session '{}'", finalSaveEntitiesIn, session);
+
+			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+
 			throw exceptionAdapterService.convert(
-					ex,
+					finalException,
 					i18nService,
 					SAVE_ENTITIES,
 					getEntityClazz(),
@@ -234,7 +279,6 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change an entity before update it.
 	 * 
 	 * @param updateEntityIn The object to be changed
-	 * 
 	 * @param directives     Objects used to configure the update operation
 	 * 
 	 * @return A new {@code UpdateEntityIn} object
@@ -247,13 +291,29 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change an entity after update it.
 	 * 
 	 * @param updateEntityOut The object to be changed
-	 * 
 	 * @param directives      Objects used to configure the update operation
 	 * 
 	 * @return A new {@code UpdateEntityOut} object
 	 */
 	protected UpdateEntityOut posUpdate(final UpdateEntityOut updateEntityOut, final Object... directives) {
 		return updateEntityOut;
+	}
+
+	/**
+	 * Method used to handle update errors.
+	 * 
+	 * @param updateEntityIn The object tried to update
+	 * @param exception      Exception thrown by update operation
+	 * @param directives     Objects used to configure the update operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorUpdate(
+			final UpdateEntityIn updateEntityIn,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
 	}
 
 	/**
@@ -278,8 +338,14 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			updateEntityOut = updateFunction.apply(finalUpdateEntityIn);
 		} catch (final Exception ex) {
+
+			final var finalException = errorUpdate(updateEntityIn, ex, directives);
+			final var errorMsg = format("Error update '{}', session '{}'", updateEntityIn, session);
+
+			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+
 			throw exceptionAdapterService.convert(
-					ex,
+					finalException,
 					i18nService,
 					UPDATE_ENTITY,
 					getEntityClazz(),
@@ -304,7 +370,6 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change a group of entities before update it.
 	 * 
 	 * @param updateEntitiesIn The object to be changed
-	 * 
 	 * @param directives       Objects used to configure the update all operation
 	 * 
 	 * @return A new {@code UpdateEntitiesIn} object
@@ -317,13 +382,29 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change a group of entities after update it.
 	 * 
 	 * @param updateEntitiesOut The object to be changed
-	 * 
 	 * @param directives        Objects used to configure the update all operation
 	 * 
 	 * @return A new {@code UpdateEntitiesOut} object
 	 */
 	protected UpdateEntitiesOut posUpdateAll(final UpdateEntitiesOut updateEntitiesOut, final Object... directives) {
 		return updateEntitiesOut;
+	}
+
+	/**
+	 * Method used to handle update all errors.
+	 * 
+	 * @param updateEntitiesIn The object tried to update
+	 * @param exception        Exception thrown by save operation
+	 * @param directives       Objects used to configure the save operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorUpdateAll(
+			final UpdateEntitiesIn updateEntitiesIn,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
 	}
 
 	/**
@@ -348,8 +429,14 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			updateEntitiesOut = updateAllFunction.apply(finalUpdateEntitiesIn);
 		} catch (final Exception ex) {
+
+			final var finalException = errorUpdateAll(preUpdateEntitiesIn, ex, directives);
+			final var errorMsg = format("Error update all entities '{}', session '{}'", preUpdateEntitiesIn, session);
+
+			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+
 			throw exceptionAdapterService.convert(
-					ex,
+					finalException,
 					i18nService,
 					UPDATE_ENTITIES,
 					getEntityClazz(),
@@ -374,7 +461,6 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change an entity before delete it.
 	 * 
 	 * @param deleteEntityIn The object to be changed
-	 * 
 	 * @param directives     Objects used to configure the delete operation
 	 * 
 	 * @return A new {@code DeleteEntityIn} object
@@ -387,13 +473,29 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change an entity after delete it.
 	 * 
 	 * @param deleteEntityOut The object to be changed
-	 * 
 	 * @param directives      Objects used to configure the delete operation
 	 * 
 	 * @return A new {@code DeleteEntityOut} object
 	 */
 	protected DeleteEntityOut posDelete(final DeleteEntityOut deleteEntityOut, final Object... directives) {
 		return deleteEntityOut;
+	}
+
+	/**
+	 * Method used to handle delete errors.
+	 * 
+	 * @param deleteEntityIn The object tried to delete
+	 * @param exception      Exception thrown by delete operation
+	 * @param directives     Objects used to configure the delete operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorDelete(
+			final DeleteEntityIn deleteEntityIn,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
 	}
 
 	/**
@@ -418,8 +520,14 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			deleteEntityOut = deleteFunction.apply(finalDeleteEntityIn);
 		} catch (final Exception ex) {
+
+			final var finalException = errorDelete(finalDeleteEntityIn, ex, directives);
+
+			final var errorMsg = format("Error delete entity '{}', session '{}'", finalDeleteEntityIn, session);
+			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+
 			throw exceptionAdapterService.convert(
-					ex,
+					finalException,
 					i18nService,
 					DELETE_ENTITY,
 					getEntityClazz(),
@@ -444,7 +552,6 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change a group of entities before delete it.
 	 * 
 	 * @param deleteEntitiesIn The object to be changed
-	 * 
 	 * @param directives       Objects used to configure the delete all operation
 	 * 
 	 * @return A new {@code DeleteEntitiesIn} object
@@ -457,13 +564,29 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change a group of entities after delete it.
 	 * 
 	 * @param deleteEntitiesOut The object to be changed
-	 * 
 	 * @param directives        Objects used to configure the delete all operation
 	 * 
 	 * @return A new {@code DeleteEntitiesOut} object
 	 */
 	protected DeleteEntitiesOut posDeleteAll(final DeleteEntitiesOut deleteEntitiesOut, final Object... directives) {
 		return deleteEntitiesOut;
+	}
+
+	/**
+	 * Method used to handle delete all errors.
+	 * 
+	 * @param deleteEntitiesIn The object tried to delete
+	 * @param exception        Exception thrown by delete operation
+	 * @param directives       Objects used to configure the delete operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorDeleteAll(
+			final DeleteEntitiesIn deleteEntitiesIn,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
 	}
 
 	/**
@@ -488,8 +611,14 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			deleteEntitiesOut = deleteAllFunction.apply(finalDeleteEntitiesIn);
 		} catch (final Exception ex) {
+
+			final var finalException = errorDeleteAll(finalDeleteEntitiesIn, ex, directives);
+			final var errorMsg = format("Error delete entities '{}', session '{}'", finalDeleteEntitiesIn, session);
+
+			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+
 			throw exceptionAdapterService.convert(
-					ex,
+					finalException,
 					i18nService,
 					DELETE_ENTITIES,
 					getEntityClazz(),
@@ -514,7 +643,6 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change an id object before delete it.
 	 * 
 	 * @param deleteIdIn The object to be changed
-	 * 
 	 * @param directives Objects used to configure the delete by id operation
 	 * 
 	 * @return A new {@code DeleteIdIn} object
@@ -527,13 +655,29 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change an id object after delete it.
 	 * 
 	 * @param deleteIdOut The object to be changed
-	 * 
 	 * @param directives  Objects used to configure the delete by id operation
 	 * 
 	 * @return A new {@code DeleteIdOut} object
 	 */
 	protected DeleteIdOut posDeleteBy(final DeleteIdOut deleteIdOut, final Object... directives) {
 		return deleteIdOut;
+	}
+
+	/**
+	 * Method used to handle delete by id errors.
+	 * 
+	 * @param deleteIdIn The object tried to delete
+	 * @param exception  Exception thrown by delete by id operation
+	 * @param directives Objects used to configure the delete operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorDeleteBy(
+			final DeleteIdIn deleteIdIn,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
 	}
 
 	/**
@@ -558,8 +702,14 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			deleteIdOut = deleteByIdFunction.apply(finalDeleteIdIn);
 		} catch (final Exception ex) {
+
+			final var finalException = errorDeleteBy(finalDeleteIdIn, ex, directives);
+			final var errorMsg = format("Error delete entity by id '{}', session '{}'", finalDeleteIdIn, session);
+
+			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+
 			throw exceptionAdapterService.convert(
-					ex,
+					finalException,
 					i18nService,
 					DELETE_BY_ID,
 					getEntityClazz(),
@@ -583,7 +733,6 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change a group of ids before save it.
 	 * 
 	 * @param deleteIdsIn The object to be changed
-	 * 
 	 * @param directives  Objects used to configure the delete by id operation
 	 * 
 	 * @return A new {@code DeleteIdsIn} object
@@ -596,13 +745,29 @@ public non-sealed class EntityCommandFacade< // generics
 	 * Method used to change a group of ids after save it.
 	 * 
 	 * @param deleteIdsOut The object to be changed
-	 * 
 	 * @param directives   Objects used to configure the delete by id operation
 	 * 
 	 * @return A new {@code DeleteIdsOut} object
 	 */
 	protected DeleteIdsOut posDeleteEntitiesBy(final DeleteIdsOut deleteIdsOut, final Object... directives) {
 		return deleteIdsOut;
+	}
+
+	/**
+	 * Method used to handle delete by ids errors.
+	 * 
+	 * @param deleteIdsIn The object tried to delete
+	 * @param exception   Exception thrown by delete by ids operation
+	 * @param directives  Objects used to configure the delete operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorDeleteAllBy(
+			final DeleteIdsIn deleteIdsIn,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
 	}
 
 	/**
@@ -627,8 +792,14 @@ public non-sealed class EntityCommandFacade< // generics
 		try {
 			deleteIdsOut = deleteAllByIdFunction.apply(finalDeleteIdsIn);
 		} catch (final Exception ex) {
+
+			final var finalException = errorDeleteAllBy(finalDeleteIdsIn, ex, directives);
+			final var errorMsg = format("Error delete entity by ids '{}', session '{}'", finalDeleteIdsIn, session);
+
+			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+
 			throw exceptionAdapterService.convert(
-					ex,
+					finalException,
 					i18nService,
 					DELETE_BY_IDS,
 					getEntityClazz(),
