@@ -2,7 +2,7 @@ package org.reusablecomponents.spring.core.application.mix.entity.paged;
 
 import java.util.Optional;
 
-import org.reusablecomponents.base.core.application.mix.entity.paged.InterfaceEntityPaginationFacade;
+import org.reusablecomponents.base.core.application.mix.entity.paged.InterfaceEntityPagedFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import org.springframework.data.domain.Page;
@@ -11,7 +11,7 @@ import org.springframework.data.domain.Sort;
 
 public interface InterfaceSpringEntityPaginationFacade<Entity extends AbstractEntity<Id>, Id>
 
-		extends InterfaceEntityPaginationFacade<Entity, Id,
+		extends InterfaceEntityPagedFacade<Entity, Id,
 				// ------------ command
 				// save
 				Entity, Entity, // save a entity

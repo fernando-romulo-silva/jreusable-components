@@ -9,17 +9,17 @@ import org.springframework.stereotype.Component;
 public class SpringI18nService implements InterfaceI18nService {
 
     private final MessageSource messageSource;
-    
+
     protected SpringI18nService(final MessageSource messageSource) {
-	super();
-	this.messageSource = messageSource;
+        super();
+        this.messageSource = messageSource;
     }
 
     @Override
     public String translate(final String code, final Object... params) {
 
-	final var locale = LocaleContextHolder.getLocale();
+        final var locale = LocaleContextHolder.getLocale();
 
-	return messageSource.getMessage(code, params, locale);
+        return messageSource.getMessage(code, params, locale);
     }
 }

@@ -12,7 +12,7 @@
 	<modules>
 		<module>jreusable-components-spring-kafka</module>
 		<module>jreusable-components-spring-rabbitMQ</module>
-		<module>jreusable-components-spring-ActiveMQ</module>
+		<module>jreusable-components-spring-activeMQ</module>
 	</modules>
 
 

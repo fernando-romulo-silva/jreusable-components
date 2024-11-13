@@ -8,32 +8,31 @@ import org.reusablecomponents.spring.core.application.query.entity.nonpaged.Inte
  * @param <Entity>
  * @param <Id>
  */
-public class SpringEntityFacade<Entity extends AbstractEntity<Id>, Id> 
-	implements InterfaceSpringEntityFacade<Entity, Id> {
-    
+public class SpringEntityFacade<Entity extends AbstractEntity<Id>, Id>
+        implements InterfaceSpringEntityFacade<Entity, Id> {
+
     protected InterfaceSpringCommandFacade<Entity, Id> entityCommandFacade;
-    
+
     protected InterfaceSpringEntityQueryFacade<Entity, Id> entityQueryFacade;
-    
-    
+
     /**
      * @param entityCommandFacade
      * @param entityQueryFacade
      */
     protected SpringEntityFacade(
-		    final InterfaceSpringCommandFacade<Entity, Id> entityCommandFacade, 
-		    final InterfaceSpringEntityQueryFacade<Entity, Id> entityQueryFacade) {
+            final InterfaceSpringCommandFacade<Entity, Id> entityCommandFacade,
+            final InterfaceSpringEntityQueryFacade<Entity, Id> entityQueryFacade) {
 
-	this.entityCommandFacade = entityCommandFacade;
-	this.entityQueryFacade = entityQueryFacade;
+        this.entityCommandFacade = entityCommandFacade;
+        this.entityQueryFacade = entityQueryFacade;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public InterfaceSpringCommandFacade<Entity, Id> getEntityCommandFacade() {
-	return entityCommandFacade;
+        return entityCommandFacade;
     }
 
     /**
@@ -41,6 +40,6 @@ public class SpringEntityFacade<Entity extends AbstractEntity<Id>, Id>
      */
     @Override
     public InterfaceSpringEntityQueryFacade<Entity, Id> getEntityQueryFacade() {
-	return entityQueryFacade;
+        return entityQueryFacade;
     }
 }

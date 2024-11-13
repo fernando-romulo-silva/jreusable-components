@@ -18,8 +18,10 @@ import jakarta.validation.constraints.NotNull;
  * 
  * @param <QueryIdIn>      The entity Id used in the query
  * 
- * @param <OneResult>      The one-result type
- * @param <MultipleResult> The multiple-result type
+ * @param <OneResult>      The one-result type, like the entity or wrap type
+ *                         like Mono<Entity>
+ * @param <MultipleResult> The multiple-result type, like List<Entity>,
+ *                         Iterable<Entity>, or a wrap type like
  * @param <CountResult>    The count-result type
  * @param <ExistsResult>   The exist-result type
  */
@@ -44,7 +46,7 @@ public non-sealed interface InterfaceEntityQueryFacade<Entity extends AbstractEn
    * 
    * @return Return a {@code OneResult} object
    */
-  OneResult findBy(
+  OneResult findById(
       @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final QueryIdIn queryIdIn,
       final Object... directives);
 
@@ -71,7 +73,7 @@ public non-sealed interface InterfaceEntityQueryFacade<Entity extends AbstractEn
    * 
    * @return Return a {@code ExistsResult} object
    */
-  ExistsResult existsBy(final QueryIdIn queryIdIn);
+  ExistsResult existsById(final QueryIdIn queryIdIn);
 
   /**
    * Check if there exists at least an entity.

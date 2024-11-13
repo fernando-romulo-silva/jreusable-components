@@ -8,8 +8,9 @@ package org.reusablecomponents.base.security;
  * <li>User name</li>
  * <li>User realm</li>
  * <li>Session</li>
- * <li>Application</li>
  * <li>Machine name</li>
+ * <li>Application</li>
+ * <li>Version</li>
  * </ul>
  * 
  */
@@ -37,6 +38,13 @@ public interface InterfaceSecurityService {
     String getSession();
 
     /**
+     * Return the machine name.
+     * 
+     * @return An String object
+     */
+    String getMachineName();
+
+    /**
      * Return the application name.
      * 
      * @return An String object
@@ -44,10 +52,12 @@ public interface InterfaceSecurityService {
     String getApplication();
 
     /**
-     * Return the machine name.
+     * Return the application version.
      * 
      * @return An String object
      */
-    String getMachineName();
+    default String getVersion() {
+        return "0.0.0";
+    }
 
 }

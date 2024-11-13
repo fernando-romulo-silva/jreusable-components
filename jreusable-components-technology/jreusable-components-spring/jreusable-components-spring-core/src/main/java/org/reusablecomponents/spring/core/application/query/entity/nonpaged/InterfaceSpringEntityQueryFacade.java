@@ -25,7 +25,7 @@ public interface InterfaceSpringEntityQueryFacade<Entity extends AbstractEntity<
   @Override
   @Cacheable
   @Transactional(readOnly = true, propagation = SUPPORTS)
-  Optional<Entity> findBy(final Id id, final Object... directives);
+  Optional<Entity> findById(final Id id, final Object... directives);
 
   /**
    * {@inheritDoc}
@@ -41,7 +41,7 @@ public interface InterfaceSpringEntityQueryFacade<Entity extends AbstractEntity<
   @Override
   @Cacheable
   @Transactional(readOnly = true, propagation = SUPPORTS)
-  Boolean existsBy(final Id id);
+  Boolean existsById(final Id id);
 
   /**
    * {@inheritDoc}

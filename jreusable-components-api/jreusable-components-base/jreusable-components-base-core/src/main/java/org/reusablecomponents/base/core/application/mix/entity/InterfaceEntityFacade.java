@@ -1,19 +1,12 @@
-package org.reusablecomponents.base.core.application.mix.entity.nonpaged;
+package org.reusablecomponents.base.core.application.mix.entity;
 
 import org.reusablecomponents.base.core.application.command.entity.InterfaceEntityCommandFacade;
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceEntityQuerySpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.paged.InterfaceEntityQueryPaginationFacade;
+import org.reusablecomponents.base.core.application.query.entity.paged.InterfaceEntityQueryPaginationSpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
-/**
- * @param <Entity>
- * @param <Id>
- * @param <OneResultCommand>
- * @param <OneResultQuery>
- * @param <MultipleResult>
- * @param <CountResult>
- * @param <ExistsResult>
- * @param <VoidResult>
- */
 public interface InterfaceEntityFacade<Entity extends AbstractEntity<Id>, Id, // basic
         // ------------ command
         // save
@@ -33,8 +26,15 @@ public interface InterfaceEntityFacade<Entity extends AbstractEntity<Id>, Id, //
         OneResult, // One result type
         MultipleResult, // multiple result type
         CountResult, // count result type
-        ExistsResult> // boolean result type
-        // command
+        ExistsResult, // boolean result type
+
+        MultiplePagedResult, // multiple result type
+        Specification,
+        // Pagination
+        Pageable, // pageable type
+        Sort> // sort type
+
+        // non paged
         extends InterfaceEntityCommandFacade<Entity, Id, // default
                 // save
                 SaveEntityIn, SaveEntityOut, // save a entity
@@ -48,13 +48,32 @@ public interface InterfaceEntityFacade<Entity extends AbstractEntity<Id>, Id, //
                 // delete by id
                 DeleteIdIn, DeleteIdOut, // delete a entity by id
                 DeleteIdsIn, DeleteIdsOut>, // delete entities by id
-        // query
+        //
         InterfaceEntityQueryFacade<Entity, Id, // default
                 QueryIdIn, // by id arg
                 OneResult, // One result type
                 MultipleResult, // multiple result type
                 CountResult, // count result type
-                ExistsResult> { // boolean result type
+                ExistsResult>, // boolean result type
+        //
+        InterfaceEntityQuerySpecificationFacade<Entity, Id, //
+                OneResult, //
+                MultipleResult, //
+                CountResult, //
+                ExistsResult, //
+                Specification>, //
+        //
+        InterfaceEntityQueryPaginationFacade<Entity, Id, // basic
+                OneResult, // one result type
+                MultiplePagedResult, // multiple result type
+                Pageable, // pageable type
+                Sort>, // sort type
+        //
+        InterfaceEntityQueryPaginationSpecificationFacade<Entity, Id, // basic
+                OneResult, // oneResult
+                MultiplePagedResult, // multiple paged
+                Pageable, Sort, // pagination
+                Specification> { // specification
 
     /**
      * {@inheritDoc}
@@ -124,14 +143,6 @@ public interface InterfaceEntityFacade<Entity extends AbstractEntity<Id>, Id, //
      * {@inheritDoc}
      */
     @Override
-    default OneResult findBy(final QueryIdIn queryIdIn, final Object... directives) {
-        return getEntityQueryFacade().findBy(queryIdIn, directives);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     default MultipleResult findAll(final Object... directives) {
         return getEntityQueryFacade().findAll(directives);
     }
@@ -140,8 +151,83 @@ public interface InterfaceEntityFacade<Entity extends AbstractEntity<Id>, Id, //
      * {@inheritDoc}
      */
     @Override
-    default ExistsResult existsBy(final QueryIdIn queryIdIn) {
-        return getEntityQueryFacade().existsBy(queryIdIn);
+    default MultiplePagedResult findAll(final Pageable pageable, final Object... directives) {
+        return getEntityQueryPaginationFacade().findAll(pageable, directives);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default OneResult findById(final QueryIdIn queryIdIn, final Object... directives) {
+        return getEntityQueryFacade().findById(queryIdIn, directives);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default MultipleResult findBySpec(final Specification specification, final Object... directives) {
+        return getEntityQuerySpecificationFacade().findBySpec(specification, directives);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default MultiplePagedResult findBy(
+            final Pageable pageable,
+            final Specification specification,
+            final Object... directives) {
+        return getEntityQueryPaginationSpecificationFacade().findBy(pageable, specification, directives);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default OneResult findOne(final Sort sort, final Object... directives) {
+        return getEntityQueryPaginationFacade().findOne(sort, directives);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default OneResult findOneBySpec(final Specification specification, final Object... directives) {
+        return getEntityQuerySpecificationFacade().findOneBySpec(specification, directives);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default OneResult findOneBy(final Sort sort, final Specification specification, final Object... directives) {
+        return getEntityQueryPaginationSpecificationFacade().findOneBy(sort, specification, directives);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default ExistsResult existsById(final QueryIdIn queryIdIn) {
+        return getEntityQueryFacade().existsById(queryIdIn);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default ExistsResult existsAll() {
+        return getEntityQueryFacade().existsAll();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default ExistsResult existsBySpec(final Specification specification) {
+        return getEntityQuerySpecificationFacade().existsBySpec(specification);
     }
 
     /**
@@ -156,9 +242,11 @@ public interface InterfaceEntityFacade<Entity extends AbstractEntity<Id>, Id, //
      * {@inheritDoc}
      */
     @Override
-    default ExistsResult existsAll() {
-        return getEntityQueryFacade().existsAll();
+    default CountResult countBySpec(final Specification specification) {
+        return getEntityQuerySpecificationFacade().countBySpec(specification);
     }
+
+    // ---------------------------------------------------------------------
 
     /**
      * {@inheritDoc}
@@ -179,5 +267,11 @@ public interface InterfaceEntityFacade<Entity extends AbstractEntity<Id>, Id, //
     InterfaceEntityCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> getEntityCommandFacade();
 
     InterfaceEntityQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> getEntityQueryFacade();
+
+    InterfaceEntityQuerySpecificationFacade<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> getEntityQuerySpecificationFacade();
+
+    InterfaceEntityQueryPaginationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> getEntityQueryPaginationFacade();
+
+    InterfaceEntityQueryPaginationSpecificationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification> getEntityQueryPaginationSpecificationFacade();
 
 }

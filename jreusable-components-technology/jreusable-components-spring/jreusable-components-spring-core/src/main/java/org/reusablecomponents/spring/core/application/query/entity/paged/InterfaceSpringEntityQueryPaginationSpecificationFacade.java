@@ -36,5 +36,5 @@ public interface InterfaceSpringEntityQueryPaginationSpecificationFacade<Entity 
    */
   @Override
   @Cacheable
-  Optional<Entity> findOneBy(final Specification specification, final Sort sort, final Object... directives);
+  Optional<Entity> findOneBy(final Sort sort, final Specification specification, final Object... directives);
 }

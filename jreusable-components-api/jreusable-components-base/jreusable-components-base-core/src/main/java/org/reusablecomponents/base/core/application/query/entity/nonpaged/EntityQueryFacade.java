@@ -1,7 +1,7 @@
 package org.reusablecomponents.base.core.application.query.entity.nonpaged;
 
-import static java.text.MessageFormat.format;
 import static java.util.Optional.ofNullable;
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
 import static org.reusablecomponents.base.core.infra.util.Functions.createNullPointerException;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.COUNT_ALL;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_ALL;
@@ -13,7 +13,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reusablecomponents.base.core.application.base.EntiyBaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
@@ -128,8 +127,8 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 
 			final var finalException = errorFindAll(ex, finalDirectives);
 
-			final var errorMsg = format("Error find all directives '{}', session '{}'", finalDirectives, session);
-			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+			LOGGER.debug("Error find all directives '{}', session '{}', error '{}'",
+					finalDirectives, session, getRootCauseMessage(finalException));
 
 			throw exceptionAdapterService.convert(
 					finalException,
@@ -202,7 +201,7 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 	 * {@inheritDoc}
 	 */
 	@Override
-	public OneResult findBy(@NotNull final QueryIdIn queryIdIn, @Nullable final Object... directives) {
+	public OneResult findById(@NotNull final QueryIdIn queryIdIn, @Nullable final Object... directives) {
 
 		final var session = securityService.getSession();
 
@@ -223,8 +222,8 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 
 			final var finalException = errorFindBy(finalQueryIdIn, ex, directives);
 
-			final var errorMsg = format("Error find by id '{}', session '{}'", finalQueryIdIn, session);
-			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+			LOGGER.debug("Error find by id '{}', session '{}', error '{}'",
+					finalQueryIdIn, session, getRootCauseMessage(finalException));
 
 			throw exceptionAdapterService.convert(
 					finalException,
@@ -284,7 +283,7 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ExistsResult existsBy(@NotNull final QueryIdIn queryIdIn) {
+	public ExistsResult existsById(@NotNull final QueryIdIn queryIdIn) {
 
 		final var session = securityService.getSession();
 
@@ -305,8 +304,8 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 
 			final var finalException = errorExistBy(finalQueryIdIn, ex);
 
-			final var errorMsg = format("Error exists by id '{}', session '{}'", finalQueryIdIn, session);
-			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+			LOGGER.debug("Error exists by id '{}', session '{}', error '{}'",
+					finalQueryIdIn, session, getRootCauseMessage(finalException));
 
 			throw exceptionAdapterService.convert(
 					finalException,
@@ -365,9 +364,8 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 
 			final var finalException = errorCountAll(ex);
 
-			final var errorMsg = format("Error counting all, entity '{}', session '{}'",
-					getEntityClazz().getSimpleName(), session);
-			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+			LOGGER.debug("Error counting all, entity '{}', session '{}', error '{}'",
+					getEntityClazz().getSimpleName(), session, getRootCauseMessage(finalException));
 
 			throw exceptionAdapterService.convert(
 					finalException,
@@ -416,9 +414,8 @@ public non-sealed class EntityQueryFacade<Entity extends AbstractEntity<Id>, Id,
 		} catch (final Exception ex) {
 			final var finalException = errorExistAll(ex);
 
-			final var errorMsg = format("Error exists all, entity '{}', session '{}'",
-					getEntityClazz().getSimpleName(), session);
-			LOGGER.debug(errorMsg, ExceptionUtils.getRootCause(finalException));
+			LOGGER.debug("Error exists all, entity '{}', session '{}', error '{}'",
+					getEntityClazz().getSimpleName(), session, getRootCauseMessage(finalException));
 
 			throw exceptionAdapterService.convert(
 					finalException,

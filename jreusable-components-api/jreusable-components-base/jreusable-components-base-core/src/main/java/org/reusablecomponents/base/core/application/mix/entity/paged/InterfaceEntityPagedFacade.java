@@ -2,9 +2,10 @@ package org.reusablecomponents.base.core.application.mix.entity.paged;
 
 import org.reusablecomponents.base.core.application.command.entity.InterfaceEntityCommandFacade;
 import org.reusablecomponents.base.core.application.query.entity.paged.InterfaceEntityQueryPaginationFacade;
+import org.reusablecomponents.base.core.application.query.entity.paged.InterfaceEntityQueryPaginationSpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
-public interface InterfaceEntityPaginationFacade<Entity extends AbstractEntity<Id>, Id, // basic
+public interface InterfaceEntityPagedFacade<Entity extends AbstractEntity<Id>, Id, // basic
         // ------------ command
         // save
         SaveEntityIn, SaveEntityOut, // save a entity
@@ -22,6 +23,7 @@ public interface InterfaceEntityPaginationFacade<Entity extends AbstractEntity<I
         // results
         OneResult, // one result type
         MultiplePagedResult, // multiple result type
+        Specification,
         // Pagination
         Pageable, // pageable type
         Sort> // sort type
@@ -44,7 +46,13 @@ public interface InterfaceEntityPaginationFacade<Entity extends AbstractEntity<I
                 OneResult, // one result type
                 MultiplePagedResult, // multiple result type
                 Pageable, // pageable type
-                Sort> { // sort type
+                Sort>, // sort type
+
+        InterfaceEntityQueryPaginationSpecificationFacade<Entity, Id, // basic
+                OneResult, // oneResult
+                MultiplePagedResult, // multiple paged
+                Pageable, Sort, // pagination
+                Specification> { // specificatio
 
     /**
      * {@inheritDoc}
@@ -122,12 +130,31 @@ public interface InterfaceEntityPaginationFacade<Entity extends AbstractEntity<I
      * {@inheritDoc}
      */
     @Override
-    default OneResult findFirst(final Sort sort, final Object... directives) {
-        return getEntityQueryPaginationFacade().findFirst(sort, directives);
+    default OneResult findOne(final Sort sort, final Object... directives) {
+        return getEntityQueryPaginationFacade().findOne(sort, directives);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default MultiplePagedResult findBy(final Pageable pageable, final Specification specification,
+            final Object... directives) {
+        return getEntityQueryPaginationSpecificationFacade().findBy(pageable, specification, directives);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default OneResult findOneBy(final Sort sort, final Specification specification, final Object... directives) {
+        return getEntityQueryPaginationSpecificationFacade().findOneBy(sort, specification, directives);
     }
 
     InterfaceEntityCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> getEntityCommandFacade();
 
     InterfaceEntityQueryPaginationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> getEntityQueryPaginationFacade();
+
+    InterfaceEntityQueryPaginationSpecificationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification> getEntityQueryPaginationSpecificationFacade();
 
 }

@@ -19,13 +19,13 @@ public class CacheConfig {
     @Bean
     CaffeineCacheManager cacheManager() {
 
-	final var caffeineBuilder = Caffeine.newBuilder()
+        final var caffeineBuilder = Caffeine.newBuilder()
                 .expireAfterWrite(1, TimeUnit.HOURS)
                 .initialCapacity(100)
                 .maximumSize(1000);
 
-	final var caffeineCacheManager = new CaffeineCacheManager();
-	caffeineCacheManager.setCaffeine(caffeineBuilder);
-	return caffeineCacheManager;
+        final var caffeineCacheManager = new CaffeineCacheManager();
+        caffeineCacheManager.setCaffeine(caffeineBuilder);
+        return caffeineCacheManager;
     }
 }

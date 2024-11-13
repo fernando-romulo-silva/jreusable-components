@@ -1,5 +1,6 @@
 package org.reusablecomponents.base.core.application.query.entity.paged;
 
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ALL_ENTITIES_PAGEABLE;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_SORTED;
 
@@ -46,7 +47,6 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	 * Method used to change directives object before use it (findAll method).
 	 * 
 	 * @param pageable   The object to be changed
-	 * 
 	 * @param directives The object to be changed
 	 * 
 	 * @return A new {@code Pageable} object
@@ -68,6 +68,23 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	}
 
 	/**
+	 * Method used to handle pageable find all errors.
+	 * 
+	 * @param pageable   The object used to pageable find all
+	 * @param exception  Exception thrown by pageable find all operation
+	 * @param directives Objects used to configure the pageable find all operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorPageableFindAll(
+			final Pageable pageable,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -76,7 +93,7 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 
 		final var session = securityService.getSession();
 
-		LOGGER.debug("Finding all by '{}', session '{}'", pageable, session);
+		LOGGER.debug("Pageable finding all by '{}', session '{}'", pageable, session);
 
 		final var finalPageable = preFindAll(pageable, directives);
 
@@ -85,6 +102,12 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 		try {
 			multiplePagedResult = findAllFunction.apply(finalPageable, directives);
 		} catch (final Exception ex) {
+
+			final var finalException = errorPageableFindAll(pageable, ex, directives);
+
+			LOGGER.debug("Error pageable find all, pageable '{}', session '{}', error '{}'",
+					pageable, session, getRootCauseMessage(finalException));
+
 			throw exceptionAdapterService.convert(
 					ex,
 					i18nService,
@@ -96,7 +119,7 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 
 		final var finalMultiplePagedResult = posFindAll(multiplePagedResult);
 
-		LOGGER.debug("Found all by '{}', session '{}'", finalPageable, session);
+		LOGGER.debug("Found all by pageable '{}', session '{}'", finalPageable, session);
 
 		return finalMultiplePagedResult;
 	}
@@ -126,10 +149,27 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	}
 
 	/**
+	 * Method used to handle pageable find all errors.
+	 * 
+	 * @param sort       The object used to pageable find all
+	 * @param exception  Exception thrown by pageable find all operation
+	 * @param directives Objects used to configure the pageable find all operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorSortedFindFirst(
+			final Sort sort,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public OneResult findFirst(@Nullable final Sort sort, final Object... directives) {
+	public OneResult findOne(@Nullable final Sort sort, final Object... directives) {
 
 		final var session = securityService.getSession();
 
@@ -142,6 +182,11 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 		try {
 			oneResult = findFirstFunction.apply(finalSort);
 		} catch (final Exception ex) {
+			final var finalException = errorSortedFindFirst(finalSort, ex, directives);
+
+			LOGGER.debug("Error find first, sort '{}', session '{}', error '{}'",
+					finalSort, session, getRootCauseMessage(finalException));
+
 			throw exceptionAdapterService.convert(
 					ex,
 					i18nService,

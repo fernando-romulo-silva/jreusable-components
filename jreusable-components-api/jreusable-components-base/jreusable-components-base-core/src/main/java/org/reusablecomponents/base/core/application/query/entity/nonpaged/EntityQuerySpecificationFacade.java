@@ -5,6 +5,8 @@ import static org.reusablecomponents.base.core.infra.util.operation.QueryOperati
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION;
 
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
+
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -75,10 +77,29 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 	}
 
 	/**
+	 * Method used to handle find by specification errors.
+	 * 
+	 * @param specification The object used to find by specification
+	 * @param exception     Exception thrown by find specification operation
+	 * @param directives    Objects used to configure the find by specification
+	 *                      operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorFindBySpecification(
+			final Specification specification,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public MultipleResult findBy(@NotNull final Specification specification, @NotNull final Object... directives) {
+	public MultipleResult findBySpec(@NotNull final Specification specification,
+			@NotNull final Object... directives) {
 
 		final var session = securityService.getSession();
 
@@ -93,6 +114,12 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 		try {
 			multipleResult = findBySpecificationFunction.apply(specification, directives);
 		} catch (final Exception ex) {
+
+			final var finalException = errorFindBySpecification(finalSpecification, ex, directives);
+
+			LOGGER.debug("Error find by specification '{}', session '{}', error '{}'",
+					finalSpecification, session, getRootCauseMessage(finalException));
+
 			throw exceptionAdapterService.convert(
 					ex,
 					i18nService,
@@ -135,10 +162,28 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 	}
 
 	/**
+	 * Method used to handle find one by specification errors.
+	 * 
+	 * @param specification The object used to find one by specification
+	 * @param exception     Exception thrown by find one specification operation
+	 * @param directives    Objects used to configure the find one by specification
+	 *                      operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorFindOneBySpecification(
+			final Specification specification,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public OneResult findOneBy(@NotNull final Specification specification, @NotNull final Object... directives) {
+	public OneResult findOneBySpec(@NotNull final Specification specification, @NotNull final Object... directives) {
 
 		final var session = securityService.getSession();
 
@@ -153,6 +198,12 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 		try {
 			oneResult = findOneByFunction.apply(finalSpecification, directives);
 		} catch (final Exception ex) {
+
+			final var finalException = errorFindOneBySpecification(finalSpecification, ex, directives);
+
+			LOGGER.debug("Error find one by specification '{}', session '{}', error '{}'",
+					finalSpecification, session, getRootCauseMessage(finalException));
+
 			throw exceptionAdapterService.convert(
 					ex,
 					i18nService,
@@ -194,10 +245,25 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 	}
 
 	/**
+	 * Method used to handle exists by specification errors.
+	 * 
+	 * @param specification The object used to exists by specification
+	 * @param exception     Exception thrown by exists by specification operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorExistsBySpecification(
+			final Specification specification,
+			final Exception exception) {
+
+		return exception;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final ExistsResult existsBy(@NotNull final Specification specification) {
+	public final ExistsResult existsBySpec(@NotNull final Specification specification) {
 
 		final var session = securityService.getSession();
 
@@ -212,6 +278,12 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 		try {
 			existsResult = existsBySpecificationFunction.apply(finalSpecification);
 		} catch (final Exception ex) {
+
+			final var finalException = errorExistsBySpecification(finalSpecification, ex);
+
+			LOGGER.debug("Error exists by specification '{}', session '{}', error '{}'",
+					finalSpecification, session, getRootCauseMessage(finalException));
+
 			throw exceptionAdapterService.convert(
 					ex,
 					i18nService,
@@ -253,10 +325,25 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 	}
 
 	/**
+	 * Method used to handle count by specification errors.
+	 * 
+	 * @param specification The object used to count by specification
+	 * @param exception     Exception thrown by count specification operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorCountBySpecification(
+			final Specification specification,
+			final Exception exception) {
+
+		return exception;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final CountResult count(@NotNull final Specification specification) {
+	public final CountResult countBySpec(@NotNull final Specification specification) {
 
 		final var session = securityService.getSession();
 
@@ -271,6 +358,12 @@ public non-sealed class EntityQuerySpecificationFacade<Entity extends AbstractEn
 		try {
 			countResult = countBySpecificationFunction.apply(finalSpecification);
 		} catch (final Exception ex) {
+
+			final var finalException = errorCountBySpecification(finalSpecification, ex);
+
+			LOGGER.debug("Error count by specification '{}', session '{}', error '{}'",
+					finalSpecification, session, getRootCauseMessage(finalException));
+
 			throw exceptionAdapterService.convert(
 					ex,
 					i18nService,

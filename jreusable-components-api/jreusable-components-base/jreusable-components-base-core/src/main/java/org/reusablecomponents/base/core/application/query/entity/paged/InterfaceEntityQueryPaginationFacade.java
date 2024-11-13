@@ -41,5 +41,5 @@ public non-sealed interface InterfaceEntityQueryPaginationFacade<Entity extends 
    * 
    * @return Return a {@code OneResult} object
    */
-  OneResult findFirst(final Sort sort, final Object... directives);
+  OneResult findOne(final Sort sort, final Object... directives);
 }

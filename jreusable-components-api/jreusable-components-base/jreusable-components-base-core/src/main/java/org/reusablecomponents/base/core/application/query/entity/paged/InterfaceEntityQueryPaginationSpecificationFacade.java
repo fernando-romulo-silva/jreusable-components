@@ -28,7 +28,7 @@ public non-sealed interface InterfaceEntityQueryPaginationSpecificationFacade<En
         extends InterfaceEntityBaseFacade<Entity, Id> {
 
     /**
-     * Find and retrieve all objects filtered by specification
+     * Find and retrieve entities filtered by specification using pagination
      * 
      * @param pageable      Object {@code Pageable} used to controll the query's
      *                      result
@@ -41,11 +41,13 @@ public non-sealed interface InterfaceEntityQueryPaginationSpecificationFacade<En
     MultiplePagedResult findBy(final Pageable pageable, final Specification specification, final Object... directives);
 
     /**
-     * @param specification Object {@code Pageable} used to filter query's result
+     * * Find and retrieve one entity filtered by specification using pagination
+     * 
      * @param sort          Object {@code Sort} used to order the query
+     * @param specification Object {@code Pageable} used to filter query's result
      * @param directives    Objects used to configure the query's result
      * 
      * @return Return a {@code OneResult} object
      */
-    OneResult findOneBy(final Specification specification, final Sort sort, final Object... directives);
+    OneResult findOneBy(final Sort sort, final Specification specification, final Object... directives);
 }

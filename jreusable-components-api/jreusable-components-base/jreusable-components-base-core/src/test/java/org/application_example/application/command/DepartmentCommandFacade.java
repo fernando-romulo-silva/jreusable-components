@@ -4,8 +4,12 @@ import java.util.List;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.application_example.domain.Department;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DepartmentCommandFacade extends EntityCommandFacadeList<Department, String> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DepartmentCommandFacade.class);
 
     public DepartmentCommandFacade(final List<Department> data) {
         super(data);
@@ -20,5 +24,27 @@ public class DepartmentCommandFacade extends EntityCommandFacadeList<Department,
 
         saveEntityIn.increaseOperation();
         return saveEntityIn;
+    }
+
+    @Override
+    protected Department posSave(final Department saveEntityIn, final Object... directives) {
+
+        if (ObjectUtils.allNull(saveEntityIn)) {
+            return saveEntityIn;
+        }
+
+        saveEntityIn.increaseOperation();
+        return saveEntityIn;
+    }
+
+    @Override
+    protected Exception errorSave(
+            final Department saveEntityIn,
+            final Exception exception,
+            final Object... directives) {
+
+        LOGGER.debug("Error Save");
+
+        return exception;
     }
 }

@@ -5,5 +5,5 @@
     <artifactId>jreusable-components-spring-messaging</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>jreusable-components-spring-ActiveMQ</artifactId>
+  <artifactId>jreusable-components-spring-activeMQ</artifactId>
 </project>

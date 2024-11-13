@@ -17,54 +17,56 @@ import org.springframework.http.ResponseEntity;
  * @param <Entity>
  * @param <Id>
  */
-public class SpringEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id> extends EntityCommandHttpController<Entity, Id, // basic
-		Id, Entity, // 
-		// save
-		Entity, Entity, // save a entity
-		Iterable<Entity>, Iterable<Entity>, // save entities
-		// update
-		Entity, Entity, // update a entity
-		Iterable<Entity>, Iterable<Entity>, // update entities
-		// delete
-		Entity, Void, // delete a entity
-		Iterable<Entity>, Void, // delete entities
-		// delete by id
-		Id, Void, // delete a entity by id
-		Iterable<Id>, Void, // delete entities by id>
-		ResponseEntity<?>> implements InterfaceSpringEntityCommandHttpController<Entity, Id> {
+public class SpringEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id>
+		extends EntityCommandHttpController<Entity, Id, // basic
+				Id, Entity, //
+				// save
+				Entity, Entity, // save a entity
+				Iterable<Entity>, Iterable<Entity>, // save entities
+				// update
+				Entity, Entity, // update a entity
+				Iterable<Entity>, Iterable<Entity>, // update entities
+				// delete
+				Entity, Void, // delete a entity
+				Iterable<Entity>, Void, // delete entities
+				// delete by id
+				Id, Void, // delete a entity by id
+				Iterable<Id>, Void, // delete entities by id>
+				ResponseEntity<?>>
+		implements InterfaceSpringEntityCommandHttpController<Entity, Id> {
 
-    protected SpringEntityCommandHttpController(
-		    final InterfaceSpringEntityQueryFacade<Entity, Id> springEntityFacade,
-		    final InterfaceSpringCommandFacade<Entity, Id> springCommandFacade) {
-	
-	super(new EntityCommandHttpControllerBuilder<>($ -> {
-	    
-	    $.applyPatchToJObject = (jsonPatchs, id) -> {
-		
-		final var entity = springEntityFacade.findBy(id).orElseThrow(null);
-		
-		final var toReplace = jsonPatchs.stream()
-				.filter(jsonPatch -> Objects.equals(jsonPatch.op(), JsonPatchOperation.REPLACE))
-				.collect(Collectors.toMap(JsonPatch::path, JsonPatch::value));
-		
-		toReplace.forEach((key, value) -> {
-		    final var field = FieldUtils.getField(entity.getClass(), key, true);
-		    try {
-			FieldUtils.writeField(field, entity, value, true);
-		    } catch (final IllegalAccessException ex) {
-			throw new IllegalArgumentException(ex);
-		    }
-		});
-		
-		return entity;
-	    };
-	    
-	    $.createResponseDelete = (voidValue) -> ResponseEntity.noContent().build();
-	    $.createResponsePatch = (entity) -> ResponseEntity.noContent().build();
-	    $.createResponsePut = (entity) -> ResponseEntity.noContent().build();
-	    $.createResponsePost = (entity) -> ResponseEntity.ok(entity);
+	protected SpringEntityCommandHttpController(
+			final InterfaceSpringEntityQueryFacade<Entity, Id> springEntityFacade,
+			final InterfaceSpringCommandFacade<Entity, Id> springCommandFacade) {
 
-	    $.entityCommandFacade = springCommandFacade;
-	}));
-    }
+		super(new EntityCommandHttpControllerBuilder<>($ -> {
+
+			$.applyPatchToJObject = (jsonPatchs, id) -> {
+
+				final var entity = springEntityFacade.findById(id).orElseThrow(null);
+
+				final var toReplace = jsonPatchs.stream()
+						.filter(jsonPatch -> Objects.equals(jsonPatch.op(), JsonPatchOperation.REPLACE))
+						.collect(Collectors.toMap(JsonPatch::path, JsonPatch::value));
+
+				toReplace.forEach((key, value) -> {
+					final var field = FieldUtils.getField(entity.getClass(), key, true);
+					try {
+						FieldUtils.writeField(field, entity, value, true);
+					} catch (final IllegalAccessException ex) {
+						throw new IllegalArgumentException(ex);
+					}
+				});
+
+				return entity;
+			};
+
+			$.createResponseDelete = (voidValue) -> ResponseEntity.noContent().build();
+			$.createResponsePatch = (entity) -> ResponseEntity.noContent().build();
+			$.createResponsePut = (entity) -> ResponseEntity.noContent().build();
+			$.createResponsePost = (entity) -> ResponseEntity.ok(entity);
+
+			$.entityCommandFacade = springCommandFacade;
+		}));
+	}
 }

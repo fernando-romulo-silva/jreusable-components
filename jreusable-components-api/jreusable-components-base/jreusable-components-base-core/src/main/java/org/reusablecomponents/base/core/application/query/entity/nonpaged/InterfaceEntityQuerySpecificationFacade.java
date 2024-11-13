@@ -36,15 +36,14 @@ public non-sealed interface InterfaceEntityQuerySpecificationFacade<Entity exten
      * 
      * @param directives    Params used to configure the query's result
      * 
-     * @throws NullPointerException     If the parameter 'specification' is
-     *                                  null
+     * @throws NullPointerException     If the parameter 'specification' is null
      * @throws ElementNotFoundException If you try to retrieve an entity that
      *                                  doesn't exist
      * @throws BaseApplicationException If an unidentified error happened
      * 
      * @return Return a {@code MultipleResult} object
      */
-    MultipleResult findBy(final Specification specification, final Object... directives);
+    MultipleResult findBySpec(final Specification specification, final Object... directives);
 
     /**
      * Find and retrieve a {@code OneResult} object by specification
@@ -53,15 +52,14 @@ public non-sealed interface InterfaceEntityQuerySpecificationFacade<Entity exten
      *                      result
      * @param directives    Params used to configure the query's result
      * 
-     * @throws NullPointerException     If the parameter 'specification' is
-     *                                  null
+     * @throws NullPointerException     If the parameter 'specification' is null
      * @throws ElementNotFoundException If you try to retrieve an entity that
      *                                  doesn't exist
      * @throws BaseApplicationException If an unidentified error happened
      * 
      * @return Return a {@code OneResult} object
      */
-    OneResult findOneBy(final Specification specification, final Object... directives);
+    OneResult findOneBySpec(final Specification specification, final Object... directives);
 
     /**
      * Check if there exists an entity with the provided specification.
@@ -70,12 +68,11 @@ public non-sealed interface InterfaceEntityQuerySpecificationFacade<Entity exten
      *                      result
      * 
      * @throws NullPointerException     If the parameter 'specification' is null
-     * 
      * @throws BaseApplicationException If an unidentified error happened
      * 
      * @return Return a {@code ExistsResult} object
      */
-    ExistsResult existsBy(final Specification specification);
+    ExistsResult existsBySpec(final Specification specification);
 
     /**
      * Count how many entities there are by specification
@@ -84,11 +81,10 @@ public non-sealed interface InterfaceEntityQuerySpecificationFacade<Entity exten
      *                      result
      * 
      * @throws NullPointerException     If the parameter 'specification' is null
-     * 
      * @throws BaseApplicationException If an unidentified error happened
      * 
      * @return Return a {@code CountResult} object
      */
-    CountResult count(final Specification specification);
+    CountResult countBySpec(final Specification specification);
 
 }

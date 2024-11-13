@@ -91,11 +91,12 @@ public class EntiyBaseEvent {
         final var session = securityService.getSession();
         final var application = securityService.getApplication();
         final var machineName = securityService.getMachineName();
+        final var version = securityService.getVersion();
 
         final var event = new Event.Builder().with($ -> {
             $.what = new What(dataIn, dataOut, status);
             $.when = new When();
-            $.where = new Where(application, machineName);
+            $.where = new Where(machineName, application, version);
             $.who = new Who(realm, user, session);
             $.why = new Why(operation.getName(), operation.getDescription());
         }).build();

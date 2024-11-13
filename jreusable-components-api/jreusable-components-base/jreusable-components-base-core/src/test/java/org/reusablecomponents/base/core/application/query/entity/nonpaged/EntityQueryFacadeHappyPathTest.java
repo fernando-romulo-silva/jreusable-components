@@ -61,7 +61,7 @@ class EntityQueryFacadeHappyPathTest {
         final var id = "x1";
 
         // when
-        final var result = defaultQueryFacade.findBy(id);
+        final var result = defaultQueryFacade.findById(id);
 
         // then
         assertThat(department01).isEqualTo(result);
@@ -124,12 +124,12 @@ class EntityQueryFacadeHappyPathTest {
         final var id = "x1";
 
         // when
-        final var result = defaultQueryFacade.existsBy(id);
+        final var result = defaultQueryFacade.existsById(id);
 
         // then
         assertThat(result)
                 .isTrue()
-                .matches(e -> defaultQueryFacade.existsBy("whatever") != result);
+                .matches(e -> defaultQueryFacade.existsById("whatever") != result);
     }
 
 }

@@ -1,5 +1,6 @@
 package org.reusablecomponents.base.core.application.query.entity.paged;
 
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION_SORTED;
 
@@ -68,6 +69,26 @@ public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends 
 	}
 
 	/**
+	 * Method used to handle {@link #findBy(Object, Object, Object...) findBy}
+	 * errors.
+	 * 
+	 * @param pageable      The object used to find by pageable
+	 * @param specification The object used to find by specification
+	 * @param exception     Exception thrown by findBy operation
+	 * @param directives    Objects used to configure the findBy operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorFindBy(
+			final Pageable pageable,
+			final Specification specification,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -90,6 +111,13 @@ public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends 
 		try {
 			multiplePagedResult = findBySpecificationFunction.apply(finalSpecification, finalPageable, directives);
 		} catch (final Exception ex) {
+
+			final var finalException = errorFindBy(pageable, specification, ex, directives);
+
+			LOGGER.debug(
+					"Error pageable find by specification, pageable '{}', specification '{}', session '{}', error '{}'",
+					pageable, specification, session, getRootCauseMessage(finalException));
+
 			throw exceptionAdapterService.convert(
 					ex,
 					i18nService,
@@ -129,14 +157,23 @@ public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends 
 		return oneResult;
 	}
 
+	protected Exception errorFindOneBy(
+			final Sort sort,
+			final Specification specification,
+			final Exception exception,
+			final Object... directives) {
+
+		return exception;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public OneResult findOneBy(
-			@Nullable final Specification specification,
 			@Nullable final Sort sort,
-			final Object... directives) {
+			@Nullable final Specification specification,
+			@Nullable final Object... directives) {
 
 		final var session = securityService.getSession();
 
@@ -151,6 +188,12 @@ public non-sealed class EntityQueryPaginationSpecificationFacade<Entity extends 
 		try {
 			oneResult = findOneByFunctionWithOrder.apply(finalSpecification, finalSort, null);
 		} catch (final Exception ex) {
+
+			final var finalException = errorFindOneBy(sort, specification, ex, directives);
+
+			LOGGER.debug("Error pageable find all, pageable '{}', session '{}', error '{}'",
+					sort, session, getRootCauseMessage(finalException));
+
 			throw exceptionAdapterService.convert(
 					ex,
 					i18nService,
