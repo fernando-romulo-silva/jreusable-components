@@ -31,8 +31,7 @@ open module org.reusablecomponent.base.core {
     exports org.reusablecomponents.base.core.application.query.entity.nonpaged;
 
     // -- full facades
-    exports org.reusablecomponents.base.core.application.mix.entity.paged;
-    exports org.reusablecomponents.base.core.application.mix.entity.nonpaged;
+    exports org.reusablecomponents.base.core.application.mix.entity;
 
     // -- exception
     exports org.reusablecomponents.base.core.infra.exception;

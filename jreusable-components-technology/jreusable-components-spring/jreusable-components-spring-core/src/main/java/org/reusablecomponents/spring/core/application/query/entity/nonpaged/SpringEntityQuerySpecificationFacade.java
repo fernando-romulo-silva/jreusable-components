@@ -1,15 +1,11 @@
 package org.reusablecomponents.spring.core.application.query.entity.nonpaged;
 
 import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQuerySpecificationFacade;
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQuerySpecificationFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.spring.core.domain.InterfaceSpringSpecificationRepository;
-
-import jakarta.validation.constraints.NotNull;
 
 public class SpringEntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, Specification>
 		// base class

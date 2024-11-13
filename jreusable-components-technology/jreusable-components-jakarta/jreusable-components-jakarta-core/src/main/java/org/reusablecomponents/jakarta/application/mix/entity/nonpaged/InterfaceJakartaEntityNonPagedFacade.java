@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.reusablecomponents.base.core.application.mix.entity.nonpaged.InterfaceEntityNonPagedFacade;
+import org.reusablecomponents.base.core.application.mix.entity.InterfaceEntityNonPagedFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import jakarta.transaction.Transactional;
@@ -16,7 +16,7 @@ import jakarta.transaction.Transactional;
  * @param <Id>
  */
 @Transactional(value = SUPPORTS)
-public interface InterfaceJakartaEntityFacade<Entity extends AbstractEntity<Id>, Id>
+public interface InterfaceJakartaEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, Specification>
 		//
 		extends InterfaceEntityNonPagedFacade<Entity, Id,
 				// ------------ command
@@ -37,6 +37,6 @@ public interface InterfaceJakartaEntityFacade<Entity extends AbstractEntity<Id>,
 				Stream<Entity>, // multiple result
 				Long, // count result
 				Boolean, // exists result
-				String> { // Query by string
+				Specification> { // Query Specification
 
 }

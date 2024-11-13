@@ -1,4 +1,4 @@
-package org.reusablecomponents.base.core.application.mix.entity.nonpaged;
+package org.reusablecomponents.base.core.application.mix.entity;
 
 import org.reusablecomponents.base.core.application.command.entity.InterfaceEntityCommandFacade;
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;

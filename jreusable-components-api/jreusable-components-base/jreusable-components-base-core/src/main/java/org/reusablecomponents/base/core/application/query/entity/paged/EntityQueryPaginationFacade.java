@@ -76,7 +76,7 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	 * 
 	 * @return The handled exception
 	 */
-	protected Exception errorPageableFindAll(
+	protected Exception errorFindAll(
 			final Pageable pageable,
 			final Exception exception,
 			final Object... directives) {
@@ -103,7 +103,7 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 			multiplePagedResult = findAllFunction.apply(finalPageable, directives);
 		} catch (final Exception ex) {
 
-			final var finalException = errorPageableFindAll(pageable, ex, directives);
+			final var finalException = errorFindAll(pageable, ex, directives);
 
 			LOGGER.debug("Error pageable find all, pageable '{}', session '{}', error '{}'",
 					pageable, session, getRootCauseMessage(finalException));
@@ -134,7 +134,7 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	 * 
 	 * @return
 	 */
-	protected Sort preFindFirst(final Sort sort, final Object... directives) {
+	protected Sort preFindOne(final Sort sort, final Object... directives) {
 		return sort;
 	}
 
@@ -144,7 +144,7 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	 * 
 	 * @return
 	 */
-	protected OneResult posFindFirst(final OneResult oneResult) {
+	protected OneResult posFindOne(final OneResult oneResult) {
 		return oneResult;
 	}
 
@@ -157,7 +157,7 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 	 * 
 	 * @return The handled exception
 	 */
-	protected Exception errorSortedFindFirst(
+	protected Exception errorFindOne(
 			final Sort sort,
 			final Exception exception,
 			final Object... directives) {
@@ -175,14 +175,14 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 
 		LOGGER.debug("Finding first by '{}', session '{}'", sort, session);
 
-		final var finalSort = preFindFirst(sort, directives);
+		final var finalSort = preFindOne(sort, directives);
 
 		final OneResult oneResult;
 
 		try {
 			oneResult = findFirstFunction.apply(finalSort);
 		} catch (final Exception ex) {
-			final var finalException = errorSortedFindFirst(finalSort, ex, directives);
+			final var finalException = errorFindOne(finalSort, ex, directives);
 
 			LOGGER.debug("Error find first, sort '{}', session '{}', error '{}'",
 					finalSort, session, getRootCauseMessage(finalException));
@@ -196,7 +196,7 @@ public non-sealed class EntityQueryPaginationFacade<Entity extends AbstractEntit
 					directives);
 		}
 
-		final var finalOneResult = posFindFirst(oneResult);
+		final var finalOneResult = posFindOne(oneResult);
 
 		LOGGER.debug("Found first by '{}', session '{}'", finalSort, session);
 

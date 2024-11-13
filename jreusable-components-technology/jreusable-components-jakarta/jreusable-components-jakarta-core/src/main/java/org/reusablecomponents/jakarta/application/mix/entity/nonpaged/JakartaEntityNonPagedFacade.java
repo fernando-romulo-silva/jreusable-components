@@ -10,8 +10,8 @@ import org.reusablecomponents.jakarta.domain.InterfaceJakartaRepository;
  * @param <Entity>
  * @param <Id>
  */
-public class JakartaEntityFacade<Entity extends AbstractEntity<Id>, Id>
-        implements InterfaceJakartaEntityFacade<Entity, Id> {
+public class JakartaEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, Specification>
+        implements InterfaceJakartaEntityNonPagedFacade<Entity, Id, Specification> {
 
     protected InterfaceJakartaRepository<Entity, Id> repository;
 
@@ -19,34 +19,44 @@ public class JakartaEntityFacade<Entity extends AbstractEntity<Id>, Id>
 
     protected final InterfaceJakartaEntityQueryFacade<Entity, Id> entityQueryFacade;
 
-    protected final InterfaceJakartaEntityQuerySpecificationFacade<Entity, Id> entityQuerySpecificationFacade;
+    protected final InterfaceJakartaEntityQuerySpecificationFacade<Entity, Id, Specification> entityQuerySpecificationFacade;
 
     /**
      * @param entityCommandFacade
      * @param entityQueryFacade
+     * @param entityQuerySpecificationFacade
      */
-    protected JakartaEntityFacade(
+    protected JakartaEntityNonPagedFacade(
             final InterfaceJakartaCommandFacade<Entity, Id> entityCommandFacade,
             final InterfaceJakartaEntityQueryFacade<Entity, Id> entityQueryFacade,
-            final InterfaceJakartaEntityQuerySpecificationFacade<Entity, Id> entityQuerySpecificationFacade) {
+            final InterfaceJakartaEntityQuerySpecificationFacade<Entity, Id, Specification> entityQuerySpecificationFacade) {
 
         this.entityCommandFacade = entityCommandFacade;
         this.entityQueryFacade = entityQueryFacade;
         this.entityQuerySpecificationFacade = entityQuerySpecificationFacade;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public InterfaceJakartaCommandFacade<Entity, Id> getEntityCommandFacade() {
         return entityCommandFacade;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public InterfaceJakartaEntityQueryFacade<Entity, Id> getEntityQueryFacade() {
         return entityQueryFacade;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public InterfaceJakartaEntityQuerySpecificationFacade<Entity, Id> getEntityQuerySpecificationFacade() {
+    public InterfaceJakartaEntityQuerySpecificationFacade<Entity, Id, Specification> getEntityQuerySpecificationFacade() {
         return entityQuerySpecificationFacade;
     }
 }
