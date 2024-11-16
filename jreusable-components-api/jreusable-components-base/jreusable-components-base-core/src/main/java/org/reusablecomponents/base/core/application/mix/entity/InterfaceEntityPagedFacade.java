@@ -23,10 +23,10 @@ public interface InterfaceEntityPagedFacade<Entity extends AbstractEntity<Id>, I
         // results
         OneResult, // one result type
         MultiplePagedResult, // multiple result type
-        Specification,
         // Pagination
         Pageable, // pageable type
-        Sort> // sort type
+        Sort, // sort type
+        Specification>
         // command
         extends InterfaceEntityCommandFacade<Entity, Id, // default
                 // save
@@ -149,6 +149,22 @@ public interface InterfaceEntityPagedFacade<Entity extends AbstractEntity<Id>, I
     @Override
     default OneResult findOneBy(final Sort sort, final Specification specification, final Object... directives) {
         return getEntityQueryPaginationSpecificationFacade().findOneBy(sort, specification, directives);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default Class<Entity> getEntityClazz() {
+        return getEntityCommandFacade().getEntityClazz();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default Class<Id> getIdClazz() {
+        return getEntityCommandFacade().getIdClazz();
     }
 
     InterfaceEntityCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> getEntityCommandFacade();

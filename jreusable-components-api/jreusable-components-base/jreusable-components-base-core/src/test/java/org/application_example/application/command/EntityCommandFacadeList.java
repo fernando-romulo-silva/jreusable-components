@@ -196,7 +196,6 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 
 			// others --------------------------------
 			$.securityService = new DummySecurityService();
-			// $.publisherService = new LoggerPublisherSerice();
 			$.exceptionAdapterService = new ExceptionAdapterListService();
 			$.i18nService = new JavaSEI18nService();
 		}));

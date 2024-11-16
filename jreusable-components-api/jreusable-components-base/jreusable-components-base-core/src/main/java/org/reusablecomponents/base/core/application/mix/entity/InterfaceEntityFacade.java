@@ -29,10 +29,10 @@ public interface InterfaceEntityFacade<Entity extends AbstractEntity<Id>, Id, //
         ExistsResult, // boolean result type
 
         MultiplePagedResult, // multiple result type
-        Specification,
         // Pagination
         Pageable, // pageable type
-        Sort> // sort type
+        Sort, // sort type
+        Specification>
 
         // non paged
         extends InterfaceEntityCommandFacade<Entity, Id, // default
