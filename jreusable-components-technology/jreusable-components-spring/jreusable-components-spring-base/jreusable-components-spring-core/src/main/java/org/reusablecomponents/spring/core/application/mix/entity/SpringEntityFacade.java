@@ -1,14 +1,14 @@
 package org.reusablecomponents.spring.core.application.mix.entity;
 
+import javax.swing.text.html.parser.Entity;
+
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.spring.core.application.command.entity.InterfaceSpringCommandFacade;
 import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringEntityQueryFacade;
 import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringEntityQuerySpecificationFacade;
 import org.reusablecomponents.spring.core.application.query.entity.paged.InterfaceSpringEntityQueryPaginationFacade;
 import org.reusablecomponents.spring.core.application.query.entity.paged.InterfaceSpringEntityQueryPaginationSpecificationFacade;
-import org.springframework.stereotype.Service;
 
-@Service
 public class SpringEntityFacade<Entity extends AbstractEntity<Id>, Id, Specification>
         implements InterfaceSpringEntityFacade<Entity, Id, Specification> {
 

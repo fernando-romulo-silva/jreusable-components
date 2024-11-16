@@ -6,14 +6,12 @@ import org.reusablecomponents.base.core.application.command.entity.EntityCommand
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
+import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.spring.core.domain.InterfaceSpringReactiveRepository;
-import org.reusablecomponents.spring.core.infra.i18n.SpringI18nService;
-import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Service
 public class SpringReactiveEntityCommandFacade<Entity extends AbstractEntity<Id>, Id> // basic
 		// basic class
 		extends EntityCommandFacade<Entity, Id, // basic
@@ -35,7 +33,7 @@ public class SpringReactiveEntityCommandFacade<Entity extends AbstractEntity<Id>
 			final InterfaceSpringReactiveRepository<Entity, Id> repository,
 			final InterfaceSecurityService securityService,
 			final InterfaceExceptionAdapterService exceptionAdapterService,
-			final SpringI18nService i18Service) {
+			final InterfaceI18nService i18Service) {
 
 		// invoke super wih builder
 		super(new EntityCommandFacadeBuilder<>($ -> {

@@ -11,7 +11,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>jreusable-components-spring-core</module>
+		<module>jreusable-components-spring-base</module>
 		<module>jreusable-components-spring-batch</module>
 		<module>jreusable-components-spring-messaging</module>
 		<module>jreusable-components-spring-webservice</module>

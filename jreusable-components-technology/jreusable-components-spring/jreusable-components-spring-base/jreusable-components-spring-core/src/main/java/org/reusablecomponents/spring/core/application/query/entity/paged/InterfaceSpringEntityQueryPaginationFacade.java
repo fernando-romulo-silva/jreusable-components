@@ -9,6 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+/**
+ * @param <Entity>
+ * @param <Id>
+ */
 public interface InterfaceSpringEntityQueryPaginationFacade<Entity extends AbstractEntity<Id>, Id>
     extends InterfaceEntityQueryPaginationFacade<Entity, Id, // basic
         // results

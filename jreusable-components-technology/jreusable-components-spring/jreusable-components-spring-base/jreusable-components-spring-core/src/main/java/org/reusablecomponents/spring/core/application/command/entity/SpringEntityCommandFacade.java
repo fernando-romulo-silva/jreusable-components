@@ -8,9 +8,6 @@ import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.spring.core.domain.InterfaceSpringRepository;
 
-import org.springframework.stereotype.Service;
-
-@Service
 public class SpringEntityCommandFacade<Entity extends AbstractEntity<Id>, Id> // basic
 		// basic class
 		extends EntityCommandFacade<Entity, Id, // basic
@@ -75,4 +72,5 @@ public class SpringEntityCommandFacade<Entity extends AbstractEntity<Id>, Id> //
 
 		this.repository = repository;
 	}
+
 }

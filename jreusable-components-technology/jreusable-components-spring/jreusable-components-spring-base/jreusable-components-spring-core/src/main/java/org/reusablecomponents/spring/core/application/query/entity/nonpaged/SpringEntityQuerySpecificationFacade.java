@@ -2,7 +2,6 @@ package org.reusablecomponents.spring.core.application.query.entity.nonpaged;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQuerySpecificationFacade;
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQuerySpecificationFacadeBuilder;
@@ -12,9 +11,6 @@ import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.spring.core.domain.InterfaceSpringSpecificationRepository;
 
-import org.springframework.stereotype.Service;
-
-@Service
 public class SpringEntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, Specification>
 		// base class
 		extends EntityQuerySpecificationFacade<Entity, Id, Optional<Entity>, // One result

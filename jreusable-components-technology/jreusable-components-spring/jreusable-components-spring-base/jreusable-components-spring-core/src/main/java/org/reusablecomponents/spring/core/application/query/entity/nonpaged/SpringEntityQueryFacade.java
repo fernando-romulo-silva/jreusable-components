@@ -10,9 +10,6 @@ import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.spring.core.domain.InterfaceSpringRepository;
 
-import org.springframework.stereotype.Service;
-
-@Service
 public class SpringEntityQueryFacade<Entity extends AbstractEntity<Id>, Id>
 		// base class
 		extends EntityQueryFacade<Entity, Id, // basic
@@ -44,10 +41,8 @@ public class SpringEntityQueryFacade<Entity extends AbstractEntity<Id>, Id>
 			$.i18nService = i18Service;
 			$.exceptionAdapterService = exceptionAdapterService;
 			$.securityService = securityService;
-
 		}));
 
 		this.repository = repository;
-
 	}
 }

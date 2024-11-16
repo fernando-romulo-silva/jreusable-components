@@ -4,13 +4,14 @@ import org.reactivestreams.Publisher;
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQueryFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
+import org.reusablecomponents.base.security.InterfaceSecurityService;
+import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.spring.core.domain.InterfaceSpringReactiveRepository;
-import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Service
 public class SpringReactiveEntityQueryFacade<Entity extends AbstractEntity<Id>, Id>
 		// base class
 		extends EntityQueryFacade<Entity, Id, Publisher<Id>, // by id arg
@@ -22,7 +23,11 @@ public class SpringReactiveEntityQueryFacade<Entity extends AbstractEntity<Id>, 
 
 	protected final InterfaceSpringReactiveRepository<Entity, Id> repository;
 
-	public SpringReactiveEntityQueryFacade(final InterfaceSpringReactiveRepository<Entity, Id> repository) {
+	public SpringReactiveEntityQueryFacade(
+			final InterfaceSpringReactiveRepository<Entity, Id> repository,
+			final InterfaceSecurityService securityService,
+			final InterfaceExceptionAdapterService exceptionAdapterService,
+			final InterfaceI18nService i18Service) {
 
 		super(new EntityQueryFacadeBuilder<>($ -> {
 
@@ -32,6 +37,10 @@ public class SpringReactiveEntityQueryFacade<Entity extends AbstractEntity<Id>, 
 			$.countAllFunction = repository::count;
 			$.existsAllFunction = () -> repository.count().map(m -> m.longValue() > 0);
 
+			// services
+			$.i18nService = i18Service;
+			$.exceptionAdapterService = exceptionAdapterService;
+			$.securityService = securityService;
 		}));
 
 		this.repository = repository;

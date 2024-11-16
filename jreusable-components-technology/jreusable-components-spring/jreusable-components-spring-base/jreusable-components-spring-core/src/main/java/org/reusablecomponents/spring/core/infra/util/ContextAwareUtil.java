@@ -51,8 +51,8 @@ public class ContextAwareUtil implements ApplicationContextAware {
      * 
      * @return A bean retrieved
      */
-    public static <T> T getBeanFrom(final Class<T> beanClass, final String name) {
-        return context.getBean(name, beanClass);
+    public static <T> T getBeanFrom(final String beanName, final Class<T> beanClass) {
+        return context.getBean(beanName, beanClass);
     }
 
     /**

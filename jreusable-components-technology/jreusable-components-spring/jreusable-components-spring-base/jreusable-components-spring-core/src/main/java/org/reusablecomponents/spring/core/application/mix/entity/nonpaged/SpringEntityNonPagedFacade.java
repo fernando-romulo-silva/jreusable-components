@@ -2,17 +2,13 @@ package org.reusablecomponents.spring.core.application.mix.entity.nonpaged;
 
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.spring.core.application.command.entity.InterfaceSpringCommandFacade;
-import org.reusablecomponents.spring.core.application.command.entity.SpringEntityCommandFacade;
 import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringEntityQueryFacade;
 import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringEntityQuerySpecificationFacade;
-import org.reusablecomponents.spring.core.infra.util.ContextAwareUtil;
-import org.springframework.stereotype.Service;
 
 /**
  * @param <Entity>
  * @param <Id>
  */
-@Service
 public class SpringEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, Specification>
         implements InterfaceSpringEntityNonPagedFacade<Entity, Id, Specification> {
 
@@ -36,23 +32,24 @@ public class SpringEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, S
         this.entityQuerySpecificationFacade = entityQuerySpecificationFacade;
     }
 
-    /**
-     * @param entityCommandFacade
-     * @param entityQueryFacade
-     */
-    @SuppressWarnings("unchecked")
-    protected SpringEntityNonPagedFacade() {
+    // /**
+    // * @param entityCommandFacade
+    // * @param entityQueryFacade
+    // */
+    // @SuppressWarnings("unchecked")
+    // protected SpringEntityNonPagedFacade() {
 
-        // https: //
-        // stackoverflow.com/questions/30374267/get-spring-bean-via-context-using-generic
+    // https://stackoverflow.com/questions/30374267/get-spring-bean-via-context-using-generic
 
-        this.entityCommandFacade = ContextAwareUtil.getBeanFrom(SpringEntityCommandFacade.class);
+    // this.entityCommandFacade =
+    // ContextAwareUtil.getBeanFrom(SpringEntityCommandFacade.class);
 
-        this.entityQueryFacade = ContextAwareUtil.getBeanFrom(InterfaceSpringEntityQueryFacade.class);
+    // this.entityQueryFacade =
+    // ContextAwareUtil.getBeanFrom(InterfaceSpringEntityQueryFacade.class);
 
-        this.entityQuerySpecificationFacade = ContextAwareUtil
-                .getBeanFrom(InterfaceSpringEntityQuerySpecificationFacade.class);
-    }
+    // this.entityQuerySpecificationFacade = ContextAwareUtil
+    // .getBeanFrom(InterfaceSpringEntityQuerySpecificationFacade.class);
+    // }
 
     /**
      * {@inheritDoc}
