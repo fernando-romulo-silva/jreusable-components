@@ -1,51 +1,53 @@
 package org.reusablecomponents.jakarta.application.query.entity;
 
+import static jakarta.transaction.Transactional.TxType.SUPPORTS;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceQuerySpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceQueryFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
-import static jakarta.transaction.Transactional.TxType.SUPPORTS;
 
 import jakarta.transaction.Transactional;
 
 /**
- * 
+ * @param <Entity>
+ * @param <Id>
  */
-public interface InterfaceJakartaEntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, Specification>
-                extends InterfaceQuerySpecificationFacade<Entity, Id, // base
+public interface InterfaceJakartaQueryFacade<Entity extends AbstractEntity<Id>, Id>
+                //
+                extends InterfaceQueryFacade<Entity, Id, // base
+                                Id, // by id arg
                                 Optional<Entity>, // One result
                                 Stream<Entity>, // multiple result
                                 Long, // count result
-                                Boolean, // exists result
-                                Specification> { // spec
+                                Boolean> { // exists result
 
         /**
          * {@inheritDoc}
          */
         @Override
         @Transactional(value = SUPPORTS)
-        Stream<Entity> findBySpec(final Specification specification, final Object... directives);
+        Optional<Entity> findById(final Id id, final Object... directives);
 
         /**
          * {@inheritDoc}
          */
         @Override
         @Transactional(value = SUPPORTS)
-        Optional<Entity> findOneBySpec(final Specification specification, final Object... directives);
+        Stream<Entity> findAll(final Object... directives);
 
         /**
          * {@inheritDoc}
          */
         @Override
         @Transactional(value = SUPPORTS)
-        Boolean existsBySpec(final Specification specification);
+        Long countAll();
 
         /**
          * {@inheritDoc}
          */
         @Override
         @Transactional(value = SUPPORTS)
-        Long countBySpec(final Specification specification);
-
+        Boolean existsById(final Id id);
 }

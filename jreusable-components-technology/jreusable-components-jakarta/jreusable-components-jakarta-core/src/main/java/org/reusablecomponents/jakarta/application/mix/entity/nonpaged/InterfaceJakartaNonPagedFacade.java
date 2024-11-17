@@ -16,7 +16,7 @@ import jakarta.transaction.Transactional;
  * @param <Id>
  */
 @Transactional(value = SUPPORTS)
-public interface InterfaceJakartaEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, Specification>
+public interface InterfaceJakartaNonPagedFacade<Entity extends AbstractEntity<Id>, Id, Specification>
 		//
 		extends InterfaceNonPagedFacade<Entity, Id,
 				// ------------ command

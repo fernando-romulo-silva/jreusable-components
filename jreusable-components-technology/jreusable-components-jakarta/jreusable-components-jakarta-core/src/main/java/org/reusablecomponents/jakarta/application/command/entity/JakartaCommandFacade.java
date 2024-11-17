@@ -7,6 +7,9 @@ import org.reusablecomponents.base.core.application.command.entity.CommandFacade
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.jakarta.domain.InterfaceJakartaRepository;
 
+/**
+ * 
+ */
 public class JakartaCommandFacade<Entity extends AbstractEntity<Id>, Id> // basic types
 		// basic class
 		extends CommandFacade<Entity, Id, // basic types

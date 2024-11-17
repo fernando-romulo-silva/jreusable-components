@@ -2,34 +2,34 @@ package org.reusablecomponents.jakarta.application.mix.entity.nonpaged;
 
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.jakarta.application.command.entity.InterfaceJakartaCommandFacade;
-import org.reusablecomponents.jakarta.application.query.entity.InterfaceJakartaEntityQueryFacade;
-import org.reusablecomponents.jakarta.application.query.entity.InterfaceJakartaEntityQuerySpecificationFacade;
+import org.reusablecomponents.jakarta.application.query.entity.InterfaceJakartaQueryFacade;
+import org.reusablecomponents.jakarta.application.query.entity.InterfaceJakartaQuerySpecificationFacade;
 import org.reusablecomponents.jakarta.domain.InterfaceJakartaRepository;
 
 /**
  * @param <Entity>
  * @param <Id>
  */
-public class JakartaEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, Specification>
-        implements InterfaceJakartaEntityNonPagedFacade<Entity, Id, Specification> {
+public class JakartaNonPagedFacade<Entity extends AbstractEntity<Id>, Id, Specification>
+        implements InterfaceJakartaNonPagedFacade<Entity, Id, Specification> {
 
     protected InterfaceJakartaRepository<Entity, Id> repository;
 
     protected final InterfaceJakartaCommandFacade<Entity, Id> entityCommandFacade;
 
-    protected final InterfaceJakartaEntityQueryFacade<Entity, Id> entityQueryFacade;
+    protected final InterfaceJakartaQueryFacade<Entity, Id> entityQueryFacade;
 
-    protected final InterfaceJakartaEntityQuerySpecificationFacade<Entity, Id, Specification> entityQuerySpecificationFacade;
+    protected final InterfaceJakartaQuerySpecificationFacade<Entity, Id, Specification> entityQuerySpecificationFacade;
 
     /**
      * @param entityCommandFacade
      * @param entityQueryFacade
      * @param entityQuerySpecificationFacade
      */
-    protected JakartaEntityNonPagedFacade(
+    protected JakartaNonPagedFacade(
             final InterfaceJakartaCommandFacade<Entity, Id> entityCommandFacade,
-            final InterfaceJakartaEntityQueryFacade<Entity, Id> entityQueryFacade,
-            final InterfaceJakartaEntityQuerySpecificationFacade<Entity, Id, Specification> entityQuerySpecificationFacade) {
+            final InterfaceJakartaQueryFacade<Entity, Id> entityQueryFacade,
+            final InterfaceJakartaQuerySpecificationFacade<Entity, Id, Specification> entityQuerySpecificationFacade) {
 
         this.entityCommandFacade = entityCommandFacade;
         this.entityQueryFacade = entityQueryFacade;
@@ -48,7 +48,7 @@ public class JakartaEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, 
      * {@inheritDoc}
      */
     @Override
-    public InterfaceJakartaEntityQueryFacade<Entity, Id> getEntityQueryFacade() {
+    public InterfaceJakartaQueryFacade<Entity, Id> getEntityQueryFacade() {
         return entityQueryFacade;
     }
 
@@ -56,7 +56,7 @@ public class JakartaEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, 
      * {@inheritDoc}
      */
     @Override
-    public InterfaceJakartaEntityQuerySpecificationFacade<Entity, Id, Specification> getEntityQuerySpecificationFacade() {
+    public InterfaceJakartaQuerySpecificationFacade<Entity, Id, Specification> getEntityQuerySpecificationFacade() {
         return entityQuerySpecificationFacade;
     }
 }

@@ -9,6 +9,9 @@ import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * 
+ */
 public interface InterfaceJakartaCommandFacade<Entity extends AbstractEntity<Id>, Id>
                 //
                 extends InterfaceCommandFacade<Entity, Id,
