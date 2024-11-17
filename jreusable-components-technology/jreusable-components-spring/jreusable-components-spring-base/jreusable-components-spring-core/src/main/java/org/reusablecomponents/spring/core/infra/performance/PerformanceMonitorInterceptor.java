@@ -34,8 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.logging.LogLevel;
 
-import jakarta.annotation.Nonnull;
-
 /**
  * This method intercept class in order to measures how much time was spent
  * executing a intercepted method and based on configurations, defines if it was

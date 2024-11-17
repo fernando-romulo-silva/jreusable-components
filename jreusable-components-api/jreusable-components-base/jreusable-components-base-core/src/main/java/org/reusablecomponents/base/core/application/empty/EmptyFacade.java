@@ -7,10 +7,10 @@ import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapte
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 
-public non-sealed class SimpleEntiyBaseFacade<Entity extends AbstractEntity<Id>, Id>
+public non-sealed class EmptyFacade<Entity extends AbstractEntity<Id>, Id>
 		extends BaseFacade<Entity, Id> {
 
-	public SimpleEntiyBaseFacade(
+	public EmptyFacade(
 			final InterfaceI18nService i18nService,
 			final InterfaceSecurityService securityService,
 			final InterfaceExceptionAdapterService exceptionTranslatorService) {
@@ -23,7 +23,7 @@ public non-sealed class SimpleEntiyBaseFacade<Entity extends AbstractEntity<Id>,
 		}));
 	}
 
-	public SimpleEntiyBaseFacade() {
+	public EmptyFacade() {
 		super(new BaseFacadeBuilder($ -> {
 		}));
 	}

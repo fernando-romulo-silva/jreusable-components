@@ -4,7 +4,7 @@ import static java.util.Optional.ofNullable;
 import static org.reusablecomponents.base.core.infra.util.Functions.*;
 
 import org.reusablecomponents.base.core.application.command.entity.CommandFacade;
-import org.reusablecomponents.base.core.application.empty.SimpleEntiyBaseFacade;
+import org.reusablecomponents.base.core.application.empty.EmptyFacade;
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.QueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.QuerySpecificationFacade;
 import org.reusablecomponents.base.core.application.query.entity.paged.QueryPaginationFacade;
@@ -29,7 +29,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		implements InterfaceBaseFacade<Entity, Id>
-		permits SimpleEntiyBaseFacade, CommandFacade, QueryFacade,
+		permits EmptyFacade, CommandFacade, QueryFacade,
 		QuerySpecificationFacade, QueryPaginationFacade, QueryPaginationSpecificationFacade {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseFacade.class);

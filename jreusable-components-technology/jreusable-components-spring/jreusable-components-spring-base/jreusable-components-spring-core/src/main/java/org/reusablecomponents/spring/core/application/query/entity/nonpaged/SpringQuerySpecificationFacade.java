@@ -1,8 +1,8 @@
 package org.reusablecomponents.spring.core.application.query.entity.nonpaged;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.collections4.IterableUtils;
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.QuerySpecificationFacade;
 import org.reusablecomponents.base.core.application.query.entity.nonpaged.QuerySpecificationFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
@@ -33,10 +33,12 @@ public class SpringQuerySpecificationFacade<Entity extends AbstractEntity<Id>, I
 			final InterfaceI18nService i18Service) {
 
 		super(new QuerySpecificationFacadeBuilder<>($ -> {
-			$.findBySpecificationFunction = (specification, directives) -> List.<Entity>of();
-			$.findOneByFunction = (specification, directives) -> Optional.empty();
-			$.existsBySpecificationFunction = specification -> Boolean.FALSE;
-			$.countBySpecificationFunction = specification -> 0L;
+
+			$.findBySpecificationFunction = (specification, directives) -> repository.findBy(specification);
+			$.findOneByFunction = (specification, directives) -> repository.findOneBy(specification);
+			$.existsBySpecificationFunction = specification -> repository.findOneBy(specification).isPresent();
+			$.countBySpecificationFunction = specification -> Long
+					.valueOf(IterableUtils.size(repository.findBy(specification)));
 
 			// services
 			$.i18nService = i18Service;
