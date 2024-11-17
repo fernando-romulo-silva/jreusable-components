@@ -11,7 +11,7 @@ import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.spring.core.domain.InterfaceSpringSpecificationRepository;
 
-public class SpringEntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, Specification>
+public class SpringQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, Specification>
 		// base class
 		extends QuerySpecificationFacade<Entity, Id, Optional<Entity>, // One result
 				Iterable<Entity>, // multiple result
@@ -26,7 +26,7 @@ public class SpringEntityQuerySpecificationFacade<Entity extends AbstractEntity<
 	 * 
 	 * @param builder
 	 */
-	public SpringEntityQuerySpecificationFacade(
+	public SpringQuerySpecificationFacade(
 			final InterfaceSpringSpecificationRepository<Entity, Id, Specification> repository,
 			final InterfaceSecurityService securityService,
 			final InterfaceExceptionAdapterService exceptionAdapterService,
