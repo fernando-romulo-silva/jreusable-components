@@ -25,7 +25,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reusablecomponents.base.core.application.base.EntiyBaseFacade;
+import org.reusablecomponents.base.core.application.base.BaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.GenericException;
@@ -96,14 +96,14 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 
 		assertThat(facade)
 				// when
-				.extracting(EntiyBaseFacade::getEntityClazz)
+				.extracting(BaseFacade::getEntityClazz)
 				// then
 				.isNotNull()
 				.isEqualTo(Department.class);
 
 		assertThat(facade)
 				// when
-				.extracting(EntiyBaseFacade::getIdClazz)
+				.extracting(BaseFacade::getIdClazz)
 				// then
 				.isNotNull()
 				.isEqualTo(String.class);
@@ -133,7 +133,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 
 		assertThat(facade)
 				// when
-				.extracting(EntiyBaseFacade::getI18nService)
+				.extracting(BaseFacade::getI18nService)
 				// then
 				.isNotNull()
 				.extracting(i18nService -> i18nService.getClass())
@@ -141,7 +141,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 
 		assertThat(facade)
 				// when
-				.extracting(EntiyBaseFacade::getExceptionTranslatorService)
+				.extracting(BaseFacade::getExceptionTranslatorService)
 				// then
 				.isNotNull();
 	}
@@ -182,7 +182,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 		listAppender.start();
 
 		final var publishServiceLogger = (Logger) LoggerFactory.getLogger(LoggerPublisherSerice.class);
-		final var facadeLogger = (Logger) LoggerFactory.getLogger(EntiyBaseFacade.class);
+		final var facadeLogger = (Logger) LoggerFactory.getLogger(BaseFacade.class);
 
 		publishServiceLogger.addAppender(listAppender);
 		facadeLogger.addAppender(listAppender);
@@ -212,7 +212,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 		listAppender.start();
 
 		final var publishServiceLogger = (Logger) LoggerFactory.getLogger(LoggerPublisherSerice.class);
-		final var facadeLogger = (Logger) LoggerFactory.getLogger(EntiyBaseFacade.class);
+		final var facadeLogger = (Logger) LoggerFactory.getLogger(BaseFacade.class);
 
 		publishServiceLogger.addAppender(listAppender);
 		facadeLogger.addAppender(listAppender);

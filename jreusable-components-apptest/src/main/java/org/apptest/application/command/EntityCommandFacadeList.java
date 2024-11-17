@@ -8,15 +8,15 @@ import java.util.Objects;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apptest.infra.ExceptionAdapterListService;
-import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacade;
-import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacadeBuilder;
+import org.reusablecomponents.base.core.application.command.entity.CommandFacade;
+import org.reusablecomponents.base.core.application.command.entity.CommandFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 
 public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 		//
-		extends EntityCommandFacade< // Basic Command Facade
+		extends CommandFacade< // Basic Command Facade
 				// basic
 				Entity, Id, //
 				// Save
@@ -38,7 +38,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 			final List<Entity> repository,
 			final InterfaceI18nService i18nService,
 			final InterfaceSecurityService securityService) {
-		super(new EntityCommandFacadeBuilder<>($ -> {
+		super(new CommandFacadeBuilder<>($ -> {
 
 			// save --------------------------------
 			$.saveFunction = (entity, directives) -> {

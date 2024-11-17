@@ -1,6 +1,6 @@
 package org.reusablecomponents.rest.rest.query.entity.base;
 
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceQueryFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,14 +14,14 @@ public class EntityQueryBaseHttpController<QueryIdIn, ExistsResult, OneResult, H
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityQueryBaseHttpController.class);
 
-    private final InterfaceEntityQueryFacade<?, ?, QueryIdIn, OneResult, ?, ?, ExistsResult> entityQueryFacade;
+    private final InterfaceQueryFacade<?, ?, QueryIdIn, OneResult, ?, ?, ExistsResult> entityQueryFacade;
 
     protected final Function<OneResult, HttpResponseOne> createResponseGetOneFunction;
 
     protected final Function<ExistsResult, HttpResponseVoid> createResponseHeadFunction;
 
     protected EntityQueryBaseHttpController(
-            final InterfaceEntityQueryFacade<?, ?, QueryIdIn, OneResult, ?, ?, ExistsResult> entityQueryFacade,
+            final InterfaceQueryFacade<?, ?, QueryIdIn, OneResult, ?, ?, ExistsResult> entityQueryFacade,
             final Function<OneResult, HttpResponseOne> createResponseGetOneFunction,
             final Function<ExistsResult, HttpResponseVoid> createResponseHeadFunction) {
         super();

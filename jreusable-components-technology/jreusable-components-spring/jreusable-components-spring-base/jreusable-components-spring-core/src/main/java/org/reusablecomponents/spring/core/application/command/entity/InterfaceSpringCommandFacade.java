@@ -1,6 +1,6 @@
 package org.reusablecomponents.spring.core.application.command.entity;
 
-import org.reusablecomponents.base.core.application.command.entity.InterfaceEntityCommandFacade;
+import org.reusablecomponents.base.core.application.command.entity.InterfaceCommandFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface InterfaceSpringCommandFacade<Entity extends AbstractEntity<Id>, Id>
                 //
-                extends InterfaceEntityCommandFacade<Entity, Id,
+                extends InterfaceCommandFacade<Entity, Id,
                                 // save
                                 Entity, Entity, // save a entity
                                 Iterable<Entity>, Iterable<Entity>, // save entities

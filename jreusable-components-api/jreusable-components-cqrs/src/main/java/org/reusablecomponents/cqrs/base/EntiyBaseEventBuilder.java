@@ -4,10 +4,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.function.Consumer;
 
-import org.reusablecomponents.base.core.application.base.EntiyBaseFacadeBuilder;
+import org.reusablecomponents.base.core.application.base.BaseFacadeBuilder;
 import org.reusablecomponents.messaging.InterfaceEventPublisherSerice;
 
-public class EntiyBaseEventBuilder extends EntiyBaseFacadeBuilder {
+public class EntiyBaseEventBuilder extends BaseFacadeBuilder {
 
     /**
      * 

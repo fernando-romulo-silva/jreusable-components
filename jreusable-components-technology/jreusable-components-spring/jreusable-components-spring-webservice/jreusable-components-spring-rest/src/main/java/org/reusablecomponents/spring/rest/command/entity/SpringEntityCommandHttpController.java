@@ -10,7 +10,7 @@ import org.reusablecomponents.rest.infra.jsonpath.JsonPatchOperation;
 import org.reusablecomponents.rest.rest.command.EntityCommandHttpController;
 import org.reusablecomponents.rest.rest.command.EntityCommandHttpControllerBuilder;
 import org.reusablecomponents.spring.core.application.command.entity.InterfaceSpringCommandFacade;
-import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringEntityQueryFacade;
+import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringQueryFacade;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -36,7 +36,7 @@ public class SpringEntityCommandHttpController<Entity extends AbstractEntity<Id>
 		implements InterfaceSpringEntityCommandHttpController<Entity, Id> {
 
 	protected SpringEntityCommandHttpController(
-			final InterfaceSpringEntityQueryFacade<Entity, Id> springEntityFacade,
+			final InterfaceSpringQueryFacade<Entity, Id> springEntityFacade,
 			final InterfaceSpringCommandFacade<Entity, Id> springCommandFacade) {
 
 		super(new EntityCommandHttpControllerBuilder<>($ -> {

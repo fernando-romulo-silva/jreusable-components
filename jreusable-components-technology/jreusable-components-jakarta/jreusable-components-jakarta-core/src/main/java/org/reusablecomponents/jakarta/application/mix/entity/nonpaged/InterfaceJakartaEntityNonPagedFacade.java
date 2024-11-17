@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.reusablecomponents.base.core.application.mix.entity.InterfaceEntityNonPagedFacade;
+import org.reusablecomponents.base.core.application.mix.entity.InterfaceNonPagedFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import jakarta.transaction.Transactional;
@@ -18,7 +18,7 @@ import jakarta.transaction.Transactional;
 @Transactional(value = SUPPORTS)
 public interface InterfaceJakartaEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, Specification>
 		//
-		extends InterfaceEntityNonPagedFacade<Entity, Id,
+		extends InterfaceNonPagedFacade<Entity, Id,
 				// ------------ command
 				Entity, Entity, // save a entity
 				List<Entity>, List<Entity>, // save entities

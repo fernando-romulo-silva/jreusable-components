@@ -1,6 +1,6 @@
 package org.reusablecomponents.rest.rest.query.entity.nonpaged;
 
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceEntityQuerySpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceQuerySpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.rest.rest.query.entity.base.EntityQueryBaseHttpController;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public class EntityQuerySpecificationHttp<Entity extends AbstractEntity<Id>, Id,
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EntityQuerySpecificationHttp.class);
 
-	protected final InterfaceEntityQuerySpecificationFacade<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> entityQuerySpecificationFacade;
+	protected final InterfaceQuerySpecificationFacade<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> entityQuerySpecificationFacade;
 
 	protected final Function<MultipleResult, HttpResponseMultiple> createResponseGetMultipleFunction;
 

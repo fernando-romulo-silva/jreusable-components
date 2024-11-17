@@ -5,19 +5,19 @@ import java.util.Objects;
 
 import org.application_example.infra.DummySecurityService;
 import org.application_example.infra.ExceptionAdapterListService;
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQueryFacade;
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQueryFacadeBuilder;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.QueryFacade;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.QueryFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
 
 public class EntityQueryFacadeList<Entity extends AbstractEntity<Id>, Id>
-        extends EntityQueryFacade<Entity, Id, Id, Entity, List<Entity>, Long, Boolean> {
+        extends QueryFacade<Entity, Id, Id, Entity, List<Entity>, Long, Boolean> {
 
     private final List<Entity> repository;
 
     public EntityQueryFacadeList(final List<Entity> repository) {
 
-        super(new EntityQueryFacadeBuilder<>($ -> {
+        super(new QueryFacadeBuilder<>($ -> {
 
             $.existsByIdFunction = id -> repository.stream().anyMatch(entity -> Objects.equals(entity.getId(), id));
 

@@ -15,5 +15,6 @@
 	<modules>
 		<module>jreusable-components-spring-core</module>
 		<module>jreusable-components-spring-core-jpa</module>
+		<module>jreusable-components-spring-core-mongodb</module>
 	</modules>
 </project>

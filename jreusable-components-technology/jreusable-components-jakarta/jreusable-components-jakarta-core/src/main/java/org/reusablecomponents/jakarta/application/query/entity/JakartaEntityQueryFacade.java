@@ -3,13 +3,13 @@ package org.reusablecomponents.jakarta.application.query.entity;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQueryFacade;
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQueryFacadeBuilder;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.QueryFacade;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.QueryFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.jakarta.domain.InterfaceJakartaRepository;
 
 public class JakartaEntityQueryFacade<Entity extends AbstractEntity<Id>, Id>
-		extends EntityQueryFacade<Entity, Id, // basic
+		extends QueryFacade<Entity, Id, // basic
 				Id, // by id arg
 				Optional<Entity>, // One result
 				Stream<Entity>, // multiple result
@@ -21,7 +21,7 @@ public class JakartaEntityQueryFacade<Entity extends AbstractEntity<Id>, Id>
 
 	protected JakartaEntityQueryFacade(final InterfaceJakartaRepository<Entity, Id> repository) {
 
-		super(new EntityQueryFacadeBuilder<>($ -> {
+		super(new QueryFacadeBuilder<>($ -> {
 
 			$.existsByIdFunction = id -> repository.findById(id).isPresent();
 			$.findByIdFunction = (id, directives) -> repository.findById(id);

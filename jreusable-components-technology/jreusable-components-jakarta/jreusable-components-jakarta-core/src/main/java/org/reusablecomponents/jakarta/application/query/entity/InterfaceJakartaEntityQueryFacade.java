@@ -5,7 +5,7 @@ import static jakarta.transaction.Transactional.TxType.SUPPORTS;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceQueryFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import jakarta.transaction.Transactional;
@@ -16,7 +16,7 @@ import jakarta.transaction.Transactional;
  */
 public interface InterfaceJakartaEntityQueryFacade<Entity extends AbstractEntity<Id>, Id>
                 //
-                extends InterfaceEntityQueryFacade<Entity, Id, // base
+                extends InterfaceQueryFacade<Entity, Id, // base
                                 Id, // by id arg
                                 Optional<Entity>, // One result
                                 Stream<Entity>, // multiple result

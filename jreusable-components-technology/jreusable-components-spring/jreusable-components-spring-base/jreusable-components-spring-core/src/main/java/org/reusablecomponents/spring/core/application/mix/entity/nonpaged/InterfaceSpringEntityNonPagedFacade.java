@@ -2,11 +2,11 @@ package org.reusablecomponents.spring.core.application.mix.entity.nonpaged;
 
 import java.util.Optional;
 
-import org.reusablecomponents.base.core.application.mix.entity.InterfaceEntityNonPagedFacade;
+import org.reusablecomponents.base.core.application.mix.entity.InterfaceNonPagedFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 public interface InterfaceSpringEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, Specification>
-		extends InterfaceEntityNonPagedFacade<Entity, Id, // basic
+		extends InterfaceNonPagedFacade<Entity, Id, // basic
 				// ------------ command
 				// save
 				Entity, Entity, // save a entity

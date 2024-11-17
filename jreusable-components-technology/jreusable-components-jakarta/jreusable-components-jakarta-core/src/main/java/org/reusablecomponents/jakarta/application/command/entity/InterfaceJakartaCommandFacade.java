@@ -4,14 +4,14 @@ import static jakarta.transaction.Transactional.TxType.REQUIRED;
 
 import java.util.List;
 
-import org.reusablecomponents.base.core.application.command.entity.InterfaceEntityCommandFacade;
+import org.reusablecomponents.base.core.application.command.entity.InterfaceCommandFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import jakarta.transaction.Transactional;
 
 public interface InterfaceJakartaCommandFacade<Entity extends AbstractEntity<Id>, Id>
                 //
-                extends InterfaceEntityCommandFacade<Entity, Id,
+                extends InterfaceCommandFacade<Entity, Id,
                                 // save
                                 Entity, Entity, // save a entity
                                 List<Entity>, List<Entity>, // save entities

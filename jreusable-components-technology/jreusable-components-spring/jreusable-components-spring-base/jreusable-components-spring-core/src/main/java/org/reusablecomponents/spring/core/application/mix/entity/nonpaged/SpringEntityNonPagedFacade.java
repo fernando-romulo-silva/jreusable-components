@@ -2,8 +2,8 @@ package org.reusablecomponents.spring.core.application.mix.entity.nonpaged;
 
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.spring.core.application.command.entity.InterfaceSpringCommandFacade;
-import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringEntityQueryFacade;
-import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringEntityQuerySpecificationFacade;
+import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringQueryFacade;
+import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringQuerySpecificationFacade;
 
 /**
  * @param <Entity>
@@ -14,9 +14,9 @@ public class SpringEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, S
 
     protected final InterfaceSpringCommandFacade<Entity, Id> entityCommandFacade;
 
-    protected final InterfaceSpringEntityQueryFacade<Entity, Id> entityQueryFacade;
+    protected final InterfaceSpringQueryFacade<Entity, Id> entityQueryFacade;
 
-    protected final InterfaceSpringEntityQuerySpecificationFacade<Entity, Id, Specification> entityQuerySpecificationFacade;
+    protected final InterfaceSpringQuerySpecificationFacade<Entity, Id, Specification> entityQuerySpecificationFacade;
 
     /**
      * @param entityCommandFacade
@@ -24,8 +24,8 @@ public class SpringEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, S
      */
     protected SpringEntityNonPagedFacade(
             final InterfaceSpringCommandFacade<Entity, Id> entityCommandFacade,
-            final InterfaceSpringEntityQueryFacade<Entity, Id> entityQueryFacade,
-            final InterfaceSpringEntityQuerySpecificationFacade<Entity, Id, Specification> entityQuerySpecificationFacade) {
+            final InterfaceSpringQueryFacade<Entity, Id> entityQueryFacade,
+            final InterfaceSpringQuerySpecificationFacade<Entity, Id, Specification> entityQuerySpecificationFacade) {
 
         this.entityCommandFacade = entityCommandFacade;
         this.entityQueryFacade = entityQueryFacade;
@@ -63,7 +63,7 @@ public class SpringEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, S
      * {@inheritDoc}
      */
     @Override
-    public InterfaceSpringEntityQueryFacade<Entity, Id> getEntityQueryFacade() {
+    public InterfaceSpringQueryFacade<Entity, Id> getEntityQueryFacade() {
         return entityQueryFacade;
     }
 
@@ -71,7 +71,7 @@ public class SpringEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, S
      * {@inheritDoc}
      */
     @Override
-    public InterfaceSpringEntityQuerySpecificationFacade<Entity, Id, Specification> getEntityQuerySpecificationFacade() {
+    public InterfaceSpringQuerySpecificationFacade<Entity, Id, Specification> getEntityQuerySpecificationFacade() {
         return entityQuerySpecificationFacade;
     }
 }

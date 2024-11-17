@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.function.Consumer;
 
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceEntityQueryFacade;
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceEntityQuerySpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceQueryFacade;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceQuerySpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import com.google.common.base.Function;
@@ -18,28 +18,29 @@ public class EntityQuerySpecificationHttpBuilder<Entity extends AbstractEntity<I
 		ExistsResult, //
 		Specification, // query specification
 		HttpResponseVoid, HttpResponseOne, HttpResponseMultiple> {
-    
-    public InterfaceEntityQuerySpecificationFacade<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> entityQuerySpecificationFacade;
-    
-    public InterfaceEntityQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> entityQueryFacade;
-    
-    public Function<OneResult, HttpResponseOne> createResponseGetOneFunction;
-    
-    public Function<ExistsResult, HttpResponseVoid> createResponseHeadFunction;
-    
-    public Function<MultipleResult, HttpResponseMultiple> createResponseGetMultipleFunction;
-    
-    public EntityQuerySpecificationHttpBuilder(final Consumer<EntityQuerySpecificationHttpBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult, Specification, HttpResponseVoid, HttpResponseOne, HttpResponseMultiple>> function) {
-	super();
-	
-	// load the functions
-	function.accept(this);
 
-	checkNotNull(createResponseGetOneFunction, "Please pass a non-null 'createResponseGetOneFunction'");
-	checkNotNull(createResponseHeadFunction, "Please pass a non-null 'createResponseHeadFunction'");
-	checkNotNull(createResponseGetMultipleFunction, "Please pass a non-null 'createResponseGetMultipleFunction'");
-	
-	checkNotNull(entityQueryFacade, "Please pass a non-null 'entityQueryFacade'");
-    }
+	public InterfaceQuerySpecificationFacade<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> entityQuerySpecificationFacade;
+
+	public InterfaceQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> entityQueryFacade;
+
+	public Function<OneResult, HttpResponseOne> createResponseGetOneFunction;
+
+	public Function<ExistsResult, HttpResponseVoid> createResponseHeadFunction;
+
+	public Function<MultipleResult, HttpResponseMultiple> createResponseGetMultipleFunction;
+
+	public EntityQuerySpecificationHttpBuilder(
+			final Consumer<EntityQuerySpecificationHttpBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult, Specification, HttpResponseVoid, HttpResponseOne, HttpResponseMultiple>> function) {
+		super();
+
+		// load the functions
+		function.accept(this);
+
+		checkNotNull(createResponseGetOneFunction, "Please pass a non-null 'createResponseGetOneFunction'");
+		checkNotNull(createResponseHeadFunction, "Please pass a non-null 'createResponseHeadFunction'");
+		checkNotNull(createResponseGetMultipleFunction, "Please pass a non-null 'createResponseGetMultipleFunction'");
+
+		checkNotNull(entityQueryFacade, "Please pass a non-null 'entityQueryFacade'");
+	}
 
 }

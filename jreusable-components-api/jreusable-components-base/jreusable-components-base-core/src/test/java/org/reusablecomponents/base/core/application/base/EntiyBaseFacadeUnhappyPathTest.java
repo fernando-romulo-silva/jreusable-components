@@ -26,7 +26,7 @@ class EntiyBaseFacadeUnhappyPathTest {
         @DisplayName("Test the constructor values")
         void constructorValuesTest() {
 
-                assertThatThrownBy(() -> new EntiyBaseFacade<Department, String>(null))
+                assertThatThrownBy(() -> new BaseFacade<Department, String>(null))
                                 // then
                                 .isInstanceOf(NullPointerException.class)
                                 .hasMessageContaining("The object 'builder' cannot be null");

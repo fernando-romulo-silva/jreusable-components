@@ -3,8 +3,8 @@ package org.reusablecomponents.spring.core.application.query.entity.nonpaged;
 import java.util.List;
 import java.util.Optional;
 
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQuerySpecificationFacade;
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.EntityQuerySpecificationFacadeBuilder;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.QuerySpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.QuerySpecificationFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
@@ -13,12 +13,12 @@ import org.reusablecomponents.spring.core.domain.InterfaceSpringSpecificationRep
 
 public class SpringEntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, Specification>
 		// base class
-		extends EntityQuerySpecificationFacade<Entity, Id, Optional<Entity>, // One result
+		extends QuerySpecificationFacade<Entity, Id, Optional<Entity>, // One result
 				Iterable<Entity>, // multiple result
 				Long, // count result
 				Boolean, Specification>
 
-		implements InterfaceSpringEntityQuerySpecificationFacade<Entity, Id, Specification> {
+		implements InterfaceSpringQuerySpecificationFacade<Entity, Id, Specification> {
 
 	protected InterfaceSpringSpecificationRepository<Entity, Id, Specification> repository;
 
@@ -32,7 +32,7 @@ public class SpringEntityQuerySpecificationFacade<Entity extends AbstractEntity<
 			final InterfaceExceptionAdapterService exceptionAdapterService,
 			final InterfaceI18nService i18Service) {
 
-		super(new EntityQuerySpecificationFacadeBuilder<>($ -> {
+		super(new QuerySpecificationFacadeBuilder<>($ -> {
 			$.findBySpecificationFunction = (specification, directives) -> List.<Entity>of();
 			$.findOneByFunction = (specification, directives) -> Optional.empty();
 			$.existsBySpecificationFunction = specification -> Boolean.FALSE;

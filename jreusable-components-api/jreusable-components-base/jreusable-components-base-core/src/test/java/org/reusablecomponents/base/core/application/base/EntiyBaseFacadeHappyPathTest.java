@@ -69,14 +69,14 @@ class EntiyBaseFacadeHappyPathTest {
 
 		assertThat(facade)
 				// when
-				.extracting(EntiyBaseFacade::getEntityClazz)
+				.extracting(BaseFacade::getEntityClazz)
 				// then
 				.isNotNull()
 				.isEqualTo(Department.class);
 
 		assertThat(facade)
 				// when
-				.extracting(EntiyBaseFacade::getIdClazz)
+				.extracting(BaseFacade::getIdClazz)
 				// then
 				.isNotNull()
 				.isEqualTo(String.class);
@@ -100,7 +100,7 @@ class EntiyBaseFacadeHappyPathTest {
 
 		assertThat(facade)
 				// when
-				.extracting(EntiyBaseFacade::getI18nService)
+				.extracting(BaseFacade::getI18nService)
 				// then
 				.isNotNull()
 				.extracting(i18nService -> i18nService.getClass())
@@ -108,7 +108,7 @@ class EntiyBaseFacadeHappyPathTest {
 
 		assertThat(facade)
 				// when
-				.extracting(EntiyBaseFacade::getExceptionTranslatorService)
+				.extracting(BaseFacade::getExceptionTranslatorService)
 				// then
 				.isNotNull();
 	}

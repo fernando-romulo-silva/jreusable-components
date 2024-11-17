@@ -3,7 +3,7 @@ package org.reusablecomponents.jakarta.application.query.entity;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceEntityQuerySpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceQuerySpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import static jakarta.transaction.Transactional.TxType.SUPPORTS;
 
@@ -13,7 +13,7 @@ import jakarta.transaction.Transactional;
  * 
  */
 public interface InterfaceJakartaEntityQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, Specification>
-                extends InterfaceEntityQuerySpecificationFacade<Entity, Id, // base
+                extends InterfaceQuerySpecificationFacade<Entity, Id, // base
                                 Optional<Entity>, // One result
                                 Stream<Entity>, // multiple result
                                 Long, // count result

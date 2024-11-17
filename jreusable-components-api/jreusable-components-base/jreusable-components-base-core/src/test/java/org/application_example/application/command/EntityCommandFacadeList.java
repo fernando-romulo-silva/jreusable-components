@@ -10,14 +10,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.application_example.domain.Department;
 import org.application_example.infra.DummySecurityService;
 import org.application_example.infra.ExceptionAdapterListService;
-import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacade;
-import org.reusablecomponents.base.core.application.command.entity.EntityCommandFacadeBuilder;
+import org.reusablecomponents.base.core.application.command.entity.CommandFacade;
+import org.reusablecomponents.base.core.application.command.entity.CommandFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
 
 public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 		//
-		extends EntityCommandFacade< // Basic Command Facade
+		extends CommandFacade< // Basic Command Facade
 				// basic
 				Entity, Id, //
 				// Save
@@ -36,7 +36,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 	private final List<Entity> repository;
 
 	public EntityCommandFacadeList(final List<Entity> repository) {
-		super(new EntityCommandFacadeBuilder<>($ -> {
+		super(new CommandFacadeBuilder<>($ -> {
 
 			// save --------------------------------
 			$.saveFunction = (entity, directives) -> {
