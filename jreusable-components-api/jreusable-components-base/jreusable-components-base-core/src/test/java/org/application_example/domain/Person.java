@@ -97,7 +97,7 @@ public class Person extends AbstractEntity<Long> {
 
     // ------------------- Builder
 
-    public static class Builder extends AbstractEntityBuilder<Long, Person> {
+    public static class Builder extends AbstractEntityBuilder<Long, Person, Builder> {
 
         public Long id;
 
@@ -113,15 +113,9 @@ public class Person extends AbstractEntity<Long> {
 
         public Gender gender;
 
-        // @Override
-        public Builder with(final Consumer<Builder> function) {
-            function.accept(this);
-            return this;
-        }
-
-        @Override
-        @Valid
         @NotNull
+        @Valid
+        @Override
         public Person build() {
             return validate(new Person(this));
         }
@@ -130,6 +124,5 @@ public class Person extends AbstractEntity<Long> {
         protected Validator getValidator() {
             return VALIDATOR;
         }
-
     }
 }

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
-public class Room extends AbstractEntity<String> {
+public class Room extends AbstractEntity<Long> {
 
     private Hotel hotel;
 

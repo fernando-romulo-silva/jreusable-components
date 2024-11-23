@@ -70,7 +70,7 @@ class EntityCommandFacadeHappyPathTest {
 		// then
 		assertThat(department).isEqualTo(result);
 		assertThat(data).contains(department);
-		assertThat(result).extracting("operation").isEqualTo(1);
+		assertThat(result).extracting("operation").isEqualTo(2);
 	}
 
 	@Test
