@@ -32,6 +32,12 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 				Id, Boolean, // delete entity by id
 				List<Id>, List<Boolean>> { // delete entities by id
 
+	private static final String ENTITY_NOT_FOUND = "Entity not found: ";
+
+	private static final String ENTITY_WITH_INVALID_ID = "Entity with invalid id: ";
+
+	private static final String THERE_ARE_INVALID_ENTITY = "There are invalid entity ";
+
 	private final List<Entity> repository;
 
 	public EntityCommandFacadeList(
@@ -44,7 +50,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 			$.saveFunction = (entity, directives) -> {
 
 				if (Objects.isNull(entity.getId())) {
-					throw new IllegalStateException("Entity with invalid id: " + entity);
+					throw new IllegalStateException(ENTITY_WITH_INVALID_ID + entity);
 				}
 
 				if (repository.contains(entity)) {
@@ -60,7 +66,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 			$.saveAllFunction = entities -> {
 
 				if (entities.stream().anyMatch(e -> Objects.isNull(e.getId()))) {
-					throw new IllegalStateException("There are invalid entity " + entities);
+					throw new IllegalStateException(THERE_ARE_INVALID_ENTITY + entities);
 				}
 
 				if (CollectionUtils.containsAny(repository, entities)) {
@@ -77,11 +83,11 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 				final var index = repository.indexOf(entity);
 
 				if (Objects.isNull(entity.getId())) {
-					throw new IllegalStateException("Entity with invalid id: " + entity);
+					throw new IllegalStateException(ENTITY_WITH_INVALID_ID + entity);
 				}
 
 				if (index < 0) {
-					throw new IllegalArgumentException("Entity not found: " + entity);
+					throw new IllegalArgumentException(ENTITY_NOT_FOUND + entity);
 				}
 
 				repository.set(index, entity);
@@ -92,11 +98,11 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 			$.updateAllFunction = entities -> {
 
 				if (entities.stream().anyMatch(e -> Objects.isNull(e.getId()))) {
-					throw new IllegalStateException("There are invalid entity " + entities);
+					throw new IllegalStateException(THERE_ARE_INVALID_ENTITY + entities);
 				}
 
 				if (!CollectionUtils.containsAll(repository, entities)) {
-					throw new IllegalArgumentException("Entity not found: " + entities);
+					throw new IllegalArgumentException(ENTITY_NOT_FOUND + entities);
 				}
 
 				repository.addAll(entities);
@@ -107,11 +113,11 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 			$.deleteFunction = entity -> {
 
 				if (Objects.isNull(entity.getId())) {
-					throw new IllegalStateException("Entity with invalid id: " + entity);
+					throw new IllegalStateException(ENTITY_WITH_INVALID_ID + entity);
 				}
 
 				if (!repository.remove(entity)) {
-					throw new IllegalArgumentException("Entity not found: " + entity);
+					throw new IllegalArgumentException(ENTITY_NOT_FOUND + entity);
 				}
 
 				return Boolean.TRUE;
@@ -122,7 +128,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 				if (entities.stream()
 						.anyMatch(e -> e instanceof AbstractEntity<?> deparment
 								&& Objects.isNull(deparment.getId()))) {
-					throw new IllegalStateException("There are invalid entity " + entities);
+					throw new IllegalStateException(THERE_ARE_INVALID_ENTITY + entities);
 				}
 
 				if (!repository.removeAll(entities)) {
@@ -139,7 +145,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 			$.deleteByIdFunction = id -> {
 
 				if (id instanceof String idString && StringUtils.isBlank(idString)) {
-					throw new IllegalStateException("There are invalid entity " + id);
+					throw new IllegalStateException(THERE_ARE_INVALID_ENTITY + id);
 				}
 
 				final var entityFound = repository.stream()
@@ -156,7 +162,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 
 				ids.stream().forEach(id -> {
 					if (id instanceof String idString && StringUtils.isBlank(idString)) {
-						throw new IllegalStateException("There are invalid entity " + id);
+						throw new IllegalStateException(THERE_ARE_INVALID_ENTITY + id);
 					}
 				});
 

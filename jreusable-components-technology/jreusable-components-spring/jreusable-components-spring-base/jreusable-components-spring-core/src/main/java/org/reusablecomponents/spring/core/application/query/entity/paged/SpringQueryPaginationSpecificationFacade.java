@@ -13,39 +13,44 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+/**
+ * 
+ */
 public class SpringQueryPaginationSpecificationFacade<Entity extends AbstractEntity<Id>, Id, Specification>
-        extends QueryPaginationSpecificationFacade<Entity, Id, // basic
-                Optional<Entity>, // one result type
-                Page<Entity>, // multiple result type
-                // Pagination
-                Pageable, // pageable type
-                Sort, // sort type
-                Specification> // query spec
-        //
-        implements InterfaceSpringQueryPaginationSpecificationFacade<Entity, Id, Specification> {
+                extends QueryPaginationSpecificationFacade<Entity, Id, // basic
+                                Optional<Entity>, // one result type
+                                Page<Entity>, // multiple result type
+                                // Pagination
+                                Pageable, // pageable type
+                                Sort, // sort type
+                                Specification> // query spec
+                //
+                implements InterfaceSpringQueryPaginationSpecificationFacade<Entity, Id, Specification> {
 
-    protected final InterfaceSpringPaginationSpecificationRepository<Entity, Id, Specification> repository;
+        protected final InterfaceSpringPaginationSpecificationRepository<Entity, Id, Specification> repository;
 
-    protected SpringQueryPaginationSpecificationFacade(
-            final InterfaceSpringPaginationSpecificationRepository<Entity, Id, Specification> repository,
-            final InterfaceSecurityService securityService,
-            final InterfaceExceptionAdapterService exceptionAdapterService,
-            final InterfaceI18nService i18Service) {
-        super(new QueryPaginationSpecificationFacadeBuilder<>($ -> {
+        protected SpringQueryPaginationSpecificationFacade(
+                        final InterfaceSpringPaginationSpecificationRepository<Entity, Id, Specification> repository,
+                        final InterfaceSecurityService securityService,
+                        final InterfaceExceptionAdapterService exceptionAdapterService,
+                        final InterfaceI18nService i18Service) {
+                super(new QueryPaginationSpecificationFacadeBuilder<>($ -> {
 
-            $.findBySpecificationFunction = (specification, pageable, directives) -> repository.findBy(specification,
-                    pageable);
+                        $.findBySpecificationFunction = (specification, pageable, directives) -> repository.findBy(
+                                        specification,
+                                        pageable);
 
-            $.findOneByFunctionWithOrder = (specification, sort, directives) -> repository.findOneBy(specification,
-                    sort);
+                        $.findOneByFunctionWithOrder = (specification, sort, directives) -> repository.findOneBy(
+                                        specification,
+                                        sort);
 
-            // services
-            $.i18nService = i18Service;
-            $.exceptionAdapterService = exceptionAdapterService;
-            $.securityService = securityService;
-        }));
+                        // services
+                        $.i18nService = i18Service;
+                        $.exceptionAdapterService = exceptionAdapterService;
+                        $.securityService = securityService;
+                }));
 
-        this.repository = repository;
-    }
+                this.repository = repository;
+        }
 
 }
