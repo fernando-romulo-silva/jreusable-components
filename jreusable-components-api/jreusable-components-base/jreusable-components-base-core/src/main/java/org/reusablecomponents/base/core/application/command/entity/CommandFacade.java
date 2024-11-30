@@ -1,7 +1,7 @@
 package org.reusablecomponents.base.core.application.command.entity;
 
 import static java.util.Optional.ofNullable;
-import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 import static org.reusablecomponents.base.core.infra.util.Functions.createNullPointerException;
 import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_ID;
 import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_IDS;
@@ -13,10 +13,11 @@ import static org.reusablecomponents.base.core.infra.util.operation.CommandOpera
 import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.UPDATE_ENTITY;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
+import org.apache.commons.lang3.function.TriFunction;
 import org.reusablecomponents.base.core.application.base.BaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +41,8 @@ public non-sealed class CommandFacade< // generics
 		DeleteIdsIn, DeleteIdsOut> //
 
 		// Base Facade
-		extends BaseFacade<Entity, Id>
+		extends
+		BaseFacade<Entity, Id>
 		// Interface command facade
 		implements InterfaceCommandFacade<Entity, Id, // basic
 
@@ -58,17 +60,16 @@ public non-sealed class CommandFacade< // generics
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommandFacade.class);
 
-	// BiFunction<SaveEntityIn, Object[], SaveEntityOut>
 	protected final BiFunction<SaveEntityIn, Object[], SaveEntityOut> saveFunction;
-	protected final Function<SaveEntitiesIn, SaveEntitiesOut> saveAllFunction;
+	protected final BiFunction<SaveEntitiesIn, Object[], SaveEntitiesOut> saveAllFunction;
 
-	protected final Function<UpdateEntityIn, UpdateEntityOut> updateFunction;
-	protected final Function<UpdateEntitiesIn, UpdateEntitiesOut> updateAllFunction;
+	protected final BiFunction<UpdateEntityIn, Object[], UpdateEntityOut> updateFunction;
+	protected final BiFunction<UpdateEntitiesIn, Object[], UpdateEntitiesOut> updateAllFunction;
 
-	protected final Function<DeleteEntityIn, DeleteEntityOut> deleteFunction;
-	protected final Function<DeleteEntitiesIn, DeleteEntitiesOut> deleteAllFunction;
-	protected final Function<DeleteIdIn, DeleteIdOut> deleteByIdFunction;
-	protected final Function<DeleteIdsIn, DeleteIdsOut> deleteAllByIdFunction;
+	protected final BiFunction<DeleteEntityIn, Object[], DeleteEntityOut> deleteFunction;
+	protected final BiFunction<DeleteEntitiesIn, Object[], DeleteEntitiesOut> deleteAllFunction;
+	protected final BiFunction<DeleteIdIn, Object[], DeleteIdOut> deleteByIdFunction;
+	protected final BiFunction<DeleteIdsIn, Object[], DeleteIdsOut> deleteAllByIdFunction;
 
 	/**
 	 * Default constructior
@@ -91,6 +92,80 @@ public non-sealed class CommandFacade< // generics
 
 		this.deleteByIdFunction = builder.deleteByIdFunction;
 		this.deleteAllByIdFunction = builder.deleteAllByIdFunction;
+	}
+
+	/**
+	 * 
+	 * @param <In>
+	 * @param <Out>
+	 * @param in
+	 * @param operation
+	 * @param preExecuteFunction
+	 * @param posExecuteFunction
+	 * @param executeFunction
+	 * @param errorFunction
+	 * @param directives
+	 * @return
+	 */
+	protected <In, Out> Out executeCommand(
+			final In in,
+			final InterfaceOperation operation,
+			final BiFunction<In, Object[], In> preExecuteFunction,
+			final BiFunction<Out, Object[], Out> posExecuteFunction,
+			final BiFunction<In, Object[], Out> executeFunction,
+			final TriFunction<In, Exception, Object[], Exception> errorFunction,
+			final Object... directives) {
+
+		final var session = securityService.getSession();
+		final var operationName = operation.getName();
+
+		final var inName = operation.getReceiver().concat("In");
+		final var preInName = "pre".concat(inName);
+		final var finalInName = "final".concat(inName);
+
+		final var outName = operation.getReceiver().concat("Out");
+		final var preOutName = "pre".concat(outName);
+		final var finalOutName = "final".concat(outName);
+
+		LOGGER.debug("Pre executing {} operation with {} '{}', session '{}', and directives '{}'",
+				operationName, inName, in, session, directives);
+
+		final var preIn = preExecuteFunction.apply(in, directives);
+
+		final var finalIn = ofNullable(preIn)
+				.orElseThrow(createNullPointerException(i18nService, preInName));
+
+		LOGGER.debug("Executing {} operation with {} '{}', session '{}', and directives '{}'",
+				operationName, finalInName, finalIn, session, directives);
+
+		final Out out;
+
+		try {
+			out = executeFunction.apply(finalIn, directives);
+		} catch (final Exception ex) {
+
+			final var finalException = errorFunction.apply(finalIn, ex, directives);
+			final var exceptionClass = getRootCause(finalException).getClass().getSimpleName();
+
+			LOGGER.debug("Error on {} operation with {} '{}', session '{}', error '{}'",
+					operationName, finalInName, finalIn, session, exceptionClass);
+
+			throw exceptionAdapterService.convert(
+					finalException, i18nService, operation, getEntityClazz(), finalIn);
+		}
+
+		LOGGER.debug("{} operation executed, with {} '{}', session '{}', and directives '{}'",
+				operationName, outName, out, session, directives);
+
+		final var posOut = posExecuteFunction.apply(out, directives);
+
+		final var finalOut = ofNullable(posOut)
+				.orElseThrow(createNullPointerException(i18nService, preOutName));
+
+		LOGGER.debug("Pos {} operation with {} '{}', session '{}', and directives '{}'",
+				operationName, finalOutName, finalOut, session, directives);
+
+		return finalOut;
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
@@ -135,7 +210,6 @@ public non-sealed class CommandFacade< // generics
 			final SaveEntityIn saveEntityIn,
 			final Exception exception,
 			final Object... directives) {
-
 		return exception;
 	}
 
@@ -144,43 +218,9 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public SaveEntityOut save(final SaveEntityIn saveEntityIn, final Object... directives) {
-
-		final var session = securityService.getSession();
-
-		LOGGER.debug("Saving entity '{}', session '{}', and directives '{}'", saveEntityIn, session, directives);
-
-		final var preSaveEntityIn = preSave(saveEntityIn, directives);
-
-		final var finalSaveEntityIn = ofNullable(preSaveEntityIn)
-				.orElseThrow(createNullPointerException(i18nService, "preSaveEntityIn"));
-
-		LOGGER.debug("Saving finalSaveEntityIn '{}'", finalSaveEntityIn);
-
-		final SaveEntityOut saveEntityOut;
-
-		try {
-			saveEntityOut = saveFunction.apply(finalSaveEntityIn, directives);
-		} catch (final Exception ex) {
-
-			final var finalException = errorSave(finalSaveEntityIn, ex, directives);
-
-			LOGGER.debug("Error save entity '{}', session '{}', error '{}'",
-					finalSaveEntityIn, session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					finalException, i18nService, SAVE_ENTITY, getEntityClazz(), finalSaveEntityIn);
-		}
-
-		LOGGER.debug("Saved saveEntityOut '{}'", saveEntityOut);
-
-		final var posSaveEntityOut = posSave(saveEntityOut, directives);
-
-		final var finalSaveEntityOut = ofNullable(posSaveEntityOut)
-				.orElseThrow(createNullPointerException(i18nService, "posSaveEntityOut"));
-
-		LOGGER.debug("Saved entity '{}', session '{}'", finalSaveEntityOut, session);
-
-		return finalSaveEntityOut;
+		return executeCommand(
+				saveEntityIn, SAVE_ENTITY, this::preSave,
+				this::posSave, saveFunction::apply, this::errorSave, directives);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
@@ -217,14 +257,12 @@ public non-sealed class CommandFacade< // generics
 	 * @param exception      Exception thrown by save operation
 	 * @param directives     Objects used to configure the save operation
 	 * 
-	 * 
 	 * @return The handled exception
 	 */
 	protected Exception errorSaveAll(
 			final SaveEntitiesIn saveEntitiesIn,
 			final Exception exception,
 			final Object... directives) {
-
 		return exception;
 	}
 
@@ -233,47 +271,9 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public SaveEntitiesOut saveAll(final SaveEntitiesIn saveEntitiesIn, final Object... directives) {
-
-		final var session = securityService.getSession();
-
-		LOGGER.debug("Saving all entities '{}' with session '{}'", saveEntitiesIn, session);
-
-		final var preSaveEntitiesIn = preSaveAll(saveEntitiesIn, directives);
-
-		final var finalSaveEntitiesIn = ofNullable(preSaveEntitiesIn)
-				.orElseThrow(createNullPointerException(i18nService, "saveEntitiesIn"));
-
-		LOGGER.debug("Saving finalSaveEntitiesIn '{}'", finalSaveEntitiesIn);
-
-		final SaveEntitiesOut saveEntitiesOut;
-
-		try {
-			saveEntitiesOut = saveAllFunction.apply(finalSaveEntitiesIn);
-		} catch (final Exception ex) {
-
-			final var finalException = errorSaveAll(finalSaveEntitiesIn, ex, directives);
-
-			LOGGER.debug("Error save all entities '{}', session '{}', error '{}'",
-					finalSaveEntitiesIn, session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					finalException,
-					i18nService,
-					SAVE_ENTITIES,
-					getEntityClazz(),
-					finalSaveEntitiesIn);
-		}
-
-		LOGGER.debug("Saved saveEntitiesOut '{}'", saveEntitiesOut);
-
-		final var posSaveEntitiesOut = posSaveAll(saveEntitiesOut, directives);
-
-		final var finalSaveEntitiesOut = ofNullable(posSaveEntitiesOut)
-				.orElseThrow(createNullPointerException(i18nService, "posSaveEntitiesOut"));
-
-		LOGGER.debug("Saved all entities '{}' with session '{}'", finalSaveEntitiesOut, session);
-
-		return finalSaveEntitiesOut;
+		return executeCommand(
+				saveEntitiesIn, SAVE_ENTITIES, this::preSaveAll,
+				this::posSaveAll, saveAllFunction::apply, this::errorSaveAll, directives);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
@@ -324,47 +324,9 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public UpdateEntityOut update(final UpdateEntityIn updateEntityIn, final Object... directives) {
-
-		final var session = securityService.getSession();
-
-		LOGGER.debug("Updating entity '{}' with session '{}'", updateEntityIn, session);
-
-		final var preUpdateEntityIn = preUpdate(updateEntityIn, directives);
-
-		final var finalUpdateEntityIn = ofNullable(preUpdateEntityIn)
-				.orElseThrow(createNullPointerException(i18nService, "preUpdateEntityIn"));
-
-		LOGGER.debug("Updating finalUpdateEntityIn '{}'", finalUpdateEntityIn);
-
-		final UpdateEntityOut updateEntityOut;
-
-		try {
-			updateEntityOut = updateFunction.apply(finalUpdateEntityIn);
-		} catch (final Exception ex) {
-
-			final var finalException = errorUpdate(updateEntityIn, ex, directives);
-
-			LOGGER.debug("Error update entity '{}', session '{}', error '{}'",
-					updateEntityIn, session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					finalException,
-					i18nService,
-					UPDATE_ENTITY,
-					getEntityClazz(),
-					finalUpdateEntityIn);
-		}
-
-		LOGGER.debug("Updated result '{}'", updateEntityOut);
-
-		final var posUpdateEntityOut = posUpdate(updateEntityOut, directives);
-
-		final var finalUpdateEntityOut = ofNullable(posUpdateEntityOut)
-				.orElseThrow(createNullPointerException(i18nService, "posUpdateEntityOut"));
-
-		LOGGER.debug("Updated entity '{}' with session '{}'", finalUpdateEntityOut, session);
-
-		return finalUpdateEntityOut;
+		return executeCommand(
+				updateEntityIn, UPDATE_ENTITY, this::preUpdate,
+				this::posUpdate, updateFunction::apply, this::errorUpdate, directives);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
@@ -406,7 +368,6 @@ public non-sealed class CommandFacade< // generics
 			final UpdateEntitiesIn updateEntitiesIn,
 			final Exception exception,
 			final Object... directives) {
-
 		return exception;
 	}
 
@@ -415,47 +376,9 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public UpdateEntitiesOut updateAll(final UpdateEntitiesIn updateEntitiesIn, final Object... directives) {
-
-		final var session = securityService.getSession();
-
-		LOGGER.debug("Updating entities '{}' with session '{}'", updateEntitiesIn, session);
-
-		final var preUpdateEntitiesIn = preUpdateAll(updateEntitiesIn);
-
-		final var finalUpdateEntitiesIn = ofNullable(preUpdateEntitiesIn)
-				.orElseThrow(createNullPointerException(i18nService, "preUpdateEntitiesIn"));
-
-		LOGGER.debug("Updating finalUpdateEntitiesIn '{}'", finalUpdateEntitiesIn);
-
-		final UpdateEntitiesOut updateEntitiesOut;
-
-		try {
-			updateEntitiesOut = updateAllFunction.apply(finalUpdateEntitiesIn);
-		} catch (final Exception ex) {
-
-			final var finalException = errorUpdateAll(preUpdateEntitiesIn, ex, directives);
-
-			LOGGER.debug("Error update all entities '{}', session '{}', error '{}'",
-					preUpdateEntitiesIn, session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					finalException,
-					i18nService,
-					UPDATE_ENTITIES,
-					getEntityClazz(),
-					finalUpdateEntitiesIn);
-		}
-
-		LOGGER.debug("Updated updateEntitiesOut '{}'", updateEntitiesOut);
-
-		final var posUpdateEntitiesOut = posUpdateAll(updateEntitiesOut);
-
-		final var finalUpdateEntitiesOut = ofNullable(posUpdateEntitiesOut)
-				.orElseThrow(createNullPointerException(i18nService, "posUpdateAllEntitiesOut"));
-
-		LOGGER.debug("Updated all entities '{}' with session '{}'", finalUpdateEntitiesOut, session);
-
-		return finalUpdateEntitiesOut;
+		return executeCommand(
+				updateEntitiesIn, UPDATE_ENTITIES, this::preUpdateAll,
+				this::posUpdateAll, updateAllFunction::apply, this::errorUpdateAll, directives);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
@@ -497,7 +420,6 @@ public non-sealed class CommandFacade< // generics
 			final DeleteEntityIn deleteEntityIn,
 			final Exception exception,
 			final Object... directives) {
-
 		return exception;
 	}
 
@@ -506,47 +428,9 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public DeleteEntityOut delete(final DeleteEntityIn deleteEntityIn, final Object... directives) {
-
-		final var session = securityService.getSession();
-
-		LOGGER.debug("Deleting entity '{}' with session '{}'", deleteEntityIn, session);
-
-		final var preDeleteEntityIn = preDelete(deleteEntityIn, directives);
-
-		final var finalDeleteEntityIn = ofNullable(preDeleteEntityIn)
-				.orElseThrow(createNullPointerException(i18nService, "preDeleteEntityIn"));
-
-		LOGGER.debug("Deleting finalDeleteEntityIn '{}'", finalDeleteEntityIn);
-
-		final DeleteEntityOut deleteEntityOut;
-
-		try {
-			deleteEntityOut = deleteFunction.apply(finalDeleteEntityIn);
-		} catch (final Exception ex) {
-
-			final var finalException = errorDelete(finalDeleteEntityIn, ex, directives);
-
-			LOGGER.debug("Error delete entity '{}', session '{}', error '{}'",
-					finalDeleteEntityIn, session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					finalException,
-					i18nService,
-					DELETE_ENTITY,
-					getEntityClazz(),
-					finalDeleteEntityIn);
-		}
-
-		LOGGER.debug("Delete result '{}'", deleteEntityOut);
-
-		final var posDeleteEntityOut = posDelete(deleteEntityOut, directives);
-
-		final var finalDeleteEntityOut = ofNullable(posDeleteEntityOut)
-				.orElseThrow(createNullPointerException(i18nService, "posDeleteEntityOut"));
-
-		LOGGER.debug("Deleted entity '{}' with session '{}'", finalDeleteEntityOut, session);
-
-		return finalDeleteEntityOut;
+		return executeCommand(
+				deleteEntityIn, DELETE_ENTITY, this::preDelete,
+				this::posDelete, deleteFunction::apply, this::errorDelete, directives);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
@@ -588,7 +472,6 @@ public non-sealed class CommandFacade< // generics
 			final DeleteEntitiesIn deleteEntitiesIn,
 			final Exception exception,
 			final Object... directives) {
-
 		return exception;
 	}
 
@@ -597,47 +480,9 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public DeleteEntitiesOut deleteAll(final DeleteEntitiesIn deleteEntitiesIn, final Object... directives) {
-
-		final var session = securityService.getSession();
-
-		LOGGER.debug("Deleting entities '{}' with session '{}'", deleteEntitiesIn, session);
-
-		final var preDeleteEntityIn = preDeleteAll(deleteEntitiesIn, directives);
-
-		final var finalDeleteEntitiesIn = ofNullable(preDeleteEntityIn)
-				.orElseThrow(createNullPointerException(i18nService, "preDeleteEntitiesIn"));
-
-		LOGGER.debug("Deleting finalDeleteEntitiesIn '{}'", finalDeleteEntitiesIn);
-
-		final DeleteEntitiesOut deleteEntitiesOut;
-
-		try {
-			deleteEntitiesOut = deleteAllFunction.apply(finalDeleteEntitiesIn);
-		} catch (final Exception ex) {
-
-			final var finalException = errorDeleteAll(finalDeleteEntitiesIn, ex, directives);
-
-			LOGGER.debug("Error delete entities '{}', session '{}', error '{}'",
-					finalDeleteEntitiesIn, session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					finalException,
-					i18nService,
-					DELETE_ENTITIES,
-					getEntityClazz(),
-					finalDeleteEntitiesIn);
-		}
-
-		LOGGER.debug("Delete all deleteEntitiesOut '{}'", deleteEntitiesOut);
-
-		final var posDeleteEntitiesOut = posDeleteAll(deleteEntitiesOut, directives);
-
-		final var finalDeleteEntitiesOut = ofNullable(posDeleteEntitiesOut)
-				.orElseThrow(createNullPointerException(i18nService, "posDeleteEntitiesOut"));
-
-		LOGGER.debug("Deleted entities '{}' with session '{}'", finalDeleteEntitiesOut, session);
-
-		return finalDeleteEntitiesOut;
+		return executeCommand(
+				deleteEntitiesIn, DELETE_ENTITIES, this::preDeleteAll,
+				this::posDeleteAll, deleteAllFunction::apply, this::errorDeleteAll, directives);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
@@ -679,7 +524,6 @@ public non-sealed class CommandFacade< // generics
 			final DeleteIdIn deleteIdIn,
 			final Exception exception,
 			final Object... directives) {
-
 		return exception;
 	}
 
@@ -688,47 +532,9 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public DeleteIdOut deleteBy(final DeleteIdIn deleteIdIn, final Object... directives) {
-
-		final var session = securityService.getSession();
-
-		LOGGER.debug("Deleting by id '{}' with session '{}'", deleteIdIn, session);
-
-		final var preDeleteIdIn = preDeleteBy(deleteIdIn, directives);
-
-		final var finalDeleteIdIn = ofNullable(preDeleteIdIn)
-				.orElseThrow(createNullPointerException(i18nService, "preDeleteIdIn"));
-
-		LOGGER.debug("Deleting by id finalDeleteIdIn '{}'", finalDeleteIdIn);
-
-		final DeleteIdOut deleteIdOut;
-
-		try {
-			deleteIdOut = deleteByIdFunction.apply(finalDeleteIdIn);
-		} catch (final Exception ex) {
-
-			final var finalException = errorDeleteBy(finalDeleteIdIn, ex, directives);
-
-			LOGGER.debug("Error delete entity by id '{}', session '{}', error '{}'",
-					finalDeleteIdIn, session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					finalException,
-					i18nService,
-					DELETE_BY_ID,
-					getEntityClazz(),
-					finalDeleteIdIn);
-		}
-
-		LOGGER.debug("Delete by id result '{}' with session '{}'", deleteIdOut, session);
-
-		final var posDeleteDeleteIdOut = posDeleteBy(deleteIdOut, directives);
-
-		final var finalDeleteIdOut = ofNullable(posDeleteDeleteIdOut)
-				.orElseThrow(createNullPointerException(i18nService, "posDeleteDeleteIdOut"));
-
-		LOGGER.debug("Deleted by id '{}' with session '{}'", finalDeleteIdOut, session);
-
-		return finalDeleteIdOut;
+		return executeCommand(
+				deleteIdIn, DELETE_BY_ID, this::preDeleteBy, this::posDeleteBy,
+				deleteByIdFunction::apply, this::errorDeleteBy, directives);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
@@ -769,7 +575,6 @@ public non-sealed class CommandFacade< // generics
 			final DeleteIdsIn deleteIdsIn,
 			final Exception exception,
 			final Object... directives) {
-
 		return exception;
 	}
 
@@ -778,46 +583,8 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public DeleteIdsOut deleteAllBy(final DeleteIdsIn deleteIdsIn, final Object... directives) {
-
-		final var session = securityService.getSession();
-
-		LOGGER.debug("Deleting by ids '{}' with session '{}'", deleteIdsIn, session);
-
-		final var preDeleteIdsIn = preDeleteEntitiesBy(deleteIdsIn, directives);
-
-		final var finalDeleteIdsIn = ofNullable(preDeleteIdsIn)
-				.orElseThrow(createNullPointerException(i18nService, "preDeleteIdsIn"));
-
-		LOGGER.debug("Deleting All by finalDeleteIdsIn '{}'", finalDeleteIdsIn);
-
-		final DeleteIdsOut deleteIdsOut;
-
-		try {
-			deleteIdsOut = deleteAllByIdFunction.apply(finalDeleteIdsIn);
-		} catch (final Exception ex) {
-
-			final var finalException = errorDeleteAllBy(finalDeleteIdsIn, ex, directives);
-
-			LOGGER.debug("Error delete entity by ids '{}', session '{}', error '{}'",
-					finalDeleteIdsIn, session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					finalException,
-					i18nService,
-					DELETE_BY_IDS,
-					getEntityClazz(),
-					finalDeleteIdsIn);
-		}
-
-		LOGGER.debug("Delete all by id result '{}'", deleteIdsOut);
-
-		final var posDeleteEntitiesOut = posDeleteEntitiesBy(deleteIdsOut, directives);
-
-		final var finalDeleteIdsOut = ofNullable(posDeleteEntitiesOut)
-				.orElseThrow(createNullPointerException(i18nService, "posDeleteEntitiesOut"));
-
-		LOGGER.debug("Deleted by ids '{}' with session '{}'", finalDeleteIdsOut, session);
-
-		return finalDeleteIdsOut;
+		return executeCommand(
+				deleteIdsIn, DELETE_BY_IDS, this::preDeleteEntitiesBy, this::posDeleteEntitiesBy,
+				deleteAllByIdFunction::apply, this::errorDeleteAllBy, directives);
 	}
 }

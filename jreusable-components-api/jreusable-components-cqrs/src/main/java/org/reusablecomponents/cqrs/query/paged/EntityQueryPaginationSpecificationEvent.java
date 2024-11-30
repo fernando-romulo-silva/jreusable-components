@@ -4,6 +4,9 @@ import static org.apache.commons.lang3.StringUtils.SPACE;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION_SORTED;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.reusablecomponents.messaging.event.DefaultEventStatus.SUCCESS;
+
 import java.util.Objects;
 
 import org.reusablecomponents.cqrs.base.EntiyBaseEvent;
@@ -70,7 +73,7 @@ public class EntityQueryPaginationSpecificationEvent<OneResult, MultiplePagedRes
         final var dataOutSupplier = convertMultiplePagedResultToPublishData(finalMultiplePagedResult);
         final var dataOut = dataOutSupplier.get();
 
-        publishEvent(dataIn, dataOut, FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE);
+        publishEvent(dataIn, dataOut, EMPTY, SUCCESS, FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE);
     }
 
     // -----------------------------------------------------------------------------
@@ -108,6 +111,6 @@ public class EntityQueryPaginationSpecificationEvent<OneResult, MultiplePagedRes
         final var dataOutSupplier = convertOneResultResultToPublishData(finalOneResult);
         final var dataOut = dataOutSupplier.get();
 
-        publishEvent(dataIn, dataOut, FIND_ENTITY_BY_SPECIFICATION_SORTED);
+        publishEvent(dataIn, dataOut, EMPTY, SUCCESS, FIND_ENTITY_BY_SPECIFICATION_SORTED);
     }
 }

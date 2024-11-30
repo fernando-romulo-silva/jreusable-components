@@ -1,14 +1,19 @@
 package org.reusablecomponents.cqrs.command;
 
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.SAVE_ENTITY;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.*;
 import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.UPDATE_ENTITIES;
 import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.UPDATE_ENTITY;
+import static org.reusablecomponents.messaging.event.DefaultEventStatus.FAILURE;
+import static org.reusablecomponents.messaging.event.DefaultEventStatus.SUCCESS;
 
 import java.util.Objects;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
 import org.reusablecomponents.cqrs.base.EntiyBaseEvent;
 import org.reusablecomponents.cqrs.base.EntiyBaseEventBuilder;
 import org.slf4j.Logger;
@@ -35,163 +40,259 @@ public class EntityCommandEvent< // generics
         DeleteIdIn, DeleteIdOut, //
         DeleteIdsIn, DeleteIdsOut> extends EntiyBaseEvent {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntityCommandEvent.class);
+
+    /**
+     * 
+     * @param builder
+     */
     protected EntityCommandEvent(final EntiyBaseEventBuilder builder) {
         super(builder);
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EntityCommandEvent.class);
+    /**
+     * 
+     * @param <In>
+     * @param <Out>
+     * @param in
+     * @param entityOut
+     * @param operation
+     * @param inToMsgFunction
+     * @param outToMsgFunction
+     * @param directives
+     */
+    protected <In, Out> void publishCommandEvent(
+            final In in,
+            final Out entityOut,
+            final InterfaceOperation operation,
+            final Function<In, String> inToMsgFunction,
+            final Function<Out, String> outToMsgFunction,
+            final Object... directives) {
+
+        if (!isPublishEvents(directives)) {
+            LOGGER.debug(
+                    "Publishing {} event was avoided, in '{}', out '{}', and directives '{}'",
+                    operation.getName(), in, entityOut, directives);
+            return;
+        }
+
+        LOGGER.debug("Publishing {} event, in '{}', out '{}', and directives '{}'",
+                operation.getName(), in, entityOut, directives);
+
+        try {
+            final var dataIn = inToMsgFunction.apply(in);
+            final var dataOut = outToMsgFunction.apply(entityOut);
+
+            publishEvent(dataIn, dataOut, EMPTY, SUCCESS, operation);
+
+            LOGGER.debug("The {} event was published, dataIn '{}' and dataOut '{}'",
+                    operation.getName(), dataIn, dataOut);
+
+        } catch (final Exception ex) {
+            LOGGER.error("The {} event was not published".formatted(operation.getName()), getRootCause(ex));
+        }
+    }
 
     /**
-     * Create a supplier function (deferred execution) that converts a
-     * {@code SaveEntityIn} object to String to show in logs, the default is the
-     * <code>java.util.Objects.toString</code>
+     * 
+     * @param <In>
+     * @param in
+     * @param exception
+     * @param operation
+     * @param inToMsgFunction
+     * @param exceptionToMsgFunction
+     * @param directives
+     */
+    protected <In> void publishCommandEvent(
+            final In in,
+            final Exception exception,
+            final InterfaceOperation operation,
+            final Function<In, String> inToMsgFunction,
+            final Function<Exception, String> exceptionToMsgFunction,
+            final Object... directives) {
+
+        final var exceptionString = getRootCause(exception)
+                .getClass()
+                .getSimpleName();
+
+        if (!isPublishEvents(directives)) {
+            LOGGER.debug(
+                    "Publishing {} event error was avoided, in '{}', error '{}', and directives '{}'",
+                    operation.getName(), in, exceptionString, directives);
+            return;
+        }
+
+        LOGGER.debug("Publishing {} event error, in '{}', error '{}', and directives '{}'",
+                operation.getName(), in, exceptionString, directives);
+
+        try {
+            final var dataIn = inToMsgFunction.apply(in);
+            final var dataOut = exceptionToMsgFunction.apply(exception);
+
+            publishEvent(dataIn, dataOut, EMPTY, FAILURE, operation);
+
+            LOGGER.debug("The {} event error was published, dataIn '{}' and dataOut '{}'",
+                    operation.getName(), dataIn, dataOut);
+
+        } catch (final Exception ex) {
+            LOGGER.error("The {} event error was not published".formatted(operation.getName()), getRootCause(ex));
+        }
+    }
+
+    /**
+     * Converts a {@code Exception} object to String to show in logs, the default
+     * is the <code>ExceptionUtils.getStackTrace</code>
+     * 
+     * @param exception The exception to transform
+     * 
+     * @return A string object
+     */
+    @NotNull
+    protected String convertExceptionToPublishDataOut(final Exception exception) {
+        return ExceptionUtils.getStackTrace(getRootCause(exception));
+    }
+
+    // --------------------------------------------------------
+
+    /**
+     * Converts a {@code SaveEntityIn} object to String to show in logs, the default
+     * is the <code>java.util.Objects.toString</code>
      * 
      * @param saveEntityIn The entity to transform
      * 
-     * @return A Supplier object
+     * @return A string object
      */
     @NotNull
-    protected Supplier<String> convertSaveEntityInToPublishDataIn(final SaveEntityIn saveEntityIn) {
-        return () -> Objects.toString(saveEntityIn);
+    protected String convertSaveEntityInToPublishDataIn(final SaveEntityIn saveEntityIn) {
+        return Objects.toString(saveEntityIn);
     }
 
     /**
-     * Create a supplier function (deferred execution) that converts a
-     * {@code SaveEntityOut} object to String to show in logs, the default is the
-     * <code>java.util.Objects.toString</code>
+     * Converts a {@code SaveEntityOut} object to String to show in logs, the
+     * default is the <code>java.util.Objects.toString</code>
      * 
      * @param saveEntityOut The entity to transform
      * 
-     * @return A Supplier object
+     * @return A string object
      */
     @NotNull
-    protected Supplier<String> convertSaveEntityOutToPublishDataOut(final SaveEntityOut saveEntityOut) {
-        return () -> Objects.toString(saveEntityOut);
+    protected String convertSaveEntityOutToPublishDataOut(final SaveEntityOut saveEntityOut) {
+        return Objects.toString(saveEntityOut);
     }
 
     /**
-     * Publish save event to message service
+     * Publish successful save event to message service
      * 
-     * @param finalSaveEntityIn  The object you want to save on the persistence
-     *                           mechanism
-     * 
-     * @param finalSaveEntityOut The save command result
-     * 
-     * @param directives         Objects used to configure the save operation
+     * @param saveEntityIn  The object you want to save on the persistence
+     *                      mechanism
+     * @param saveEntityOut The save command result
+     * @param directives    Objects used to configure the save operation
      */
     protected void publishSaveEvent(
-            final SaveEntityIn finalSaveEntityIn,
-            final SaveEntityOut finalSaveEntityOut,
+            final SaveEntityIn saveEntityIn,
+            final SaveEntityOut saveEntityOut,
             final Object... directives) {
+        publishCommandEvent(
+                saveEntityIn, saveEntityOut, SAVE_ENTITY,
+                this::convertSaveEntityInToPublishDataIn,
+                this::convertSaveEntityOutToPublishDataOut, directives);
+    }
 
-        if (!isPublishEvents(directives)) {
-            LOGGER.debug(
-                    "Publishing save event was avoided, finalSaveEntityIn '{}', finalSaveEntityOut '{}', and directives '{}'",
-                    finalSaveEntityIn, finalSaveEntityOut, directives);
-            return;
-        }
-
-        LOGGER.debug("Publishing save event, finalSaveEntityIn '{}', finalSaveEntityOut '{}', and directives '{}'",
-                finalSaveEntityIn, finalSaveEntityOut, directives);
-
-        try {
-            final var dataInSupplier = convertSaveEntityInToPublishDataIn(finalSaveEntityIn);
-            final var dataIn = dataInSupplier.get();
-
-            final var dataOutSupplier = convertSaveEntityOutToPublishDataOut(finalSaveEntityOut);
-            final var dataOut = dataOutSupplier.get();
-
-            publishEvent(dataIn, dataOut, SAVE_ENTITY);
-
-            LOGGER.debug("The save event was published, dataIn '{}' and dataOut '{}'", dataIn, dataOut);
-
-        } catch (final Exception ex) {
-            LOGGER.error("The save event was not published", ExceptionUtils.getRootCause(ex));
-        }
+    /**
+     * Publish unsuccessful save event to message service
+     * 
+     * @param saveEntityIn The object you want to save on the persistence
+     *                     mechanism
+     * @param exception    The save command exception
+     * @param directives   Objects used to configure the save operation
+     */
+    protected void publishSaveEvent(
+            final SaveEntityIn saveEntityIn,
+            final Exception exception,
+            final Object... directives) {
+        publishCommandEvent(
+                saveEntityIn, exception, SAVE_ENTITY,
+                this::convertSaveEntityInToPublishDataIn,
+                this::convertExceptionToPublishDataOut, directives);
     }
 
     // --------------------------------------------------------
 
     /**
-     * Create a supplier function (deferred execution) that converts a
-     * {@code SaveEntitiesIn} object to String to show in logs, the default is the
-     * <code>java.util.Objects.toString</code>
+     * Converts a {@code SaveEntitiesIn} object to String to show in logs, the
+     * default is the <code>java.util.Objects.toString</code>
      * 
      * @param saveEntitiesIn The entity to transform
      * 
-     * @return A Supplier object
+     * @return A string object
      */
-    protected Supplier<String> convertSaveEntitiesInToPublishDataIn(final SaveEntitiesIn saveEntitiesIn) {
-        return () -> Objects.toString(saveEntitiesIn);
+    protected String convertSaveEntitiesInToPublishDataIn(final SaveEntitiesIn saveEntitiesIn) {
+        return Objects.toString(saveEntitiesIn);
     }
 
     /**
-     * Create a supplier function (deferred execution) that converts a
-     * {@code SaveEntitiesOut} object to String to show in logs, the default is the
-     * <code>java.util.Objects.toString</code>
+     * Converts a {@code SaveEntitiesOut} object to String to show in logs, the
+     * default is the <code>java.util.Objects.toString</code>
      * 
      * @param SaveEntitiesOut The entity to transform
      * 
-     * @return A Supplier object
+     * @return A string object
      */
-    protected Supplier<String> convertSaveEntitiesOutToPublishDataOut(final SaveEntitiesOut saveEntitiesOut) {
-        return () -> Objects.toString(saveEntitiesOut);
+    protected String convertSaveEntitiesOutToPublishDataOut(final SaveEntitiesOut saveEntitiesOut) {
+        return Objects.toString(saveEntitiesOut);
     }
 
     /**
-     * Publish save all event to message service
+     * Publish successful save all event to message service
      * 
-     * @param finalSaveEntitiesIn  The objects you want to save on the persistence
-     *                             mechanism
-     * 
-     * @param finalSaveEntitiesOut The save command result
-     * 
-     * @param directives           Objects used to configure the save operation
+     * @param saveEntitiesIn  The objects you want to save on the persistence
+     *                        mechanism
+     * @param saveEntitiesOut The save command result
+     * @param directives      Objects used to configure the save operation
      */
     protected void publishSaveAllEvent(
-            final SaveEntitiesIn finalSaveEntitiesIn,
-            final SaveEntitiesOut finalSaveEntitiesOut,
+            final SaveEntitiesIn saveEntitiesIn,
+            final SaveEntitiesOut saveEntitiesOut,
             final Object... directives) {
 
-        if (!isPublishEvents(directives)) {
-            LOGGER.debug(
-                    "Publishing save all event was avoided, finalSaveEntitiesIn '{}', finalSaveEntitiesOut '{}', and directives '{}'",
-                    finalSaveEntitiesIn, finalSaveEntitiesOut, directives);
-            return;
-        }
+        publishCommandEvent(
+                saveEntitiesIn, saveEntitiesOut, SAVE_ENTITIES,
+                this::convertSaveEntitiesInToPublishDataIn,
+                this::convertSaveEntitiesOutToPublishDataOut, directives);
+    }
 
-        LOGGER.debug(
-                "Publishing save all event, finalSaveEntitiesIn '{}', finalSaveEntitiesOut '{}', and directives '{}'",
-                finalSaveEntitiesIn, finalSaveEntitiesOut, directives);
+    /**
+     * Publish unsuccessful save all event to message service
+     * 
+     * @param saveEntitiesIn The objects you want to save on the persistence
+     *                       mechanism
+     * @param exception      The save all command exception
+     * @param directives     Objects used to configure the save operation
+     */
+    protected void publishSaveAllEvent(
+            final SaveEntitiesIn saveEntitiesIn,
+            final Exception exception,
+            final Object... directives) {
 
-        try {
-            final var dataInSupplier = convertSaveEntitiesInToPublishDataIn(finalSaveEntitiesIn);
-            final var dataIn = dataInSupplier.get();
-
-            final var dataOutSupplier = convertSaveEntitiesOutToPublishDataOut(finalSaveEntitiesOut);
-            final var dataOut = dataOutSupplier.get();
-
-            publishEvent(dataIn, dataOut, SAVE_ENTITY);
-
-            LOGGER.debug("The save all event was published, dataIn '{}' and dataOut '{}'", dataIn, dataOut);
-        } catch (final Exception ex) {
-            LOGGER.error("The save all event was not published", ExceptionUtils.getRootCause(ex));
-        }
+        publishCommandEvent(
+                saveEntitiesIn, exception, SAVE_ENTITIES,
+                this::convertSaveEntitiesInToPublishDataIn,
+                this::convertExceptionToPublishDataOut, directives);
     }
 
     // --------------------------------------------------------
 
     /**
-     * Create a supplier function (deferred execution) that converts a
-     * {@code UpdateEntityIn} object to String to show in logs, the default is the
+     * Converts a {@code UpdateEntityIn} object to String to show in logs, the
+     * default is the
      * <code>java.util.Objects.toString</code>
      * 
      * @param updateEntityIn The entity to transform
      * 
-     * @return A Supplier object
+     * @return A String object
      */
-    protected Supplier<String> convertUpdateEntityInToPublishDataIn(final UpdateEntityIn updateEntityIn) {
-        return () -> Objects.toString(updateEntityIn);
+    protected String convertUpdateEntityInToPublishDataIn(final UpdateEntityIn updateEntityIn) {
+        return Objects.toString(updateEntityIn);
     }
 
     /**
@@ -203,120 +304,370 @@ public class EntityCommandEvent< // generics
      * 
      * @return A Supplier object
      */
-    protected Supplier<String> convertUpdateEntityOutToPublishDataOut(final UpdateEntityOut updateEntityOut) {
-        return () -> Objects.toString(updateEntityOut);
+    protected String convertUpdateEntityOutToPublishDataOut(final UpdateEntityOut updateEntityOut) {
+        return Objects.toString(updateEntityOut);
     }
 
     /**
-     * Publish update event to message service
+     * Publish successful update event to message service
      * 
-     * @param finalUpdateEntityIn  The objects you want to update on the persistence
-     *                             mechanism
-     * 
-     * @param finalUpdateEntityOut The update command result
-     * 
-     * @param directives           Objects used to configure the update operation
+     * @param updateEntityIn  The objects you want to update on the persistence
+     *                        mechanism
+     * @param updateEntityOut The update command result
+     * @param directives      Objects used to configure the update operation
      */
     protected void publishUpdateEvent(
-            final UpdateEntityIn finalUpdateEntityIn,
-            final UpdateEntityOut finalUpdateEntityOut,
+            final UpdateEntityIn updateEntityIn,
+            final UpdateEntityOut updateEntityOut,
             final Object... directives) {
 
-        if (!isPublishEvents(directives)) {
-            LOGGER.debug(
-                    "Publishing update event was avoided, finalUpdateEntityIn '{}', finalUpdateEntityOut '{}', and directives '{}'",
-                    finalUpdateEntityIn, finalUpdateEntityOut, directives);
-            return;
-        }
+        publishCommandEvent(
+                updateEntityIn, updateEntityOut, UPDATE_ENTITY,
+                this::convertUpdateEntityInToPublishDataIn,
+                this::convertUpdateEntityOutToPublishDataOut, directives);
+    }
 
-        LOGGER.debug(
-                "Publishing update event, finalUpdateEntityIn '{}', finalUpdateEntityOut '{}', and directives '{}'",
-                finalUpdateEntityIn, finalUpdateEntityOut, directives);
+    /**
+     * Publish unsuccessful update event to message service
+     * 
+     * @param updateEntityIn The objects you want to update on the persistence
+     *                       mechanism
+     * @param exception      The update command exception
+     * @param directives     Objects used to configure the save operation
+     */
+    protected void publishUpdateEvent(
+            final UpdateEntityIn updateEntityIn,
+            final Exception exception,
+            final Object... directives) {
 
-        try {
-            final var dataInSupplier = convertUpdateEntityInToPublishDataIn(finalUpdateEntityIn);
-            final var dataIn = dataInSupplier.get();
-
-            final var dataOutSupplier = convertUpdateEntityOutToPublishDataOut(finalUpdateEntityOut);
-            final var dataOut = dataOutSupplier.get();
-
-            publishEvent(dataIn, dataOut, UPDATE_ENTITY);
-
-            LOGGER.debug("The update event was published, dataIn '{}' and dataOut '{}'", dataIn, dataOut);
-        } catch (final Exception ex) {
-            LOGGER.error("The update event was not published", ExceptionUtils.getRootCause(ex));
-        }
+        publishCommandEvent(
+                updateEntityIn, exception, UPDATE_ENTITY,
+                this::convertUpdateEntityInToPublishDataIn,
+                this::convertExceptionToPublishDataOut, directives);
     }
 
     // --------------------------------------------------------
 
     /**
-     * Create a supplier function (deferred execution) that converts a
-     * {@code UpdateEntitiesIn} object to String to show in logs, the default is the
-     * <code>java.util.Objects.toString</code>
+     * Converts a {@code UpdateEntitiesIn} object to String to show in logs, the
+     * default is the <code>java.util.Objects.toString</code>
      * 
      * @param updateEntitiesIn The group of entities to transform
      * 
-     * @return A Supplier object
+     * @return A string object
      */
-    protected Supplier<String> convertUpdateEntitiesInToPublishDataIn(final UpdateEntitiesIn updateEntitiesIn) {
-        return () -> Objects.toString(updateEntitiesIn);
+    protected String convertUpdateEntitiesInToPublishDataIn(final UpdateEntitiesIn updateEntitiesIn) {
+        return Objects.toString(updateEntitiesIn);
     }
 
     /**
-     * Create a supplier function (deferred execution) that converts a
-     * {@code UpdateEntitiesOut} object to String to show in logs, the default is
-     * the <code>java.util.Objects.toString</code>
+     * Converts a {@code UpdateEntitiesOut} object to String to show in logs, the
+     * default is the <code>java.util.Objects.toString</code>
      * 
      * @param updateEntitiesOut The group of entities to transform
      * 
-     * @return A Supplier object
+     * @return A string object
      */
-    protected Supplier<String> convertUpdateEntitiesOutToPublishDataOut(final UpdateEntitiesOut updateEntitiesOut) {
-        return () -> Objects.toString(updateEntitiesOut);
+    protected String convertUpdateEntitiesOutToPublishDataOut(final UpdateEntitiesOut updateEntitiesOut) {
+        return Objects.toString(updateEntitiesOut);
     }
 
     /**
-     * Publish update all event to message service
+     * Publish successful update all event to message service
      * 
-     * @param finalUpdateEntitiesIn  The objects you want to update on the
-     *                               persistence mechanism
-     * 
-     * @param finalUpdateEntitiesOut The update command result
-     * 
-     * @param directives             Objects used to configure the save operation
+     * @param updateEntitiesIn  The objects you want to update on the
+     *                          persistence mechanism
+     * @param updateEntitiesOut The update command result
+     * @param directives        Objects used to configure the save operation
      */
     protected void publishUpdateAllEvent(
-            final UpdateEntitiesIn finalUpdateEntitiesIn,
-            final UpdateEntitiesOut finalUpdateEntitiesOut,
+            final UpdateEntitiesIn updateEntitiesIn,
+            final UpdateEntitiesOut updateEntitiesOut,
             final Object... directives) {
 
-        if (!isPublishEvents(directives)) {
-            LOGGER.debug(
-                    "Publishing update all event was avoided, finalUpdateEntitiesIn '{}', finalUpdateEntitiesOut '{}', and directives '{}'",
-                    finalUpdateEntitiesIn, finalUpdateEntitiesOut, directives);
-            return;
-        }
-
-        LOGGER.debug(
-                "Publishing update all event, finalUpdateEntitiesIn '{}', finalUpdateEntitiesOut '{}', and directives '{}'",
-                finalUpdateEntitiesIn,
-                finalUpdateEntitiesOut,
-                directives);
-
-        try {
-            final var dataInSupplier = convertUpdateEntitiesInToPublishDataIn(finalUpdateEntitiesIn);
-            final var dataIn = dataInSupplier.get();
-
-            final var dataOutSupplier = convertUpdateEntitiesOutToPublishDataOut(finalUpdateEntitiesOut);
-            final var dataOut = dataOutSupplier.get();
-
-            publishEvent(dataIn, dataOut, UPDATE_ENTITIES);
-
-            LOGGER.debug("The update all event was published, dataIn '{}' and dataOut '{}'", dataIn, dataOut);
-
-        } catch (final Exception ex) {
-            LOGGER.error("The update all event was not published", ExceptionUtils.getRootCause(ex));
-        }
+        publishCommandEvent(
+                updateEntitiesIn, updateEntitiesOut, UPDATE_ENTITIES,
+                this::convertUpdateEntitiesInToPublishDataIn,
+                this::convertUpdateEntitiesOutToPublishDataOut, directives);
     }
+
+    /**
+     * Publish unsuccessful update all event to message service
+     * 
+     * @param updateEntitiesIn The objects you want to update on the
+     *                         persistence mechanism
+     * @param exception        The update command exception
+     * @param directives       Objects used to configure the save operation
+     */
+    protected void publishUpdateAllEvent(
+            final UpdateEntitiesIn updateEntitiesIn,
+            final Exception exception,
+            final Object... directives) {
+
+        publishCommandEvent(
+                updateEntitiesIn, exception, UPDATE_ENTITIES,
+                this::convertUpdateEntitiesInToPublishDataIn,
+                this::convertExceptionToPublishDataOut, directives);
+    }
+
+    // --------------------------------------------------------
+
+    /**
+     * Converts a {@code DeleteEntityIn} object to String to show in logs, the
+     * default is the <code>java.util.Objects.toString</code>
+     * 
+     * @param deleteEntityIn The entity to transform
+     * 
+     * @return A string object
+     */
+    protected String convertDeleteEntityInToPublishDataIn(final DeleteEntityIn deleteEntityIn) {
+        return Objects.toString(deleteEntityIn);
+    }
+
+    /**
+     * Converts a {@code DeleteEntityOut} object to String to show in logs, the
+     * default is the <code>java.util.Objects.toString</code>
+     * 
+     * @param deleteEntityOut The entity to transform
+     * 
+     * @return A Supplier object
+     */
+    protected String convertDeleteEntityOutToPublishDataOut(final DeleteEntityOut deleteEntityOut) {
+        return Objects.toString(deleteEntityOut);
+    }
+
+    /**
+     * Publish successful delete event to message service
+     * 
+     * @param deleteEntityIn  The objects you want to update on the persistence
+     *                        mechanism
+     * @param deleteEntityOut The update command result
+     * @param directives      Objects used to configure the update operation
+     */
+    protected void publishDeleteEvent(
+            final DeleteEntityIn deleteEntityIn,
+            final DeleteEntityOut deleteEntityOut,
+            final Object... directives) {
+
+        publishCommandEvent(
+                deleteEntityIn, deleteEntityOut, DELETE_ENTITY,
+                this::convertDeleteEntityInToPublishDataIn,
+                this::convertDeleteEntityOutToPublishDataOut, directives);
+    }
+
+    /**
+     * Publish unsuccessful delete event to message service
+     * 
+     * @param updateEntityIn The objects you want to update on the persistence
+     *                       mechanism
+     * @param exception      The update command exception
+     * @param directives     Objects used to configure the save operation
+     */
+    protected void publishDeleteEvent(
+            final DeleteEntityIn deleteEntityIn,
+            final Exception exception,
+            final Object... directives) {
+
+        publishCommandEvent(
+                deleteEntityIn, exception, DELETE_ENTITY,
+                this::convertDeleteEntityInToPublishDataIn,
+                this::convertExceptionToPublishDataOut, directives);
+    }
+
+    // --------------------------------------------------------
+
+    /**
+     * Converts a {@code DeleteEntitiesIn} object to String to show in logs, the
+     * default is the <code>java.util.Objects.toString</code>
+     * 
+     * @param deleteEntitiesIn The entity to transform
+     * 
+     * @return A string object
+     */
+    protected String convertDeleteEntitiesInToPublishDataIn(final DeleteEntitiesIn deleteEntitiesIn) {
+        return Objects.toString(deleteEntitiesIn);
+    }
+
+    /**
+     * Converts a {@code DeleteEntitiesOut} object to String to show in logs, the
+     * default is the <code>java.util.Objects.toString</code>
+     * 
+     * @param deleteEntitiesOut The entity to transform
+     * 
+     * @return A string object
+     */
+    protected String convertDeleteEntitiesOutToPublishDataOut(final DeleteEntitiesOut deleteEntitiesOut) {
+        return Objects.toString(deleteEntitiesOut);
+    }
+
+    /**
+     * Publish successful delete all event to message service
+     * 
+     * @param deleteEntitiesIn  The objects you want to save on the persistence
+     *                          mechanism
+     * @param deleteEntitiesOut The save command result
+     * @param directives        Objects used to configure the save operation
+     */
+    protected void publishDeleteAllEvent(
+            final DeleteEntitiesIn deleteEntitiesIn,
+            final DeleteEntitiesOut deleteEntitiesOut,
+            final Object... directives) {
+
+        publishCommandEvent(
+                deleteEntitiesIn, deleteEntitiesOut, DELETE_ENTITIES,
+                this::convertDeleteEntitiesInToPublishDataIn,
+                this::convertDeleteEntitiesOutToPublishDataOut, directives);
+    }
+
+    /**
+     * Publish unsuccessful delete all event to message service
+     * 
+     * @param deleteEntitiesIn The objects you want to save on the persistence
+     *                         mechanism
+     * @param exception        The delete all command exception
+     * @param directives       Objects used to configure the save operation
+     */
+    protected void publishDeleteAllEvent(
+            final DeleteEntitiesIn deleteEntitiesIn,
+            final Exception exception,
+            final Object... directives) {
+
+        publishCommandEvent(
+                deleteEntitiesIn, exception, SAVE_ENTITIES,
+                this::convertDeleteEntitiesInToPublishDataIn,
+                this::convertExceptionToPublishDataOut, directives);
+    }
+
+    // --------------------------------------------------------
+
+    /**
+     * Converts a {@code DeleteIdIn} object to String to show in logs, the default
+     * is the <code>java.util.Objects.toString</code>
+     * 
+     * @param deleteIdIn The entity to transform
+     * 
+     * @return A string object
+     */
+    @NotNull
+    protected String convertDeleteIdInToPublishDataIn(final DeleteIdIn deleteIdIn) {
+        return Objects.toString(deleteIdIn);
+    }
+
+    /**
+     * Converts a {@code DeleteIdOut} object to String to show in logs, the
+     * default is the <code>java.util.Objects.toString</code>
+     * 
+     * @param deleteIdOut The entity to transform
+     * 
+     * @return A string object
+     */
+    @NotNull
+    protected String convertDeleteIdOutToPublishDataOut(final DeleteIdOut deleteIdOut) {
+        return Objects.toString(deleteIdOut);
+    }
+
+    /**
+     * Publish successful delete by id event to message service
+     * 
+     * @param deleteIdIn  The object id you want to delete by id on the persistence
+     *                    mechanism
+     * @param deleteIdOut The delete by id command result
+     * @param directives  Objects used to configure the delete by id operation
+     */
+    protected void publishDeleteByIdEvent(
+            final DeleteIdIn deleteIdIn,
+            final DeleteIdOut deleteIdOut,
+            final Object... directives) {
+
+        publishCommandEvent(
+                deleteIdIn, deleteIdOut, DELETE_BY_ID,
+                this::convertDeleteIdInToPublishDataIn,
+                this::convertDeleteIdOutToPublishDataOut, directives);
+    }
+
+    /**
+     * Publish unsuccessful delete by id event to message service
+     * 
+     * @param deleteIdIn The object id you want to delete on the persistence
+     *                   mechanism
+     * @param exception  The save command exception
+     * @param directives Objects used to configure the save operation
+     */
+    protected void publishDeleteByIdEvent(
+            final DeleteIdIn deleteIdIn,
+            final Exception exception,
+            final Object... directives) {
+
+        publishCommandEvent(
+                deleteIdIn, exception, DELETE_BY_ID,
+                this::convertDeleteIdInToPublishDataIn,
+                this::convertExceptionToPublishDataOut, directives);
+    }
+
+    // --------------------------------------------------------
+
+    /**
+     * Converts a {@code DeleteIdsIn} object to String to show in logs, the default
+     * is the <code>java.util.Objects.toString</code>
+     * 
+     * @param deleteIdsIn The entity to transform
+     * 
+     * @return A string object
+     */
+    @NotNull
+    protected String convertDeleteIdsInToPublishDataIn(final DeleteIdsIn deleteIdsIn) {
+        return Objects.toString(deleteIdsIn);
+    }
+
+    /**
+     * Converts a {@code DeleteIdOut} object to String to show in logs, the
+     * default is the <code>java.util.Objects.toString</code>
+     * 
+     * @param deleteIdsOut The entity to transform
+     * 
+     * @return A string object
+     */
+    @NotNull
+    protected String convertDeleteIdsOutToPublishDataOut(final DeleteIdsOut deleteIdsOut) {
+        return Objects.toString(deleteIdsOut);
+    }
+
+    /**
+     * Publish successful delete by ids event to message service
+     * 
+     * @param deleteIdsIn  The object id you want to delete by id on the persistence
+     *                     mechanism
+     * @param deleteIdsOut The delete by id command result
+     * @param directives   Objects used to configure the delete by ids operation
+     */
+    protected void publishDeleteByIdsEvent(
+            final DeleteIdsIn deleteIdsIn,
+            final DeleteIdsOut deleteIdsOut,
+            final Object... directives) {
+
+        publishCommandEvent(
+                deleteIdsIn, deleteIdsOut, DELETE_BY_IDS,
+                this::convertDeleteIdsInToPublishDataIn,
+                this::convertDeleteIdsOutToPublishDataOut, directives);
+    }
+
+    /**
+     * Publish unsuccessful delete by ids event to message service
+     * 
+     * @param deleteIdsIn The object id you want to delete on the persistence
+     *                    mechanism
+     * @param exception   The save command exception
+     * @param directives  Objects used to configure the delete by ids operation
+     */
+    protected void publishDeleteByIdsEvent(
+            final DeleteIdsIn deleteIdsIn,
+            final Exception exception,
+            final Object... directives) {
+
+        publishCommandEvent(
+                deleteIdsIn, exception, DELETE_BY_IDS,
+                this::convertDeleteIdsInToPublishDataIn,
+                this::convertExceptionToPublishDataOut, directives);
+    }
+
 }

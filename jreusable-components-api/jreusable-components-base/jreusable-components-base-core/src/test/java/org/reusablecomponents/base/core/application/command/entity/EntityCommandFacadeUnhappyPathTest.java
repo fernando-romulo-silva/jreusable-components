@@ -122,7 +122,7 @@ class EntityCommandFacadeUnhappyPathTest {
                 final var elementAlreadyExistsParams = List.of(
                                 "org.application_example.domain.Department");
 
-                final var nullPointerParams = List.of("preSaveEntityIn");
+                final var nullPointerParams = List.of("preEntityIn");
 
                 return Stream.of(
                                 Arguments.of(nullDepartment, NullPointerException.class,
@@ -131,6 +131,35 @@ class EntityCommandFacadeUnhappyPathTest {
                                                 "The object '%s", elementAlreadyExistsParams),
                                 Arguments.of(invalidDepartment, ElementInvalidException.class,
                                                 "The object '%s", elementAlreadyExistsParams)
+
+                );
+        }
+
+        // given
+        Stream<Arguments> createInvalidSaveAllData() {
+
+                final List<Department> nullList = null;
+                final var repeatedDepartment = new Department("x2", "Development 01", "Technology", manager);
+                final var correctDepartment = new Department("x3", "Default 02", "Resource", manager);
+                final var invalidDepartment = new Department(null, "Development 01", "Technology", manager);
+
+                final var nullListParams = List.of("preEntitiesIn");
+
+                final var elementAlreadyExistsParams = List.of(
+                                "org.application_example.domain.Department");
+
+                return Stream.of(
+                                Arguments.of(nullList, NullPointerException.class,
+                                                "The object '%s' cannot be null",
+                                                nullListParams),
+
+                                Arguments.of(List.of(repeatedDepartment, correctDepartment),
+                                                ElementAlreadyExistsException.class,
+                                                "The object '[%s", elementAlreadyExistsParams),
+
+                                Arguments.of(List.of(invalidDepartment, correctDepartment),
+                                                ElementInvalidException.class,
+                                                "The object '[%s", elementAlreadyExistsParams)
 
                 );
         }
@@ -174,35 +203,6 @@ class EntityCommandFacadeUnhappyPathTest {
         }
 
         // given
-        Stream<Arguments> createInvalidSaveAllData() {
-
-                final List<Department> nullList = null;
-                final var repeatedDepartment = new Department("x2", "Development 01", "Technology", manager);
-                final var correctDepartment = new Department("x3", "Default 02", "Resource", manager);
-                final var invalidDepartment = new Department(null, "Development 01", "Technology", manager);
-
-                final var nullListParams = List.of("saveEntitiesIn");
-
-                final var elementAlreadyExistsParams = List.of(
-                                "org.application_example.domain.Department");
-
-                return Stream.of(
-                                Arguments.of(nullList, NullPointerException.class,
-                                                "The object '%s' cannot be null",
-                                                nullListParams),
-
-                                Arguments.of(List.of(repeatedDepartment, correctDepartment),
-                                                ElementAlreadyExistsException.class,
-                                                "The object '[%s", elementAlreadyExistsParams),
-
-                                Arguments.of(List.of(invalidDepartment, correctDepartment),
-                                                ElementInvalidException.class,
-                                                "The object '[%s", elementAlreadyExistsParams)
-
-                );
-        }
-
-        // given
         Stream<Arguments> createInvalidUpdateData() {
 
                 final Department nullDepartment = null;
@@ -212,7 +212,7 @@ class EntityCommandFacadeUnhappyPathTest {
                 final var elementNotExistsParams = List.of(
                                 "org.application_example.domain.Department");
 
-                final var nullPointerParams = List.of("preUpdateEntityIn");
+                final var nullPointerParams = List.of("preEntityIn");
 
                 return Stream.of(
                                 Arguments.of(nullDepartment, NullPointerException.class,
@@ -252,7 +252,7 @@ class EntityCommandFacadeUnhappyPathTest {
                 final var correctDepartment = new Department("x3", "Default 02", "Resource", manager);
                 final var invalidDepartment = new Department(null, "Development 01", "Technology", manager);
 
-                final var nullListParams = List.of("preUpdateEntitiesIn");
+                final var nullListParams = List.of("preEntitiesIn");
 
                 final var elementAlreadyExistsParams = List.of(
                                 "org.application_example.domain.Department");
@@ -302,7 +302,7 @@ class EntityCommandFacadeUnhappyPathTest {
 
                 final var elementNotExistsParams = List.of("org.application_example.domain.Department");
 
-                final var nullPointerParams = List.of("preDeleteEntityIn");
+                final var nullPointerParams = List.of("preEntityIn");
 
                 final var invalidDepartment = new Department(null, "Development 01", "Technology", manager);
                 invalidDepartment.removeManager();
@@ -354,7 +354,7 @@ class EntityCommandFacadeUnhappyPathTest {
 
                 final var elementNotExistsParams = List.of("org.application_example.domain.Department");
 
-                final var nullPointerParams = List.of("preDeleteEntitiesIn");
+                final var nullPointerParams = List.of("preEntitiesIn");
 
                 final var invalidDepartment = new Department(null, "Development 01", "Technology", manager);
                 invalidDepartment.removeManager();
@@ -413,7 +413,7 @@ class EntityCommandFacadeUnhappyPathTest {
 
                 final var elementNotExistsParams = List.of(unknownDepartment.getId(), "Department");
 
-                final var nullPointerParams = List.of("preDeleteIdIn");
+                final var nullPointerParams = List.of("preIdIn");
 
                 final var invalidDepartment = new Department("", "Development 01", "Technology", manager);
                 invalidDepartment.removeManager();
@@ -467,7 +467,7 @@ class EntityCommandFacadeUnhappyPathTest {
                 final var elementNotExistsParams = List.of(unknownDepartment.getId() + ", " + correctDepartment.getId(),
                                 "Department");
 
-                final var nullPointerParams = List.of("preDeleteIdsIn");
+                final var nullPointerParams = List.of("preIdsIn");
 
                 final var invalidDepartment = new Department("", "Development 01", "Technology", manager);
                 invalidDepartment.removeManager();

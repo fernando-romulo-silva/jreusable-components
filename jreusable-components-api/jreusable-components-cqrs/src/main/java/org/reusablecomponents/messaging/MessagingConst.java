@@ -9,18 +9,21 @@ public class MessagingConst {
   public static final String JSON_LAYOUT = """
       {
          "id": "${id}",
+         "origin: "${origin},
+         "status" : "${status}",
          "what": {
             "dataIn" : "${dataIn}",
-            "dataOut" : "${dataOut}",
-            "status" : "${status}"
+            "dataOut" : "${dataOut}"
           },
          "when": {
             "dateTime" : "${dateTime}",
             "zoneId" : "${zoneId}"
          },
          "where": {
+            "machine" : "${machine}",
+            "build" : "{$build},
             "application" : "${application}",
-            "machine" : "${machine}"
+            "version" : "${version}
          },
          "who": {
             "login" : "${login}",
@@ -37,18 +40,21 @@ public class MessagingConst {
       <?xml version="1.0" encoding="UTF-8" ?>
       <event>
           <id>${id}</id>
+          <origin>${origin}</origin>
+          <status>${status}</status>
           <what>
               <dataIn>${dataIn}</dataIn>
               <dataOut>${dataOut}</dataOut>
-              <status>${status}</status>
           </what>
           <when>
               <dateTime>${dateTime}</dateTime>
               <zoneId>${zoneId}</zoneId>
           </when>
           <where>
-              <application>${application}</application>
               <machine>${machine}</machine>
+              <build>${build}</build>
+              <application>${application}</application>
+              <version>${version}</version>
           </where>
           <who>
               <login>${login}</login>
@@ -64,16 +70,19 @@ public class MessagingConst {
   public static final String YAML_LAYOUT = """
       ---
       id: "${id}"
+      origin: "${origin}"
+      status: "${status}"
       what:
         dataIn: "${dataIn}"
         dataOut: "${dataOut}"
-        status: "${status}
       when:
         dateTime: "${dateTime}"
         zoneId: "${zoneId}"
       where:
-        application: "${application}"
         machine: "${machine}"
+        application: "${application}"
+        build: "${build}"
+        version: "${version}
       who:
         login: "${login}"
         session: "${session}"

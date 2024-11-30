@@ -34,28 +34,29 @@ public class JakartaCommandFacade<Entity extends AbstractEntity<Id>, Id> // basi
 		super(new CommandFacadeBuilder<>($ -> {
 			// save
 			$.saveFunction = (entity, directives) -> repository.save(entity);
-			$.saveAllFunction = repository::saveAll;
+			$.saveAllFunction = (entities, directives) -> repository.saveAll(entities);
 
 			// update
-			$.updateFunction = repository::update;
-			$.updateAllFunction = repository::updateAll;
+			$.updateFunction = (entity, directives) -> repository.update(entity);
+			$.updateAllFunction = (entities, directives) -> repository.updateAll(entities);
 
 			// delete
-			$.deleteFunction = entity -> {
+			$.deleteFunction = (entity, directives) -> {
 				repository.delete(entity);
 				return null;
 			};
-			$.deleteAllFunction = entities -> {
+			$.deleteAllFunction = (entities, directives) -> {
 				repository.deleteAll(entities);
 				return null;
 			};
 
 			// delete by id
-			$.deleteByIdFunction = id -> {
+			$.deleteByIdFunction = (id, directives) -> {
 				repository.deleteById(id);
 				return null;
 			};
-			$.deleteAllByIdFunction = ids -> {
+
+			$.deleteAllByIdFunction = (ids, directives) -> {
 				ids.forEach(repository::deleteById);
 				return null;
 			};

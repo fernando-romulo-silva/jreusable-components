@@ -55,7 +55,7 @@ class EntityQueryFacadeHappyPathTest {
 
     @Test
     @Order(1)
-    @DisplayName("find by id test")
+    @DisplayName("Find by id test")
     void findByIdTest() {
         // given
         final var id = "x1";
@@ -71,7 +71,7 @@ class EntityQueryFacadeHappyPathTest {
 
     @Test
     @Order(2)
-    @DisplayName("find all test")
+    @DisplayName("Find all test")
     void findAllTest() {
         // given
         final var currentData = defaultData;
@@ -99,7 +99,7 @@ class EntityQueryFacadeHappyPathTest {
 
     @Test
     @Order(4)
-    @DisplayName("Count all test")
+    @DisplayName("Exists all test")
     void existsAllTest() {
         // given
         final var existsAll = defaultData.size() > 0;
@@ -118,7 +118,7 @@ class EntityQueryFacadeHappyPathTest {
 
     @Test
     @Order(5)
-    @DisplayName("find by id test")
+    @DisplayName("Exists by id test")
     void existsByIdTest() {
         // given
         final var id = "x1";

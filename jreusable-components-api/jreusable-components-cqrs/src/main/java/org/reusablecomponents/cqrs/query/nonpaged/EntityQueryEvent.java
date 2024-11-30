@@ -1,10 +1,12 @@
 package org.reusablecomponents.cqrs.query.nonpaged;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.COUNT_ALL;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_ALL;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_BY_ID;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ALL_ENTITIES;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_ID;
+import static org.reusablecomponents.messaging.event.DefaultEventStatus.SUCCESS;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -133,7 +135,7 @@ public class EntityQueryEvent<QueryIdIn, OneResult, MultipleResult, CountResult,
             final var dataOutSupplier = convertMultipleResultToPublishDataOut(finalMultipleResult);
             final var dataOut = dataOutSupplier.get();
 
-            publishEvent(dataIn, dataOut, FIND_ALL_ENTITIES);
+            publishEvent(dataIn, dataOut, EMPTY, SUCCESS, FIND_ALL_ENTITIES);
 
             LOGGER.debug("The find all was published, dataIn '{}' and dataOut '{}'", dataIn, dataOut);
         } catch (final Exception ex) {
@@ -169,11 +171,14 @@ public class EntityQueryEvent<QueryIdIn, OneResult, MultipleResult, CountResult,
                 directives);
 
         final var dataInSupplier = convertQueryIdInToPublishDataIn(finalQueryIdIn);
+        final var dataIn = dataInSupplier.get();
+
         final var dataOutSupplier = convertOneResultToPublishDataOut(finalOneResult);
+        final var dataOut = dataOutSupplier.get();
 
         LOGGER.debug("Publish event for find by id dataIn '{}' and dataOut '{}', ", dataInSupplier, dataOutSupplier);
 
-        publishEvent(dataInSupplier.get(), dataOutSupplier.get(), FIND_ENTITY_BY_ID);
+        publishEvent(dataIn, dataOut, EMPTY, SUCCESS, FIND_ENTITY_BY_ID);
     }
 
     /**
@@ -205,11 +210,14 @@ public class EntityQueryEvent<QueryIdIn, OneResult, MultipleResult, CountResult,
                 directives);
 
         final var dataInSupplier = convertQueryIdInToPublishDataIn(finalQueryIdIn);
+        final var dataIn = dataInSupplier.get();
+
         final var dataOutSupplier = convertExistsResultToPublishData(finalExistsResult);
+        final var dataOut = dataOutSupplier.get();
 
         LOGGER.debug("Publish event for exists by id, dataIn '{}' and dataOut '{}', ", dataInSupplier, dataOutSupplier);
 
-        publishEvent(dataInSupplier.get(), dataOutSupplier.get(), EXISTS_BY_ID);
+        publishEvent(dataIn, dataOut, EMPTY, SUCCESS, EXISTS_BY_ID);
     }
 
     /**
@@ -238,11 +246,13 @@ public class EntityQueryEvent<QueryIdIn, OneResult, MultipleResult, CountResult,
                 directives);
 
         final var dataOutSupplier = convertCountResultToPublishDataOut(finalCountResult);
-        publishEvent(StringUtils.EMPTY, dataOutSupplier.get(), COUNT_ALL);
+        final var dataOut = dataOutSupplier.get();
+
+        publishEvent(EMPTY, dataOut, EMPTY, SUCCESS, COUNT_ALL);
 
         LOGGER.debug("Publish event for count all, dataIn '{}' and dataOut '{}', ",
                 StringUtils.EMPTY,
-                dataOutSupplier);
+                dataOut);
     }
 
     /**
@@ -271,7 +281,9 @@ public class EntityQueryEvent<QueryIdIn, OneResult, MultipleResult, CountResult,
                 directives);
 
         final var dataOutSupplier = convertExistsResultToPublishData(finalExistsResult);
-        publishEvent(StringUtils.EMPTY, dataOutSupplier.get(), EXISTS_ALL);
+        final var dataOut = dataOutSupplier.get();
+
+        publishEvent(EMPTY, dataOut, EMPTY, SUCCESS, EXISTS_ALL);
 
         LOGGER.debug("Publish event for exists all, dataIn '{}' and dataOut '{}', ",
                 StringUtils.EMPTY,

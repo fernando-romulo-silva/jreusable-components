@@ -2,6 +2,8 @@ package org.reusablecomponents.cqrs.query.paged;
 
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ALL_ENTITIES_PAGEABLE;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_SORTED;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.reusablecomponents.messaging.event.DefaultEventStatus.SUCCESS;
 
 import java.util.Objects;
 
@@ -67,7 +69,7 @@ public class EntityQueryPaginationEvent<OneResult, MultiplePagedResult, Pageable
         final var dataOutSupplier = convertMultiplePagedResultToPublishDataOut(finalMultiplePagedResult);
         final var dataOut = dataOutSupplier.get();
 
-        publishEvent(dataIn, dataOut, FIND_ALL_ENTITIES_PAGEABLE);
+        publishEvent(dataIn, dataOut, EMPTY, SUCCESS, FIND_ALL_ENTITIES_PAGEABLE);
     }
 
     protected Supplier<String> convertSortToPublishDataIn(final Sort sort) {
@@ -86,6 +88,6 @@ public class EntityQueryPaginationEvent<OneResult, MultiplePagedResult, Pageable
         final var dataOutSupplier = convertOneResultResultToPublishDataOut(finalOneResult);
         final var dataOut = dataOutSupplier.get();
 
-        publishEvent(dataIn, dataOut, FIND_ENTITY_SORTED);
+        publishEvent(dataIn, dataOut, EMPTY, SUCCESS, FIND_ENTITY_SORTED);
     }
 }

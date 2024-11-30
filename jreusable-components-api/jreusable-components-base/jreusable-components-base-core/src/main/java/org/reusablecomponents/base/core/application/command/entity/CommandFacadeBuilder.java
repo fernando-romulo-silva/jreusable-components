@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.reusablecomponents.base.core.application.base.BaseFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
@@ -28,16 +27,16 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 		extends BaseFacadeBuilder {
 
 	public BiFunction<SaveEntityIn, Object[], SaveEntityOut> saveFunction;
-	public Function<SaveEntitiesIn, SaveEntitiesOut> saveAllFunction;
+	public BiFunction<SaveEntitiesIn, Object[], SaveEntitiesOut> saveAllFunction;
 
-	public Function<UpdateEntityIn, UpdateEntityOut> updateFunction;
-	public Function<UpdateEntitiesIn, UpdateEntitiesOut> updateAllFunction;
+	public BiFunction<UpdateEntityIn, Object[], UpdateEntityOut> updateFunction;
+	public BiFunction<UpdateEntitiesIn, Object[], UpdateEntitiesOut> updateAllFunction;
 
-	public Function<DeleteEntityIn, DeleteEntityOut> deleteFunction;
-	public Function<DeleteEntitiesIn, DeleteEntitiesOut> deleteAllFunction;
+	public BiFunction<DeleteEntityIn, Object[], DeleteEntityOut> deleteFunction;
+	public BiFunction<DeleteEntitiesIn, Object[], DeleteEntitiesOut> deleteAllFunction;
 
-	public Function<DeleteIdIn, DeleteIdOut> deleteByIdFunction;
-	public Function<DeleteIdsIn, DeleteIdsOut> deleteAllByIdFunction;
+	public BiFunction<DeleteIdIn, Object[], DeleteIdOut> deleteByIdFunction;
+	public BiFunction<DeleteIdsIn, Object[], DeleteIdsOut> deleteAllByIdFunction;
 
 	public CommandFacadeBuilder(
 			final Consumer<CommandFacadeBuilder<Entity, Id, //

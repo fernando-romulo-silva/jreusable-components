@@ -1,7 +1,7 @@
 package org.reusablecomponents.base.core.application.base;
 
 import static java.util.Optional.ofNullable;
-import static org.reusablecomponents.base.core.infra.util.Functions.*;
+import static org.reusablecomponents.base.core.infra.util.Functions.createNullPointerException;
 
 import org.reusablecomponents.base.core.application.command.entity.CommandFacade;
 import org.reusablecomponents.base.core.application.empty.EmptyFacade;

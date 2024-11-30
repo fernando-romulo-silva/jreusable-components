@@ -18,6 +18,14 @@ public class Event {
 
 	@Valid
 	@NotNull
+	private final String origin;
+
+	@Valid
+	@NotNull
+	private final InterfaceEventStatus status;
+
+	@Valid
+	@NotNull
 	private final When when;
 
 	@Valid
@@ -40,6 +48,8 @@ public class Event {
 
 	private Event(final Builder builder) {
 		this.id = UUID.randomUUID().toString();
+		this.origin = builder.origin;
+		this.status = builder.status;
 		this.when = builder.when;
 		this.who = builder.who;
 		this.what = builder.what;
@@ -49,6 +59,14 @@ public class Event {
 
 	public String getId() {
 		return id;
+	}
+
+	public String getOrigin() {
+		return origin;
+	}
+
+	public InterfaceEventStatus getStatus() {
+		return status;
 	}
 
 	public When getWhen() {
@@ -103,6 +121,10 @@ public class Event {
 
 	public static class Builder {
 
+		public String origin;
+
+		public InterfaceEventStatus status;
+
 		public When when;
 
 		public Who who;
@@ -119,6 +141,10 @@ public class Event {
 		}
 
 		public Event build() {
+
+			if (Objects.isNull(status)) {
+				throw new IllegalArgumentException("");
+			}
 
 			if (Objects.isNull(when)) {
 				throw new IllegalArgumentException("");

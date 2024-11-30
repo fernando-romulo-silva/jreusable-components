@@ -211,7 +211,7 @@ class EntityCommandFacadeHappyPathTest {
 
 	@Test
 	@Order(6)
-	@DisplayName("delete a collection of entities by id test")
+	@DisplayName("Delete a collection of entities by ids")
 	void deleteAllByIdTest() {
 		// given
 		assertThat(defaultData)

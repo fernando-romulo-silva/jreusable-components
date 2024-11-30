@@ -63,7 +63,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 
 			};
 
-			$.saveAllFunction = entities -> {
+			$.saveAllFunction = (entities, directives) -> {
 
 				if (entities.stream().anyMatch(e -> Objects.isNull(e.getId()))) {
 					throw new IllegalStateException(THERE_ARE_INVALID_ENTITY + entities);
@@ -78,7 +78,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 			};
 
 			// update --------------------------------
-			$.updateFunction = entity -> {
+			$.updateFunction = (entity, directives) -> {
 
 				final var index = repository.indexOf(entity);
 
@@ -95,7 +95,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 				return entity;
 			};
 
-			$.updateAllFunction = entities -> {
+			$.updateAllFunction = (entities, directives) -> {
 
 				if (entities.stream().anyMatch(e -> Objects.isNull(e.getId()))) {
 					throw new IllegalStateException(THERE_ARE_INVALID_ENTITY + entities);
@@ -110,7 +110,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 			};
 
 			// delete --------------------------------
-			$.deleteFunction = entity -> {
+			$.deleteFunction = (entity, directives) -> {
 
 				if (Objects.isNull(entity.getId())) {
 					throw new IllegalStateException(ENTITY_WITH_INVALID_ID + entity);
@@ -123,7 +123,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 				return Boolean.TRUE;
 			};
 
-			$.deleteAllFunction = entities -> {
+			$.deleteAllFunction = (entities, directives) -> {
 
 				if (entities.stream()
 						.anyMatch(e -> e instanceof AbstractEntity<?> deparment
@@ -142,7 +142,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 			};
 
 			// delete id --------------------------------
-			$.deleteByIdFunction = id -> {
+			$.deleteByIdFunction = (id, directives) -> {
 
 				if (id instanceof String idString && StringUtils.isBlank(idString)) {
 					throw new IllegalStateException(THERE_ARE_INVALID_ENTITY + id);
@@ -158,7 +158,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 				return Boolean.TRUE;
 			};
 
-			$.deleteAllByIdFunction = ids -> {
+			$.deleteAllByIdFunction = (ids, directives) -> {
 
 				ids.stream().forEach(id -> {
 					if (id instanceof String idString && StringUtils.isBlank(idString)) {

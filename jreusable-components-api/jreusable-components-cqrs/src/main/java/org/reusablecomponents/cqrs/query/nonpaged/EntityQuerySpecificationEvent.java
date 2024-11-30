@@ -1,9 +1,11 @@
 package org.reusablecomponents.cqrs.query.nonpaged;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.COUNT_BY_SPECIFICATION;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_BY_SPECIFICATION;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION;
+import static org.reusablecomponents.messaging.event.DefaultEventStatus.SUCCESS;
 
 import java.util.Objects;
 
@@ -63,7 +65,7 @@ public class EntityQuerySpecificationEvent<OneResult, MultipleResult, CountResul
         final var dataOutSupplier = convertMultipleResultToPublishDataOut(finalMultipleResult);
         final var dataOut = dataOutSupplier.get();
 
-        publishEvent(dataIn, dataOut, FIND_ENTITIES_BY_SPECIFICATION);
+        publishEvent(dataIn, dataOut, EMPTY, SUCCESS, FIND_ENTITIES_BY_SPECIFICATION);
     }
 
     /**
@@ -87,7 +89,7 @@ public class EntityQuerySpecificationEvent<OneResult, MultipleResult, CountResul
         final var dataOutSupplier = convertOneResultToPublishDataOut(finalOneResult);
         final var dataOut = dataOutSupplier.get();
 
-        publishEvent(dataIn, dataOut, FIND_ENTITY_BY_SPECIFICATION);
+        publishEvent(dataIn, dataOut, EMPTY, SUCCESS, FIND_ENTITY_BY_SPECIFICATION);
     }
 
     /**
@@ -128,7 +130,7 @@ public class EntityQuerySpecificationEvent<OneResult, MultipleResult, CountResul
         final var dataOutSupplier = convertExistsResultToPublishDataOut(finalResult);
         final var dataOut = dataOutSupplier.get();
 
-        publishEvent(dataIn, dataOut, EXISTS_BY_SPECIFICATION);
+        publishEvent(dataIn, dataOut, EMPTY, SUCCESS, EXISTS_BY_SPECIFICATION);
     }
 
     /**
@@ -144,6 +146,6 @@ public class EntityQuerySpecificationEvent<OneResult, MultipleResult, CountResul
         final var dataOutSupplier = convertCountResultToPublishDataOut(finalCountResult);
         final var dataOut = dataOutSupplier.get();
 
-        publishEvent(dataIn, dataOut, COUNT_BY_SPECIFICATION);
+        publishEvent(dataIn, dataOut, EMPTY, SUCCESS, COUNT_BY_SPECIFICATION);
     }
 }

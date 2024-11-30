@@ -1,11 +1,12 @@
 package org.reusablecomponents.base.core.application.query.entity.nonpaged;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.groups.Tuple.tuple;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
-import org.application_example.application.command.DepartmentCommandFacade;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.application_example.application.query.entity.nonpaged.DeparmentQueryFacade;
 import org.application_example.domain.Department;
 import org.application_example.domain.Manager;
@@ -23,11 +24,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
 
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -88,7 +84,7 @@ class EntityQueryFacadeUnhappyPathTest {
 
     @Test
     @Order(1)
-    @DisplayName("find by id test")
+    @DisplayName("Find by id test")
     void findByIdTest() {
         // given
         assertThatThrownBy(() -> defaultQueryFacade.findById(null))
@@ -101,7 +97,7 @@ class EntityQueryFacadeUnhappyPathTest {
 
     @Test
     @Order(2)
-    @DisplayName("find by id test")
+    @DisplayName("Exists by id test")
     void existsByTest() {
         // given
         assertThatThrownBy(() -> defaultQueryFacade.existsById(null))
