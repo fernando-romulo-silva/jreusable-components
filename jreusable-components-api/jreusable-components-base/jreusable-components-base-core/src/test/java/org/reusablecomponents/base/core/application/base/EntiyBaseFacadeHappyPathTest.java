@@ -1,11 +1,9 @@
 package org.reusablecomponents.base.core.application.base;
 
-import static java.lang.System.out;
 import static java.text.MessageFormat.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
-import org.apache.commons.lang3.concurrent.ConcurrentUtils;
 import org.application_example.application.TestEntiyBaseFacade;
 import org.application_example.domain.Department;
 import org.application_example.infra.DummySecurityService;
@@ -19,8 +17,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.core.infra.exception.common.GenericException;
-
+import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
@@ -37,11 +34,18 @@ class EntiyBaseFacadeHappyPathTest {
 	@DisplayName("Test the constructor values")
 	void constructorValuesTest() {
 
+		class GenericError extends BaseApplicationException {
+
+			public GenericError(final Exception exception) {
+				super("Generic error", exception);
+			}
+		}
+
 		// given
 		final InterfaceI18nService i18nService = (code, params) -> "translated!";
 		final InterfaceSecurityService interfaceSecurityService = new DummySecurityService();
 		final InterfaceExceptionAdapterService exceptionTranslatorService = (ex, i18n,
-				directives) -> new GenericException(ex);
+				directives) -> new GenericError(ex);
 
 		// when
 		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);

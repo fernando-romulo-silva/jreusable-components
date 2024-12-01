@@ -64,17 +64,15 @@ public non-sealed interface InterfaceCommandFacade<Entity extends AbstractEntity
          * a {@code SaveEntityOut} object, an updated object.
          * 
          * @param saveEntityIn The object you want to save on the persistence mechanism
-         * 
          * @param directives   Objects used to configure the save operation
          * 
-         * @return The object you saved and updated with the persistence mechanism
          * @throws NullPointerException          If the parameter is null
          * @throws ElementAlreadyExistsException If you try store the entity with same
          *                                       {@code Id}
          * @throws ElementInvalidException       If the entity has constraints errors
          * @throws BaseApplicationException      If an unidentified error happened
          * 
-         * @return SaveEntityOut The persistence mechanism resulted in a save operation
+         * @return An {@code SaveEntityOut}, an saved object
          */
         @Valid
         @NotNull(message = NULL_POINTER_EXCEPTION_MSG)
@@ -97,7 +95,7 @@ public non-sealed interface InterfaceCommandFacade<Entity extends AbstractEntity
          * @throws ElementInvalidException       If an entity has constraints errors
          * @throws BaseApplicationException      If an unidentified error happened
          * 
-         * @return An a collection of updated object with the persistence mechanism
+         * @return An group of objects, {@code SaveEntitiesOut}, of saved objects
          */
         @Valid
         @NotNull(message = NULL_POINTER_EXCEPTION_MSG)
@@ -106,8 +104,7 @@ public non-sealed interface InterfaceCommandFacade<Entity extends AbstractEntity
                         @Nullable final Object... directives);
 
         /**
-         * Update a {@code UpdateEntityIn} object on the persistence mechanism and
-         * returns a {@code UpdateEntityOut} object, an updated object.
+         * Update a {@code UpdateEntityIn} object on the persistence mechanism
          * 
          * @param updateEntityIn The object you want to save on the persistence
          *                       mechanism

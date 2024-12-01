@@ -1,8 +1,5 @@
 package org.reusablecomponents.base.core.application.query.entity.nonpaged;
 
-import static java.util.Optional.ofNullable;
-import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
-import static org.reusablecomponents.base.core.infra.util.Functions.createNullPointerException;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.COUNT_ALL;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_ALL;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_BY_ID;
@@ -11,14 +8,12 @@ import static org.reusablecomponents.base.core.infra.util.operation.QueryOperati
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import org.reusablecomponents.base.core.application.base.BaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -31,15 +26,15 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(QueryFacade.class);
 
-	protected final Function<QueryIdIn, ExistsResult> existsByIdFunction;
+	protected final BiFunction<QueryIdIn, Object[], ExistsResult> existsByIdFunction;
 
 	protected final BiFunction<QueryIdIn, Object[], OneResult> findByIdFunction;
 
 	protected final Function<Object[], MultipleResult> findAllFunction;
 
-	protected final Supplier<CountResult> countAllFunction;
+	protected final Function<Object[], CountResult> countAllFunction;
 
-	protected final Supplier<ExistsResult> existsAllFunction;
+	protected final Function<Object[], ExistsResult> existsAllFunction;
 
 	/**
 	 * Default constructor
@@ -62,17 +57,19 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	/**
 	 * Method used to change directives object before use it (findAll method).
 	 * 
-	 * @param directives The object to be changed
+	 * @param directives Objects used to configure the find all query
 	 * 
-	 * @return A new {@code Object[]} object
+	 * @return A {@code Object[]} object
 	 */
 	protected Object[] preFindAll(final Object... directives) {
 
 		// final var formatDirectives = Optional.ofNullable(directives)
+
 		// .map(params -> params.get("format"))
 		// .stream()
 		// .flatMap(Arrays::stream)
 		// .collect(Collectors.toList());
+
 		// .anyMatch("full"::equalsIgnoreCase);
 
 		return directives;
@@ -82,10 +79,11 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * Method used to change multipleResult object after use it (findAll method).
 	 * 
 	 * @param multipleResult The object to be changed
+	 * @param directives     Objects used to configure the find all query
 	 * 
 	 * @return A new {@code MultipleResult} object
 	 */
-	protected MultipleResult posFindAll(final MultipleResult multipleResult) {
+	protected MultipleResult posFindAll(final MultipleResult multipleResult, final Object... directives) {
 		return multipleResult;
 	}
 
@@ -93,14 +91,13 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * Method used to handle find all errors.
 	 * 
 	 * @param exception  Exception thrown by find all operation
-	 * @param directives Objects used to configure the find all operation
+	 * @param directives Objects used to configure the find all query
 	 * 
 	 * @return The handled exception
 	 */
 	protected Exception errorFindAll(
 			final Exception exception,
 			final Object... directives) {
-
 		return exception;
 	}
 
@@ -108,43 +105,10 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * {@inheritDoc}
 	 */
 	@Override
-	public MultipleResult findAll(@Nullable final Object... directives) {
-
-		final var session = securityService.getSession();
-		final var simpleName = getEntityClazz().getSimpleName();
-
-		LOGGER.debug("Findind all '{}' object, session '{}', and directives '{}'", simpleName, session, directives);
-
-		final var finalDirectives = preFindAll(directives);
-
-		LOGGER.debug("Findind all finalDirectives '{}' ", finalDirectives);
-
-		final MultipleResult multipleResult;
-
-		try {
-			multipleResult = findAllFunction.apply(finalDirectives);
-		} catch (final Exception ex) {
-
-			final var finalException = errorFindAll(ex, finalDirectives);
-
-			LOGGER.debug("Error find all directives '{}', session '{}', error '{}'",
-					finalDirectives, session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					finalException,
-					i18nService,
-					FIND_ALL_ENTITIES,
-					getEntityClazz(),
-					finalDirectives);
-		}
-
-		LOGGER.debug("Find all result '{}'", multipleResult);
-
-		final var finalMultipleResult = posFindAll(multipleResult);
-
-		LOGGER.debug("Found all '{}', session '{}'", getEntityClazz().getSimpleName(), session);
-
-		return finalMultipleResult;
+	public MultipleResult findAll(final Object... directives) {
+		return executeOperation(
+				FIND_ALL_ENTITIES, this::preFindAll, this::posFindAll,
+				findAllFunction::apply, this::errorFindAll, directives);
 	}
 
 	/**
@@ -176,7 +140,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * 
 	 * @return A new {@code QueryIdIn} object
 	 */
-	protected OneResult posFindBy(final OneResult oneResult) {
+	protected OneResult posFindBy(final OneResult oneResult, final Object... directives) {
 		return oneResult;
 	}
 
@@ -193,7 +157,6 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 			final QueryIdIn queryIdIn,
 			final Exception exception,
 			final Object... directives) {
-
 		return exception;
 	}
 
@@ -201,55 +164,21 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * {@inheritDoc}
 	 */
 	@Override
-	public OneResult findById(@NotNull final QueryIdIn queryIdIn, @Nullable final Object... directives) {
-
-		final var session = securityService.getSession();
-
-		LOGGER.debug("Findind by '{}', directives '{}', and session '{}'", queryIdIn, directives, session);
-
-		final var preQueryIdIn = preFindBy(queryIdIn, directives);
-
-		final var finalQueryIdIn = ofNullable(preQueryIdIn)
-				.orElseThrow(createNullPointerException(i18nService, "preQueryIdIn"));
-
-		LOGGER.debug("Findind by finalQueryIdIn '{}'", finalQueryIdIn);
-
-		final OneResult oneResult;
-
-		try {
-			oneResult = findByIdFunction.apply(finalQueryIdIn, directives);
-		} catch (final Exception ex) {
-
-			final var finalException = errorFindBy(finalQueryIdIn, ex, directives);
-
-			LOGGER.debug("Error find by id '{}', session '{}', error '{}'",
-					finalQueryIdIn, session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					finalException,
-					i18nService,
-					FIND_ENTITY_BY_ID,
-					getEntityClazz(),
-					finalQueryIdIn);
-		}
-
-		LOGGER.debug("Find by id result '{}'", oneResult);
-
-		final var finalOneResult = posFindBy(oneResult);
-
-		LOGGER.debug("Found by id '{}', result '{}', session '{}'", finalQueryIdIn, finalOneResult, session);
-
-		return finalOneResult;
+	public OneResult findById(@NotNull final QueryIdIn queryIdIn, final Object... directives) {
+		return executeOperation(
+				queryIdIn, FIND_ENTITY_BY_ID, this::preFindBy, this::posFindBy,
+				findByIdFunction::apply, this::errorFindBy, directives);
 	}
 
 	/**
 	 * Method used to change queryIdIn object before use it (existsBy method).
 	 * 
-	 * @param queryIdIn The object to be changed
+	 * @param queryIdIn  The entity id
+	 * @param directives Params used to configure the query
 	 * 
 	 * @return A new {@code QueryIdIn} object
 	 */
-	protected QueryIdIn preExistsBy(final QueryIdIn queryIdIn) {
+	protected QueryIdIn preExistsBy(final QueryIdIn queryIdIn, final Object... directives) {
 		return queryIdIn;
 	}
 
@@ -257,25 +186,27 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * Method used to change existsResult object after use it (existsBy method).
 	 * 
 	 * @param existsResult The object to be changed
+	 * @param directives   Params used to configure the query
 	 * 
 	 * @return A new {@code ExistsResult} object
 	 */
-	protected ExistsResult posExistsBy(final ExistsResult existsResult) {
+	protected ExistsResult posExistsBy(final ExistsResult existsResult, final Object... directives) {
 		return existsResult;
 	}
 
 	/**
 	 * Method used to handle exists by id operation.
 	 * 
-	 * @param queryIdIn The object used to exists by id
-	 * @param exception Exception thrown by exists by id operation
+	 * @param queryIdIn  The object used to exists by id
+	 * @param exception  Exception thrown by exists by id operation
+	 * @param directives Params used to configure the query
 	 * 
 	 * @return The handled exception
 	 */
-	protected Exception errorExistBy(
+	protected Exception errorExistsBy(
 			final QueryIdIn queryIdIn,
-			final Exception exception) {
-
+			final Exception exception,
+			final Object... directives) {
 		return exception;
 	}
 
@@ -283,45 +214,21 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ExistsResult existsById(@NotNull final QueryIdIn queryIdIn) {
+	public ExistsResult existsById(@NotNull final QueryIdIn queryIdIn, final Object... directives) {
+		return executeOperation(
+				queryIdIn, EXISTS_BY_ID, this::preExistsBy,
+				this::posExistsBy, existsByIdFunction::apply, this::errorExistsBy, directives);
+	}
 
-		final var session = securityService.getSession();
-
-		LOGGER.debug("Existing by id, queryIdIn '{}' and session '{}'", queryIdIn, session);
-
-		final var preQueryIdIn = preExistsBy(queryIdIn);
-
-		final var finalQueryIdIn = ofNullable(preQueryIdIn)
-				.orElseThrow(createNullPointerException(i18nService, "preQueryIdIn"));
-
-		LOGGER.debug("Existing by id, finalQueryIdIn '{}' ", finalQueryIdIn);
-
-		final ExistsResult existsResult;
-
-		try {
-			existsResult = existsByIdFunction.apply(finalQueryIdIn);
-		} catch (final Exception ex) {
-
-			final var finalException = errorExistBy(finalQueryIdIn, ex);
-
-			LOGGER.debug("Error exists by id '{}', session '{}', error '{}'",
-					finalQueryIdIn, session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					finalException,
-					i18nService,
-					EXISTS_BY_ID,
-					getEntityClazz(),
-					finalQueryIdIn);
-		}
-
-		LOGGER.debug("Existing by id, existsResult '{}'", existsResult);
-
-		final var finalExistsResult = posExistsBy(existsResult);
-
-		LOGGER.debug("Existed by '{}', result '{}', session '{}'", finalQueryIdIn, finalExistsResult, session);
-
-		return finalExistsResult;
+	/**
+	 * Method used to change directives object before use it (CountAll method).
+	 * 
+	 * @param directives Objects used to configure the find all query
+	 * 
+	 * @return A {@code Object[]} object
+	 */
+	protected Object[] preCountdAll(final Object... directives) {
+		return directives;
 	}
 
 	/**
@@ -331,7 +238,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * 
 	 * @return A new {@code CountResult} object
 	 */
-	protected CountResult posCountAll(final CountResult countResult) {
+	protected CountResult posCountAll(final CountResult countResult, final Object... directives) {
 		return countResult;
 	}
 
@@ -342,7 +249,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * 
 	 * @return The handled exception
 	 */
-	protected Exception errorCountAll(final Exception exception) {
+	protected Exception errorCountAll(final Exception exception, final Object... directives) {
 		return exception;
 	}
 
@@ -350,40 +257,32 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * {@inheritDoc}
 	 */
 	@Override
-	public CountResult countAll() {
+	public CountResult countAll(final Object... directives) {
+		return executeOperation(
+				COUNT_ALL, this::preCountdAll, this::posCountAll,
+				countAllFunction::apply, this::errorFindAll, directives);
+	}
 
-		final var session = securityService.getSession();
+	/**
+	 * Method used to change directives object before use it (CountAll method).
+	 * 
+	 * @param directives Objects used to configure the find all query
+	 * 
+	 * @return A {@code Object[]} object
+	 */
+	protected Object[] preExistsAll(final Object... directives) {
+		return directives;
+	}
 
-		LOGGER.debug("Counting all, entity '{}' and session '{}'", getEntityClazz().getSimpleName(), session);
-
-		final CountResult countResult;
-
-		try {
-			countResult = countAllFunction.get();
-		} catch (final Exception ex) {
-
-			final var finalException = errorCountAll(ex);
-
-			LOGGER.debug("Error counting all, entity '{}', session '{}', error '{}'",
-					getEntityClazz().getSimpleName(), session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					finalException,
-					i18nService,
-					COUNT_ALL,
-					getEntityClazz());
-		}
-
-		LOGGER.debug("Count all result '{}'", countResult);
-
-		final var finalCountResult = posCountAll(countResult);
-
-		LOGGER.debug("Counted all entity '{}', result '{}', and session '{}'",
-				getEntityClazz().getSimpleName(),
-				finalCountResult,
-				session);
-
-		return finalCountResult;
+	/**
+	 * Method used to change countResult object after use it (countAll method).
+	 * 
+	 * @param countResult The object to be changed
+	 * 
+	 * @return A new {@code ExistsResult} object
+	 */
+	protected ExistsResult posExistsAll(final ExistsResult countResult, final Object... directives) {
+		return countResult;
 	}
 
 	/**
@@ -393,7 +292,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * 
 	 * @return The handled exception
 	 */
-	protected Exception errorExistAll(final Exception exception) {
+	protected Exception errorExistsAll(final Exception exception, final Object... directives) {
 		return exception;
 	}
 
@@ -401,39 +300,9 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ExistsResult existsAll() {
-
-		final var session = securityService.getSession();
-
-		LOGGER.debug("Existing all '{}', session '{}'", getEntityClazz().getSimpleName(), session);
-
-		final ExistsResult existsResult;
-
-		try {
-			existsResult = existsAllFunction.get();
-		} catch (final Exception ex) {
-			final var finalException = errorExistAll(ex);
-
-			LOGGER.debug("Error exists all, entity '{}', session '{}', error '{}'",
-					getEntityClazz().getSimpleName(), session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					finalException,
-					i18nService,
-					EXISTS_ALL,
-					getEntityClazz());
-		}
-
-		LOGGER.debug("Exists all result '{}'", existsResult);
-
-		final var finalExistsResult = posExistsBy(existsResult);
-
-		LOGGER.debug(
-				"Existed all '{}', result '{}', session '{}'",
-				getEntityClazz().getSimpleName(),
-				finalExistsResult,
-				session);
-
-		return finalExistsResult;
+	public ExistsResult existsAll(final Object... directives) {
+		return executeOperation(
+				EXISTS_ALL, this::preExistsAll, this::posExistsAll,
+				existsAllFunction::apply, this::errorExistsAll, directives);
 	}
 }

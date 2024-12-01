@@ -169,24 +169,24 @@ public interface InterfaceNonPagedFacade<Entity extends AbstractEntity<Id>, Id, 
      * {@inheritDoc}
      */
     @Override
-    default ExistsResult existsById(final QueryIdIn queryIdIn) {
-        return getEntityQueryFacade().existsById(queryIdIn);
+    default ExistsResult existsById(final QueryIdIn queryIdIn, final Object... directives) {
+        return getEntityQueryFacade().existsById(queryIdIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default CountResult countAll() {
-        return getEntityQueryFacade().countAll();
+    default CountResult countAll(final Object... directives) {
+        return getEntityQueryFacade().countAll(directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default ExistsResult existsAll() {
-        return getEntityQueryFacade().existsAll();
+    default ExistsResult existsAll(final Object... directives) {
+        return getEntityQueryFacade().existsAll(directives);
     }
 
     /**

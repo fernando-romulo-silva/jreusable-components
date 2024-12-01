@@ -19,7 +19,7 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
     /**
      * Function that executes exists by id algorithm
      */
-    public Function<QueryIdIn, ExistsResult> existsByIdFunction;
+    public BiFunction<QueryIdIn, Object[], ExistsResult> existsByIdFunction;
 
     /**
      * Function that executes find by id algorithm
@@ -34,12 +34,12 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
     /**
      * Function that executes count all algorithm
      */
-    public Supplier<CountResult> countAllFunction;
+    public Function<Object[], CountResult> countAllFunction;
 
     /**
      * Function that executes exist all algorithm
      */
-    public Supplier<ExistsResult> existsAllFunction;
+    public Function<Object[], ExistsResult> existsAllFunction;
 
     /**
      * Default constructor.

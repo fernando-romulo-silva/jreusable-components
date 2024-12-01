@@ -23,11 +23,11 @@ public class JakartaQueryFacade<Entity extends AbstractEntity<Id>, Id>
 
 		super(new QueryFacadeBuilder<>($ -> {
 
-			$.existsByIdFunction = id -> repository.findById(id).isPresent();
+			$.existsByIdFunction = (id, directives) -> repository.findById(id).isPresent();
 			$.findByIdFunction = (id, directives) -> repository.findById(id);
 			$.findAllFunction = directives -> repository.findAll();
-			$.countAllFunction = () -> repository.findAll().count();
-			$.existsAllFunction = () -> repository.findAll().count() > 0;
+			$.countAllFunction = directives -> repository.findAll().count();
+			$.existsAllFunction = directives -> repository.findAll().count() > 0;
 
 		}));
 

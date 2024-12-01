@@ -19,7 +19,8 @@ public class EntityQueryFacadeList<Entity extends AbstractEntity<Id>, Id>
 
         super(new QueryFacadeBuilder<>($ -> {
 
-            $.existsByIdFunction = id -> repository.stream().anyMatch(entity -> Objects.equals(entity.getId(), id));
+            $.existsByIdFunction = (id, directives) -> repository.stream()
+                    .anyMatch(entity -> Objects.equals(entity.getId(), id));
 
             $.findByIdFunction = (id, params) -> repository.stream()
                     .filter(entity -> Objects.equals(entity.getId(), id))
@@ -28,12 +29,11 @@ public class EntityQueryFacadeList<Entity extends AbstractEntity<Id>, Id>
 
             $.findAllFunction = params -> repository.stream().toList();
 
-            $.countAllFunction = () -> repository.stream().count();
-            $.existsAllFunction = () -> repository.stream().count() > 0;
+            $.countAllFunction = directives -> repository.stream().count();
+            $.existsAllFunction = directives -> repository.stream().count() > 0;
 
             // others --------------------------------
             $.securityService = new DummySecurityService();
-            // $.publisherService = new LoggerPublisherSerice();
             $.exceptionAdapterService = new ExceptionAdapterListService();
             $.i18nService = new JavaSEI18nService();
         }));

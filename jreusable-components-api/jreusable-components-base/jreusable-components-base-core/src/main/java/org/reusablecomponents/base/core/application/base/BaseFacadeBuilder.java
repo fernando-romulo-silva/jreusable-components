@@ -2,10 +2,11 @@ package org.reusablecomponents.base.core.application.base;
 
 import static java.util.Objects.nonNull;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.core.infra.exception.common.GenericException;
+import org.reusablecomponents.base.core.infra.exception.common.UnexpectedException;
 import org.reusablecomponents.base.security.DefaultSecurityService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
@@ -50,9 +51,8 @@ public class BaseFacadeBuilder {
 
         securityService = nonNull(securityService) ? securityService : new DefaultSecurityService();
 
-        exceptionAdapterService = nonNull(exceptionAdapterService)
-                ? exceptionAdapterService
-                : (paramException, paramI18nService, directives) -> new GenericException(paramException);
+        exceptionAdapterService = Optional.ofNullable(exceptionAdapterService)
+                .orElseThrow(() -> new IllegalArgumentException("You need a 'exceptionAdapterService'"));
 
     }
 }

@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.domain.AbstractEntityBuilder;

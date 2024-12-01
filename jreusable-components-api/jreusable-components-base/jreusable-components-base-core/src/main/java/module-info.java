@@ -23,6 +23,9 @@ open module org.reusablecomponent.base.core {
     // -- base facade
     exports org.reusablecomponents.base.core.application.base;
 
+    // -- empty facade
+    exports org.reusablecomponents.base.core.application.empty;
+
     // -- command facades
     exports org.reusablecomponents.base.core.application.command.entity;
 

@@ -31,11 +31,11 @@ public class SpringQueryFacade<Entity extends AbstractEntity<Id>, Id>
 
 		super(new QueryFacadeBuilder<>($ -> {
 
-			$.existsByIdFunction = repository::existsById;
+			$.existsByIdFunction = (id, directives) -> repository.existsById(id);
 			$.findByIdFunction = (id, directives) -> repository.findById(id);
 			$.findAllFunction = directives -> repository.findAll();
-			$.countAllFunction = repository::count;
-			$.existsAllFunction = () -> repository.count() > 0;
+			$.countAllFunction = directives -> repository.count();
+			$.existsAllFunction = directives -> repository.count() > 0;
 
 			// services
 			$.i18nService = i18Service;

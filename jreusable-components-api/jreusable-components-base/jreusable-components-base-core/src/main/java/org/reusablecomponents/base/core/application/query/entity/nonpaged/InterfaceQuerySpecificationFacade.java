@@ -34,7 +34,7 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
      * @param specification Object {@code Specification} used to filter query's
      *                      result
      * 
-     * @param directives    Params used to configure the query's result
+     * @param directives    Params used to configure the query
      * 
      * @throws NullPointerException     If the parameter 'specification' is null
      * @throws ElementNotFoundException If you try to retrieve an entity that
@@ -50,7 +50,7 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
      * 
      * @param specification Object {@code Specification} used to filter query's
      *                      result
-     * @param directives    Params used to configure the query's result
+     * @param directives    Params used to configure the query
      * 
      * @throws NullPointerException     If the parameter 'specification' is null
      * @throws ElementNotFoundException If you try to retrieve an entity that
@@ -66,25 +66,27 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
      * 
      * @param specification Object {@code Specification} used to filter query's
      *                      result
+     * @param directives    Params used to configure the query
      * 
      * @throws NullPointerException     If the parameter 'specification' is null
      * @throws BaseApplicationException If an unidentified error happened
      * 
      * @return Return a {@code ExistsResult} object
      */
-    ExistsResult existsBySpec(final Specification specification);
+    ExistsResult existsBySpec(final Specification specification, final Object... directives);
 
     /**
      * Count how many entities there are by specification
      * 
      * @param specification Object {@code Specification} used to filter query's
      *                      result
+     * @param directives    Params used to configure the query
      * 
      * @throws NullPointerException     If the parameter 'specification' is null
      * @throws BaseApplicationException If an unidentified error happened
      * 
      * @return Return a {@code CountResult} object
      */
-    CountResult countBySpec(final Specification specification);
+    CountResult countBySpec(final Specification specification, final Object... directives);
 
 }

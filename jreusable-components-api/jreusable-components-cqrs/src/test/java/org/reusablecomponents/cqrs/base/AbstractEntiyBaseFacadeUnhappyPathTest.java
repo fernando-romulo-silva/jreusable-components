@@ -4,7 +4,7 @@ import static java.text.MessageFormat.format;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
-import org.apptest.application.TestEntiyBaseFacade;
+import org.apptest.domain.Guest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -15,6 +15,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.reusablecomponents.base.core.application.empty.EmptyFacade;
 
 @Disabled
 @Tag("unit")
@@ -30,7 +31,7 @@ class AbstractEntiyBaseFacadeUnhappyPathTest {
 	void publishInvalidOperationTest() {
 
 		// given
-		final var facade = new TestEntiyBaseFacade();
+		final EmptyFacade<Guest, Long> facade = null;
 
 		// when
 		assertThatThrownBy(() -> {
@@ -48,7 +49,7 @@ class AbstractEntiyBaseFacadeUnhappyPathTest {
 	void publishInvalidDirectivesTest() {
 
 		// given
-		final var facade = new TestEntiyBaseFacade();
+		final EmptyFacade<Guest, Long> facade = null;
 
 		final Object[] nullArray = null;
 

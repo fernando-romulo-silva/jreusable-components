@@ -43,7 +43,7 @@ public interface InterfaceSpringReactiveQueryFacade<Entity extends AbstractEntit
   @Override
   @Cacheable
   @Transactional(readOnly = true, propagation = SUPPORTS)
-  Mono<Boolean> existsById(final Publisher<Id> id);
+  Mono<Boolean> existsById(final Publisher<Id> id, final Object... directives);
 
   /**
    * {@inheritDoc}
@@ -51,5 +51,5 @@ public interface InterfaceSpringReactiveQueryFacade<Entity extends AbstractEntit
   @Override
   @Cacheable
   @Transactional(readOnly = true, propagation = SUPPORTS)
-  Mono<Long> countAll();
+  Mono<Long> countAll(final Object... directives);
 }

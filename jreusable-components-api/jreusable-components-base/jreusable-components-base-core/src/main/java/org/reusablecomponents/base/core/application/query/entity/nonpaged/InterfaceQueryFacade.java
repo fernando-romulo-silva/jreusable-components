@@ -37,7 +37,7 @@ public non-sealed interface InterfaceQueryFacade<Entity extends AbstractEntity<I
    * Find and retrieve a {@code OneResult} object by id
    * 
    * @param queryIdIn  The entity id
-   * @param directives Params used to configure the query's result
+   * @param directives Params used to configure the query
    * 
    * @throws NullPointerException           If the parameter 'queryIdIn' is null
    * @throws ElementWithIdNotFoundException If you try to retrieve an entity that
@@ -53,9 +53,8 @@ public non-sealed interface InterfaceQueryFacade<Entity extends AbstractEntity<I
   /**
    * Find and retrieve all objects, be carefull with it.
    * 
-   * @param directives Params used to configure the query's result
+   * @param directives Params used to configure the query
    * 
-   * @throws NullPointerException     If the parameter 'queryIdIn' is null
    * @throws BaseApplicationException If an unidentified error happened
    * 
    * @return Return a {@code OneResult} object
@@ -65,31 +64,36 @@ public non-sealed interface InterfaceQueryFacade<Entity extends AbstractEntity<I
   /**
    * Check if an entity exists with the provided ID.
    * 
-   * @param queryIdIn The entity id
+   * @param queryIdIn  The entity id
+   * @param directives Params used to configure the query
    * 
    * @throws NullPointerException     If the parameter 'queryIdIn' is null
-   * 
    * @throws BaseApplicationException If an unidentified error happened
    * 
    * @return Return a {@code ExistsResult} object
    */
-  ExistsResult existsById(final QueryIdIn queryIdIn);
+  ExistsResult existsById(@NotNull(message = NULL_POINTER_EXCEPTION_MSG) final QueryIdIn queryIdIn,
+      final Object... directives);
 
   /**
    * Check if there exists at least an entity.
    * 
+   * @param directives Params used to configure the query
+   * 
    * @throws BaseApplicationException If an unidentified error happened
    * 
    * @return Return a {@code ExistsResult} object
    */
-  ExistsResult existsAll();
+  ExistsResult existsAll(final Object... directives);
 
   /**
    * Count how many entities there are.
+   * 
+   * @param directives Params used to configure the query
    * 
    * @throws BaseApplicationException If an unidentified error happened
    * 
    * @return Return a {@code CountResult} object
    */
-  CountResult countAll();
+  CountResult countAll(final Object... directives);
 }

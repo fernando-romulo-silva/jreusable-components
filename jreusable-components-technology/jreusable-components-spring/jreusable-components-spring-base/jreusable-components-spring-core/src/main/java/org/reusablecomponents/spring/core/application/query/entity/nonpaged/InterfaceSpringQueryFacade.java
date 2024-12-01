@@ -41,7 +41,7 @@ public interface InterfaceSpringQueryFacade<Entity extends AbstractEntity<Id>, I
   @Override
   @Cacheable
   @Transactional(readOnly = true, propagation = SUPPORTS)
-  Boolean existsById(final Id id);
+  Boolean existsById(final Id id, final Object... directives);
 
   /**
    * {@inheritDoc}
@@ -49,5 +49,5 @@ public interface InterfaceSpringQueryFacade<Entity extends AbstractEntity<Id>, I
   @Override
   @Cacheable
   @Transactional(readOnly = true, propagation = SUPPORTS)
-  Long countAll();
+  Long countAll(final Object... directives);
 }

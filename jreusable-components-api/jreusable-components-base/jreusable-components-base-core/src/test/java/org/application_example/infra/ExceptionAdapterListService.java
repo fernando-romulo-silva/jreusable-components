@@ -7,6 +7,7 @@ import org.reusablecomponents.base.core.infra.exception.common.ElementConflictEx
 import org.reusablecomponents.base.core.infra.exception.common.ElementInvalidException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementNotFoundException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
+import org.reusablecomponents.base.core.infra.exception.common.UnexpectedException;
 import org.reusablecomponents.base.core.infra.util.operation.CommandOperation;
 import org.reusablecomponents.base.core.infra.util.operation.QueryOperation;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
@@ -46,7 +47,7 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
                 && directives[0] instanceof QueryOperation queryOperation) {
 
             return switch (queryOperation) {
-                case FIND_ENTITY_BY_ID -> null;
+                case FIND_ENTITY_BY_ID -> finByExceptionHandler(ex, i18nService);
 
                 default -> throw new IllegalArgumentException("Unexpected value: " + queryOperation);
             };
@@ -107,6 +108,17 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
             case IllegalArgumentException ex2 -> new ElementWithIdNotFoundException(clazz, i18nService, ex, object);
             case IllegalStateException ex2 -> new ElementInvalidException(i18nService, ex, object);
             case ArrayStoreException ex2 -> new ElementConflictException(i18nService, ex, object);
+
+            default -> throw new IllegalArgumentException("Unexpected exception", ex);
+        };
+    }
+
+    private BaseApplicationException finByExceptionHandler(
+            final Exception ex,
+            final InterfaceI18nService i18nService) {
+
+        return switch (ex) {
+            case IllegalArgumentException ex2 -> new UnexpectedException(i18nService, ex);
 
             default -> throw new IllegalArgumentException("Unexpected exception", ex);
         };

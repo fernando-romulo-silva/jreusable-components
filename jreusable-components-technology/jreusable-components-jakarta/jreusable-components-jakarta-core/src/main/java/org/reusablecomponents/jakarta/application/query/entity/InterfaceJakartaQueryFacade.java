@@ -42,12 +42,12 @@ public interface InterfaceJakartaQueryFacade<Entity extends AbstractEntity<Id>, 
          */
         @Override
         @Transactional(value = SUPPORTS)
-        Long countAll();
+        Long countAll(final Object... directives);
 
         /**
          * {@inheritDoc}
          */
         @Override
         @Transactional(value = SUPPORTS)
-        Boolean existsById(final Id id);
+        Boolean existsById(final Id id, final Object... directives);
 }

@@ -6,14 +6,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
-import java.util.stream.Stream;
-
 import org.apache.commons.lang3.concurrent.ConcurrentUtils;
-import org.apptest.application.TestEntiyBaseFacade;
-import org.apptest.application.TestEntiyNoPublishBaseFacade;
-import org.apptest.domain.Department;
-import org.apptest.domain.Project;
-import org.apptest.infra.DummySecurityService;
+import org.application_example.infra.LoggerPublisherSerice;
+import org.apptest.domain.Guest;
+import org.apptest.domain.Hotel;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -26,15 +22,12 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.reusablecomponents.base.core.application.base.BaseFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.application.empty.EmptyFacade;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.core.infra.exception.common.GenericException;
-
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
 import org.reusablecomponents.messaging.InterfaceEventPublisherSerice;
-import org.reusablecomponents.messaging.logger.LoggerPublisherSerice;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Level;
@@ -62,16 +55,17 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 		};
 
 		final InterfaceI18nService i18nService = (code, params) -> "translated!";
-		final InterfaceSecurityService interfaceSecurityService = new DummySecurityService();
-		final InterfaceExceptionAdapterService exceptionTranslatorService = (ex, i18n,
-				directives) -> new GenericException(ex);
+		final InterfaceSecurityService interfaceSecurityService = null; // new DummySecurityService();
+		final InterfaceExceptionAdapterService exceptionTranslatorService = null; // (ex, i18n, directives) -> new
+																					// UnexpectedException(ex);
 
 		// when
-		final var facade = new TestEntiyBaseFacade(
-				publisherService,
-				i18nService,
-				interfaceSecurityService,
-				exceptionTranslatorService);
+		final BaseFacade facade = null;
+		// new TestEntiyBaseFacade(
+		// publisherService,
+		// i18nService,
+		// interfaceSecurityService,
+		// exceptionTranslatorService);
 
 		// then
 		assertThat(facade)
@@ -82,8 +76,9 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 		// then
 		assertThat(facade)
 				.extracting("entityClazz", "idClazz")
-				.as(format("Check the entityClazz ''{0}'' and idClazz ''{1}''", Department.class, String.class))
-				.containsExactly(Department.class, String.class);
+				.as(format("Check the entityClazz ''{0}'' and idClazz ''{1}''",
+						Guest.class, String.class))
+				.containsExactly(Guest.class, String.class);
 	}
 
 	@Test
@@ -92,21 +87,21 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 	void checkValuesTest() {
 
 		// given
-		final var facade = new TestEntiyBaseFacade();
+		final BaseFacade<Guest, Long> facade = null; // new TestEntiyBaseFacade();
 
 		assertThat(facade)
 				// when
 				.extracting(BaseFacade::getEntityClazz)
 				// then
 				.isNotNull()
-				.isEqualTo(Department.class);
+				.isEqualTo(Guest.class);
 
 		assertThat(facade)
 				// when
 				.extracting(BaseFacade::getIdClazz)
 				// then
 				.isNotNull()
-				.isEqualTo(String.class);
+				.isEqualTo(Long.class);
 	}
 
 	@Test
@@ -115,11 +110,12 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 	void checkServicesTest() {
 
 		// given
-		final var facade = new TestEntiyBaseFacade();
+		final BaseFacade<Guest, Long> facade = null;
 
 		assertThat(facade)
 				// when
-				.extracting(TestEntiyBaseFacade::getSecurityService)
+				.extracting(
+						BaseFacade::getSecurityService)
 				// then
 				.isNotNull()
 				.extracting(InterfaceSecurityService::getUserName)
@@ -127,7 +123,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 
 		// assertThat(facade)
 		// // when
-		// .extracting(TestEntiyBaseFacade::getPublisherService)
+		// .extracting(BaseFacade::getPublisherService)
 		// // then
 		// .isNotNull();
 
@@ -158,7 +154,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 		final var facadeLogger = (Logger) LoggerFactory.getLogger(LoggerPublisherSerice.class);
 		facadeLogger.addAppender(listAppender);
 
-		final var facade = new TestEntiyBaseFacade();
+		final EmptyFacade<Guest, Long> facade = null;
 
 		// when
 		// facade.publishEvent(() -> "SaveIn", () -> null, SAVE_ENTITY);
@@ -187,7 +183,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 		publishServiceLogger.addAppender(listAppender);
 		facadeLogger.addAppender(listAppender);
 
-		final var facade = new TestEntiyNoPublishBaseFacade();
+		final BaseFacade facade = null;
 
 		// when
 		// facade.publishEvent(() -> "SaveIn", () -> "SaveOut", SAVE_ENTITY);
@@ -217,13 +213,14 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 		publishServiceLogger.addAppender(listAppender);
 		facadeLogger.addAppender(listAppender);
 
-		final var project = new Project(1L, "Project 1", null);
+		final Hotel project = null; // new Hotel(1L, "Project 1", null);
 
 		assertThat(project)
-				.extracting(Project::isPublishable)
+				.extracting(
+						Hotel::isPublishable)
 				.isEqualTo(Boolean.FALSE);
 
-		final var facade = new TestEntiyBaseFacade() {
+		final var facade = new EmptyFacade<>() {
 
 			// @Override
 			// protected boolean isPublishEvents(final Object... directives) {

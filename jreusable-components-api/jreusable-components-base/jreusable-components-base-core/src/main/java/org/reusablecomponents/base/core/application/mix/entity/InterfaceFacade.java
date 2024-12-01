@@ -210,15 +210,15 @@ public interface InterfaceFacade<Entity extends AbstractEntity<Id>, Id, // basic
      * {@inheritDoc}
      */
     @Override
-    default ExistsResult existsById(final QueryIdIn queryIdIn) {
-        return getEntityQueryFacade().existsById(queryIdIn);
+    default ExistsResult existsById(final QueryIdIn queryIdIn, final Object... directives) {
+        return getEntityQueryFacade().existsById(queryIdIn, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default ExistsResult existsAll() {
+    default ExistsResult existsAll(final Object... directives) {
         return getEntityQueryFacade().existsAll();
     }
 
@@ -234,7 +234,7 @@ public interface InterfaceFacade<Entity extends AbstractEntity<Id>, Id, // basic
      * {@inheritDoc}
      */
     @Override
-    default CountResult countAll() {
+    default CountResult countAll(final Object... directives) {
         return getEntityQueryFacade().countAll();
     }
 

@@ -21,6 +21,8 @@ public final class ExceptionMessages {
 
     public static final String ID_ALREADY_EXITS_EXCEPTION_MSG = "{exception.idAlreadyExistsException}";
 
+    public static final String UNEXPECTED_ERROR_MSG = "{exception.unexpectedException}";
+
     private ExceptionMessages() {
         throw new IllegalStateException("You cannot instanciate this class");
     }

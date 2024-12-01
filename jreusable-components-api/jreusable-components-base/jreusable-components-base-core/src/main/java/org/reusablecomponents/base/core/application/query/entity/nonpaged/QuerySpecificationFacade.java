@@ -99,7 +99,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 */
 	@Override
 	public MultipleResult findBySpec(@NotNull final Specification specification,
-			@NotNull final Object... directives) {
+			final Object... directives) {
 
 		final var session = securityService.getSession();
 
