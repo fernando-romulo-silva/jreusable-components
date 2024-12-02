@@ -16,15 +16,9 @@ public non-sealed class EmptyFacade<Entity extends AbstractEntity<Id>, Id>
 			final InterfaceExceptionAdapterService exceptionTranslatorService) {
 
 		super(new BaseFacadeBuilder($ -> {
-
 			$.i18nService = i18nService;
 			$.securityService = securityService;
 			$.exceptionAdapterService = exceptionTranslatorService;
-		}));
-	}
-
-	public EmptyFacade() {
-		super(new BaseFacadeBuilder($ -> {
 		}));
 	}
 }

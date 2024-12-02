@@ -36,11 +36,11 @@ public class SpringQueryPaginationSpecificationFacade<Entity extends AbstractEnt
                         final InterfaceI18nService i18Service) {
                 super(new QueryPaginationSpecificationFacadeBuilder<>($ -> {
 
-                        $.findBySpecificationFunction = (specification, pageable, directives) -> repository.findBy(
+                        $.findBySpecificationFunction = (pageable, specification, directives) -> repository.findBy(
                                         specification,
                                         pageable);
 
-                        $.findOneByFunctionWithOrder = (specification, sort, directives) -> repository.findOneBy(
+                        $.findOneByFunctionWithOrder = (sort, specification, directives) -> repository.findOneBy(
                                         specification,
                                         sort);
 

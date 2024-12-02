@@ -25,7 +25,7 @@ public class QueryPaginationFacadeBuilder<Entity extends AbstractEntity<Id>, Id,
     /**
      * Function that executes find first by a specific order
      */
-    public Function<Sort, OneResult> findFirstFunction;
+    public BiFunction<Sort, Object[], OneResult> findFirstFunction;
 
     /**
      * Default constructor.

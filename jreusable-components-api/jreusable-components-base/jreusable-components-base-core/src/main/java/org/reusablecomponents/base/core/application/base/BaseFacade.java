@@ -4,6 +4,7 @@ import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 import static org.reusablecomponents.base.core.infra.util.Functions.createNullPointerException;
 
+import java.util.Map.Entry;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -17,6 +18,7 @@ import org.reusablecomponents.base.core.application.query.entity.paged.QueryPagi
 import org.reusablecomponents.base.core.application.query.entity.paged.QueryPaginationSpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
+import org.reusablecomponents.base.core.infra.util.QuadFunction;
 import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
@@ -172,6 +174,87 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 			throw exceptionAdapterService.convert(
 					finalException, i18nService, operation, getEntityClazz(), finalIn);
+		}
+
+		LOGGER.debug("{} operation executed, with {} '{}', session '{}', and directives '{}'",
+				operationName, outName, out, session, directives);
+
+		final var posOut = posExecuteFunction.apply(out, directives);
+
+		final var finalOut = ofNullable(posOut)
+				.orElseThrow(createNullPointerException(i18nService, preOutName));
+
+		LOGGER.debug("Pos {} operation with {} '{}', session '{}', and directives '{}'",
+				operationName, finalOutName, finalOut, session, directives);
+
+		return finalOut;
+	}
+
+	/**
+	 * 
+	 * @param <In>
+	 * @param <Out>
+	 * @param in1
+	 * @param operation
+	 * @param preExecuteFunction
+	 * @param posExecuteFunction
+	 * @param executeFunction
+	 * @param errorFunction
+	 * @param directives
+	 * @return
+	 */
+	protected <In1, In2, Out> Out executeOperation(
+			final In1 in1,
+			final In2 in2,
+			final InterfaceOperation operation,
+			final TriFunction<In1, In2, Object[], Entry<In1, In2>> preExecuteFunction,
+			final BiFunction<Out, Object[], Out> posExecuteFunction,
+			final TriFunction<In1, In2, Object[], Out> executeFunction,
+			final QuadFunction<In1, In2, Exception, Object[], Exception> errorFunction,
+			final Object... directives) {
+
+		final var session = securityService.getSession();
+		final var operationName = operation.getName();
+
+		final var inName = operation.getReceiver().concat("In");
+		final var preInName = "pre".concat(inName);
+		final var finalInName = "final".concat(inName);
+
+		final var outName = operation.getReceiver().concat("Out");
+		final var preOutName = "pre".concat(outName);
+		final var finalOutName = "final".concat(outName);
+
+		LOGGER.debug("Pre executing {} operation with {} '{}', session '{}', and directives '{}'",
+				operationName, inName, in1, session, directives);
+
+		final var preInEntry = preExecuteFunction.apply(in1, in2, directives);
+
+		final var preIn1 = preInEntry.getKey();
+		final var preIn2 = preInEntry.getValue();
+
+		final var finalIn1 = ofNullable(preIn1)
+				.orElseThrow(createNullPointerException(i18nService, preInName));
+
+		final var finalIn2 = ofNullable(preIn2)
+				.orElseThrow(createNullPointerException(i18nService, preInName));
+
+		LOGGER.debug("Executing {} operation with {} '{}', session '{}', and directives '{}'",
+				operationName, finalInName, finalIn1, session, directives);
+
+		final Out out;
+
+		try {
+			out = executeFunction.apply(finalIn1, finalIn2, directives);
+		} catch (final Exception ex) {
+
+			final var finalException = errorFunction.apply(finalIn1, in2, ex, directives);
+			final var exceptionClass = getRootCause(finalException).getClass().getSimpleName();
+
+			LOGGER.debug("Error on {} operation with {} '{}', session '{}', error '{}'",
+					operationName, finalInName, finalIn1, session, exceptionClass);
+
+			throw exceptionAdapterService.convert(
+					finalException, i18nService, operation, getEntityClazz(), finalIn1);
 		}
 
 		LOGGER.debug("{} operation executed, with {} '{}', session '{}', and directives '{}'",

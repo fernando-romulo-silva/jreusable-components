@@ -36,7 +36,7 @@ public class SpringQueryPaginationFacade<Entity extends AbstractEntity<Id>, Id>
         super(new QueryPaginationFacadeBuilder<>($ -> {
 
             $.findAllFunction = (pageable, directives) -> repository.findAll(pageable);
-            $.findFirstFunction = sort -> Optional.ofNullable(repository.findAll(sort).iterator().next());
+            $.findFirstFunction = (sort, directives) -> Optional.ofNullable(repository.findAll(sort).iterator().next());
 
             // services
             $.i18nService = i18Service;

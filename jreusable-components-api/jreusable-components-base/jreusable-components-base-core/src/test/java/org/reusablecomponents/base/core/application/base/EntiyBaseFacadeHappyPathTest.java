@@ -20,7 +20,6 @@ import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapte
 import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
-import org.reusablecomponents.base.translation.JavaSEI18nService;
 
 @Tag("unit")
 @DisplayName("Test the EntiyBaseFacade entity test, happy Path :) ")
@@ -28,27 +27,28 @@ import org.reusablecomponents.base.translation.JavaSEI18nService;
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 class EntiyBaseFacadeHappyPathTest {
+	static class GenericError extends BaseApplicationException {
+
+		public GenericError(final Exception exception) {
+			super("Generic error", exception);
+		}
+	}
+
+	final InterfaceI18nService i18nService = (code, params) -> "translated!";
+	final InterfaceSecurityService interfaceSecurityService = new DummySecurityService();
+	final InterfaceExceptionAdapterService exceptionTranslatorService = (ex, i18n,
+			directives) -> new GenericError(ex);
 
 	@Test
 	@Order(1)
 	@DisplayName("Test the constructor values")
 	void constructorValuesTest() {
 
-		class GenericError extends BaseApplicationException {
-
-			public GenericError(final Exception exception) {
-				super("Generic error", exception);
-			}
-		}
-
 		// given
-		final InterfaceI18nService i18nService = (code, params) -> "translated!";
-		final InterfaceSecurityService interfaceSecurityService = new DummySecurityService();
-		final InterfaceExceptionAdapterService exceptionTranslatorService = (ex, i18n,
-				directives) -> new GenericError(ex);
+		final var myExceptionTranslatorService = exceptionTranslatorService;
 
 		// when
-		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
+		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, myExceptionTranslatorService);
 
 		// then
 		assertThat(facade)
@@ -69,11 +69,12 @@ class EntiyBaseFacadeHappyPathTest {
 	void checkValuesTest() {
 
 		// given
-		final var facade = new TestEntiyBaseFacade();
+		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService,
+				exceptionTranslatorService);
 
 		assertThat(facade)
 				// when
-				.extracting(BaseFacade::getEntityClazz)
+				.extracting(TestEntiyBaseFacade::getEntityClazz)
 				// then
 				.isNotNull()
 				.isEqualTo(Department.class);
@@ -92,7 +93,14 @@ class EntiyBaseFacadeHappyPathTest {
 	void checkServicesTest() {
 
 		// given
-		final var facade = new TestEntiyBaseFacade();
+		final var myDummySecurityService = new DummySecurityService() {
+			@Override
+			public String getUserName() {
+				return "Fernando";
+			}
+		};
+
+		final var facade = new TestEntiyBaseFacade(i18nService, myDummySecurityService, exceptionTranslatorService);
 
 		assertThat(facade)
 				// when
@@ -100,19 +108,11 @@ class EntiyBaseFacadeHappyPathTest {
 				// then
 				.isNotNull()
 				.extracting(InterfaceSecurityService::getUserName)
-				.isEqualTo("fernando");
+				.isEqualTo("Fernando");
 
 		assertThat(facade)
 				// when
-				.extracting(BaseFacade::getI18nService)
-				// then
-				.isNotNull()
-				.extracting(i18nService -> i18nService.getClass())
-				.isEqualTo(JavaSEI18nService.class);
-
-		assertThat(facade)
-				// when
-				.extracting(BaseFacade::getExceptionTranslatorService)
+				.extracting(TestEntiyBaseFacade::getExceptionTranslatorService)
 				// then
 				.isNotNull();
 	}

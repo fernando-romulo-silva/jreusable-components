@@ -27,7 +27,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 
 	protected final BiFunction<Pageable, Object[], MultiplePagedResult> findAllFunction;
 
-	protected final Function<Sort, OneResult> findFirstFunction;
+	protected final BiFunction<Sort, Object[], OneResult> findFirstFunction;
 
 	/**
 	 * Default constructor
@@ -51,7 +51,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 * 
 	 * @return A new {@code Pageable} object
 	 */
-	protected Pageable preFindAll(final Pageable pageable, @NotNull final Object... directives) {
+	protected Pageable preFindAll(final Pageable pageable, final Object... directives) {
 		return pageable;
 	}
 
@@ -63,7 +63,9 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 * 
 	 * @return A new {@code MultiplePagedResult} object
 	 */
-	protected MultiplePagedResult posFindAll(final MultiplePagedResult multiplePagedResult) {
+	protected MultiplePagedResult posFindAll(
+			final MultiplePagedResult multiplePagedResult,
+			final Object... directives) {
 		return multiplePagedResult;
 	}
 
@@ -90,38 +92,9 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	@Override
 	@SafeVarargs
 	public final MultiplePagedResult findAll(@Nullable final Pageable pageable, @NotNull final Object... directives) {
-
-		final var session = securityService.getSession();
-
-		LOGGER.debug("Pageable finding all by '{}', session '{}'", pageable, session);
-
-		final var finalPageable = preFindAll(pageable, directives);
-
-		final MultiplePagedResult multiplePagedResult;
-
-		try {
-			multiplePagedResult = findAllFunction.apply(finalPageable, directives);
-		} catch (final Exception ex) {
-
-			final var finalException = errorFindAll(pageable, ex, directives);
-
-			LOGGER.debug("Error pageable find all, pageable '{}', session '{}', error '{}'",
-					pageable, session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					ex,
-					i18nService,
-					FIND_ALL_ENTITIES_PAGEABLE,
-					getEntityClazz(),
-					finalPageable,
-					directives);
-		}
-
-		final var finalMultiplePagedResult = posFindAll(multiplePagedResult);
-
-		LOGGER.debug("Found all by pageable '{}', session '{}'", finalPageable, session);
-
-		return finalMultiplePagedResult;
+		return executeOperation(
+				pageable, FIND_ALL_ENTITIES_PAGEABLE, this::preFindAll,
+				this::posFindAll, findAllFunction::apply, this::errorFindAll, directives);
 	}
 
 	// ---------------------------------------------------------------------------
@@ -144,7 +117,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 * 
 	 * @return
 	 */
-	protected OneResult posFindOne(final OneResult oneResult) {
+	protected OneResult posFindOne(final OneResult oneResult, final Object... directives) {
 		return oneResult;
 	}
 
@@ -169,37 +142,9 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 * {@inheritDoc}
 	 */
 	@Override
-	public OneResult findOne(@Nullable final Sort sort, final Object... directives) {
-
-		final var session = securityService.getSession();
-
-		LOGGER.debug("Finding first by '{}', session '{}'", sort, session);
-
-		final var finalSort = preFindOne(sort, directives);
-
-		final OneResult oneResult;
-
-		try {
-			oneResult = findFirstFunction.apply(finalSort);
-		} catch (final Exception ex) {
-			final var finalException = errorFindOne(finalSort, ex, directives);
-
-			LOGGER.debug("Error find first, sort '{}', session '{}', error '{}'",
-					finalSort, session, getRootCauseMessage(finalException));
-
-			throw exceptionAdapterService.convert(
-					ex,
-					i18nService,
-					FIND_ENTITY_SORTED,
-					getEntityClazz(),
-					sort,
-					directives);
-		}
-
-		final var finalOneResult = posFindOne(oneResult);
-
-		LOGGER.debug("Found first by '{}', session '{}'", finalSort, session);
-
-		return finalOneResult;
+	public OneResult findOne(final Sort sort, final Object... directives) {
+		return executeOperation(
+				sort, FIND_ENTITY_SORTED, this::preFindOne,
+				this::posFindOne, findFirstFunction::apply, this::errorFindOne, directives);
 	}
 }

@@ -20,12 +20,12 @@ public class QueryPaginationSpecificationFacadeBuilder<Entity extends AbstractEn
     /**
      * Function that executes find By Specificationid algorithm
      */
-    public TriFunction<Specification, Pageable, Object[], MultiplePagedResult> findBySpecificationFunction;
+    public TriFunction<Pageable, Specification, Object[], MultiplePagedResult> findBySpecificationFunction;
 
     /**
      * Function that executes find One By Specificationid and Sort algorithm
      */
-    public TriFunction<Specification, Sort, Object[], OneResult> findOneByFunctionWithOrder;
+    public TriFunction<Sort, Specification, Object[], OneResult> findOneByFunctionWithOrder;
 
     /**
      * Default constructor.

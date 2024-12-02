@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.core.infra.exception.common.UnexpectedException;
 import org.reusablecomponents.base.security.DefaultSecurityService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;

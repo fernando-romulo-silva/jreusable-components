@@ -7,6 +7,7 @@ import static org.assertj.core.groups.Tuple.tuple;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 import org.apache.commons.lang3.concurrent.ConcurrentUtils;
+
 import org.application_example.infra.LoggerPublisherSerice;
 import org.apptest.domain.Guest;
 import org.apptest.domain.Hotel;
@@ -24,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.reusablecomponents.base.core.application.base.BaseFacade;
 import org.reusablecomponents.base.core.application.empty.EmptyFacade;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
+import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
@@ -42,6 +44,18 @@ import ch.qos.logback.core.read.ListAppender;
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 class AbstractEntiyBaseFacadeHappyPathTest {
+
+	static class GenericError extends BaseApplicationException {
+
+		public GenericError(final Exception exception) {
+			super("Generic error", exception);
+		}
+	}
+
+	final InterfaceI18nService i18nService = (code, params) -> "translated!";
+	final InterfaceSecurityService interfaceSecurityService = null;
+	final InterfaceExceptionAdapterService exceptionTranslatorService = (ex, i18n,
+			directives) -> new GenericError(ex);
 
 	@Test
 	@Order(1)
@@ -220,7 +234,8 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 						Hotel::isPublishable)
 				.isEqualTo(Boolean.FALSE);
 
-		final var facade = new EmptyFacade<>() {
+		final var facade = new EmptyFacade<Guest, Long>(i18nService, null,
+				exceptionTranslatorService) {
 
 			// @Override
 			// protected boolean isPublishEvents(final Object... directives) {
