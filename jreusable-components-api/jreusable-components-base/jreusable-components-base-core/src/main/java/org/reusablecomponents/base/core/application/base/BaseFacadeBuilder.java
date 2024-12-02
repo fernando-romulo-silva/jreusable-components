@@ -53,6 +53,5 @@ public class BaseFacadeBuilder {
 
         exceptionAdapterService = Optional.ofNullable(exceptionAdapterService)
                 .orElseThrow(() -> new IllegalArgumentException("You need a 'exceptionAdapterService'"));
-
     }
 }

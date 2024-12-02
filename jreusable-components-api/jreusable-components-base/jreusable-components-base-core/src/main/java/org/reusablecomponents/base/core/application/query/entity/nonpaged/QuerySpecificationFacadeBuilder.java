@@ -28,12 +28,12 @@ public class QuerySpecificationFacadeBuilder<Entity extends AbstractEntity<Id>, 
     /**
      * Function that executes exists by algorithm
      */
-    public Function<Specification, ExistsResult> existsBySpecificationFunction;
+    public BiFunction<Specification, Object[], ExistsResult> existsBySpecificationFunction;
 
     /**
      * Function that executes count by specification algorithm
      */
-    public Function<Specification, CountResult> countBySpecificationFunction;
+    public BiFunction<Specification, Object[], CountResult> countBySpecificationFunction;
 
     /**
      * Default constructor

@@ -39,13 +39,13 @@ public interface InterfaceJakartaQuerySpecificationFacade<Entity extends Abstrac
          */
         @Override
         @Transactional(value = SUPPORTS)
-        Boolean existsBySpec(final Specification specification);
+        Boolean existsBySpec(final Specification specification, final Object... directives);
 
         /**
          * {@inheritDoc}
          */
         @Override
         @Transactional(value = SUPPORTS)
-        Long countBySpec(final Specification specification);
+        Long countBySpec(final Specification specification, final Object... directives);
 
 }

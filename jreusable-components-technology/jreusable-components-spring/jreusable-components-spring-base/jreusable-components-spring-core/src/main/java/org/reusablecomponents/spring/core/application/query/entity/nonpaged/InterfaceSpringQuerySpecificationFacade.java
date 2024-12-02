@@ -38,7 +38,7 @@ public interface InterfaceSpringQuerySpecificationFacade<Entity extends Abstract
 	@Override
 	@Cacheable
 	@Transactional(readOnly = true, propagation = SUPPORTS)
-	Boolean existsBySpec(final Specification specification);
+	Boolean existsBySpec(final Specification specification, final Object... directives);
 
 	/**
 	 * {@inheritDoc}
@@ -46,5 +46,5 @@ public interface InterfaceSpringQuerySpecificationFacade<Entity extends Abstract
 	@Override
 	@Cacheable
 	@Transactional(readOnly = true, propagation = SUPPORTS)
-	Long countBySpec(final Specification specification);
+	Long countBySpec(final Specification specification, final Object... directives);
 }

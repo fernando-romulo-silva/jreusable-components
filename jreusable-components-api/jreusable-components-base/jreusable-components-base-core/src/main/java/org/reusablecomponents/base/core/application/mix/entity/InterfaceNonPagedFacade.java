@@ -209,16 +209,16 @@ public interface InterfaceNonPagedFacade<Entity extends AbstractEntity<Id>, Id, 
      * {@inheritDoc}
      */
     @Override
-    default ExistsResult existsBySpec(final Specification specification) {
-        return getEntityQuerySpecificationFacade().existsBySpec(specification);
+    default ExistsResult existsBySpec(final Specification specification, final Object... directives) {
+        return getEntityQuerySpecificationFacade().existsBySpec(specification, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default CountResult countBySpec(final Specification specification) {
-        return getEntityQuerySpecificationFacade().countBySpec(specification);
+    default CountResult countBySpec(final Specification specification, final Object... directives) {
+        return getEntityQuerySpecificationFacade().countBySpec(specification, directives);
     }
 
     /**
