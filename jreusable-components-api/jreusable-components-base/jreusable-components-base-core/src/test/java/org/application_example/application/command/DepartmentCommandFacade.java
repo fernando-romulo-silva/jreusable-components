@@ -18,6 +18,8 @@ public class DepartmentCommandFacade extends EntityCommandFacadeList<Department,
     @Override
     protected Department preSave(final Department saveEntityIn, final Object... directives) {
 
+        super.preSave(saveEntityIn, directives);
+
         if (ObjectUtils.allNull(saveEntityIn)) {
             return saveEntityIn;
         }
@@ -28,6 +30,8 @@ public class DepartmentCommandFacade extends EntityCommandFacadeList<Department,
 
     @Override
     protected Department posSave(final Department saveEntityIn, final Object... directives) {
+
+        super.posSave(saveEntityIn, directives);
 
         if (ObjectUtils.allNull(saveEntityIn)) {
             return saveEntityIn;
@@ -42,6 +46,8 @@ public class DepartmentCommandFacade extends EntityCommandFacadeList<Department,
             final Department saveEntityIn,
             final Exception exception,
             final Object... directives) {
+
+        super.errorSave(saveEntityIn, exception, directives);
 
         LOGGER.debug("Error Save");
 

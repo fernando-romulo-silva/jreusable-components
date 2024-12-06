@@ -89,8 +89,6 @@ public non-sealed class CommandFacade< // generics
 		this.deleteAllByIdFunction = builder.deleteAllByIdFunction;
 	}
 
-	// ----------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Method executed before {@link #save(Object, Object...) save} saveFunction,
 	 * use it to change values.
@@ -101,6 +99,7 @@ public non-sealed class CommandFacade< // generics
 	 * @return A {@code SaveEntityIn} object
 	 */
 	protected SaveEntityIn preSave(final SaveEntityIn saveEntityIn, final Object... directives) {
+		LOGGER.debug("Pre save method, ");
 		return saveEntityIn;
 	}
 
@@ -143,8 +142,6 @@ public non-sealed class CommandFacade< // generics
 				saveEntityIn, SAVE_ENTITY, this::preSave,
 				this::posSave, saveFunction::apply, this::errorSave, directives);
 	}
-
-	// ----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Method used to change a group of entities before save it.
@@ -197,8 +194,6 @@ public non-sealed class CommandFacade< // generics
 				this::posSaveAll, saveAllFunction::apply, this::errorSaveAll, directives);
 	}
 
-	// ----------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Method used to change an entity before update it.
 	 * 
@@ -236,7 +231,6 @@ public non-sealed class CommandFacade< // generics
 			final UpdateEntityIn updateEntityIn,
 			final Exception exception,
 			final Object... directives) {
-
 		return exception;
 	}
 
@@ -249,8 +243,6 @@ public non-sealed class CommandFacade< // generics
 				updateEntityIn, UPDATE_ENTITY, this::preUpdate,
 				this::posUpdate, updateFunction::apply, this::errorUpdate, directives);
 	}
-
-	// ----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Method used to change a group of entities before update it.
@@ -302,8 +294,6 @@ public non-sealed class CommandFacade< // generics
 				this::posUpdateAll, updateAllFunction::apply, this::errorUpdateAll, directives);
 	}
 
-	// ----------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Method used to change an entity before delete it.
 	 * 
@@ -353,8 +343,6 @@ public non-sealed class CommandFacade< // generics
 				deleteEntityIn, DELETE_ENTITY, this::preDelete,
 				this::posDelete, deleteFunction::apply, this::errorDelete, directives);
 	}
-
-	// ----------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Method used to change a group of entities before delete it.
@@ -458,7 +446,6 @@ public non-sealed class CommandFacade< // generics
 				deleteByIdFunction::apply, this::errorDeleteBy, directives);
 	}
 
-	// ----------------------------------------------------------------------------------------------------------
 	/**
 	 * Method used to change a group of ids before save it.
 	 * 

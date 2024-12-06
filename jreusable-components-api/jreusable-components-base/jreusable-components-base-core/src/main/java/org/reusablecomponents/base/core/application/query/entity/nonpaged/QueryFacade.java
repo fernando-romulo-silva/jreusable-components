@@ -122,14 +122,6 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * @return A new {@code QueryIdIn} object
 	 */
 	protected QueryIdIn preFindBy(final QueryIdIn queryIdIn, final Object... directives) {
-
-		// final var formatDirectives = Optional.ofNullable(directives)
-		// .map(params -> params.get("format"))
-		// .stream()
-		// .flatMap(Arrays::stream)
-		// .collect(Collectors.toList());
-		// .anyMatch("full"::equalsIgnoreCase);
-
 		return queryIdIn;
 	}
 
@@ -260,7 +252,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	public CountResult countAll(final Object... directives) {
 		return executeOperation(
 				COUNT_ALL, this::preCountdAll, this::posCountAll,
-				countAllFunction::apply, this::errorFindAll, directives);
+				countAllFunction::apply, this::errorCountAll, directives);
 	}
 
 	/**

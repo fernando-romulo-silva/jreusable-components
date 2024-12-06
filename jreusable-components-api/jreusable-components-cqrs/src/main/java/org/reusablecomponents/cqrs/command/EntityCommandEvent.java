@@ -1,19 +1,19 @@
 package org.reusablecomponents.cqrs.command;
 
-import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.*;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_ID;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_IDS;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_ENTITY;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.SAVE_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.SAVE_ENTITY;
 import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.UPDATE_ENTITIES;
 import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.UPDATE_ENTITY;
-import static org.reusablecomponents.messaging.event.DefaultEventStatus.FAILURE;
-import static org.reusablecomponents.messaging.event.DefaultEventStatus.SUCCESS;
 
 import java.util.Objects;
-import java.util.function.Function;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
-import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
 import org.reusablecomponents.cqrs.base.EntiyBaseEvent;
 import org.reusablecomponents.cqrs.base.EntiyBaseEventBuilder;
 import org.slf4j.Logger;
@@ -48,95 +48,6 @@ public class EntityCommandEvent< // generics
      */
     protected EntityCommandEvent(final EntiyBaseEventBuilder builder) {
         super(builder);
-    }
-
-    /**
-     * 
-     * @param <In>
-     * @param <Out>
-     * @param in
-     * @param entityOut
-     * @param operation
-     * @param inToMsgFunction
-     * @param outToMsgFunction
-     * @param directives
-     */
-    protected <In, Out> void publishCommandEvent(
-            final In in,
-            final Out entityOut,
-            final InterfaceOperation operation,
-            final Function<In, String> inToMsgFunction,
-            final Function<Out, String> outToMsgFunction,
-            final Object... directives) {
-
-        if (!isPublishEvents(directives)) {
-            LOGGER.debug(
-                    "Publishing {} event was avoided, in '{}', out '{}', and directives '{}'",
-                    operation.getName(), in, entityOut, directives);
-            return;
-        }
-
-        LOGGER.debug("Publishing {} event, in '{}', out '{}', and directives '{}'",
-                operation.getName(), in, entityOut, directives);
-
-        try {
-            final var dataIn = inToMsgFunction.apply(in);
-            final var dataOut = outToMsgFunction.apply(entityOut);
-
-            publishEvent(dataIn, dataOut, EMPTY, SUCCESS, operation);
-
-            LOGGER.debug("The {} event was published, dataIn '{}' and dataOut '{}'",
-                    operation.getName(), dataIn, dataOut);
-
-        } catch (final Exception ex) {
-            LOGGER.error("The {} event was not published".formatted(operation.getName()), getRootCause(ex));
-        }
-    }
-
-    /**
-     * 
-     * @param <In>
-     * @param in
-     * @param exception
-     * @param operation
-     * @param inToMsgFunction
-     * @param exceptionToMsgFunction
-     * @param directives
-     */
-    protected <In> void publishCommandEvent(
-            final In in,
-            final Exception exception,
-            final InterfaceOperation operation,
-            final Function<In, String> inToMsgFunction,
-            final Function<Exception, String> exceptionToMsgFunction,
-            final Object... directives) {
-
-        final var exceptionString = getRootCause(exception)
-                .getClass()
-                .getSimpleName();
-
-        if (!isPublishEvents(directives)) {
-            LOGGER.debug(
-                    "Publishing {} event error was avoided, in '{}', error '{}', and directives '{}'",
-                    operation.getName(), in, exceptionString, directives);
-            return;
-        }
-
-        LOGGER.debug("Publishing {} event error, in '{}', error '{}', and directives '{}'",
-                operation.getName(), in, exceptionString, directives);
-
-        try {
-            final var dataIn = inToMsgFunction.apply(in);
-            final var dataOut = exceptionToMsgFunction.apply(exception);
-
-            publishEvent(dataIn, dataOut, EMPTY, FAILURE, operation);
-
-            LOGGER.debug("The {} event error was published, dataIn '{}' and dataOut '{}'",
-                    operation.getName(), dataIn, dataOut);
-
-        } catch (final Exception ex) {
-            LOGGER.error("The {} event error was not published".formatted(operation.getName()), getRootCause(ex));
-        }
     }
 
     /**

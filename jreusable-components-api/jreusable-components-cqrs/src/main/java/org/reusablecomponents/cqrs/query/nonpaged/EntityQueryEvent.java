@@ -41,8 +41,8 @@ public class EntityQueryEvent<QueryIdIn, OneResult, MultipleResult, CountResult,
      * 
      * @return A Supplier object
      */
-    protected Supplier<String> convertMultipleResultToPublishDataOut(final MultipleResult multipleResult) {
-        return () -> Objects.toString(multipleResult);
+    protected String convertMultipleResultToPublishDataOut(final MultipleResult multipleResult) {
+        return Objects.toString(multipleResult);
     }
 
     /**
@@ -54,8 +54,8 @@ public class EntityQueryEvent<QueryIdIn, OneResult, MultipleResult, CountResult,
      * 
      * @return A Supplier object
      */
-    protected Supplier<String> convertOneResultToPublishDataOut(final OneResult oneResult) {
-        return () -> Objects.toString(oneResult);
+    protected String convertOneResultToPublishDataOut(final OneResult oneResult) {
+        return Objects.toString(oneResult);
     }
 
     /**
@@ -67,8 +67,8 @@ public class EntityQueryEvent<QueryIdIn, OneResult, MultipleResult, CountResult,
      * 
      * @return A Supplier object
      */
-    protected Supplier<String> convertCountResultToPublishDataOut(final CountResult countResult) {
-        return () -> Objects.toString(countResult);
+    protected String convertCountResultToPublishDataOut(final CountResult countResult) {
+        return Objects.toString(countResult);
     }
 
     /**
@@ -80,8 +80,8 @@ public class EntityQueryEvent<QueryIdIn, OneResult, MultipleResult, CountResult,
      * 
      * @return A Supplier object
      */
-    protected Supplier<String> convertQueryIdInToPublishDataIn(final QueryIdIn queryIdIn) {
-        return () -> Objects.toString(queryIdIn);
+    protected String convertQueryIdInToPublishDataIn(final QueryIdIn queryIdIn) {
+        return Objects.toString(queryIdIn);
     }
 
     /**
@@ -93,8 +93,8 @@ public class EntityQueryEvent<QueryIdIn, OneResult, MultipleResult, CountResult,
      * 
      * @return A Supplier object
      */
-    protected Supplier<String> convertDirectivesToPublishDataIn(final Object... directives) {
-        return () -> Objects.toString(directives);
+    protected String convertDirectivesToPublishDataIn(final MultipleResult multipleResult, final Object... directives) {
+        return Objects.toString(multipleResult);
     }
 
     /**
@@ -106,34 +106,31 @@ public class EntityQueryEvent<QueryIdIn, OneResult, MultipleResult, CountResult,
      * 
      * @return A Supplier object
      */
-    protected Supplier<String> convertExistsResultToPublishData(final ExistsResult resultFinal) {
-        return () -> Objects.toString(resultFinal);
+    protected String convertExistsResultToPublishData(final ExistsResult resultFinal) {
+        return Objects.toString(resultFinal);
     }
 
     /**
      * Publish find All event to message service
      * 
-     * @param finalMultipleResult The query result
+     * @param multipleResult The query result
      * 
-     * @param directives          Objects used to configure the query's result
+     * @param directives     Objects used to configure the query's result
      */
-    protected void findAllPublishEvent(final MultipleResult finalMultipleResult, final Object... directives) {
+    protected void findAllPublishEvent(final MultipleResult multipleResult, final Object... directives) {
 
         if (!isPublishEvents(directives)) {
             LOGGER.debug("Publishing find all event was avoided, finalMultipleResult '{}' and directives '{}'",
-                    finalMultipleResult, directives);
+                    multipleResult, directives);
             return;
         }
 
         LOGGER.debug("Publishing find all event, finalMultipleResult '{}' and directives '{}'",
-                finalMultipleResult, directives);
+                multipleResult, directives);
 
         try {
-            final var dataInSupplier = convertDirectivesToPublishDataIn(directives);
-            final var dataIn = dataInSupplier.get();
-
-            final var dataOutSupplier = convertMultipleResultToPublishDataOut(finalMultipleResult);
-            final var dataOut = dataOutSupplier.get();
+            final var dataIn = convertDirectivesToPublishDataIn(multipleResult, directives);
+            final var dataOut = convertMultipleResultToPublishDataOut(multipleResult);
 
             publishEvent(dataIn, dataOut, EMPTY, SUCCESS, FIND_ALL_ENTITIES);
 
@@ -146,113 +143,82 @@ public class EntityQueryEvent<QueryIdIn, OneResult, MultipleResult, CountResult,
     /**
      * Publish find by id event to message service
      * 
-     * @param finalQueryIdIn The object id
+     * @param queryIdIn  The object id
      * 
-     * @param finalOneResult The query result
+     * @param oneResult  The query result
      * 
-     * @param directives     Objects used to configure the query's result
+     * @param directives Objects used to configure the query's result
      */
     protected void findByPublishEvent(
-            final QueryIdIn finalQueryIdIn,
-            final OneResult finalOneResult,
+            final QueryIdIn queryIdIn,
+            final OneResult oneResult,
             final Object... directives) {
 
-        if (!isPublishEvents(directives)) {
-            LOGGER.debug("Publish event for find by id finalQueryIdIn '{}', finalOneResult '{}', and directives '{}'",
-                    finalQueryIdIn,
-                    finalOneResult,
-                    directives);
-            return;
-        }
-
-        LOGGER.debug("Publish event for find by id finalQueryIdIn '{}', finalOneResult '{}', and directives '{}'",
-                finalQueryIdIn,
-                finalOneResult,
-                directives);
-
-        final var dataInSupplier = convertQueryIdInToPublishDataIn(finalQueryIdIn);
-        final var dataIn = dataInSupplier.get();
-
-        final var dataOutSupplier = convertOneResultToPublishDataOut(finalOneResult);
-        final var dataOut = dataOutSupplier.get();
-
-        LOGGER.debug("Publish event for find by id dataIn '{}' and dataOut '{}', ", dataInSupplier, dataOutSupplier);
-
-        publishEvent(dataIn, dataOut, EMPTY, SUCCESS, FIND_ENTITY_BY_ID);
+        publishCommandEvent(
+                queryIdIn, oneResult, FIND_ENTITY_BY_ID,
+                this::convertQueryIdInToPublishDataIn,
+                this::convertOneResultToPublishDataOut, directives);
     }
 
     /**
      * Publish exists by id event to message service
      * 
-     * @param finalQueryIdIn    The object id
+     * @param queryIdIn    The object id
      * 
-     * @param finalExistsResult The query result
+     * @param existsResult The query result
      * 
-     * @param directives        Objects used to configure the query's result
+     * @param directives   Objects used to configure the query's result
      */
     protected void existsByPublishEvent(
-            final QueryIdIn finalQueryIdIn,
-            final ExistsResult finalExistsResult,
+            final QueryIdIn queryIdIn,
+            final ExistsResult existsResult,
             final Object... directives) {
 
-        if (!isPublishEvents(directives)) {
-            LOGGER.debug(
-                    "Publish event for exists by id finalQueryIdIn '{}', finalExistsResult '{}', and directives '{}'",
-                    finalQueryIdIn,
-                    finalExistsResult,
-                    directives);
-            return;
-        }
-
-        LOGGER.debug("Publish event for exists by id finalQueryIdIn '{}', finalExistsResult '{}', and directives '{}'",
-                finalQueryIdIn,
-                finalExistsResult,
-                directives);
-
-        final var dataInSupplier = convertQueryIdInToPublishDataIn(finalQueryIdIn);
-        final var dataIn = dataInSupplier.get();
-
-        final var dataOutSupplier = convertExistsResultToPublishData(finalExistsResult);
-        final var dataOut = dataOutSupplier.get();
-
-        LOGGER.debug("Publish event for exists by id, dataIn '{}' and dataOut '{}', ", dataInSupplier, dataOutSupplier);
-
-        publishEvent(dataIn, dataOut, EMPTY, SUCCESS, EXISTS_BY_ID);
+        publishCommandEvent(
+                queryIdIn, existsResult, EXISTS_BY_ID,
+                this::convertQueryIdInToPublishDataIn,
+                this::convertExistsResultToPublishData, directives);
     }
 
     /**
      * Publish exists by id event to message service
      * 
-     * @param finalCountResult  The object id
+     * @param countResult       The object id
      * 
      * @param finalExistsResult The query result
      * 
      * @param directives        Objects used to configure the query's result
      */
     protected void countAllPublishEvent(
-            final CountResult finalCountResult,
+            final CountResult countResult,
             final Object... directives) {
 
         if (!isPublishEvents(directives)) {
             LOGGER.debug(
                     "Publish event for count all, finalCountResult '{}' and directives '{}'",
-                    finalCountResult,
+                    countResult,
                     directives);
             return;
         }
 
         LOGGER.debug("Publish event for count all, finalCountResult '{}' and directives '{}'",
-                finalCountResult,
+                countResult,
                 directives);
 
-        final var dataOutSupplier = convertCountResultToPublishDataOut(finalCountResult);
-        final var dataOut = dataOutSupplier.get();
+        final var dataOut = convertCountResultToPublishDataOut(countResult);
 
         publishEvent(EMPTY, dataOut, EMPTY, SUCCESS, COUNT_ALL);
 
         LOGGER.debug("Publish event for count all, dataIn '{}' and dataOut '{}', ",
                 StringUtils.EMPTY,
                 dataOut);
+
+        // publishCommandEvent(
+        // countResult,
+        // COUNT_ALL,
+        // null,
+        // null,
+        // directives);
     }
 
     /**
@@ -280,13 +246,11 @@ public class EntityQueryEvent<QueryIdIn, OneResult, MultipleResult, CountResult,
                 finalExistsResult,
                 directives);
 
-        final var dataOutSupplier = convertExistsResultToPublishData(finalExistsResult);
-        final var dataOut = dataOutSupplier.get();
+        final var dataOut = convertExistsResultToPublishData(finalExistsResult);
 
         publishEvent(EMPTY, dataOut, EMPTY, SUCCESS, EXISTS_ALL);
 
         LOGGER.debug("Publish event for exists all, dataIn '{}' and dataOut '{}', ",
-                StringUtils.EMPTY,
-                dataOutSupplier);
+                StringUtils.EMPTY, dataOut);
     }
 }

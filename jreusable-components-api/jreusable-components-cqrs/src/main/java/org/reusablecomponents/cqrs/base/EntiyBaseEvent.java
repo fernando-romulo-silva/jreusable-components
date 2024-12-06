@@ -2,11 +2,16 @@ package org.reusablecomponents.cqrs.base;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 import static java.util.Optional.ofNullable;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.NULL_POINTER_EXCEPTION_MSG;
 import static org.reusablecomponents.base.core.infra.util.Functions.createNullPointerException;
 import static org.reusablecomponents.messaging.MessagingConst.JSON_LAYOUT;
+import static org.reusablecomponents.messaging.event.DefaultEventStatus.FAILURE;
+import static org.reusablecomponents.messaging.event.DefaultEventStatus.SUCCESS;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -245,6 +250,95 @@ public class EntiyBaseEvent {
                 new String[] { reason, description });
 
         return msg;
+    }
+
+    /**
+     * 
+     * @param <In>
+     * @param <Out>
+     * @param in
+     * @param entityOut
+     * @param operation
+     * @param inToMsgFunction
+     * @param outToMsgFunction
+     * @param directives
+     */
+    protected <In, Out> void publishCommandEvent(
+            final In in,
+            final Out entityOut,
+            final InterfaceOperation operation,
+            final Function<In, String> inToMsgFunction,
+            final Function<Out, String> outToMsgFunction,
+            final Object... directives) {
+
+        if (!isPublishEvents(directives)) {
+            LOGGER.debug(
+                    "Publishing {} event was avoided, in '{}', out '{}', and directives '{}'",
+                    operation.getName(), in, entityOut, directives);
+            return;
+        }
+
+        LOGGER.debug("Publishing {} event, in '{}', out '{}', and directives '{}'",
+                operation.getName(), in, entityOut, directives);
+
+        try {
+            final var dataIn = inToMsgFunction.apply(in);
+            final var dataOut = outToMsgFunction.apply(entityOut);
+
+            publishEvent(dataIn, dataOut, EMPTY, SUCCESS, operation);
+
+            LOGGER.debug("The {} event was published, dataIn '{}' and dataOut '{}'",
+                    operation.getName(), dataIn, dataOut);
+
+        } catch (final Exception ex) {
+            LOGGER.error("The {} event was not published".formatted(operation.getName()), getRootCause(ex));
+        }
+    }
+
+    /**
+     * 
+     * @param <In>
+     * @param in
+     * @param exception
+     * @param operation
+     * @param inToMsgFunction
+     * @param exceptionToMsgFunction
+     * @param directives
+     */
+    protected <In> void publishCommandEvent(
+            final In in,
+            final Exception exception,
+            final InterfaceOperation operation,
+            final Function<In, String> inToMsgFunction,
+            final Function<Exception, String> exceptionToMsgFunction,
+            final Object... directives) {
+
+        final var exceptionString = getRootCause(exception)
+                .getClass()
+                .getSimpleName();
+
+        if (!isPublishEvents(directives)) {
+            LOGGER.debug(
+                    "Publishing {} event error was avoided, in '{}', error '{}', and directives '{}'",
+                    operation.getName(), in, exceptionString, directives);
+            return;
+        }
+
+        LOGGER.debug("Publishing {} event error, in '{}', error '{}', and directives '{}'",
+                operation.getName(), in, exceptionString, directives);
+
+        try {
+            final var dataIn = inToMsgFunction.apply(in);
+            final var dataOut = exceptionToMsgFunction.apply(exception);
+
+            publishEvent(dataIn, dataOut, EMPTY, FAILURE, operation);
+
+            LOGGER.debug("The {} event error was published, dataIn '{}' and dataOut '{}'",
+                    operation.getName(), dataIn, dataOut);
+
+        } catch (final Exception ex) {
+            LOGGER.error("The {} event error was not published".formatted(operation.getName()), getRootCause(ex));
+        }
     }
 
     @NotNull

@@ -1,5 +1,6 @@
 package org.application_example.application.query.entity.nonpaged;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,22 +16,49 @@ public class EntityQueryFacadeList<Entity extends AbstractEntity<Id>, Id>
 
     private final List<Entity> repository;
 
+    private static final void validate(final Object... directives) {
+
+        final var errorString = Arrays.stream(directives)
+                .map(Object::toString)
+                .anyMatch("error"::equalsIgnoreCase);
+
+        if (errorString) {
+            throw new IllegalStateException("Error!");
+        }
+    }
+
     public EntityQueryFacadeList(final List<Entity> repository) {
 
         super(new QueryFacadeBuilder<>($ -> {
 
-            $.existsByIdFunction = (id, directives) -> repository.stream()
-                    .anyMatch(entity -> Objects.equals(entity.getId(), id));
+            $.existsByIdFunction = (id, directives) -> {
+                validate(directives);
+                return repository.stream()
+                        .anyMatch(entity -> Objects.equals(entity.getId(), id));
+            };
 
-            $.findByIdFunction = (id, params) -> repository.stream()
-                    .filter(entity -> Objects.equals(entity.getId(), id))
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("Id not found: " + id));
+            $.findByIdFunction = (id, directives) -> {
+                validate(directives);
+                return repository.stream()
+                        .filter(entity -> Objects.equals(entity.getId(), id))
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException("Id not found: " + id));
+            };
 
-            $.findAllFunction = params -> repository.stream().toList();
+            $.findAllFunction = directives -> {
+                validate(directives);
+                return repository.stream().toList();
+            };
 
-            $.countAllFunction = directives -> repository.stream().count();
-            $.existsAllFunction = directives -> repository.stream().count() > 0;
+            $.countAllFunction = directives -> {
+                validate(directives);
+                return repository.stream().count();
+            };
+
+            $.existsAllFunction = directives -> {
+                validate(directives);
+                return repository.stream().count() > 0;
+            };
 
             // others --------------------------------
             $.securityService = new DummySecurityService();

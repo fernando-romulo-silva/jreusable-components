@@ -24,6 +24,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
+import org.reusablecomponents.base.core.infra.exception.common.UnexpectedException;
 
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -84,27 +86,122 @@ class EntityQueryFacadeUnhappyPathTest {
 
     @Test
     @Order(1)
-    @DisplayName("Find by id test")
-    void findByIdTest() {
+    @DisplayName("Find by id with null id test")
+    void findByIdWithNullIdTest() {
+
         // given
-        assertThatThrownBy(() -> defaultQueryFacade.findById(null))
+        final String nullId = null;
+
+        // when
+        assertThatThrownBy(() -> defaultQueryFacade.findById(nullId))
                 // then
                 .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("The object '%s' cannot be null", "preIdIn")
-
-        ;
+                .hasMessageContaining("The object '%s' cannot be null", "preIdIn");
     }
 
     @Test
     @Order(2)
-    @DisplayName("Exists by id test")
-    void existsByTest() {
+    @DisplayName("Find by id test with id not found test")
+    void findByIdWithIdNotFoundTest() {
+
         // given
-        assertThatThrownBy(() -> defaultQueryFacade.existsById(null))
+        final var id = "notExists";
+
+        // when
+        assertThatThrownBy(() -> defaultQueryFacade.findById(id))
+                // then
+                .isInstanceOf(ElementWithIdNotFoundException.class)
+                .hasMessageContaining("The id 'notExists' not found for 'Department' type");
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("Find by id test with unexpected error test")
+    void findByIdWithUnexpectedErrorTest() {
+
+        // given
+        final var directives = new Object[] { "error" };
+
+        // when
+        assertThatThrownBy(() -> defaultQueryFacade.findById("3434j3",
+                directives))
+                // then
+                .isInstanceOf(UnexpectedException.class)
+                .hasMessageContaining("Unexpecte error happened");
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("Find all test with unexpected error test")
+    void findAllWithUnexpectedErrorTest() {
+
+        // given
+        final var directives = new Object[] { "error" };
+
+        // when
+        assertThatThrownBy(() -> defaultQueryFacade.findAll(directives))
+                // then
+                .isInstanceOf(UnexpectedException.class)
+                .hasMessageContaining("Unexpecte error happened");
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("Count all with unexpected error test")
+    void countAllWithUnexpectedErrorTest() {
+
+        // given
+        final var directives = new Object[] { "error" };
+
+        // when
+        assertThatThrownBy(() -> defaultQueryFacade.countAll(directives))
+                // then
+                .isInstanceOf(UnexpectedException.class)
+                .hasMessageContaining("Unexpecte error happened");
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("Exist all with unexpected error test")
+    void existAllWithUnexpectedErrorTest() {
+
+        // given
+        final var directives = new Object[] { "error" };
+
+        // when
+        assertThatThrownBy(() -> defaultQueryFacade.existsAll(directives))
+                // then
+                .isInstanceOf(UnexpectedException.class)
+                .hasMessageContaining("Unexpecte error happened");
+    }
+
+    @Test
+    @Order(7)
+    @DisplayName("Exists by id with null id test")
+    void existsByIdWithNullIdTest() {
+
+        // given
+        final String nullId = null;
+
+        // given
+        assertThatThrownBy(() -> defaultQueryFacade.existsById(nullId))
                 // then
                 .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("The object '%s' cannot be null", "preIdIn")
+                .hasMessageContaining("The object '%s' cannot be null", "preIdIn");
+    }
 
-        ;
+    @Test
+    @Order(8)
+    @DisplayName("Exists by id with unexpected error test")
+    void existsByIdWithUnexpectedErrorTest() {
+
+        // given
+        final var directives = new Object[] { "error" };
+
+        // given
+        assertThatThrownBy(() -> defaultQueryFacade.existsById("some Id", directives))
+                // then
+                .isInstanceOf(UnexpectedException.class)
+                .hasMessageContaining("Unexpecte error happened");
     }
 }
