@@ -14,8 +14,6 @@ import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.validation.constraints.NotNull;
-
 /**
  * The default <code>InterfaceEntityQueryFacade</code>'s implementation.
  */
@@ -42,7 +40,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * @param builder Object in charge to construct this one
 	 */
 	protected QueryFacade(
-			@NotNull final QueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> builder) {
+			final QueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> builder) {
 
 		super(builder);
 
@@ -156,7 +154,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * {@inheritDoc}
 	 */
 	@Override
-	public OneResult findById(@NotNull final QueryIdIn queryIdIn, final Object... directives) {
+	public OneResult findById(final QueryIdIn queryIdIn, final Object... directives) {
 		return executeOperation(
 				queryIdIn, FIND_ENTITY_BY_ID, this::preFindBy, this::posFindBy,
 				findByIdFunction::apply, this::errorFindBy, directives);
@@ -206,7 +204,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ExistsResult existsById(@NotNull final QueryIdIn queryIdIn, final Object... directives) {
+	public ExistsResult existsById(final QueryIdIn queryIdIn, final Object... directives) {
 		return executeOperation(
 				queryIdIn, EXISTS_BY_ID, this::preExistsBy,
 				this::posExistsBy, existsByIdFunction::apply, this::errorExistsBy, directives);

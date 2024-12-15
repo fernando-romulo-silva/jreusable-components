@@ -12,9 +12,6 @@ import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.NotNull;
-
 /**
  * Interface responsible for establishing contracts to retrieve objects, common
  * operations to all projects.
@@ -36,7 +33,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	 * @param builder Object in charge to construct this one
 	 */
 	protected QueryPaginationSpecificationFacade(
-			@NotNull final QueryPaginationSpecificationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification> builder) {
+			final QueryPaginationSpecificationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification> builder) {
 		super(builder);
 
 		this.findBySpecificationFunction = builder.findBySpecificationFunction;
@@ -94,9 +91,9 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	 */
 	@Override
 	public MultiplePagedResult findBy(
-			@Nullable final Pageable pageable,
-			@Nullable final Specification specification,
-			@NotNull final Object... directives) {
+			final Pageable pageable,
+			final Specification specification,
+			final Object... directives) {
 		return executeOperation(
 				pageable, specification, FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE,
 				this::preFindBy, this::posFindBy, findBySpecificationFunction::apply,
@@ -143,9 +140,9 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	 */
 	@Override
 	public OneResult findOneBy(
-			@Nullable final Sort sort,
-			@Nullable final Specification specification,
-			@Nullable final Object... directives) {
+			final Sort sort,
+			final Specification specification,
+			final Object... directives) {
 		return executeOperation(
 				sort, specification,
 				FIND_ENTITY_BY_SPECIFICATION_SORTED,

@@ -26,74 +26,75 @@ import jakarta.validation.constraints.NotNull;
  * @param <ExistsResult>   The exist-result type
  */
 public non-sealed interface InterfaceQueryFacade<Entity extends AbstractEntity<Id>, Id, // basic
-    QueryIdIn, //
-    OneResult, //
-    MultipleResult, //
-    CountResult, //
-    ExistsResult> //
-    extends InterfaceBaseFacade<Entity, Id> {
+        QueryIdIn, //
+        OneResult, //
+        MultipleResult, //
+        CountResult, //
+        ExistsResult> //
+        extends InterfaceBaseFacade<Entity, Id> {
 
-  /**
-   * Find and retrieve a {@code OneResult} object by id
-   * 
-   * @param queryIdIn  The entity id
-   * @param directives Params used to configure the query
-   * 
-   * @throws NullPointerException           If the parameter 'queryIdIn' is null
-   * @throws ElementWithIdNotFoundException If you try to retrieve an entity that
-   *                                        doesn't exist
-   * @throws BaseApplicationException       If an unidentified error happened
-   * 
-   * @return Return a {@code OneResult} object
-   */
-  OneResult findById(
-      @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final QueryIdIn queryIdIn,
-      final Object... directives);
+    /**
+     * Find and retrieve a {@code OneResult} object by id
+     * 
+     * @param queryIdIn  The entity id
+     * @param directives Params used to configure the query
+     * 
+     * @throws ElementWithIdNotFoundException If you try to retrieve an entity that
+     *                                        doesn't exist
+     * @throws NullPointerException           If the parameter 'queryIdIn' is null
+     * @throws BaseApplicationException       If an unidentified error happened
+     * 
+     * @return Return a {@code OneResult} object
+     */
+    OneResult findById(
+            @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final QueryIdIn queryIdIn,
+            final Object... directives);
 
-  /**
-   * Find and retrieve all objects, be carefull with it.
-   * 
-   * @param directives Params used to configure the query
-   * 
-   * @throws BaseApplicationException If an unidentified error happened
-   * 
-   * @return Return a {@code OneResult} object
-   */
-  MultipleResult findAll(final Object... directives);
+    /**
+     * Find and retrieve all objects, be carefull with it.
+     * 
+     * @param directives Params used to configure the query
+     * 
+     * @throws BaseApplicationException If an unidentified error happened
+     * 
+     * @return Return a {@code OneResult} object
+     */
+    MultipleResult findAll(final Object... directives);
 
-  /**
-   * Check if an entity exists with the provided ID.
-   * 
-   * @param queryIdIn  The entity id
-   * @param directives Params used to configure the query
-   * 
-   * @throws NullPointerException     If the parameter 'queryIdIn' is null
-   * @throws BaseApplicationException If an unidentified error happened
-   * 
-   * @return Return a {@code ExistsResult} object
-   */
-  ExistsResult existsById(@NotNull(message = NULL_POINTER_EXCEPTION_MSG) final QueryIdIn queryIdIn,
-      final Object... directives);
+    /**
+     * Check if an entity exists with the provided ID.
+     * 
+     * @param queryIdIn  The entity id
+     * @param directives Params used to configure the query
+     * 
+     * @throws NullPointerException     If the parameter 'queryIdIn' is null
+     * @throws BaseApplicationException If an unidentified error happened
+     * 
+     * @return Return a {@code ExistsResult} object
+     */
+    ExistsResult existsById(
+            @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final QueryIdIn queryIdIn,
+            final Object... directives);
 
-  /**
-   * Check if there exists at least an entity.
-   * 
-   * @param directives Params used to configure the query
-   * 
-   * @throws BaseApplicationException If an unidentified error happened
-   * 
-   * @return Return a {@code ExistsResult} object
-   */
-  ExistsResult existsAll(final Object... directives);
+    /**
+     * Check if there exists at least an entity.
+     * 
+     * @param directives Params used to configure the query
+     * 
+     * @throws BaseApplicationException If an unidentified error happened
+     * 
+     * @return Return a {@code ExistsResult} object
+     */
+    ExistsResult existsAll(final Object... directives);
 
-  /**
-   * Count how many entities there are.
-   * 
-   * @param directives Params used to configure the query
-   * 
-   * @throws BaseApplicationException If an unidentified error happened
-   * 
-   * @return Return a {@code CountResult} object
-   */
-  CountResult countAll(final Object... directives);
+    /**
+     * Count how many entities there are.
+     * 
+     * @param directives Params used to configure the query
+     * 
+     * @throws BaseApplicationException If an unidentified error happened
+     * 
+     * @return Return a {@code CountResult} object
+     */
+    CountResult countAll(final Object... directives);
 }

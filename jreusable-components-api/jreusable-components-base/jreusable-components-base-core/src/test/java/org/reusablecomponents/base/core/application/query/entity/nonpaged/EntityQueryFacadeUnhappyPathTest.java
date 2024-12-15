@@ -1,6 +1,8 @@
 package org.reusablecomponents.base.core.application.query.entity.nonpaged;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
 import org.reusablecomponents.base.core.infra.exception.common.UnexpectedException;
 
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
@@ -49,11 +52,9 @@ class EntityQueryFacadeUnhappyPathTest {
             .messageInterpolator(INTERPOLATOR)
             .buildValidatorFactory();
 
-    static final Validator VALIDATOR = VALIDATOR_FACTORY
-            .getValidator();
+    static final Validator VALIDATOR = VALIDATOR_FACTORY.getValidator();
 
-    static final ExecutableValidator EXECUTABLE_VALIDATOR = VALIDATOR_FACTORY
-            .getValidator().forExecutables();
+    static final ExecutableValidator EXECUTABLE_VALIDATOR = VALIDATOR.forExecutables();
 
     final List<Department> defaultData = new ArrayList<>();
     final DeparmentQueryFacade defaultQueryFacade = new DeparmentQueryFacade(defaultData);
@@ -101,6 +102,23 @@ class EntityQueryFacadeUnhappyPathTest {
 
     @Test
     @Order(2)
+    @DisplayName("Find by id with null id bean validation test")
+    void findByIdWithNullIdBeanValidationTest() throws NoSuchMethodException, SecurityException {
+
+        final var method = defaultQueryFacade.getClass()
+                .getMethod("findById", Object.class, Object[].class);
+
+        final var violations = EXECUTABLE_VALIDATOR
+                .validateParameters(defaultQueryFacade, method, new Object[] { null, new Object[] {} });
+
+        assertThat(violations)
+                .hasSize(1)
+                .extracting(t -> t.getPropertyPath().toString(), ConstraintViolation::getMessage)
+                .containsExactlyInAnyOrder(tuple("findById.arg0", "The object cannot be null"));
+    }
+
+    @Test
+    @Order(3)
     @DisplayName("Find by id test with id not found test")
     void findByIdWithIdNotFoundTest() {
 
@@ -115,23 +133,25 @@ class EntityQueryFacadeUnhappyPathTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     @DisplayName("Find by id test with unexpected error test")
     void findByIdWithUnexpectedErrorTest() {
 
         // given
         final var directives = new Object[] { "error" };
+        final var queryIdIn = "3434j3";
 
         // when
-        assertThatThrownBy(() -> defaultQueryFacade.findById("3434j3",
-                directives))
+        assertThatThrownBy(() -> {
+            defaultQueryFacade.findById(queryIdIn, directives);
+        })
                 // then
                 .isInstanceOf(UnexpectedException.class)
                 .hasMessageContaining("Unexpecte error happened");
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     @DisplayName("Find all test with unexpected error test")
     void findAllWithUnexpectedErrorTest() {
 
@@ -146,7 +166,7 @@ class EntityQueryFacadeUnhappyPathTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     @DisplayName("Count all with unexpected error test")
     void countAllWithUnexpectedErrorTest() {
 
@@ -161,7 +181,7 @@ class EntityQueryFacadeUnhappyPathTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     @DisplayName("Exist all with unexpected error test")
     void existAllWithUnexpectedErrorTest() {
 
@@ -176,7 +196,7 @@ class EntityQueryFacadeUnhappyPathTest {
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     @DisplayName("Exists by id with null id test")
     void existsByIdWithNullIdTest() {
 
@@ -191,7 +211,24 @@ class EntityQueryFacadeUnhappyPathTest {
     }
 
     @Test
-    @Order(8)
+    @Order(9)
+    @DisplayName("Exists by id with null id bean validation test")
+    void existsByIdWithNullIdBeanValidationTest() throws NoSuchMethodException, SecurityException {
+
+        final var method = defaultQueryFacade.getClass()
+                .getMethod("existsById", Object.class, Object[].class);
+
+        final var violations = EXECUTABLE_VALIDATOR
+                .validateParameters(defaultQueryFacade, method, new Object[] { null, new Object[] {} });
+
+        assertThat(violations)
+                .hasSize(1)
+                .extracting(t -> t.getPropertyPath().toString(), ConstraintViolation::getMessage)
+                .containsExactlyInAnyOrder(tuple("existsById.arg0", "The object cannot be null"));
+    }
+
+    @Test
+    @Order(10)
     @DisplayName("Exists by id with unexpected error test")
     void existsByIdWithUnexpectedErrorTest() {
 

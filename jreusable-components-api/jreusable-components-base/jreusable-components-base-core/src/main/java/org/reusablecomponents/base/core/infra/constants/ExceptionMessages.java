@@ -7,7 +7,7 @@ public final class ExceptionMessages {
 
     public static final String ELEMENT_ALREADY_EXITS_EXCEPTION_MSG = "{exception.elementAlreadyExistsException}";
 
-    public static final String ELEMENT_INVALID_EXCEPTION_MSG = "{exception.elementInvalidException}";
+    public static final String INVALID_ELEMENT_EXCEPTION_MSG = "{exception.invalidElementException}";
 
     public static final String ELEMENT_NOT_FOUND_EXCEPTION_MSG = "{exception.elementNotFoundException}";
 

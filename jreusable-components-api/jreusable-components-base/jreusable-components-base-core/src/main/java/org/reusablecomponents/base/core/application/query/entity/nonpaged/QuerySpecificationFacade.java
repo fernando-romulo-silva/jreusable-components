@@ -12,8 +12,6 @@ import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.validation.constraints.NotNull;
-
 /**
  * The default <code>InterfaceEntityQuerySpecificationFacade</code>'s
  * implementation.
@@ -39,7 +37,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * @param builder Object in charge to construct this one
 	 */
 	protected QuerySpecificationFacade(
-			@NotNull final QuerySpecificationFacadeBuilder<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> builder) {
+			final QuerySpecificationFacadeBuilder<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> builder) {
 
 		super(builder);
 
@@ -95,7 +93,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 */
 	@Override
 	public MultipleResult findBySpec(
-			@NotNull final Specification specification,
+			final Specification specification,
 			final Object... directives) {
 		return executeOperation(
 				specification, FIND_ENTITIES_BY_SPECIFICATION, this::preFindBy, this::posFindBy,
@@ -149,7 +147,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 */
 	@Override
 	public OneResult findOneBySpec(
-			@NotNull final Specification specification,
+			final Specification specification,
 			final Object... directives) {
 		return executeOperation(
 				specification, FIND_ENTITY_BY_SPECIFICATION, this::preFindOneBy, this::posFindOneBy,
@@ -199,7 +197,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final ExistsResult existsBySpec(@NotNull final Specification specification, final Object... directives) {
+	public final ExistsResult existsBySpec(final Specification specification, final Object... directives) {
 		return executeOperation(
 				specification, EXISTS_BY_SPECIFICATION, this::preExistsBy, this::posExistsBy,
 				existsBySpecificationFunction::apply, this::errorExistsBySpecification, directives);
@@ -248,7 +246,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final CountResult countBySpec(@NotNull final Specification specification, final Object... directives) {
+	public final CountResult countBySpec(final Specification specification, final Object... directives) {
 		return executeOperation(
 				specification, COUNT_BY_SPECIFICATION, this::preCountBy, this::posCountBy,
 				countBySpecificationFunction::apply, this::errorCountBySpecification, directives);

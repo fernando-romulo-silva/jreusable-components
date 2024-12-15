@@ -1,9 +1,14 @@
 package org.reusablecomponents.base.core.application.query.entity.nonpaged;
 
+import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.NULL_POINTER_EXCEPTION_MSG;
+
 import org.reusablecomponents.base.core.application.base.InterfaceBaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementNotFoundException;
+import org.reusablecomponents.base.core.infra.exception.common.InvalidSpecificationException;
+
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Interface responsible for establishing contracts to retrieve objects using
@@ -36,14 +41,16 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
      * 
      * @param directives    Params used to configure the query
      * 
-     * @throws NullPointerException     If the parameter 'specification' is null
-     * @throws ElementNotFoundException If you try to retrieve an entity that
-     *                                  doesn't exist
-     * @throws BaseApplicationException If an unidentified error happened
+     * @throws InvalidSpecificationException If specification is invalid
+     * @throws NullPointerException          If the parameter 'specification' is
+     *                                       null
+     * @throws BaseApplicationException      If an unidentified error happened
      * 
      * @return Return a {@code MultipleResult} object
      */
-    MultipleResult findBySpec(final Specification specification, final Object... directives);
+    MultipleResult findBySpec(
+            @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Specification specification,
+            final Object... directives);
 
     /**
      * Find and retrieve a {@code OneResult} object by specification
@@ -52,14 +59,18 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
      *                      result
      * @param directives    Params used to configure the query
      * 
-     * @throws NullPointerException     If the parameter 'specification' is null
-     * @throws ElementNotFoundException If you try to retrieve an entity that
-     *                                  doesn't exist
-     * @throws BaseApplicationException If an unidentified error happened
+     * @throws ElementNotFoundException      If you try to retrieve an entity that
+     *                                       doesn't exist
+     * @throws InvalidSpecificationException If specification is invalid
+     * @throws NullPointerException          If the parameter 'specification' is
+     *                                       null
+     * @throws BaseApplicationException      If an unidentified error happened
      * 
      * @return Return a {@code OneResult} object
      */
-    OneResult findOneBySpec(final Specification specification, final Object... directives);
+    OneResult findOneBySpec(
+            @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Specification specification,
+            final Object... directives);
 
     /**
      * Check if there exists an entity with the provided specification.
@@ -68,12 +79,16 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
      *                      result
      * @param directives    Params used to configure the query
      * 
-     * @throws NullPointerException     If the parameter 'specification' is null
-     * @throws BaseApplicationException If an unidentified error happened
+     * @throws InvalidSpecificationException If specification is invalid
+     * @throws NullPointerException          If the parameter 'specification' is
+     *                                       null
+     * @throws BaseApplicationException      If an unidentified error happened
      * 
      * @return Return a {@code ExistsResult} object
      */
-    ExistsResult existsBySpec(final Specification specification, final Object... directives);
+    ExistsResult existsBySpec(
+            @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Specification specification,
+            final Object... directives);
 
     /**
      * Count how many entities there are by specification
@@ -82,11 +97,14 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
      *                      result
      * @param directives    Params used to configure the query
      * 
-     * @throws NullPointerException     If the parameter 'specification' is null
-     * @throws BaseApplicationException If an unidentified error happened
+     * @throws InvalidSpecificationException If specification is invalid
+     * @throws NullPointerException          If the parameter 'specification' is
+     *                                       null
+     * @throws BaseApplicationException      If an unidentified error happened
      * 
      * @return Return a {@code CountResult} object
      */
-    CountResult countBySpec(final Specification specification, final Object... directives);
-
+    CountResult countBySpec(
+            @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Specification specification,
+            final Object... directives);
 }

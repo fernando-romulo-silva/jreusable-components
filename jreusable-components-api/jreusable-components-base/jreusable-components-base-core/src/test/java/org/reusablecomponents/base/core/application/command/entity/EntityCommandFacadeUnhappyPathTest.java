@@ -59,11 +59,9 @@ class EntityCommandFacadeUnhappyPathTest {
                         .messageInterpolator(INTERPOLATOR)
                         .buildValidatorFactory();
 
-        static final Validator VALIDATOR = VALIDATOR_FACTORY
-                        .getValidator();
+        static final Validator VALIDATOR = VALIDATOR_FACTORY.getValidator();
 
-        static final ExecutableValidator EXECUTABLE_VALIDATOR = VALIDATOR_FACTORY
-                        .getValidator().forExecutables();
+        static final ExecutableValidator EXECUTABLE_VALIDATOR = VALIDATOR.forExecutables();
 
         final List<Department> defaultData = new ArrayList<>();
         final DepartmentCommandFacade defaultFacade = new DepartmentCommandFacade(defaultData);
@@ -270,9 +268,7 @@ class EntityCommandFacadeUnhappyPathTest {
 
                                 Arguments.of(List.of(invalidDepartment, correctDepartment),
                                                 ElementInvalidException.class,
-                                                "The object '[%s", elementAlreadyExistsParams)
-
-                );
+                                                "The object '[%s", elementAlreadyExistsParams));
         }
 
         @Order(4)

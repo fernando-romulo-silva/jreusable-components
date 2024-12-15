@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.reusablecomponents.base.core.application.base.BaseFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;

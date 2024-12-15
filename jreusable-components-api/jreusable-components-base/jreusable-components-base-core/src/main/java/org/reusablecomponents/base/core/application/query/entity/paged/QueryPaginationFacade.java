@@ -1,19 +1,14 @@
 package org.reusablecomponents.base.core.application.query.entity.paged;
 
-import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ALL_ENTITIES_PAGEABLE;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_SORTED;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import org.reusablecomponents.base.core.application.base.BaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * The default <code>InterfaceEntityQueryPaginationFacade</code>'s
@@ -35,10 +30,8 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 * @param builder Object in charge to construct this one
 	 */
 	protected QueryPaginationFacade(
-			@NotNull final QueryPaginationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> builder) {
-
+			final QueryPaginationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> builder) {
 		super(builder);
-
 		this.findAllFunction = builder.findAllFunction;
 		this.findFirstFunction = builder.findFirstFunction;
 	}
@@ -82,7 +75,6 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 			final Pageable pageable,
 			final Exception exception,
 			final Object... directives) {
-
 		return exception;
 	}
 
@@ -91,7 +83,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 */
 	@Override
 	@SafeVarargs
-	public final MultiplePagedResult findAll(@Nullable final Pageable pageable, @NotNull final Object... directives) {
+	public final MultiplePagedResult findAll(final Pageable pageable, final Object... directives) {
 		return executeOperation(
 				pageable, FIND_ALL_ENTITIES_PAGEABLE, this::preFindAll,
 				this::posFindAll, findAllFunction::apply, this::errorFindAll, directives);
@@ -134,7 +126,6 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 			final Sort sort,
 			final Exception exception,
 			final Object... directives) {
-
 		return exception;
 	}
 

@@ -1,7 +1,11 @@
 package org.reusablecomponents.base.core.application.query.entity.paged;
 
+import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.NULL_POINTER_EXCEPTION_MSG;
+
 import org.reusablecomponents.base.core.application.base.InterfaceBaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
+
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Interface responsible for establishing contracts to retrieve objects, using
@@ -38,7 +42,10 @@ public non-sealed interface InterfaceQueryPaginationSpecificationFacade<Entity e
      * 
      * @return Return a {@code MultipleResult} object
      */
-    MultiplePagedResult findBy(final Pageable pageable, final Specification specification, final Object... directives);
+    MultiplePagedResult findBy(
+            @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Pageable pageable,
+            @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Specification specification,
+            final Object... directives);
 
     /**
      * * Find and retrieve one entity filtered by specification using pagination
@@ -49,5 +56,8 @@ public non-sealed interface InterfaceQueryPaginationSpecificationFacade<Entity e
      * 
      * @return Return a {@code OneResult} object
      */
-    OneResult findOneBy(final Sort sort, final Specification specification, final Object... directives);
+    OneResult findOneBy(
+            @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Sort sort,
+            @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Specification specification,
+            final Object... directives);
 }

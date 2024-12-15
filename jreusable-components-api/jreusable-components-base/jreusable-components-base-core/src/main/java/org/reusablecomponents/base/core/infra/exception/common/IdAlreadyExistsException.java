@@ -22,14 +22,17 @@ public class IdAlreadyExistsException extends ElementConflictException {
      * @param cls  Class element
      * @param i18n The msg translation function
      * @param id   The id parameter
+     * @param ex   The exception's cause
      */
     public <T> IdAlreadyExistsException(
             final Class<T> cls,
             final InterfaceI18nService i18n,
+            final Throwable ex,
             final Object id) {
         super(
                 ID_ALREADY_EXITS_EXCEPTION_MSG,
                 i18n,
+                ex,
                 addAll(new Object[] { cls.getSimpleName() }, id));
     }
 }

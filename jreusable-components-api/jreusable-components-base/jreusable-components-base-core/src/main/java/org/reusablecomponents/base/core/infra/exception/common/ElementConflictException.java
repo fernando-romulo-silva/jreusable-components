@@ -18,17 +18,6 @@ public class ElementConflictException extends BaseApplicationException {
      * 
      * @param code   The message code
      * @param i18n   The message translation service
-     * @param params The parameters used on message
-     */
-    protected ElementConflictException(final String code, final InterfaceI18nService i18n, final Object... params) {
-        super(code, i18n, params);
-    }
-
-    /**
-     * Constructs a new ElementConflictException exception.
-     * 
-     * @param code   The message code
-     * @param i18n   The message translation service
      * @param ex     The exception's cause
      * @param params The parameters used on message
      */

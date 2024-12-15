@@ -48,13 +48,17 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
                 && directives[1] instanceof Class clazz) {
 
             return switch (queryOperation) {
-                case FIND_ENTITY_BY_ID -> queryExceptionHandler(ex, clazz, i18nService, directives[2]);
+                case FIND_ENTITY_BY_ID,
+                        FIND_ENTITY_BY_SPECIFICATION ->
+                    queryExceptionHandler(ex, clazz, i18nService, directives[2]);
+
+                // case FIND_ENTITY_BY_SPECIFICATION ->
+                // new ElementNotFoundException(i18nService, ex, directives[2]);
 
                 case FIND_ALL_ENTITIES,
                         FIND_ENTITIES_BY_SPECIFICATION,
                         FIND_ALL_ENTITIES_PAGEABLE,
                         FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE,
-                        FIND_ENTITY_BY_SPECIFICATION,
                         FIND_ENTITY_SORTED,
                         FIND_ENTITY_BY_SPECIFICATION_SORTED,
                         EXISTS_BY_ID,
@@ -139,6 +143,7 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
         return switch (ex) {
             case IllegalArgumentException ex2 ->
                 new ElementWithIdNotFoundException(clazz, i18nService, ex, object);
+
             case IllegalStateException ex2 -> new UnexpectedException(i18nService, ex);
 
             default -> throw new IllegalArgumentException("Unexpected exception", ex);

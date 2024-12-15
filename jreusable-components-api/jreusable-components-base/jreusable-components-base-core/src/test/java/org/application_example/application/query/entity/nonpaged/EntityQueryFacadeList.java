@@ -14,8 +14,6 @@ import org.reusablecomponents.base.translation.JavaSEI18nService;
 public class EntityQueryFacadeList<Entity extends AbstractEntity<Id>, Id>
         extends QueryFacade<Entity, Id, Id, Entity, List<Entity>, Long, Boolean> {
 
-    private final List<Entity> repository;
-
     private static final void validate(final Object... directives) {
 
         final var errorString = Arrays.stream(directives)
@@ -26,6 +24,8 @@ public class EntityQueryFacadeList<Entity extends AbstractEntity<Id>, Id>
             throw new IllegalStateException("Error!");
         }
     }
+
+    private final List<Entity> repository;
 
     public EntityQueryFacadeList(final List<Entity> repository) {
 
