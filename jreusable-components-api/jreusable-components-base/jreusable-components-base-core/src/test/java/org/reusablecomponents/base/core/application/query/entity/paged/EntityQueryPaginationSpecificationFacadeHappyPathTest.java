@@ -107,6 +107,5 @@ class EntityQueryPaginationSpecificationFacadeHappyPathTest {
                 .contains(departmentInsidePage)
                 .doesNotContain(departmentOusidePage)
                 .matches(e -> defaultQueryFacade.findBy(pageable, spec02).isEmpty());
-
     }
 }

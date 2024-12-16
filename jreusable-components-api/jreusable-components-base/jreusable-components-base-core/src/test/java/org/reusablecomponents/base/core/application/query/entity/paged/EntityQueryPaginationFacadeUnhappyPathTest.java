@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import org.application_example.application.query.entity.nonpaged.DeparmentQueryFacade;
 import org.application_example.application.query.entity.paged.DeparmentQueryPaginationFacade;
 import org.application_example.application.query.entity.paged.PageList;
 import org.application_example.domain.Department;
@@ -27,7 +26,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
 import org.reusablecomponents.base.core.infra.exception.common.UnexpectedException;
 
 import jakarta.validation.Validation;
@@ -52,11 +50,9 @@ class EntityQueryPaginationFacadeUnhappyPathTest {
             .messageInterpolator(INTERPOLATOR)
             .buildValidatorFactory();
 
-    static final Validator VALIDATOR = VALIDATOR_FACTORY
-            .getValidator();
+    static final Validator VALIDATOR = VALIDATOR_FACTORY.getValidator();
 
-    static final ExecutableValidator EXECUTABLE_VALIDATOR = VALIDATOR_FACTORY
-            .getValidator().forExecutables();
+    static final ExecutableValidator EXECUTABLE_VALIDATOR = VALIDATOR.forExecutables();
 
     final List<Department> defaultData = new ArrayList<>();
     final DeparmentQueryPaginationFacade defaultQueryFacade = new DeparmentQueryPaginationFacade(defaultData);
