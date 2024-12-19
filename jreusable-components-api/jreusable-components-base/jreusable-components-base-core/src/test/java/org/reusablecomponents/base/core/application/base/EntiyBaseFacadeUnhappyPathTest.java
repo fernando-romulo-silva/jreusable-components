@@ -21,15 +21,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @TestMethodOrder(OrderAnnotation.class)
 class EntiyBaseFacadeUnhappyPathTest {
 
-        @Test
-        @Order(1)
-        @DisplayName("Test the constructor values")
-        void constructorValuesTest() {
+    @Test
+    @Order(1)
+    @DisplayName("Test the constructor values")
+    void constructorValuesTest() {
 
-                assertThatThrownBy(() -> new BaseFacade<Department, String>(null))
-                                // then
-                                .isInstanceOf(NullPointerException.class)
-                                .hasMessageContaining("The object 'builder' cannot be null");
+        assertThatThrownBy(() -> new BaseFacade<Department, String>(null))
+                // then
+                .isInstanceOf(NullPointerException.class)
+                .hasMessageContaining("The object 'builder' cannot be null");
 
-        }
+    }
 }
