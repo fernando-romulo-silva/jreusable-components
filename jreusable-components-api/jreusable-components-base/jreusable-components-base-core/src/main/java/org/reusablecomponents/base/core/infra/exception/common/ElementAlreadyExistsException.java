@@ -11,62 +11,62 @@ import org.reusablecomponents.base.translation.InterfaceI18nService;
  */
 public class ElementAlreadyExistsException extends BaseApplicationException {
 
-        private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-        /**
-         * Constructs a new ElementAlreadyExistsException exception.
-         * 
-         * @param code   The message code
-         * @param i18n   The message translation service
-         * @param params The parameters used on message
-         */
-        protected ElementAlreadyExistsException(
-                        final String code,
-                        final InterfaceI18nService i18n,
-                        final Object... params) {
-                super(
-                                code,
-                                i18n,
-                                params);
-        }
+	/**
+	 * Constructs a new ElementAlreadyExistsException exception.
+	 * 
+	 * @param code   The message code
+	 * @param i18n   The message translation service
+	 * @param params The parameters used on message
+	 */
+	protected ElementAlreadyExistsException(
+			final String code,
+			final InterfaceI18nService i18n,
+			final Object... params) {
+		super(
+				code,
+				i18n,
+				params);
+	}
 
-        /**
-         * Constructs a new ElementAlreadyExistsException exception.
-         * 
-         * @param code   The message code
-         * @param i18n   The message translation service
-         * @param ex     The exception's cause
-         * @param params The parameters used on message
-         */
-        protected ElementAlreadyExistsException(
-                        final String code,
-                        final InterfaceI18nService i18n,
-                        final Throwable ex,
-                        final Object... params) {
-                super(
-                                code,
-                                i18n,
-                                ex,
-                                params);
-        }
+	/**
+	 * Constructs a new ElementAlreadyExistsException exception.
+	 * 
+	 * @param code   The message code
+	 * @param i18n   The message translation service
+	 * @param ex     The exception's cause
+	 * @param params The parameters used on message
+	 */
+	protected ElementAlreadyExistsException(
+			final String code,
+			final InterfaceI18nService i18n,
+			final Throwable ex,
+			final Object... params) {
+		super(
+				code,
+				i18n,
+				ex,
+				params);
+	}
 
-        /**
-         * Constructs a new ElementAlreadyExistsException exception.
-         * 
-         * @param clazz  Class element
-         * @param i18n   The message translation service
-         * @param ex     The exception's cause
-         * @param object The object in exception
-         */
-        public <T> ElementAlreadyExistsException(
-                        final InterfaceI18nService i18n,
-                        final Throwable ex,
-                        final Object object) {
-                super(
-                                ELEMENT_ALREADY_EXITS_EXCEPTION_MSG,
-                                i18n,
-                                ex,
-                                object);
-        }
+	/**
+	 * Constructs a new ElementAlreadyExistsException exception.
+	 * 
+	 * @param clazz  Class element
+	 * @param i18n   The message translation service
+	 * @param ex     The exception's cause
+	 * @param object The object in exception
+	 */
+	public <T> ElementAlreadyExistsException(
+			final InterfaceI18nService i18n,
+			final Throwable ex,
+			final Object object) {
+		super(
+				ELEMENT_ALREADY_EXITS_EXCEPTION_MSG,
+				i18n,
+				ex,
+				object);
+	}
 
 }

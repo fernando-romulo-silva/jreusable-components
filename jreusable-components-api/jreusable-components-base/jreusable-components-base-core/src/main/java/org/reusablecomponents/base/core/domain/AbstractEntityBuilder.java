@@ -18,9 +18,7 @@ public abstract class AbstractEntityBuilder<Id, Entity extends AbstractEntity<Id
         super();
     }
 
-    protected Validator getValidator() {
-        return null;
-    }
+    protected abstract Validator getValidator();
 
     @Valid
     @NotNull

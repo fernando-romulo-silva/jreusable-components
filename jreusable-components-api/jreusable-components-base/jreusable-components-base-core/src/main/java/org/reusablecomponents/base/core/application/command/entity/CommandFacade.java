@@ -1,13 +1,13 @@
 package org.reusablecomponents.base.core.application.command.entity;
 
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_ID;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_IDS;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_ENTITIES;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_ENTITY;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.SAVE_ENTITIES;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.SAVE_ENTITY;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.UPDATE_ENTITIES;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.UPDATE_ENTITY;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.DELETE_BY_ID;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.DELETE_BY_IDS;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.DELETE_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.DELETE_ENTITY;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.SAVE_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.SAVE_ENTITY;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.UPDATE_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.UPDATE_ENTITY;
 
 import java.util.function.BiFunction;
 
@@ -90,8 +90,8 @@ public non-sealed class CommandFacade< // generics
 	}
 
 	/**
-	 * Method executed before {@link #save(Object, Object...) save} saveFunction,
-	 * use it to change values.
+	 * Method executed in {@link #save(Object, Object...) save} method before the
+	 * {@link #saveFunction saveFunction}, use it to change values.
 	 * 
 	 * @param saveEntityIn The object you want to save on the persistence mechanism
 	 * @param directives   Objects used to configure the save operation
@@ -99,28 +99,29 @@ public non-sealed class CommandFacade< // generics
 	 * @return A {@code SaveEntityIn} object
 	 */
 	protected SaveEntityIn preSave(final SaveEntityIn saveEntityIn, final Object... directives) {
-		LOGGER.debug("Pre save method, ");
+		LOGGER.debug("Default preSave, saveEntityIn {}, directives {} ", saveEntityIn, directives);
 		return saveEntityIn;
 	}
 
 	/**
-	 * Method executed after {@link #save(Object, Object...) save} saveFunction,
-	 * use it to change values.
+	 * Method executed in {@link #save(Object, Object...) save} method after
+	 * {@link #saveFunction saveFunction}, use it to change values.
 	 * 
-	 * @param saveEntityOut The object you saved and updated with the persistence
-	 *                      mechanism
+	 * @param saveEntityOut The object you saved on the persistence mechanism
 	 * @param directives    Objects used to configure the save operation
 	 * 
 	 * @return A {@code SaveEntityOut} object
 	 */
 	protected SaveEntityOut posSave(final SaveEntityOut saveEntityOut, final Object... directives) {
+		LOGGER.debug("Default posSave, saveEntityOut {}, directives {} ", saveEntityOut, directives);
 		return saveEntityOut;
 	}
 
 	/**
-	 * Method used to handle {@link #save(Object, Object...) save} errors.
+	 * Method executed in {@link #save(Object, Object...) save} method to handle
+	 * {@link #saveFunction saveFunction} errors.
 	 * 
-	 * @param saveEntityIn The object you want to save on the persistence mechanism
+	 * @param saveEntityIn The object you tried to save on the persistence mechanism
 	 * @param exception    Exception thrown by save operation
 	 * @param directives   Objects used to configure the save operation
 	 * 
@@ -130,6 +131,8 @@ public non-sealed class CommandFacade< // generics
 			final SaveEntityIn saveEntityIn,
 			final Exception exception,
 			final Object... directives) {
+		LOGGER.debug("Default errorSave, saveEntityIn {}, exception {}, directives {} ",
+				saveEntityIn, exception, directives);
 		return exception;
 	}
 
@@ -138,39 +141,51 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public SaveEntityOut save(final SaveEntityIn saveEntityIn, final Object... directives) {
-		return executeOperation(
+		LOGGER.debug("Default save, saveEntityIn {}, directives {} ", saveEntityIn, directives);
+
+		final var saveEntityOut = executeOperation(
 				saveEntityIn, SAVE_ENTITY, this::preSave,
 				this::posSave, saveFunction::apply, this::errorSave, directives);
+
+		LOGGER.debug("Default save, saveEntityOut {}, directives {} ", saveEntityOut, directives);
+
+		return saveEntityOut;
 	}
 
 	/**
-	 * Method used to change a group of entities before save it.
+	 * Method executed in {@link #saveAll(Object, Object...) saveAll} method before
+	 * the {@link #saveAllFunction saveAllFunction}, use it to change values.
 	 * 
-	 * @param saveEntiesIn The object to be changed
-	 * @param directives   Objects used to configure the save operation
+	 * @param saveEntiesIn The objects you want to save on the persistence
+	 *                     mechanism
+	 * @param directives   Objects used to configure the saveAll operation
 	 * 
-	 * @return A new {@code SaveEntitiesIn} object
+	 * @return A {@code SaveEntityIn} object
 	 */
 	protected SaveEntitiesIn preSaveAll(final SaveEntitiesIn saveEntiesIn, final Object... directives) {
+		LOGGER.debug("Default preSaveAll, saveEntiesIn {}, directives {} ", saveEntiesIn, directives);
 		return saveEntiesIn;
 	}
 
 	/**
-	 * Method used to change a group of entities after save it.
+	 * Method executed in {@link #saveAll(Object, Object...) saveAll} method after
+	 * {@link #saveAllFunction saveAllFunction}, use it to change values.
 	 * 
-	 * @param saveEntiesOut The group of objects to be changed
-	 * @param directives    Objects used to configure the save operation
+	 * @param saveEntiesOut The objects you saved on the persistence mechanism
+	 * @param directives    Objects used to configure the saveAll operation
 	 * 
-	 * @return A new {@code SaveEntitiesOut} object
+	 * @return A {@code SaveEntitiesOut} object
 	 */
 	protected SaveEntitiesOut posSaveAll(final SaveEntitiesOut saveEntiesOut, final Object... directives) {
+		LOGGER.debug("Default posSaveAll, saveEntiesOut {}, directives {} ", saveEntiesOut, directives);
 		return saveEntiesOut;
 	}
 
 	/**
-	 * Method used to handle {@link #saveAll(Object, Object...) save} errors.
+	 * Method executed in {@link #saveAll(Object, Object...) saveAll} method to
+	 * handle {@link #saveAllFunction saveAllFunction} errors.
 	 * 
-	 * @param saveEntitiesIn The objects you want to save on the persistence
+	 * @param saveEntitiesIn The objects you tried to save on the persistence
 	 *                       mechanism
 	 * @param exception      Exception thrown by save operation
 	 * @param directives     Objects used to configure the save operation
@@ -181,6 +196,8 @@ public non-sealed class CommandFacade< // generics
 			final SaveEntitiesIn saveEntitiesIn,
 			final Exception exception,
 			final Object... directives) {
+		LOGGER.debug("Default errorSaveAll, saveEntitiesIn {}, exception {}, directives {} ",
+				saveEntitiesIn, exception, directives);
 		return exception;
 	}
 
@@ -195,35 +212,42 @@ public non-sealed class CommandFacade< // generics
 	}
 
 	/**
-	 * Method used to change an entity before update it.
+	 * Method executed in {@link #update(Object, Object...) update} method before
+	 * the {@link #updateFunction updateFunction}, use it to change values.
 	 * 
-	 * @param updateEntityIn The object to be changed
-	 * @param directives     Objects used to configure the update operation
+	 * @param updateEntityIn The object you want to update on the persistence
+	 *                       mechanism
+	 * @param directives     Objects used to configure the save operation
 	 * 
-	 * @return A new {@code UpdateEntityIn} object
+	 * @return A {@code UpdateEntityIn} object
 	 */
 	protected UpdateEntityIn preUpdate(final UpdateEntityIn updateEntityIn, final Object... directives) {
+		LOGGER.debug("Default preUpdate, updateEntityIn {}, directives {} ", updateEntityIn, directives);
 		return updateEntityIn;
 	}
 
 	/**
-	 * Method used to change an entity after update it.
+	 * Method executed in {@link #update(Object, Object...) update} method after
+	 * {@link #updateFunction updateFunction}, use it to change values.
 	 * 
-	 * @param updateEntityOut The object to be changed
-	 * @param directives      Objects used to configure the update operation
+	 * @param updateEntityOut The object you updated on the persistence mechanism
+	 * @param directives      Objects used to configure the save operation
 	 * 
-	 * @return A new {@code UpdateEntityOut} object
+	 * @return A {@code UpdateEntityOut} object
 	 */
 	protected UpdateEntityOut posUpdate(final UpdateEntityOut updateEntityOut, final Object... directives) {
+		LOGGER.debug("Default preUpdate, updateEntityOut {}, directives {} ", updateEntityOut, directives);
 		return updateEntityOut;
 	}
 
 	/**
-	 * Method used to handle update errors.
+	 * Method executed in {@link #update(Object, Object...) update} method to handle
+	 * {@link #updateFunction updateFunction} errors.
 	 * 
-	 * @param updateEntityIn The object tried to update
-	 * @param exception      Exception thrown by update operation
-	 * @param directives     Objects used to configure the update operation
+	 * @param updateEntityIn The object you tried to update on the persistence
+	 *                       mechanism
+	 * @param exception      Exception thrown by save operation
+	 * @param directives     Objects used to configure the save operation
 	 * 
 	 * @return The handled exception
 	 */
@@ -245,34 +269,40 @@ public non-sealed class CommandFacade< // generics
 	}
 
 	/**
-	 * Method used to change a group of entities before update it.
+	 * Method executed in {@link #updateAll(Object, Object...) updateAll} method
+	 * before the {@link #updateAllFunction updateAllFunction}, use it to change
+	 * values.
 	 * 
-	 * @param updateEntitiesIn The object to be changed
-	 * @param directives       Objects used to configure the update all operation
+	 * @param updateEntitiesIn The objects you want to save on the persistence
+	 *                         mechanism
+	 * @param directives       Objects used to configure the updateAll operation
 	 * 
-	 * @return A new {@code UpdateEntitiesIn} object
+	 * @return A {@code UpdateEntitiesIn} object
 	 */
 	protected UpdateEntitiesIn preUpdateAll(final UpdateEntitiesIn updateEntitiesIn, final Object... directives) {
 		return updateEntitiesIn;
 	}
 
 	/**
-	 * Method used to change a group of entities after update it.
+	 * Method executed in {@link #updateAll(Object, Object...) updateAll} method
+	 * after {@link #updateAllFunction updateAllFunction}, use it to change values.
 	 * 
-	 * @param updateEntitiesOut The object to be changed
-	 * @param directives        Objects used to configure the update all operation
+	 * @param updateEntitiesOut The objects you updated on the persistence mechanism
+	 * @param directives        Objects used to configure the updateAll operation
 	 * 
-	 * @return A new {@code UpdateEntitiesOut} object
+	 * @return A {@code SaveEntitiesOut} object
 	 */
 	protected UpdateEntitiesOut posUpdateAll(final UpdateEntitiesOut updateEntitiesOut, final Object... directives) {
 		return updateEntitiesOut;
 	}
 
 	/**
-	 * Method used to handle update all errors.
+	 * Method executed in {@link #updateAll(Object, Object...) updateAll} method to
+	 * handle {@link #saveAllFunction saveAllFunction} errors.
 	 * 
-	 * @param updateEntitiesIn The object tried to update
-	 * @param exception        Exception thrown by save operation
+	 * @param updateEntitiesIn The objects you tried to updateall on the persistence
+	 *                         mechanism
+	 * @param exception        Exception thrown by updateAll operation
 	 * @param directives       Objects used to configure the save operation
 	 * 
 	 * @return The handled exception
@@ -294,25 +324,32 @@ public non-sealed class CommandFacade< // generics
 				this::posUpdateAll, updateAllFunction::apply, this::errorUpdateAll, directives);
 	}
 
+	// =======================================================================
+
 	/**
-	 * Method used to change an entity before delete it.
+	 * Method executed before {@link #delete(Object, Object...) delete}
+	 * deleteFunction, use it to change values.
 	 * 
-	 * @param deleteEntityIn The object to be changed
+	 * @param deleteEntityIn The object you want to delete on the persistence
+	 *                       mechanism
 	 * @param directives     Objects used to configure the delete operation
 	 * 
-	 * @return A new {@code DeleteEntityIn} object
+	 * @return A {@code DeleteEntityIn} object
 	 */
+
 	protected DeleteEntityIn preDelete(final DeleteEntityIn deleteEntityIn, final Object... directives) {
 		return deleteEntityIn;
 	}
 
 	/**
-	 * Method used to change an entity after delete it.
+	 * Method executed after {@link #delete(Object, Object...) delete}
+	 * deleteFunction,
+	 * use it to change values.
 	 * 
-	 * @param deleteEntityOut The object to be changed
+	 * @param DeleteEntityOut The object you deleted with the persistence mechanism
 	 * @param directives      Objects used to configure the delete operation
 	 * 
-	 * @return A new {@code DeleteEntityOut} object
+	 * @return A {@code DeleteEntityOut} object
 	 */
 	protected DeleteEntityOut posDelete(final DeleteEntityOut deleteEntityOut, final Object... directives) {
 		return deleteEntityOut;
@@ -324,6 +361,16 @@ public non-sealed class CommandFacade< // generics
 	 * @param deleteEntityIn The object tried to delete
 	 * @param exception      Exception thrown by delete operation
 	 * @param directives     Objects used to configure the delete operation
+	 * 
+	 * @return The handled exception
+	 */
+
+	/**
+	 * Method used to handle {@link #delete(Object, Object...) save} errors.
+	 * 
+	 * @param saveEntityIn The object you tried to save on the persistence mechanism
+	 * @param exception    Exception thrown by save operation
+	 * @param directives   Objects used to configure the save operation
 	 * 
 	 * @return The handled exception
 	 */

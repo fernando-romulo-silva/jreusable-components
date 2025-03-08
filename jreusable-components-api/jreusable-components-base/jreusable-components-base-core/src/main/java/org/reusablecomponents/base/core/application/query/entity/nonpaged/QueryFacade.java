@@ -114,7 +114,6 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * (findBy method).
 	 * 
 	 * @param queryIdIn  The object to be changed
-	 * 
 	 * @param directives The object to be changed
 	 * 
 	 * @return A new {@code QueryIdIn} object

@@ -24,10 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.application_example.domain.Manager;
 import org.application_example.domain.Department;
 import org.application_example.domain.Gender;
 import org.application_example.domain.Hobby;
+import org.application_example.domain.Manager;
+import org.application_example.domain.Notification;
 import org.application_example.domain.Person;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayName;
@@ -113,6 +114,36 @@ class AbstractEntiyHappyPathTest extends AbstractValidatorTest {
 
 	@Test
 	@Order(4)
+	void checkEntityWithouValidadorInstanceTest() {
+		// given
+		final var id = 10L;
+		final var name = "Notification 01";
+		final var description = "This is a description";
+		final var dateTime = LocalDateTime.now();
+		final var sequence = 10;
+
+		// when
+		final var notificationBuilder = new Notification.Builder()
+				.with($ -> {
+					$.id = id;
+					$.name = name;
+					$.description = description;
+					$.dateTime = dateTime;
+					$.sequence = sequence;
+				});
+
+		final var notification = notificationBuilder.build();
+
+		// then
+		assertThat(notificationBuilder.getValidator())
+				.isNull();
+
+		assertThat(notification.getId())
+				.isEqualTo(id);
+	}
+
+	@Test
+	@Order(5)
 	@DisplayName("Test entity without builder creation")
 	void checkEntityWithoutBuilderTest() {
 
@@ -129,6 +160,7 @@ class AbstractEntiyHappyPathTest extends AbstractValidatorTest {
 		assertThat(department)
 				.as("Check the update reason is not empty")
 				.returns(true, Department::isPublishable)
+				.returns(id, Department::getId)
 				.returns(EMPTY, Department::getRealmId);
 
 		// perform beans validation
@@ -148,7 +180,7 @@ class AbstractEntiyHappyPathTest extends AbstractValidatorTest {
 						LocalDate.of(2000, 2, 15), new ArrayList<>(asList(READING, WATCHING_MOVIES))));
 	}
 
-	@Order(5)
+	@Order(6)
 	@ParameterizedTest(name = "Pos {index} : id ''{0}'', name ''{1}'', createdDate ''{2}'', createdReason ''{3}''")
 	@MethodSource("createEntityWithBuilderData")
 	@DisplayName("Test entity with builder creation")

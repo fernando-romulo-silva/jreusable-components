@@ -7,5 +7,4 @@ public class Const {
     private Const() {
         throw new UnsupportedOperationException("You can't instanciate this class");
     }
-
 }

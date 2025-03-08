@@ -17,31 +17,34 @@ import jakarta.validation.constraints.NotNull;
 
 /**
  * Interface responsible for establishing contracts to create, update, and
- * delete entities, basic business operations to all projects.
- * 
+ * delete entities, basic business operations to all entities.
  * 
  * @param <Entity>            The facade entity type
  * @param <Id>                The facade entity id type
  * 
- * @param <SaveEntityIn>      The save an entity operation input type
- * @param <SaveEntityOut>     The save an entity operation result type
- * @param <SaveEntitiesIn>    The save entities operation input type
- * @param <SaveEntitiesOut>   The save entities operation result type
+ * @param <SaveEntityIn>      The save operation entity type
+ * @param <SaveEntityOut>     The save operation entity type result
+ * @param <SaveEntitiesIn>    The save operation entity type (bulk version)
+ * @param <SaveEntitiesOut>   The save operation entity type result (bulk
+ *                            version)
  * 
- * @param <UpdateEntityIn>    The update an entity operation input type
- * @param <UpdateEntityOut>   The update an entity operation result type
- * @param <UpdateEntitiesIn>  The update entities operation input type
- * @param <UpdateEntitiesOut> The update entities operation result type
+ * @param <UpdateEntityIn>    The update operation entity type
+ * @param <UpdateEntityOut>   The update operation entity type result
+ * @param <UpdateEntitiesIn>  The update operation entity type (bulk version)
+ * @param <UpdateEntitiesOut> The update operation entity type result (bulk
+ *                            version)
  * 
- * @param <DeleteEntityIn>    The delete an entity operation input type
- * @param <DeleteEntityOut>   The delete an entity operation result type
- * @param <DeleteEntitiesIn>  The delete entities operation input type
- * @param <DeleteEntitiesOut> The delete entities operation result type
+ * @param <DeleteEntityIn>    The delete operation entity type
+ * @param <DeleteEntityOut>   The delete operation entity type result
+ * @param <DeleteEntitiesIn>  The delete operation entity type (bulk version)
+ * @param <DeleteEntitiesOut> The delete operation entity type result (bulk
+ *                            version)
  * 
- * @param <DeleteIdIn>        The delete an entity by id operation input type
- * @param <DeleteIdOut>       The delete an entity by id operation result type
- * @param <DeleteIdsIn>       The delete entities by ids operation input type
- * @param <DeleteIdsOut>      The delete entities by ids operation result type
+ * @param <DeleteIdIn>        The save operation entity id type
+ * @param <DeleteIdOut>       The save operation entity id type result
+ * @param <DeleteIdsIn>       The save operation entity id type (bulk version)
+ * @param <DeleteIdsOut>      The save operation entity id type result (bulk
+ *                            version)
  */
 public non-sealed interface InterfaceCommandFacade<Entity extends AbstractEntity<Id>, Id, // basic
                 // save
@@ -82,7 +85,7 @@ public non-sealed interface InterfaceCommandFacade<Entity extends AbstractEntity
 
         /**
          * Save a group of entities at the same time.
-         * The batch version of {@link #save(E e) save method}.
+         * The batch version of {@link #save(E e) save} method.
          * 
          * @param saveEntitiesIn The objects you want to save on the persistence
          *                       mechanism
@@ -126,7 +129,7 @@ public non-sealed interface InterfaceCommandFacade<Entity extends AbstractEntity
 
         /**
          * Update a group of entities at the same time.
-         * The batch version of {@link #update(E e) update method}.
+         * The batch version of {@link #update(E e) update} method.
          * 
          * @param updateEntitiesIn The objects you want to update on the persistence
          *                         mechanism
@@ -172,7 +175,7 @@ public non-sealed interface InterfaceCommandFacade<Entity extends AbstractEntity
 
         /**
          * Delete a group of entities at the same time.
-         * The batch version of {@link #delete(E e) delete method}.
+         * The batch version of {@link #delete(E e) delete} method.
          * 
          * @param deleteEntitiesIn The object you want to delete on the persistence
          *                         mechanism
@@ -220,7 +223,7 @@ public non-sealed interface InterfaceCommandFacade<Entity extends AbstractEntity
 
         /**
          * Delete a group of entities at the same time using its ids.
-         * The batch version of {@link #deleteBy(Id id) delete method}.
+         * The batch version of {@link #deleteBy(Id id) delete} method.
          * 
          * @param DeleteIdsIn The entity ids
          * @param directives  Objects used to configure the delete by action

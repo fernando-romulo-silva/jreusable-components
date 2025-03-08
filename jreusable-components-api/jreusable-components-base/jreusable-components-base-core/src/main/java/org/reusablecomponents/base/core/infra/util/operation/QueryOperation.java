@@ -6,7 +6,7 @@ package org.reusablecomponents.base.core.infra.util.operation;
  * <code>InterfaceEntityQueryPaginationFacade</code>, and
  * <code>InterfaceEntityQueryPaginationSpecificationFacade</code>.
  */
-public enum QueryOperation implements InterfaceOperation {
+public enum QueryOperation implements InterfaceOperationType {
 
     FIND_ALL_ENTITIES,
 

@@ -40,8 +40,7 @@ public class ElementConflictException extends BaseApplicationException {
             final InterfaceI18nService i18n,
             final Throwable ex,
             final Object object) {
-        super(
-                ELEMENT_CONFLICT_EXCEPTION_MSG,
+        super(ELEMENT_CONFLICT_EXCEPTION_MSG,
                 i18n,
                 ex,
                 object);

@@ -8,7 +8,7 @@ import org.reusablecomponents.base.core.infra.exception.common.ElementInvalidExc
 import org.reusablecomponents.base.core.infra.exception.common.ElementNotFoundException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
 import org.reusablecomponents.base.core.infra.exception.common.UnexpectedException;
-import org.reusablecomponents.base.core.infra.util.operation.CommandOperation;
+import org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation;
 import org.reusablecomponents.base.core.infra.util.operation.QueryOperation;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 
@@ -21,7 +21,7 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
             final Object... directives) {
 
         if (directives.length == 3
-                && directives[0] instanceof CommandOperation commandOperation
+                && directives[0] instanceof CommandTypesOperation commandOperation
                 && directives[1] instanceof Class clazz
                 && directives[2] instanceof Object object) {
 

@@ -3,7 +3,7 @@ package org.reusablecomponents.base.core.infra.util.operation;
 /**
  * Command's operations, relate to <code>EntityCommandFacade</code>.
  */
-public enum CommandOperation implements InterfaceOperation {
+public enum CommandTypesOperation implements InterfaceOperationType {
 
     /**
      * Save an entity operation

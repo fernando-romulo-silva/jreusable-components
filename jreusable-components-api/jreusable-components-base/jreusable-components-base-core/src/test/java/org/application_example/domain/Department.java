@@ -64,7 +64,7 @@ public class Department extends AbstractEntity<String> {
 
     @NotEmpty
     public String getId() {
-        return id;
+        return super.getId();
     }
 
     public String getName() {
