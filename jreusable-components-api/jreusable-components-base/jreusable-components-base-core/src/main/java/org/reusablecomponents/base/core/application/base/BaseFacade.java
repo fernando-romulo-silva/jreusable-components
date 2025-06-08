@@ -1,21 +1,25 @@
 package org.reusablecomponents.base.core.application.base;
 
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 import static org.reusablecomponents.base.core.infra.util.Functions.createNullPointerException;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map.Entry;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.function.TriFunction;
 import org.reusablecomponents.base.core.application.command.entity.CommandFacade;
 import org.reusablecomponents.base.core.application.empty.EmptyFacade;
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.QueryFacade;
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.QuerySpecificationFacade;
-import org.reusablecomponents.base.core.application.query.entity.paged.QueryPaginationFacade;
-import org.reusablecomponents.base.core.application.query.entity.paged.QueryPaginationSpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.pagination.QueryPaginationFacade;
+import org.reusablecomponents.base.core.application.query.entity.paginationspecification.QueryPaginationSpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacade;
+import org.reusablecomponents.base.core.application.query.entity.specification.QuerySpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.util.QuadFunction;
@@ -53,8 +57,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseFacade.class);
 
-	// -------
-
 	protected final InterfaceSecurityService securityService;
 
 	protected final InterfaceI18nService i18nService;
@@ -64,8 +66,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	protected final Class<Entity> entityClazz;
 
 	protected final Class<Id> idClazz;
-
-	// ------
 
 	/**
 	 * Default constructor
@@ -85,8 +85,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		this.securityService = finalBuilder.securityService;
 		this.exceptionAdapterService = finalBuilder.exceptionAdapterService;
 	}
-
-	// ------
 
 	/**
 	 * Capture the entity class type
@@ -354,6 +352,84 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		LOGGER.debug(POS_OPERATION_LOG, operationName, finalOutName, finalOut, session, directives);
 
 		return finalOut;
+	}
+
+	/**
+	 * Execute a collection of functions in sequence
+	 * 
+	 * @param <In>
+	 * @param action
+	 * @param in
+	 * @param directives
+	 * @param functions
+	 * @return
+	 */
+	protected <In> In executeFunctions(
+			final String action,
+			final In in,
+			final Object[] directives,
+			final Collection<FacadeBiFunction<In>> functions) {
+		if (ObjectUtils.isEmpty(functions)) {
+			LOGGER.debug("No functions to execute on {} operation with input {} and directires {}",
+					action, in, directives);
+			return in;
+		}
+
+		final var allFunctionsName = functions.stream()
+				.filter(FacadeBiFunction::isActice)
+				.map(f -> f.getClass().getSimpleName())
+				.collect(joining(", "));
+
+		final var skkipedFunctions = new ArrayList<String>();
+		final var functionsError = new ArrayList<String>();
+		final var executedFunctions = new ArrayList<String>();
+
+		LOGGER.debug("Execute functions {} on {} operation with input {} and directires {}",
+				allFunctionsName, action, in, directives);
+
+		In in1Function = in;
+		for (final var function : functions) {
+			final var functionName = function.getClass().getSimpleName();
+			try {
+				if (!function.isActice()) {
+					LOGGER.debug("Function {} with input {} disabled, it won't execute", functionName, in1Function);
+					skkipedFunctions.add(functionName);
+					continue;
+				}
+				in1Function = function.apply(in1Function, directives);
+				LOGGER.debug("Function {} executed, result {}", functionName, in1Function);
+				executedFunctions.add(functionName);
+			} catch (final Exception ex) {
+				functionsError.add(functionName);
+				LOGGER.debug("Function {} executed with error  {}", functionName);
+			}
+		}
+
+		LOGGER.debug("Functions {} executed, skkipet {}, with errors {}",
+				executedFunctions,
+				skkipedFunctions,
+				functionsError);
+		return in1Function;
+	}
+
+	protected <In1, In2> In1 executeFunctions(
+			final In1 in1, final In2 in2,
+			final Object[] directives,
+			final Collection<FacadeTriFunction<In1, In2>> functions) {
+		LOGGER.debug("Execute functions on {} with input {} and directires {}", action, in1, directives);
+		if (ObjectUtils.isEmpty(functions)) {
+			return in1;
+		}
+
+		final var functionsFinal = functions.stream()
+				.filter(FacadeTriFunction::isActice)
+				.toList();
+
+		var in1Function = in1;
+		for (final var function : functionsFinal) {
+			in1Function = function.apply(in1Function, in2, directives);
+		}
+		return in1Function;
 	}
 
 	/**

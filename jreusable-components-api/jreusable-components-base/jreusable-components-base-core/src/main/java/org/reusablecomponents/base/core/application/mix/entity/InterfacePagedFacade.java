@@ -1,8 +1,8 @@
 package org.reusablecomponents.base.core.application.mix.entity;
 
 import org.reusablecomponents.base.core.application.command.entity.InterfaceCommandFacade;
-import org.reusablecomponents.base.core.application.query.entity.paged.InterfaceQueryPaginationFacade;
-import org.reusablecomponents.base.core.application.query.entity.paged.InterfaceQueryPaginationSpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.pagination.InterfaceQueryPaginationFacade;
+import org.reusablecomponents.base.core.application.query.entity.paginationspecification.InterfaceQueryPaginationSpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 public interface InterfacePagedFacade<Entity extends AbstractEntity<Id>, Id, // basic

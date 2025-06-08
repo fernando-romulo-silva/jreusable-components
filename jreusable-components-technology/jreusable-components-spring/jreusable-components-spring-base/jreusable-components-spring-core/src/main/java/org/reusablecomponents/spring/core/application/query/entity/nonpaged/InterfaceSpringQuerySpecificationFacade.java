@@ -4,7 +4,7 @@ import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 
 import java.util.Optional;
 
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.InterfaceQuerySpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.specification.InterfaceQuerySpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;

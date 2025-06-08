@@ -1,4 +1,4 @@
-package org.reusablecomponents.base.core.application.query.entity.paged;
+package org.reusablecomponents.base.core.application.query.entity.paginationspecification;
 
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION_SORTED;

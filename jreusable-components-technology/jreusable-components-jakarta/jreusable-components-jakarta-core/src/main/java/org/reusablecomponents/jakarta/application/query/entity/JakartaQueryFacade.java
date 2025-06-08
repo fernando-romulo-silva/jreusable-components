@@ -3,8 +3,8 @@ package org.reusablecomponents.jakarta.application.query.entity;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.QueryFacade;
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.QueryFacadeBuilder;
+import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacade;
+import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.jakarta.domain.InterfaceJakartaRepository;
 

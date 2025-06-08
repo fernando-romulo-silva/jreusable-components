@@ -30,8 +30,10 @@ open module org.reusablecomponent.base.core {
     exports org.reusablecomponents.base.core.application.command.entity;
 
     // -- queries facades
-    exports org.reusablecomponents.base.core.application.query.entity.paged;
-    exports org.reusablecomponents.base.core.application.query.entity.nonpaged;
+    exports org.reusablecomponents.base.core.application.query.entity.simple;
+    exports org.reusablecomponents.base.core.application.query.entity.pagination;
+    exports org.reusablecomponents.base.core.application.query.entity.paginationspecification;
+    exports org.reusablecomponents.base.core.application.query.entity.specification;
 
     // -- full facades
     exports org.reusablecomponents.base.core.application.mix.entity;
@@ -44,5 +46,4 @@ open module org.reusablecomponent.base.core {
     exports org.reusablecomponents.base.core.infra.constants;
     exports org.reusablecomponents.base.core.infra.util;
     exports org.reusablecomponents.base.core.infra.util.operation;
-
 }

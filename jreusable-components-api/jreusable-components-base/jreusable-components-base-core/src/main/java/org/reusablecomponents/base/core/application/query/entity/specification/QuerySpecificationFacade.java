@@ -1,4 +1,4 @@
-package org.reusablecomponents.base.core.application.query.entity.nonpaged;
+package org.reusablecomponents.base.core.application.query.entity.specification;
 
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.COUNT_BY_SPECIFICATION;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_BY_SPECIFICATION;

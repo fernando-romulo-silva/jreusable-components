@@ -2,8 +2,8 @@ package org.reusablecomponents.spring.core.application.query.entity.paged;
 
 import java.util.Optional;
 
-import org.reusablecomponents.base.core.application.query.entity.paged.QueryPaginationFacade;
-import org.reusablecomponents.base.core.application.query.entity.paged.QueryPaginationFacadeBuilder;
+import org.reusablecomponents.base.core.application.query.entity.pagination.QueryPaginationFacade;
+import org.reusablecomponents.base.core.application.query.entity.pagination.QueryPaginationFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;

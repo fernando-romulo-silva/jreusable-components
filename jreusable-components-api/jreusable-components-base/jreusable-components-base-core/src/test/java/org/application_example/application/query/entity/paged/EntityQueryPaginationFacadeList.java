@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.application_example.infra.DummySecurityService;
 import org.application_example.infra.ExceptionAdapterListService;
-import org.reusablecomponents.base.core.application.query.entity.paged.QueryPaginationFacade;
-import org.reusablecomponents.base.core.application.query.entity.paged.QueryPaginationFacadeBuilder;
+import org.reusablecomponents.base.core.application.query.entity.pagination.QueryPaginationFacade;
+import org.reusablecomponents.base.core.application.query.entity.pagination.QueryPaginationFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
 

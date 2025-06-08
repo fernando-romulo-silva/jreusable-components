@@ -2,8 +2,8 @@ package org.reusablecomponents.spring.core.application.query.entity.nonpaged;
 
 import java.util.Optional;
 
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.QueryFacade;
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.QueryFacadeBuilder;
+import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacade;
+import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;

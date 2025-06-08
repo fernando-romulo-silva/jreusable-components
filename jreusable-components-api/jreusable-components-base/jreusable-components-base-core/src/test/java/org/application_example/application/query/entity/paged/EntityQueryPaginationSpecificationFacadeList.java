@@ -7,8 +7,8 @@ import java.util.function.Predicate;
 
 import org.application_example.infra.DummySecurityService;
 import org.application_example.infra.ExceptionAdapterListService;
-import org.reusablecomponents.base.core.application.query.entity.paged.QueryPaginationSpecificationFacade;
-import org.reusablecomponents.base.core.application.query.entity.paged.QueryPaginationSpecificationFacadeBuilder;
+import org.reusablecomponents.base.core.application.query.entity.paginationspecification.QueryPaginationSpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.paginationspecification.QueryPaginationSpecificationFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
 

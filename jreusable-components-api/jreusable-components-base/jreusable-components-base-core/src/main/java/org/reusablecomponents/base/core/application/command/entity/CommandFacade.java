@@ -1,5 +1,6 @@
 package org.reusablecomponents.base.core.application.command.entity;
 
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.DELETE_BY_ID;
 import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.DELETE_BY_IDS;
 import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.DELETE_ENTITIES;
@@ -9,9 +10,14 @@ import static org.reusablecomponents.base.core.infra.util.operation.CommandTypes
 import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.UPDATE_ENTITIES;
 import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.UPDATE_ENTITY;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiFunction;
 
+import org.apache.commons.lang3.function.TriFunction;
 import org.reusablecomponents.base.core.application.base.BaseFacade;
+import org.reusablecomponents.base.core.application.base.FacadeBiFunction;
+import org.reusablecomponents.base.core.application.base.FacadeTriFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,15 +61,70 @@ public non-sealed class CommandFacade< // generics
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommandFacade.class);
 
+	/**
+	 * Function that executes the save operation in the
+	 * {@link #save(Object, Object...) save} method
+	 */
 	protected final BiFunction<SaveEntityIn, Object[], SaveEntityOut> saveFunction;
+
+	/**
+	 * Functions executed in sequence in the {@link #preSave(Object, Object...)
+	 * preSave} method
+	 */
+	protected final List<FacadeBiFunction<SaveEntityIn>> savePreFunctions = new ArrayList<>();
+
+	/**
+	 * Functions executed in sequence in the {@link #posSave(Object, Object...)
+	 * posSave} method
+	 */
+	protected final List<FacadeBiFunction<SaveEntityOut>> savePosFunctions = new ArrayList<>();
+
+	/**
+	 * Functions executed in sequence in the
+	 * {@link #errorSave(Object, Object, Object...) errorSave} method
+	 */
+	protected final List<FacadeTriFunction<Exception, SaveEntityIn>> saveErrorFunctions = new ArrayList<>();
+
+	/**
+	 * Function that executes the save all (bunch save) operation in the
+	 * {@link #saveAll(Object, Object...) saveAll} method
+	 */
 	protected final BiFunction<SaveEntitiesIn, Object[], SaveEntitiesOut> saveAllFunction;
 
+	/**
+	 * Function that executes the update operation in the
+	 * {@link #update(Object, Object...) update} method
+	 */
 	protected final BiFunction<UpdateEntityIn, Object[], UpdateEntityOut> updateFunction;
+
+	/**
+	 * Function that executes the update all (bunch update) operation in the
+	 * {@link #updateAll(Object, Object...) updateAll} method
+	 */
 	protected final BiFunction<UpdateEntitiesIn, Object[], UpdateEntitiesOut> updateAllFunction;
 
+	/**
+	 * Function that executes the delete operation in the
+	 * {@link #delete(Object, Object...) delete} method
+	 */
 	protected final BiFunction<DeleteEntityIn, Object[], DeleteEntityOut> deleteFunction;
+
+	/**
+	 * Function that executes the delete all (bunch delete) operation in the
+	 * {@link #deleteAll(Object, Object...) deleteAll} method
+	 */
 	protected final BiFunction<DeleteEntitiesIn, Object[], DeleteEntitiesOut> deleteAllFunction;
+
+	/**
+	 * Function that executes the delete by id operation in the
+	 * {@link #deleteBy(Object, Object...) deleteBy} method
+	 */
 	protected final BiFunction<DeleteIdIn, Object[], DeleteIdOut> deleteByIdFunction;
+
+	/**
+	 * Function that executes the delete all by id (bunch delete by id) operation in
+	 * the {@link #deleteAllBy(Object, Object...) deleteAllBy} method
+	 */
 	protected final BiFunction<DeleteIdsIn, Object[], DeleteIdsOut> deleteAllByIdFunction;
 
 	/**
@@ -71,9 +132,8 @@ public non-sealed class CommandFacade< // generics
 	 * 
 	 * @param builder Object in charge to construct this one
 	 */
-	public CommandFacade(
+	protected CommandFacade(
 			final CommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> builder) {
-
 		super(builder);
 
 		this.saveFunction = builder.saveFunction;
@@ -91,7 +151,10 @@ public non-sealed class CommandFacade< // generics
 
 	/**
 	 * Method executed in {@link #save(Object, Object...) save} method before the
-	 * {@link #saveFunction saveFunction}, use it to change values.
+	 * {@link #saveFunction saveFunction}, use it to configure, change, etc. the
+	 * saveEntityIn object. <br />
+	 * 
+	 * This method execute {@link #savePreFunctions savePreFunctions} in sequence
 	 * 
 	 * @param saveEntityIn The object you want to save on the persistence mechanism
 	 * @param directives   Objects used to configure the save operation
@@ -100,12 +163,19 @@ public non-sealed class CommandFacade< // generics
 	 */
 	protected SaveEntityIn preSave(final SaveEntityIn saveEntityIn, final Object... directives) {
 		LOGGER.debug("Default preSave, saveEntityIn {}, directives {} ", saveEntityIn, directives);
-		return saveEntityIn;
+
+		final var saveEntityInResult = executeFunctions("preSave", saveEntityIn, directives, savePreFunctions);
+
+		LOGGER.debug("Default preSave, saveEntityInResult {}, directives {} ", saveEntityInResult, directives);
+		return saveEntityInResult;
 	}
 
 	/**
 	 * Method executed in {@link #save(Object, Object...) save} method after
-	 * {@link #saveFunction saveFunction}, use it to change values.
+	 * {@link #saveFunction saveFunction}, use it to configure, change, etc. the
+	 * output. <br />
+	 * 
+	 * This method execute {@link #savePosFunctions savePosFunctions} in sequence
 	 * 
 	 * @param saveEntityOut The object you saved on the persistence mechanism
 	 * @param directives    Objects used to configure the save operation
@@ -114,12 +184,19 @@ public non-sealed class CommandFacade< // generics
 	 */
 	protected SaveEntityOut posSave(final SaveEntityOut saveEntityOut, final Object... directives) {
 		LOGGER.debug("Default posSave, saveEntityOut {}, directives {} ", saveEntityOut, directives);
-		return saveEntityOut;
+
+		final var saveEntityOutResult = executeFunctions("posSave", saveEntityOut, directives, savePosFunctions);
+
+		LOGGER.debug("Default posSave, saveEntityOutResult {}, directives {} ", saveEntityOutResult, directives);
+		return saveEntityOutResult;
 	}
 
 	/**
 	 * Method executed in {@link #save(Object, Object...) save} method to handle
-	 * {@link #saveFunction saveFunction} errors.
+	 * {@link #saveFunction saveFunction} errors. <br />
+	 * 
+	 * This method execute {@link #saveErrorFunctions saveErrorFunctions} in
+	 * sequence
 	 * 
 	 * @param saveEntityIn The object you tried to save on the persistence mechanism
 	 * @param exception    Exception thrown by save operation
@@ -132,8 +209,17 @@ public non-sealed class CommandFacade< // generics
 			final Exception exception,
 			final Object... directives) {
 		LOGGER.debug("Default errorSave, saveEntityIn {}, exception {}, directives {} ",
-				saveEntityIn, exception, directives);
-		return exception;
+				saveEntityIn,
+				exception,
+				directives);
+
+		final var exceptionResult = executeFunctions(exception, saveEntityIn, directives, saveErrorFunctions);
+
+		LOGGER.debug("Default errorSave, saveEntityIn {}, exceptionResult {}, directives {} ",
+				saveEntityIn,
+				exceptionResult,
+				directives);
+		return exceptionResult;
 	}
 
 	/**
@@ -148,19 +234,19 @@ public non-sealed class CommandFacade< // generics
 				this::posSave, saveFunction::apply, this::errorSave, directives);
 
 		LOGGER.debug("Default save, saveEntityOut {}, directives {} ", saveEntityOut, directives);
-
 		return saveEntityOut;
 	}
 
 	/**
 	 * Method executed in {@link #saveAll(Object, Object...) saveAll} method before
-	 * the {@link #saveAllFunction saveAllFunction}, use it to change values.
+	 * the {@link #saveAllFunction saveAllFunction}, use it to configure, change,
+	 * etc. the input.
 	 * 
 	 * @param saveEntiesIn The objects you want to save on the persistence
 	 *                     mechanism
 	 * @param directives   Objects used to configure the saveAll operation
 	 * 
-	 * @return A {@code SaveEntityIn} object
+	 * @return A {@code SaveEntitiesIn} object
 	 */
 	protected SaveEntitiesIn preSaveAll(final SaveEntitiesIn saveEntiesIn, final Object... directives) {
 		LOGGER.debug("Default preSaveAll, saveEntiesIn {}, directives {} ", saveEntiesIn, directives);
@@ -169,7 +255,8 @@ public non-sealed class CommandFacade< // generics
 
 	/**
 	 * Method executed in {@link #saveAll(Object, Object...) saveAll} method after
-	 * {@link #saveAllFunction saveAllFunction}, use it to change values.
+	 * {@link #saveAllFunction saveAllFunction}, use it to configure, change, etc.
+	 * the output.
 	 * 
 	 * @param saveEntiesOut The objects you saved on the persistence mechanism
 	 * @param directives    Objects used to configure the saveAll operation
@@ -196,8 +283,9 @@ public non-sealed class CommandFacade< // generics
 			final SaveEntitiesIn saveEntitiesIn,
 			final Exception exception,
 			final Object... directives) {
-		LOGGER.debug("Default errorSaveAll, saveEntitiesIn {}, exception {}, directives {} ",
-				saveEntitiesIn, exception, directives);
+		LOGGER.debug(
+				"Default errorSaveAll, saveEntitiesIn {}, exception {}, directives {} ",
+				saveEntitiesIn, getRootCause(exception), directives);
 		return exception;
 	}
 
@@ -206,14 +294,20 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public SaveEntitiesOut saveAll(final SaveEntitiesIn saveEntitiesIn, final Object... directives) {
-		return executeOperation(
+		LOGGER.debug("Default saveAll, saveEntitiesIn {}, directives {} ", saveEntitiesIn, directives);
+
+		final var saveEntitiesOut = executeOperation(
 				saveEntitiesIn, SAVE_ENTITIES, this::preSaveAll,
 				this::posSaveAll, saveAllFunction::apply, this::errorSaveAll, directives);
+
+		LOGGER.debug("Default saveAll, saveEntitiesOut {}, directives {} ", saveEntitiesOut, directives);
+		return saveEntitiesOut;
 	}
 
 	/**
 	 * Method executed in {@link #update(Object, Object...) update} method before
-	 * the {@link #updateFunction updateFunction}, use it to change values.
+	 * the {@link #updateFunction updateFunction}, use it to configure, change, etc.
+	 * the input.
 	 * 
 	 * @param updateEntityIn The object you want to update on the persistence
 	 *                       mechanism
@@ -228,7 +322,8 @@ public non-sealed class CommandFacade< // generics
 
 	/**
 	 * Method executed in {@link #update(Object, Object...) update} method after
-	 * {@link #updateFunction updateFunction}, use it to change values.
+	 * {@link #updateFunction updateFunction}, use it to configure, change, etc.
+	 * the output.
 	 * 
 	 * @param updateEntityOut The object you updated on the persistence mechanism
 	 * @param directives      Objects used to configure the save operation
@@ -255,6 +350,8 @@ public non-sealed class CommandFacade< // generics
 			final UpdateEntityIn updateEntityIn,
 			final Exception exception,
 			final Object... directives) {
+		LOGGER.debug("Default errorUpdate, updateEntityIn {}, exception {}, directives {} ",
+				updateEntityIn, getRootCause(exception), directives);
 		return exception;
 	}
 
@@ -263,9 +360,14 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public UpdateEntityOut update(final UpdateEntityIn updateEntityIn, final Object... directives) {
-		return executeOperation(
+		LOGGER.debug("Default update, updateEntityIn {}, directives {} ", updateEntityIn, directives);
+
+		final var updateEntityOut = executeOperation(
 				updateEntityIn, UPDATE_ENTITY, this::preUpdate,
 				this::posUpdate, updateFunction::apply, this::errorUpdate, directives);
+
+		LOGGER.debug("Default update, updateEntityOut {}, directives {} ", updateEntityOut, directives);
+		return updateEntityOut;
 	}
 
 	/**
@@ -280,12 +382,14 @@ public non-sealed class CommandFacade< // generics
 	 * @return A {@code UpdateEntitiesIn} object
 	 */
 	protected UpdateEntitiesIn preUpdateAll(final UpdateEntitiesIn updateEntitiesIn, final Object... directives) {
+		LOGGER.debug("Default preUpdateAll, updateEntityIn {}, directives {} ", updateEntitiesIn, directives);
 		return updateEntitiesIn;
 	}
 
 	/**
 	 * Method executed in {@link #updateAll(Object, Object...) updateAll} method
-	 * after {@link #updateAllFunction updateAllFunction}, use it to change values.
+	 * after {@link #updateAllFunction updateAllFunction}, use it to configure,
+	 * change, etc. the output.
 	 * 
 	 * @param updateEntitiesOut The objects you updated on the persistence mechanism
 	 * @param directives        Objects used to configure the updateAll operation
@@ -293,6 +397,7 @@ public non-sealed class CommandFacade< // generics
 	 * @return A {@code SaveEntitiesOut} object
 	 */
 	protected UpdateEntitiesOut posUpdateAll(final UpdateEntitiesOut updateEntitiesOut, final Object... directives) {
+		LOGGER.debug("Default posUpdateAll, updateEntitiesOut {}, directives {} ", updateEntitiesOut, directives);
 		return updateEntitiesOut;
 	}
 
@@ -311,6 +416,8 @@ public non-sealed class CommandFacade< // generics
 			final UpdateEntitiesIn updateEntitiesIn,
 			final Exception exception,
 			final Object... directives) {
+		LOGGER.debug("Default errorUpdateAll, updateEntitiesIn {}, exception {}, directives {} ",
+				updateEntitiesIn, getRootCause(exception), directives);
 		return exception;
 	}
 
@@ -319,16 +426,20 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public UpdateEntitiesOut updateAll(final UpdateEntitiesIn updateEntitiesIn, final Object... directives) {
-		return executeOperation(
+		LOGGER.debug("Default updateAll, updateEntityIn {}, directives {} ", updateEntitiesIn, directives);
+
+		final var updateEntitiesOut = executeOperation(
 				updateEntitiesIn, UPDATE_ENTITIES, this::preUpdateAll,
 				this::posUpdateAll, updateAllFunction::apply, this::errorUpdateAll, directives);
+
+		LOGGER.debug("Default update, updateEntitiesOut {}, directives {} ", updateEntitiesOut, directives);
+		return updateEntitiesOut;
 	}
 
-	// =======================================================================
-
 	/**
-	 * Method executed before {@link #delete(Object, Object...) delete}
-	 * deleteFunction, use it to change values.
+	 * Method executed in {@link #delete(Object, Object...) delete} method before
+	 * the {@link #deleteFunction deleteFunction}, use it to configure, change, etc.
+	 * the input.
 	 * 
 	 * @param deleteEntityIn The object you want to delete on the persistence
 	 *                       mechanism
@@ -336,41 +447,34 @@ public non-sealed class CommandFacade< // generics
 	 * 
 	 * @return A {@code DeleteEntityIn} object
 	 */
-
 	protected DeleteEntityIn preDelete(final DeleteEntityIn deleteEntityIn, final Object... directives) {
+		LOGGER.debug("Default preDelete, deleteEntityIn {}, directives {} ", deleteEntityIn, directives);
 		return deleteEntityIn;
 	}
 
 	/**
-	 * Method executed after {@link #delete(Object, Object...) delete}
-	 * deleteFunction,
-	 * use it to change values.
+	 * Method executed in {@link #delete(Object, Object...) delete} method after
+	 * {@link #deleteFunction deleteFunction}, use it to configure, change, etc.
+	 * the output.
 	 * 
-	 * @param DeleteEntityOut The object you deleted with the persistence mechanism
+	 * @param deleteEntityOut The object you deleted on the persistence mechanism
 	 * @param directives      Objects used to configure the delete operation
 	 * 
 	 * @return A {@code DeleteEntityOut} object
 	 */
 	protected DeleteEntityOut posDelete(final DeleteEntityOut deleteEntityOut, final Object... directives) {
+		LOGGER.debug("Default posDelete, deleteEntityOut {}, directives {} ", deleteEntityOut, directives);
 		return deleteEntityOut;
 	}
 
 	/**
-	 * Method used to handle delete errors.
+	 * Method executed in {@link #delete(Object, Object...) delete} method to handle
+	 * {@link #deleteFunction deleteFunction} errors.
 	 * 
-	 * @param deleteEntityIn The object tried to delete
+	 * @param deleteEntityIn The object you tried to delete on the persistence
+	 *                       mechanism
 	 * @param exception      Exception thrown by delete operation
 	 * @param directives     Objects used to configure the delete operation
-	 * 
-	 * @return The handled exception
-	 */
-
-	/**
-	 * Method used to handle {@link #delete(Object, Object...) save} errors.
-	 * 
-	 * @param saveEntityIn The object you tried to save on the persistence mechanism
-	 * @param exception    Exception thrown by save operation
-	 * @param directives   Objects used to configure the save operation
 	 * 
 	 * @return The handled exception
 	 */
@@ -378,6 +482,8 @@ public non-sealed class CommandFacade< // generics
 			final DeleteEntityIn deleteEntityIn,
 			final Exception exception,
 			final Object... directives) {
+		LOGGER.debug("Default errorDelete, deleteEntityIn {}, exception {}, directives {}",
+				deleteEntityIn, getRootCause(exception), directives);
 		return exception;
 	}
 
@@ -386,41 +492,55 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public DeleteEntityOut delete(final DeleteEntityIn deleteEntityIn, final Object... directives) {
-		return executeOperation(
+		LOGGER.debug("Default delete, deleteEntityIn {}, directives {}", deleteEntityIn, directives);
+
+		final var deleteEntityOut = executeOperation(
 				deleteEntityIn, DELETE_ENTITY, this::preDelete,
 				this::posDelete, deleteFunction::apply, this::errorDelete, directives);
+
+		LOGGER.debug("Default delete, deleteEntityOut {}, directives {}", deleteEntityOut, directives);
+		return deleteEntityOut;
 	}
 
 	/**
-	 * Method used to change a group of entities before delete it.
+	 * Method executed in {@link #deleteAll(Object, Object...) deleteAll} method
+	 * before the {@link #deleteAllFunction deleteAllFunction}, use it to change
+	 * values.
 	 * 
-	 * @param deleteEntitiesIn The object to be changed
-	 * @param directives       Objects used to configure the delete all operation
+	 * @param deleteEntitiesIn The objects you want to delete on the persistence
+	 *                         mechanism
+	 * @param directives       Objects used to configure the deleteAll operation
 	 * 
-	 * @return A new {@code DeleteEntitiesIn} object
+	 * @return A {@code DeleteEntitiesIn} object
 	 */
 	protected DeleteEntitiesIn preDeleteAll(final DeleteEntitiesIn deleteEntitiesIn, final Object... directives) {
+		LOGGER.debug("Default preDeleteAll, deleteEntityIn {}, directives {}", deleteEntitiesIn, directives);
 		return deleteEntitiesIn;
 	}
 
 	/**
-	 * Method used to change a group of entities after delete it.
+	 * Method executed in {@link #deleteAll(Object, Object...) deleteAll} method
+	 * after {@link #deleteAllFunction deleteAllFunction}, use it to configure,
+	 * change, etc. the output.
 	 * 
-	 * @param deleteEntitiesOut The object to be changed
-	 * @param directives        Objects used to configure the delete all operation
+	 * @param deleteEntitiesOut The objects you deleted on the persistence mechanism
+	 * @param directives        Objects used to configure the deleteAll operation
 	 * 
-	 * @return A new {@code DeleteEntitiesOut} object
+	 * @return A {@code SaveEntitiesOut} object
 	 */
 	protected DeleteEntitiesOut posDeleteAll(final DeleteEntitiesOut deleteEntitiesOut, final Object... directives) {
+		LOGGER.debug("Default posDeleteAll, deleteEntitiesOut {}, directives {}", deleteEntitiesOut, directives);
 		return deleteEntitiesOut;
 	}
 
 	/**
-	 * Method used to handle delete all errors.
+	 * Method executed in {@link #deleteAll(Object, Object...) deleteAll} method to
+	 * handle {@link #deleteAllFunction deleteAllFunction} errors.
 	 * 
-	 * @param deleteEntitiesIn The object tried to delete all
-	 * @param exception        Exception thrown by delete all operation
-	 * @param directives       Objects used to configure the delete all operation
+	 * @param deleteEntitiesIn The objects you tried to delete on the persistence
+	 *                         mechanism
+	 * @param exception        Exception thrown by delete operation
+	 * @param directives       Objects used to configure the delete operation
 	 * 
 	 * @return The handled exception
 	 */
@@ -428,6 +548,8 @@ public non-sealed class CommandFacade< // generics
 			final DeleteEntitiesIn deleteEntitiesIn,
 			final Exception exception,
 			final Object... directives) {
+		LOGGER.debug("Default errorDeleteAll, deleteEntitiesIn {}, exception {}, directives {} ",
+				deleteEntitiesIn, getRootCause(exception), directives);
 		return exception;
 	}
 
@@ -436,41 +558,53 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public DeleteEntitiesOut deleteAll(final DeleteEntitiesIn deleteEntitiesIn, final Object... directives) {
-		return executeOperation(
+		LOGGER.debug("Default deleteAll, deleteEntitiesIn {}, directives {} ", deleteEntitiesIn, directives);
+
+		final var deleteEntitiesOut = executeOperation(
 				deleteEntitiesIn, DELETE_ENTITIES, this::preDeleteAll,
 				this::posDeleteAll, deleteAllFunction::apply, this::errorDeleteAll, directives);
+
+		LOGGER.debug("Default deleteAll, deleteEntitiesOut {}, directives {} ", deleteEntitiesOut, directives);
+		return deleteEntitiesOut;
 	}
 
-	// ----------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Method used to change an id object before delete it.
+	 * Method executed in {@link #deleteBy(Object, Object...) deleteBy} method
+	 * before the {@link #deleteByIdFunction deleteByIdFunction}, use it to change
+	 * values.
 	 * 
-	 * @param deleteIdIn The object to be changed
-	 * @param directives Objects used to configure the delete by id operation
+	 * @param deleteIdIn The object you tried to delete by on the persistence
+	 *                   mechanism
+	 * @param directives Objects used to configure the delete by operation
 	 * 
-	 * @return A new {@code DeleteIdIn} object
+	 * @return A {@code DeleteIdIn} object
 	 */
 	protected DeleteIdIn preDeleteBy(final DeleteIdIn deleteIdIn, final Object... directives) {
+		LOGGER.debug("Default preDeleteBy, deleteIdIn {}, directives {} ", deleteIdIn, directives);
 		return deleteIdIn;
 	}
 
 	/**
-	 * Method used to change an id object after delete it.
+	 * Method executed in {@link #deleteBy(Object, Object...) deleteBy} method after
+	 * {@link #deleteByIdFunction deleteByIdFunction}, use it to configure, change,
+	 * etc. the input.
 	 * 
-	 * @param deleteIdOut The object to be changed
-	 * @param directives  Objects used to configure the delete by id operation
+	 * @param deleteIdOut The object's id you deleted on the persistence mechanism
+	 * @param directives  Objects used to configure the delete operation
 	 * 
-	 * @return A new {@code DeleteIdOut} object
+	 * @return A {@code DeleteIdOut} object
 	 */
 	protected DeleteIdOut posDeleteBy(final DeleteIdOut deleteIdOut, final Object... directives) {
+		LOGGER.debug("Default posDeleteBy, deleteIdOut {}, directives {} ", deleteIdOut, directives);
 		return deleteIdOut;
 	}
 
 	/**
-	 * Method used to handle delete by id errors.
+	 * Method executed in {@link #deleteBy(Object, Object...) deleteBy} method to
+	 * handle {@link #deleteByIdFunction deleteByIdFunction} errors.
 	 * 
-	 * @param deleteIdIn The object tried to delete
+	 * @param deleteIdIn The object's id you tried to delete on the persistence
+	 *                   mechanism
 	 * @param exception  Exception thrown by delete by id operation
 	 * @param directives Objects used to configure the delete operation
 	 * 
@@ -480,6 +614,8 @@ public non-sealed class CommandFacade< // generics
 			final DeleteIdIn deleteIdIn,
 			final Exception exception,
 			final Object... directives) {
+		LOGGER.debug("Default errorDeleteBy, deleteIdIn {}, exception {}, directives {} ",
+				deleteIdIn, getRootCause(exception), directives);
 		return exception;
 	}
 
@@ -488,40 +624,54 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public DeleteIdOut deleteBy(final DeleteIdIn deleteIdIn, final Object... directives) {
-		return executeOperation(
+		LOGGER.debug("Default deleteBy, deleteIdIn {}, directives {} ", deleteIdIn, directives);
+
+		final var deleteIdOut = executeOperation(
 				deleteIdIn, DELETE_BY_ID, this::preDeleteBy, this::posDeleteBy,
 				deleteByIdFunction::apply, this::errorDeleteBy, directives);
+
+		LOGGER.debug("Default deleteBy, deleteIdOut {}, directives {} ", deleteIdOut, directives);
+		return deleteIdOut;
 	}
 
 	/**
-	 * Method used to change a group of ids before save it.
+	 * Method executed in {@link #deleteAllBy(Object, Object...) deleteAllBy} method
+	 * before the {@link #deleteAllByIdFunction deleteAllByIdFunction}, use it to
+	 * configure, change, etc. the input.
 	 * 
-	 * @param deleteIdsIn The object to be changed
-	 * @param directives  Objects used to configure the delete by id operation
+	 * @param deleteIdsIn The object's ids you want to deleteBy on the persistence
+	 *                    mechanism
+	 * @param directives  Objects used to configure the deleteBy operation
 	 * 
-	 * @return A new {@code DeleteIdsIn} object
+	 * @return A {@code DeleteIdsIn} object
 	 */
-	protected DeleteIdsIn preDeleteEntitiesBy(final DeleteIdsIn deleteIdsIn, final Object... directives) {
+	protected DeleteIdsIn preDeleteAllBy(final DeleteIdsIn deleteIdsIn, final Object... directives) {
+		LOGGER.debug("Default preDeleteAllBy, deleteIdsIn {}, directives {} ", deleteIdsIn, directives);
 		return deleteIdsIn;
 	}
 
 	/**
-	 * Method used to change a group of ids after save it.
+	 * Method executed in {@link #deleteAllBy(Object, Object...) deleteAllBy} method
+	 * after {@link #deleteAllByIdFunction deleteAllByIdFunction}, use it to change
+	 * values.
 	 * 
-	 * @param deleteIdsOut The object to be changed
-	 * @param directives   Objects used to configure the delete by id operation
+	 * @param deleteIdsOut The object's ids you deleted on the persistence mechanism
+	 * @param directives   Objects used to configure the delete operation
 	 * 
-	 * @return A new {@code DeleteIdsOut} object
+	 * @return A {@code DeleteIdsOut} object
 	 */
-	protected DeleteIdsOut posDeleteEntitiesBy(final DeleteIdsOut deleteIdsOut, final Object... directives) {
+	protected DeleteIdsOut posDeleteAllBy(final DeleteIdsOut deleteIdsOut, final Object... directives) {
+		LOGGER.debug("Default posDeleteAllBy, deleteIdsOut {}, directives {} ", deleteIdsOut, directives);
 		return deleteIdsOut;
 	}
 
 	/**
-	 * Method used to handle delete by ids errors.
+	 * Method executed in {@link #deleteAllBy(Object, Object...) deleteAllBy} method
+	 * to handle {@link #deleteAllByIdFunction deleteAllByIdFunction} errors.
 	 * 
-	 * @param deleteIdsIn The object tried to delete
-	 * @param exception   Exception thrown by delete by ids operation
+	 * @param deleteIdsIn The object's ids you tried to delete on the persistence
+	 *                    mechanism
+	 * @param exception   Exception thrown by delete by id operation
 	 * @param directives  Objects used to configure the delete operation
 	 * 
 	 * @return The handled exception
@@ -530,6 +680,8 @@ public non-sealed class CommandFacade< // generics
 			final DeleteIdsIn deleteIdsIn,
 			final Exception exception,
 			final Object... directives) {
+		LOGGER.debug("Default errorDeleteAllBy, deleteIdsIn {}, exception {}, directives {} ",
+				deleteIdsIn, getRootCause(exception), directives);
 		return exception;
 	}
 
@@ -538,8 +690,13 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public DeleteIdsOut deleteAllBy(final DeleteIdsIn deleteIdsIn, final Object... directives) {
-		return executeOperation(
-				deleteIdsIn, DELETE_BY_IDS, this::preDeleteEntitiesBy, this::posDeleteEntitiesBy,
+		LOGGER.debug("Default deleteAllBy, deleteIdsIn {}, directives {} ", deleteIdsIn, directives);
+
+		final var deleteIdsOut = executeOperation(
+				deleteIdsIn, DELETE_BY_IDS, this::preDeleteAllBy, this::posDeleteAllBy,
 				deleteAllByIdFunction::apply, this::errorDeleteAllBy, directives);
+
+		LOGGER.debug("Default deleteAllBy, deleteIdsOut {}, directives {} ", deleteIdsOut, directives);
+		return deleteIdsOut;
 	}
 }

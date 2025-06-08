@@ -1,10 +1,12 @@
-package org.reusablecomponents.base.core.application.query.entity.nonpaged;
+package org.reusablecomponents.base.core.application.query.entity.simple;
 
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.COUNT_ALL;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_ALL;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_BY_ID;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ALL_ENTITIES;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_ID;
+
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -41,9 +43,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 */
 	protected QueryFacade(
 			final QueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> builder) {
-
 		super(builder);
-
 		this.existsByIdFunction = builder.existsByIdFunction;
 		this.findByIdFunction = builder.findByIdFunction;
 		this.findAllFunction = builder.findAllFunction;
@@ -51,51 +51,54 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 		this.existsAllFunction = builder.existsAllFunction;
 	}
 
-	// ---------------------------------------------------------------------------
 	/**
-	 * Method used to change directives object before use it (findAll method).
+	 * Method executed in {@link #findAll(Object...) findAll} method before
+	 * the {@link #findAllFunction findAllFunction}, use it to configure, change,
+	 * etc. the input.
 	 * 
-	 * @param directives Objects used to configure the find all query
+	 * @param directives Objects used to configure the save operation
 	 * 
 	 * @return A {@code Object[]} object
 	 */
 	protected Object[] preFindAll(final Object... directives) {
-
 		// final var formatDirectives = Optional.ofNullable(directives)
-
 		// .map(params -> params.get("format"))
 		// .stream()
 		// .flatMap(Arrays::stream)
 		// .collect(Collectors.toList());
-
 		// .anyMatch("full"::equalsIgnoreCase);
-
+		LOGGER.debug("Default preFindAll, directives {} ", directives);
 		return directives;
 	}
 
 	/**
-	 * Method used to change multipleResult object after use it (findAll method).
+	 * Method executed in {@link #findAll(Object...) findAll} method after
+	 * {@link #findAllFunction findAllFunction}, use it to configure, change, etc.
+	 * the output.
 	 * 
-	 * @param multipleResult The object to be changed
-	 * @param directives     Objects used to configure the find all query
+	 * @param multipleResult The findAll result object
+	 * @param directives     Objects used to configure the findAll operation
 	 * 
-	 * @return A new {@code MultipleResult} object
+	 * @return A {@code MultipleResult} object
 	 */
 	protected MultipleResult posFindAll(final MultipleResult multipleResult, final Object... directives) {
+		LOGGER.debug("Default posFindAll, multipleResult {}, directives {} ", multipleResult, directives);
 		return multipleResult;
 	}
 
 	/**
-	 * Method used to handle find all errors.
+	 * Method executed in {@link #findAll(Object...) findAll} method to handle
+	 * {@link #findAllFunction findAllFunction} errors.
 	 * 
-	 * @param exception  Exception thrown by find all operation
-	 * @param directives Objects used to configure the find all query
+	 * @param exception  Exception thrown by findAll operation
+	 * @param directives Objects used to configure the findAll operation
 	 * 
 	 * @return The handled exception
 	 */
 	protected Exception errorFindAll(
 			final Exception exception,
 			final Object... directives) {
+		LOGGER.debug("Default errorFindAll, exception {}, directives {}", getRootCause(exception), directives);
 		return exception;
 	}
 
@@ -104,40 +107,53 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 */
 	@Override
 	public MultipleResult findAll(final Object... directives) {
-		return executeOperation(
+		LOGGER.debug("Default findAll, directives {} ", directives);
+
+		final var multipleResult = executeOperation(
 				FIND_ALL_ENTITIES, this::preFindAll, this::posFindAll,
 				findAllFunction::apply, this::errorFindAll, directives);
+
+		LOGGER.debug("Default findAll, multipleResult {}, directives {}", directives, multipleResult);
+		return multipleResult;
 	}
 
 	/**
-	 * Method used to change queryIdIn and directives (interns) object before use it
-	 * (findBy method).
+	 * Method executed in {@link #findBy(Object, Object...) findBy} method before
+	 * the {@link #findByIdFunction findByIdFunction}, use it to configure, change,
+	 * etc. the input.
 	 * 
-	 * @param queryIdIn  The object to be changed
-	 * @param directives The object to be changed
+	 * @param queryIdIn  The object id you want to use to retrieve on the
+	 *                   persistence mechanism
+	 * @param directives Objects used to configure the findBy operation
 	 * 
 	 * @return A new {@code QueryIdIn} object
 	 */
 	protected QueryIdIn preFindBy(final QueryIdIn queryIdIn, final Object... directives) {
+		LOGGER.debug("Default preFindBy, queryIdIn {}, directives {} ", queryIdIn, directives);
 		return queryIdIn;
 	}
 
 	/**
-	 * Method used to change oneResult object after use it (findBy method).
+	 * Method executed in {@link #findBy(Object, Object...) findBy} method after
+	 * the {@link #findByIdFunction findByIdFunction}, use it to configure, change,
+	 * etc. the result.
 	 * 
-	 * @param oneResult The object to be changed
+	 * @param oneResult  The findBy result object
+	 * @param directives Objects used to configure the findBy operation
 	 * 
-	 * @return A new {@code QueryIdIn} object
+	 * @return A new {@code OneResult} object
 	 */
 	protected OneResult posFindBy(final OneResult oneResult, final Object... directives) {
+		LOGGER.debug("Default posFindBy, queryIdIn {}, directives {} ", oneResult, directives);
 		return oneResult;
 	}
 
 	/**
-	 * Method used to handle find by id operation.
+	 * Method executed in {@link #findBy(Object, Object...) findBy} method to
+	 * handle {@link #findByIdFunction findByIdFunction} errors.
 	 * 
 	 * @param queryIdIn  The object used to find by id
-	 * @param exception  Exception thrown by save operation
+	 * @param exception  Exception thrown by findBy operation
 	 * @param directives Objects used to configure the save operation
 	 * 
 	 * @return The handled exception
@@ -146,6 +162,9 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 			final QueryIdIn queryIdIn,
 			final Exception exception,
 			final Object... directives) {
+		LOGGER.debug(
+				"Default errorFindBy, queryIdIn {}, exception {}, directives {}", queryIdIn,
+				getRootCause(exception), directives);
 		return exception;
 	}
 
@@ -154,16 +173,35 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 */
 	@Override
 	public OneResult findById(final QueryIdIn queryIdIn, final Object... directives) {
-		return executeOperation(
+		LOGGER.debug("Default findById, queryIdIn {}, directives {}", queryIdIn, directives);
+
+		final var oneResult = executeOperation(
 				queryIdIn, FIND_ENTITY_BY_ID, this::preFindBy, this::posFindBy,
 				findByIdFunction::apply, this::errorFindBy, directives);
+
+		LOGGER.debug("Default findById, oneResult {}, directives {}", oneResult, directives);
+		return oneResult;
 	}
+
+	// =============================================================================================================
 
 	/**
 	 * Method used to change queryIdIn object before use it (existsBy method).
 	 * 
 	 * @param queryIdIn  The entity id
 	 * @param directives Params used to configure the query
+	 * 
+	 * @return A new {@code QueryIdIn} object
+	 */
+
+	/**
+	 * Method executed in {@link #exists(Object, Object...) #preExists} method
+	 * before the {@link #preExistsFunction findByIdFunction}, use it to configure,
+	 * change, etc. the input.
+	 * 
+	 * @param queryIdIn  The object id you want to use to retrieve on the
+	 *                   persistence mechanism
+	 * @param directives Objects used to configure the findBy operation
 	 * 
 	 * @return A new {@code QueryIdIn} object
 	 */
@@ -208,6 +246,8 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 				queryIdIn, EXISTS_BY_ID, this::preExistsBy,
 				this::posExistsBy, existsByIdFunction::apply, this::errorExistsBy, directives);
 	}
+
+	// =============================================================================================================
 
 	/**
 	 * Method used to change directives object before use it (CountAll method).

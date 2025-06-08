@@ -3,8 +3,8 @@ package org.reusablecomponents.spring.core.application.query.entity.nonpaged;
 import java.util.Optional;
 
 import org.apache.commons.collections4.IterableUtils;
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.QuerySpecificationFacade;
-import org.reusablecomponents.base.core.application.query.entity.nonpaged.QuerySpecificationFacadeBuilder;
+import org.reusablecomponents.base.core.application.query.entity.specification.QuerySpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.specification.QuerySpecificationFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;

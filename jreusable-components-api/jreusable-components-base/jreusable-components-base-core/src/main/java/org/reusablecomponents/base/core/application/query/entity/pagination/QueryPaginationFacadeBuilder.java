@@ -1,4 +1,4 @@
-package org.reusablecomponents.base.core.application.query.entity.paged;
+package org.reusablecomponents.base.core.application.query.entity.pagination;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

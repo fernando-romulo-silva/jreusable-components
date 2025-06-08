@@ -1,4 +1,4 @@
-package org.reusablecomponents.base.core.application.query.entity.nonpaged;
+package org.reusablecomponents.base.core.application.query.entity.specification;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
