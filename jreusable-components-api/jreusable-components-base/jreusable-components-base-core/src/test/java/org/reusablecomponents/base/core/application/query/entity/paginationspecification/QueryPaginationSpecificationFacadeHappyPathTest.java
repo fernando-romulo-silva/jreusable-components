@@ -1,5 +1,7 @@
-package org.reusablecomponents.base.core.application.query.entity.paged;
+package org.reusablecomponents.base.core.application.query.entity.paginationspecification;
 
+import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.leftPad;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
@@ -7,8 +9,9 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 
-import org.application_example.application.query.entity.paged.DeparmentQueryPaginationFacade;
+import org.application_example.application.query.entity.paged.DeparmentQueryPaginationSpecificationFacade;
 import org.application_example.application.query.entity.paged.PageList;
 import org.application_example.domain.Department;
 import org.application_example.domain.Manager;
@@ -25,14 +28,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @Tag("unit")
-@DisplayName("Test the QueryPaginationFacade entity test, happy Path :) ")
+@DisplayName("Test the QueryPaginationSpecificationFacade entity test, happy Path :) ")
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class EntityQueryPaginationFacadeHappyPathTest {
+class QueryPaginationSpecificationFacadeHappyPathTest {
 
     final List<Department> defaultData = new ArrayList<>();
-    final DeparmentQueryPaginationFacade defaultQueryFacade = new DeparmentQueryPaginationFacade(defaultData);
+    final DeparmentQueryPaginationSpecificationFacade defaultQueryFacade = new DeparmentQueryPaginationSpecificationFacade(
+            defaultData);
 
     Department department01;
     Department department02;
@@ -72,9 +76,10 @@ class EntityQueryPaginationFacadeHappyPathTest {
     void findOneSortedTest() {
         // given
         final var sort = (Comparator<Department>) Comparator.comparing(Department::getName).reversed();
+        final Predicate<Department> spec = department -> containsIgnoreCase(department.getName(), "Default");
 
         // when
-        final var result = defaultQueryFacade.findOne(sort);
+        final var result = defaultQueryFacade.findOneBy(sort, spec);
 
         // then
         assertThat(defaultData.getLast()).isEqualTo(result);
@@ -87,17 +92,20 @@ class EntityQueryPaginationFacadeHappyPathTest {
     void findAllPageableTest() {
         // given
         final var pageable = new PageList<>(5, 0, defaultData);
+        final Predicate<Department> spec01 = department -> containsIgnoreCase(department.getName(), "Default");
+        final Predicate<Department> spec02 = department -> equalsIgnoreCase(department.getName(), "Whatever");
         final var departmentInsidePage = defaultData.get(2);
         final var departmentOusidePage = defaultData.get(5);
 
         // when
-        final var result = defaultQueryFacade.findAll(pageable);
+        final var result = defaultQueryFacade.findBy(pageable, spec01);
 
         // then
         assertThat(result)
                 .size().isEqualTo(5)
                 .returnToIterable()
                 .contains(departmentInsidePage)
-                .doesNotContain(departmentOusidePage);
+                .doesNotContain(departmentOusidePage)
+                .matches(e -> defaultQueryFacade.findBy(pageable, spec02).isEmpty());
     }
 }

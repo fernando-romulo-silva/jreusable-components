@@ -27,7 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class EntityCommandFacadeHappyPathTest {
+class CommandFacadeHappyPathTest {
 
 	final List<Department> defaultData = new ArrayList<>();
 	final DepartmentCommandFacade defaultFacade = new DepartmentCommandFacade(defaultData);

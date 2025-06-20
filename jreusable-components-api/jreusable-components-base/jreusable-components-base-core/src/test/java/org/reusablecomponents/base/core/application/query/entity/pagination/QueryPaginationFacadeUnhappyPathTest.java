@@ -1,4 +1,4 @@
-package org.reusablecomponents.base.core.application.query.entity.paged;
+package org.reusablecomponents.base.core.application.query.entity.pagination;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
@@ -38,7 +38,7 @@ import jakarta.validation.executable.ExecutableValidator;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class EntityQueryPaginationFacadeUnhappyPathTest {
+class QueryPaginationFacadeUnhappyPathTest {
 
     static final ResourceBundleMessageInterpolator INTERPOLATOR = new ResourceBundleMessageInterpolator(
             new AggregateResourceBundleLocator(Arrays.asList("ValidationMessages")));

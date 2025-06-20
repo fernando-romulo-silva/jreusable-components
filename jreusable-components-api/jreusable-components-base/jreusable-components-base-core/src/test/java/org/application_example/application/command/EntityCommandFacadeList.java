@@ -9,7 +9,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.application_example.domain.Department;
 import org.application_example.infra.DummySecurityService;
-import org.application_example.infra.ExceptionAdapterListService;
+import org.application_example.infra.ListExceptionAdapterService;
 import org.reusablecomponents.base.core.application.command.entity.CommandFacade;
 import org.reusablecomponents.base.core.application.command.entity.CommandFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
@@ -196,7 +196,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 
 			// others --------------------------------
 			$.securityService = new DummySecurityService();
-			$.exceptionAdapterService = new ExceptionAdapterListService();
+			$.exceptionAdapterService = new ListExceptionAdapterService();
 			$.i18nService = new JavaSEI18nService();
 		}));
 

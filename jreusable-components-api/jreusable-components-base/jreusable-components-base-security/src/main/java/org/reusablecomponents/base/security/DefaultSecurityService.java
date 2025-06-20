@@ -6,7 +6,7 @@ import java.net.UnknownHostException;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * 
+ * Default <code>InterfaceSecurityService</code>'s implementation.
  */
 public class DefaultSecurityService implements InterfaceSecurityService {
 

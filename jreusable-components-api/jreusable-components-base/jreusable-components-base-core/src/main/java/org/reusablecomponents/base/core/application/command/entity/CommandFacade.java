@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import org.apache.commons.lang3.function.TriFunction;
 import org.reusablecomponents.base.core.application.base.BaseFacade;
 import org.reusablecomponents.base.core.application.base.FacadeBiFunction;
 import org.reusablecomponents.base.core.application.base.FacadeTriFunction;
@@ -164,7 +163,7 @@ public non-sealed class CommandFacade< // generics
 	protected SaveEntityIn preSave(final SaveEntityIn saveEntityIn, final Object... directives) {
 		LOGGER.debug("Default preSave, saveEntityIn {}, directives {} ", saveEntityIn, directives);
 
-		final var saveEntityInResult = executeFunctions("preSave", saveEntityIn, directives, savePreFunctions);
+		final var saveEntityInResult = executeFunctions("preSave", saveEntityIn, savePreFunctions, directives);
 
 		LOGGER.debug("Default preSave, saveEntityInResult {}, directives {} ", saveEntityInResult, directives);
 		return saveEntityInResult;
@@ -185,7 +184,7 @@ public non-sealed class CommandFacade< // generics
 	protected SaveEntityOut posSave(final SaveEntityOut saveEntityOut, final Object... directives) {
 		LOGGER.debug("Default posSave, saveEntityOut {}, directives {} ", saveEntityOut, directives);
 
-		final var saveEntityOutResult = executeFunctions("posSave", saveEntityOut, directives, savePosFunctions);
+		final var saveEntityOutResult = executeFunctions("posSave", saveEntityOut, savePosFunctions, directives);
 
 		LOGGER.debug("Default posSave, saveEntityOutResult {}, directives {} ", saveEntityOutResult, directives);
 		return saveEntityOutResult;
@@ -213,7 +212,12 @@ public non-sealed class CommandFacade< // generics
 				exception,
 				directives);
 
-		final var exceptionResult = executeFunctions(exception, saveEntityIn, directives, saveErrorFunctions);
+		final var exceptionResult = executeFunctions(
+				"errorSave",
+				exception,
+				saveEntityIn,
+				saveErrorFunctions,
+				directives);
 
 		LOGGER.debug("Default errorSave, saveEntityIn {}, exceptionResult {}, directives {} ",
 				saveEntityIn,
@@ -495,8 +499,13 @@ public non-sealed class CommandFacade< // generics
 		LOGGER.debug("Default delete, deleteEntityIn {}, directives {}", deleteEntityIn, directives);
 
 		final var deleteEntityOut = executeOperation(
-				deleteEntityIn, DELETE_ENTITY, this::preDelete,
-				this::posDelete, deleteFunction::apply, this::errorDelete, directives);
+				deleteEntityIn,
+				DELETE_ENTITY,
+				this::preDelete,
+				this::posDelete,
+				deleteFunction::apply,
+				this::errorDelete,
+				directives);
 
 		LOGGER.debug("Default delete, deleteEntityOut {}, directives {}", deleteEntityOut, directives);
 		return deleteEntityOut;

@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class EntiyBaseFacadeUnhappyPathTest {
+class BaseFacadeUnhappyPathTest {
 
     @Test
     @Order(1)

@@ -12,7 +12,7 @@ import org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperati
 import org.reusablecomponents.base.core.infra.util.operation.QueryOperation;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 
-public class ExceptionAdapterListService implements InterfaceExceptionAdapterService {
+public class ListExceptionAdapterService implements InterfaceExceptionAdapterService {
 
     @Override
     public BaseApplicationException convert(

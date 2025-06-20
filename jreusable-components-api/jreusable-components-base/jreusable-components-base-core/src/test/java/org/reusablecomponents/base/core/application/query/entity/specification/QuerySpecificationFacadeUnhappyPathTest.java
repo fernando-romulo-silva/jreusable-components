@@ -1,4 +1,4 @@
-package org.reusablecomponents.base.core.application.query.entity.nonpaged;
+package org.reusablecomponents.base.core.application.query.entity.specification;
 
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,7 +48,7 @@ import jakarta.validation.executable.ExecutableValidator;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class EntityQuerySpecificationFacadeUnhappyPathTest {
+class QuerySpecificationFacadeUnhappyPathTest {
 
 	static final ResourceBundleMessageInterpolator INTERPOLATOR = new ResourceBundleMessageInterpolator(
 			new AggregateResourceBundleLocator(Arrays.asList("ValidationMessages")));

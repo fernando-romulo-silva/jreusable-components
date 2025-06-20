@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.application_example.infra.DummySecurityService;
-import org.application_example.infra.ExceptionAdapterListService;
+import org.application_example.infra.ListExceptionAdapterService;
 import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
@@ -62,7 +62,7 @@ public class EntityQueryFacadeList<Entity extends AbstractEntity<Id>, Id>
 
             // others --------------------------------
             $.securityService = new DummySecurityService();
-            $.exceptionAdapterService = new ExceptionAdapterListService();
+            $.exceptionAdapterService = new ListExceptionAdapterService();
             $.i18nService = new JavaSEI18nService();
         }));
 

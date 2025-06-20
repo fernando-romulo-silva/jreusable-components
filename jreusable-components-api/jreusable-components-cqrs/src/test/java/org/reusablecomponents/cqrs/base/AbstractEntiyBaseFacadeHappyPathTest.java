@@ -24,6 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.reusablecomponents.base.core.application.base.BaseFacade;
 import org.reusablecomponents.base.core.application.empty.EmptyFacade;
+import org.reusablecomponents.base.core.infra.exception.DefaultExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
@@ -54,8 +55,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 
 	final InterfaceI18nService i18nService = (code, params) -> "translated!";
 	final InterfaceSecurityService interfaceSecurityService = null;
-	final InterfaceExceptionAdapterService exceptionTranslatorService = (ex, i18n,
-			directives) -> new GenericError(ex);
+	final InterfaceExceptionAdapterService exceptionTranslatorService = new DefaultExceptionAdapterService();
 
 	@Test
 	@Order(1)
@@ -69,7 +69,7 @@ class AbstractEntiyBaseFacadeHappyPathTest {
 		};
 
 		final InterfaceI18nService i18nService = (code, params) -> "translated!";
-		final InterfaceSecurityService interfaceSecurityService = null; // new DummySecurityService();
+		final InterfaceSecurityService securityService = null; // new DummySecurityService();
 		final InterfaceExceptionAdapterService exceptionTranslatorService = null; // (ex, i18n, directives) -> new
 																					// UnexpectedException(ex);
 

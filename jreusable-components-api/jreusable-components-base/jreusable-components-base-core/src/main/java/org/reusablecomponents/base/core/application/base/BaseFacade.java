@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.function.TriFunction;
 import org.reusablecomponents.base.core.application.command.entity.CommandFacade;
 import org.reusablecomponents.base.core.application.empty.EmptyFacade;
@@ -355,81 +356,126 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	}
 
 	/**
-	 * Execute a collection of functions in sequence
+	 * Execute a collection of functions in sequence, used in pre and pos operations
+	 * (preSave, posUpdate, etc.)
 	 * 
-	 * @param <In>
-	 * @param action
-	 * @param in
-	 * @param directives
-	 * @param functions
-	 * @return
+	 * @param <In>       The function input type
+	 * @param operation  The method caller name, used on logs
+	 * @param in         The function input object, the value used to create the
+	 *                   result
+	 * @param functions  A collection of <code>FacadeBiFunction</code> objects
+	 * @param directives Objects used to perform the functions
+	 * @return A updated <code>in</code> object
 	 */
 	protected <In> In executeFunctions(
-			final String action,
+			final String operation,
 			final In in,
-			final Object[] directives,
-			final Collection<FacadeBiFunction<In>> functions) {
+			final Collection<FacadeBiFunction<In>> functions,
+			final Object... directives) {
 		if (ObjectUtils.isEmpty(functions)) {
 			LOGGER.debug("No functions to execute on {} operation with input {} and directires {}",
-					action, in, directives);
+					operation, in, directives);
 			return in;
 		}
 
 		final var allFunctionsName = functions.stream()
-				.filter(FacadeBiFunction::isActice)
-				.map(f -> f.getClass().getSimpleName())
+				.map(FacadeBiFunction::getName)
 				.collect(joining(", "));
 
-		final var skkipedFunctions = new ArrayList<String>();
-		final var functionsError = new ArrayList<String>();
+		final var skippedFunctions = new ArrayList<String>();
+		final var withErrorFunctions = new ArrayList<String>();
 		final var executedFunctions = new ArrayList<String>();
 
 		LOGGER.debug("Execute functions {} on {} operation with input {} and directires {}",
-				allFunctionsName, action, in, directives);
+				allFunctionsName, operation, in, directives);
 
-		In in1Function = in;
+		var nextIn = in;
+		for (final var function : functions) {
+			final var functionName = function.getName();
+			try {
+				if (!function.isActice()) {
+					LOGGER.debug("Function {} with input {} disabled, it won't execute", functionName, nextIn);
+					skippedFunctions.add(functionName);
+					continue;
+				}
+				nextIn = function.apply(nextIn, directives);
+				LOGGER.debug("Function {} executed, result {}", functionName, nextIn);
+				executedFunctions.add(functionName);
+			} catch (final Exception ex) {
+				withErrorFunctions.add(functionName);
+				final var rootCauseMessage = ExceptionUtils.getRootCauseMessage(ex);
+				LOGGER.debug("Function {} with execution error {}", functionName, rootCauseMessage);
+			}
+		}
+
+		LOGGER.debug("Functions {} executed, skipped {}, with errors {}",
+				executedFunctions,
+				skippedFunctions,
+				withErrorFunctions);
+		return nextIn;
+	}
+
+	/**
+	 * Execute a collection of functions in sequence, used in pre and pos operations
+	 * (preSave, posUpdate, etc.)
+	 * 
+	 * @param <In1>      The first function input type
+	 * @param <In2>      The second function input type
+	 * @param operation  The method caller name, used on logs
+	 * @param in1        The first function input object, the value used to create
+	 *                   the result
+	 * @param in2        The second function input object, it is used to help the
+	 *                   result
+	 * @param functions  A collection of <code>FacadeTriFunction</code> objects
+	 * @param directives Objects used to perform the functions
+	 * @return A updated <code>in1</code> object
+	 */
+	protected <In1, In2> In1 executeFunctions(
+			final String operation,
+			final In1 in1, final In2 in2,
+			final Collection<FacadeTriFunction<In1, In2>> functions,
+			final Object... directives) {
+		if (ObjectUtils.isEmpty(functions)) {
+			LOGGER.debug("No functions to execute on {} operation with inputs [{} {}] and directires {}",
+					operation, in1, in2, directives);
+			return in1;
+		}
+
+		final var allFunctionsName = functions.stream()
+				.map(FacadeTriFunction::getName)
+				.collect(joining(", "));
+
+		final var skippedFunctions = new ArrayList<String>();
+		final var withErrorFunctions = new ArrayList<String>();
+		final var executedFunctions = new ArrayList<String>();
+
+		LOGGER.debug("Execute functions {} on {} operation with inputs [{} {}] and directires {}",
+				allFunctionsName, operation, in1, in2, directives);
+
+		var nextIn1 = in1;
 		for (final var function : functions) {
 			final var functionName = function.getClass().getSimpleName();
 			try {
 				if (!function.isActice()) {
-					LOGGER.debug("Function {} with input {} disabled, it won't execute", functionName, in1Function);
-					skkipedFunctions.add(functionName);
+					LOGGER.debug("Function {} with input {} disabled, it won't execute", functionName, nextIn1);
+					skippedFunctions.add(functionName);
 					continue;
 				}
-				in1Function = function.apply(in1Function, directives);
-				LOGGER.debug("Function {} executed, result {}", functionName, in1Function);
+				nextIn1 = function.apply(nextIn1, in2, directives);
+				LOGGER.debug("Function {} executed, result {}", functionName, nextIn1);
 				executedFunctions.add(functionName);
 			} catch (final Exception ex) {
-				functionsError.add(functionName);
-				LOGGER.debug("Function {} executed with error  {}", functionName);
+				withErrorFunctions.add(functionName);
+				final var rootCauseMessage = ExceptionUtils.getRootCauseMessage(ex);
+				LOGGER.debug("Function {} with execution error {}", functionName, rootCauseMessage);
 			}
 		}
 
-		LOGGER.debug("Functions {} executed, skkipet {}, with errors {}",
+		LOGGER.debug("Functions {} executed, skipped {}, with errors {}",
 				executedFunctions,
-				skkipedFunctions,
-				functionsError);
-		return in1Function;
-	}
-
-	protected <In1, In2> In1 executeFunctions(
-			final In1 in1, final In2 in2,
-			final Object[] directives,
-			final Collection<FacadeTriFunction<In1, In2>> functions) {
-		LOGGER.debug("Execute functions on {} with input {} and directires {}", action, in1, directives);
-		if (ObjectUtils.isEmpty(functions)) {
-			return in1;
-		}
-
-		final var functionsFinal = functions.stream()
-				.filter(FacadeTriFunction::isActice)
-				.toList();
-
-		var in1Function = in1;
-		for (final var function : functionsFinal) {
-			in1Function = function.apply(in1Function, in2, directives);
-		}
-		return in1Function;
+				skippedFunctions,
+				withErrorFunctions);
+		return nextIn1;
 	}
 
 	/**

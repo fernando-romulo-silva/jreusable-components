@@ -13,7 +13,7 @@ import org.reusablecomponents.base.translation.InterfaceI18nService;
  * 
  * @author Fernando Romulo da Silva
  */
-public abstract class BaseApplicationException extends RuntimeException {
+public class BaseApplicationException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,8 +22,17 @@ public abstract class BaseApplicationException extends RuntimeException {
      * 
      * @param msg The exception's message
      */
-    protected BaseApplicationException(final String msg) {
+    public BaseApplicationException(final String msg) {
         super(msg);
+    }
+
+    /**
+     * Constructs a new BaseApplicationException exception.
+     * 
+     * @param ex The exception's cause
+     */
+    public BaseApplicationException(final Throwable ex) {
+        super(ex);
     }
 
     /**
@@ -32,7 +41,7 @@ public abstract class BaseApplicationException extends RuntimeException {
      * @param msg The exception's message
      * @param ex  The exception's cause
      */
-    protected BaseApplicationException(final String msg, final Throwable ex) {
+    public BaseApplicationException(final String msg, final Throwable ex) {
         super(msg, ex);
     }
 
@@ -43,7 +52,7 @@ public abstract class BaseApplicationException extends RuntimeException {
      * @param i18nService The message translation service
      * @param params      The parameters used on message
      */
-    protected BaseApplicationException(
+    public BaseApplicationException(
             final String code,
             final InterfaceI18nService i18nService,
             final Object... params) {
@@ -58,7 +67,7 @@ public abstract class BaseApplicationException extends RuntimeException {
      * @param ex          The exception's cause
      * @param params      The parameters used on message
      */
-    protected BaseApplicationException(
+    public BaseApplicationException(
             final String code,
             final InterfaceI18nService i18nService,
             final Throwable ex,
@@ -75,7 +84,7 @@ public abstract class BaseApplicationException extends RuntimeException {
      * @param params      The parameters used on message
      * @return A string message (translated or not)
      */
-    private static String getFinalMessage(
+    protected static String getFinalMessage(
             final String code,
             final InterfaceI18nService i18nService,
             final Object... params) {

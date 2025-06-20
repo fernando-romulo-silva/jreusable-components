@@ -16,4 +16,8 @@ public class TestEntiyBaseFacade extends EmptyFacade<Department, String> {
 			@Nullable final InterfaceExceptionAdapterService exceptionTranslatorService) {
 		super(i18nService, securityService, exceptionTranslatorService);
 	}
+
+	public TestEntiyBaseFacade() {
+		super();
+	}
 }

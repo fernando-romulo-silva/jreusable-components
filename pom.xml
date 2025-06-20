@@ -28,8 +28,8 @@
 
 	<properties>
 		<junit-platform.version>5.11.2</junit-platform.version>
-		<mockito-platform.version>5.14.1</mockito-platform.version>
-		<equalsverifier.version>3.17.1</equalsverifier.version>
+		<mockito-platform.version>5.18.0</mockito-platform.version>
+		<equalsverifier.version>4.0.2</equalsverifier.version>
 		<to-string-verifier.version>1.4.8</to-string-verifier.version>
 		<assertj-core.version>3.26.3</assertj-core.version>
 
@@ -48,6 +48,7 @@
 		<jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
 
 		<hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
+		<project.scm.id>github</project.scm.id>
 	</properties>
 
 

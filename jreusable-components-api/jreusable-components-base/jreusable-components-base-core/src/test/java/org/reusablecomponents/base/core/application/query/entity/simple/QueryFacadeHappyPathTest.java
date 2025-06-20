@@ -1,16 +1,12 @@
-package org.reusablecomponents.base.core.application.query.entity.nonpaged;
+package org.reusablecomponents.base.core.application.query.entity.simple;
 
-import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
-import org.apache.commons.lang3.math.NumberUtils;
-import org.application_example.application.query.entity.nonpaged.DeparmentQuerySpecificationFacade;
+import org.application_example.application.query.entity.nonpaged.DeparmentQueryFacade;
 import org.application_example.domain.Department;
 import org.application_example.domain.Manager;
 import org.junit.jupiter.api.AfterAll;
@@ -26,14 +22,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @Tag("unit")
-@DisplayName("Test the EntityQuerySpecificationFacade entity test, happy Path :)")
+@DisplayName("Test the EntityQueryFacade entity test, happy Path :) ")
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class EntityQuerySpecificationFacadeHappyPathTest {
+class QueryFacadeHappyPathTest {
 
     final List<Department> defaultData = new ArrayList<>();
-    final DeparmentQuerySpecificationFacade defaultQueryFacade = new DeparmentQuerySpecificationFacade(defaultData);
+    final DeparmentQueryFacade defaultQueryFacade = new DeparmentQueryFacade(defaultData);
 
     Department department01;
     Department department02;
@@ -45,7 +41,7 @@ class EntityQuerySpecificationFacadeHappyPathTest {
     void setUp() {
         defaultData.clear();
 
-        manager = new Manager("x2", "Business Manager");
+        manager = new Manager("x2", "Business Happy");
 
         department01 = new Department("x1", "Default 01", "Peopple", manager);
         department02 = new Department("x2", "Default 02", "Resource", manager);
@@ -61,13 +57,13 @@ class EntityQuerySpecificationFacadeHappyPathTest {
 
     @Test
     @Order(1)
-    @DisplayName("Find one by specification test")
-    void findOneBySpecTest() {
+    @DisplayName("Find by id test")
+    void findByIdTest() {
         // given
-        final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(), "Default 01");
+        final var id = "x1";
 
         // when
-        final var result = defaultQueryFacade.findOneBySpec(spec);
+        final var result = defaultQueryFacade.findById(id);
 
         // then
         assertThat(department01).isEqualTo(result);
@@ -77,33 +73,30 @@ class EntityQuerySpecificationFacadeHappyPathTest {
 
     @Test
     @Order(2)
-    @DisplayName("Find by specification test")
-    void findBySpecTest() {
+    @DisplayName("Find all test")
+    void findAllTest() {
         // given
-        final Predicate<Department> spec01 = department -> containsIgnoreCase(department.getName(), "Default");
-        final Predicate<Department> spec02 = department -> equalsIgnoreCase(department.getName(), "Whatever");
+        final var currentData = defaultData;
 
         // when
-        final var result = defaultQueryFacade.findBySpec(spec01);
+        final var result = defaultQueryFacade.findAll();
 
         // then
-        assertThat(result)
-                .containsAll(defaultData)
-                .matches(e -> defaultQueryFacade.findBySpec(spec02).isEmpty());
+        assertThat(currentData).containsAll(result);
     }
 
     @Test
     @Order(3)
-    @DisplayName("Count by specification test")
+    @DisplayName("Count all test")
     void countAllTest() {
         // given
-        final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(), "Default 01");
+        final var currentSize = defaultData.size();
 
         // when
-        final var result = defaultQueryFacade.countBySpec(spec);
+        final var result = defaultQueryFacade.countAll().intValue();
 
         // then
-        assertThat(result).isEqualTo(NumberUtils.LONG_ONE);
+        assertThat(currentSize).isEqualTo(result);
     }
 
     @Test
@@ -111,17 +104,34 @@ class EntityQuerySpecificationFacadeHappyPathTest {
     @DisplayName("Exists all test")
     void existsAllTest() {
         // given
-        final Predicate<Department> spec01 = department -> equalsIgnoreCase(department.getName(), "Default 01");
-        final Predicate<Department> spec02 = department -> equalsIgnoreCase(department.getName(), "Whatever");
-
         final var existsAll = defaultData.size() > 0;
 
         // when
-        final var result = defaultQueryFacade.existsBySpec(spec01);
+        final var result = defaultQueryFacade.existsAll();
 
         // then
         assertThat(existsAll)
                 .isEqualTo(result)
-                .matches(e -> defaultQueryFacade.existsBySpec(spec02) != existsAll);
+                .matches(e -> {
+                    defaultData.clear();
+                    return defaultQueryFacade.existsAll() != existsAll;
+                });
     }
+
+    @Test
+    @Order(5)
+    @DisplayName("Exists by id test")
+    void existsByIdTest() {
+        // given
+        final var id = "x1";
+
+        // when
+        final var result = defaultQueryFacade.existsById(id);
+
+        // then
+        assertThat(result)
+                .isTrue()
+                .matches(e -> defaultQueryFacade.existsById("whatever") != result);
+    }
+
 }

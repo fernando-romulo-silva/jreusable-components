@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 @Tag("integration")
-public class AbstractEntityFacadeUnhappyPathTest {
+class AbstractEntityFacadeUnhappyPathTest {
 
     // protected EntityFacade entityFacade;
 
@@ -26,7 +26,6 @@ public class AbstractEntityFacadeUnhappyPathTest {
         // }) // then
         // .as(format("Check the repeated entity: ''{0}''", department01)) //
         // .isInstanceOf(ElementAlreadyExistsException.class);
-
     }
 
 }

@@ -8,4 +8,8 @@ public interface FacadeTriFunction<T, Q> extends TriFunction<T, Q, Object[], T> 
     default boolean isActice() {
         return true;
     }
+
+    default String getName() {
+        return this.getClass().getSimpleName();
+    }
 }

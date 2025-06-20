@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import org.application_example.infra.DummySecurityService;
-import org.application_example.infra.ExceptionAdapterListService;
+import org.application_example.infra.ListExceptionAdapterService;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.QueryPaginationSpecificationFacade;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.QueryPaginationSpecificationFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
@@ -52,7 +52,7 @@ public class EntityQueryPaginationSpecificationFacadeList<Entity extends Abstrac
 
             // others --------------------------------
             $.securityService = new DummySecurityService();
-            $.exceptionAdapterService = new ExceptionAdapterListService();
+            $.exceptionAdapterService = new ListExceptionAdapterService();
             $.i18nService = new JavaSEI18nService();
         }));
 

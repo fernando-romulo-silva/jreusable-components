@@ -21,4 +21,9 @@ public non-sealed class EmptyFacade<Entity extends AbstractEntity<Id>, Id>
 			$.exceptionAdapterService = exceptionTranslatorService;
 		}));
 	}
+
+	public EmptyFacade() {
+		super(new BaseFacadeBuilder($ -> {
+		}));
+	}
 }
