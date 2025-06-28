@@ -12,4 +12,12 @@ public interface FacadeTriFunction<T, Q> extends TriFunction<T, Q, Object[], T> 
     default String getName() {
         return this.getClass().getSimpleName();
     }
+
+    /**
+     * 
+     * @return
+     */
+    default boolean reTrowError() {
+        return false;
+    }
 }

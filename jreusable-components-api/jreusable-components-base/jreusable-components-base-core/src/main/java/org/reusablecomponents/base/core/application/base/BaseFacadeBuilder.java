@@ -29,8 +29,8 @@ public class BaseFacadeBuilder {
     public InterfaceI18nService i18nService;
 
     /**
-     * Exception adapter service, in case of null, a lambda function that throws
-     * only the <code>GenericException</code>.
+     * Exception adapter service, in case of null, the
+     * <code>DefaultExceptionAdapterService</code> will be used.
      */
     public InterfaceExceptionAdapterService exceptionAdapterService;
 

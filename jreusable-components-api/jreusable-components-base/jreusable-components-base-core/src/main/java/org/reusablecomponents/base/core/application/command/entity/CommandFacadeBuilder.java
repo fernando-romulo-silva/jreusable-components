@@ -46,13 +46,7 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 	public BiFunction<DeleteIdsIn, Object[], DeleteIdsOut> deleteAllByIdFunction;
 
 	public CommandFacadeBuilder(
-			final Consumer<CommandFacadeBuilder<Entity, Id, //
-					//
-					SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut,
-					//
-					UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut,
-					//
-					DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>> function) {
+			final Consumer<CommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>> function) {
 		super(function);
 		LOGGER.debug("Constructing CommandFacadeBuilder function {} ", function);
 

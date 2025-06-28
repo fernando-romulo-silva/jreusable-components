@@ -209,7 +209,10 @@ class BaseFacadeHappyPathTest {
 		final var function01 = new FacadeTriFunction<Exception, Department>() {
 
 			@Override
-			public Exception apply(final Exception exception, final Department department, final Object[] directives) {
+			public Exception apply(
+					final Exception exception,
+					final Department department,
+					final Object[] directives) {
 				return new IllegalAccessException("Illegal Access Exception");
 			}
 
