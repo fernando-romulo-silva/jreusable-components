@@ -52,7 +52,6 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 				repository.add(entity);
 
 				return entity;
-
 			};
 
 			$.saveAllFunction = (entities, directives) -> {

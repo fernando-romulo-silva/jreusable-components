@@ -3,33 +3,12 @@ package org.reusablecomponents.base.core.application.base;
 import java.util.function.BiFunction;
 
 /**
+ * Especialized function used by <code>BaseFacade.executeFunctions</code> to
+ * execute code in operations.
  * 
- * @param <T> The function data type
+ * @param <T> The function input data type
  */
 @FunctionalInterface
-public interface FacadeBiFunction<T> extends BiFunction<T, Object[], T> {
+public non-sealed interface FacadeBiFunction<T> extends BiFunction<T, Object[], T>, BaseFunction {
 
-    /**
-     * 
-     * @return
-     */
-    default boolean isActice() {
-        return true;
-    }
-
-    /**
-     * 
-     * @return
-     */
-    default String getName() {
-        return this.getClass().getSimpleName();
-    }
-
-    /**
-     * 
-     * @return
-     */
-    default boolean reTrowError() {
-        return false;
-    }
 }

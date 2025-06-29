@@ -1,14 +1,14 @@
 package org.reusablecomponents.base.core.application.command.entity;
 
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.DELETE_BY_ID;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.DELETE_BY_IDS;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.DELETE_ENTITIES;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.DELETE_ENTITY;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.SAVE_ENTITIES;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.SAVE_ENTITY;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.UPDATE_ENTITIES;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandTypesOperation.UPDATE_ENTITY;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_ID;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_IDS;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_ENTITY;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.SAVE_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.SAVE_ENTITY;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.UPDATE_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.UPDATE_ENTITY;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,43 +28,36 @@ public non-sealed class CommandFacade< // generics
 		// default
 		Entity extends AbstractEntity<Id>, Id, // basic
 		// save
-		SaveEntityIn, SaveEntityOut, //
-		SaveEntitiesIn, SaveEntitiesOut, //
+		SaveEntityIn, SaveEntityOut, // entity
+		SaveEntitiesIn, SaveEntitiesOut, // entities
 		// update
-		UpdateEntityIn, UpdateEntityOut, //
-		UpdateEntitiesIn, UpdateEntitiesOut, //
+		UpdateEntityIn, UpdateEntityOut, // entity
+		UpdateEntitiesIn, UpdateEntitiesOut, // entities
 		// delete
-		DeleteEntityIn, DeleteEntityOut, //
-		DeleteEntitiesIn, DeleteEntitiesOut, //
+		DeleteEntityIn, DeleteEntityOut, // entity
+		DeleteEntitiesIn, DeleteEntitiesOut, // entities
 		// delete by id
-		DeleteIdIn, DeleteIdOut, //
-		DeleteIdsIn, DeleteIdsOut> //
+		DeleteIdIn, DeleteIdOut, // id
+		DeleteIdsIn, DeleteIdsOut> // ids
 
 		// Base Facade
-		extends
-		BaseFacade<Entity, Id>
+		extends BaseFacade<Entity, Id>
 		// Interface command facade
 		implements InterfaceCommandFacade<Entity, Id, // basic
 
-				SaveEntityIn, SaveEntityOut, //
-				SaveEntitiesIn, SaveEntitiesOut, //
+				SaveEntityIn, SaveEntityOut, // entity
+				SaveEntitiesIn, SaveEntitiesOut, // entities
 
-				UpdateEntityIn, UpdateEntityOut, //
-				UpdateEntitiesIn, UpdateEntitiesOut, //
+				UpdateEntityIn, UpdateEntityOut, // entity
+				UpdateEntitiesIn, UpdateEntitiesOut, // entities
 
-				DeleteEntityIn, DeleteEntityOut, //
-				DeleteEntitiesIn, DeleteEntitiesOut, //
+				DeleteEntityIn, DeleteEntityOut, // entity
+				DeleteEntitiesIn, DeleteEntitiesOut, // entities
 
-				DeleteIdIn, DeleteIdOut, //
-				DeleteIdsIn, DeleteIdsOut> {
+				DeleteIdIn, DeleteIdOut, // id
+				DeleteIdsIn, DeleteIdsOut> { // ids
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommandFacade.class);
-
-	/**
-	 * Function that executes the save operation in the
-	 * {@link #save(Object, Object...) save} method
-	 */
-	protected final BiFunction<SaveEntityIn, Object[], SaveEntityOut> saveFunction;
 
 	/**
 	 * Functions executed in sequence in the {@link #preSave(Object, Object...)
@@ -85,16 +78,76 @@ public non-sealed class CommandFacade< // generics
 	protected final List<FacadeTriFunction<Exception, SaveEntityIn>> saveErrorFunctions = new ArrayList<>();
 
 	/**
+	 * Function that executes the save operation in the
+	 * {@link #save(Object, Object...) save} method
+	 */
+	protected final BiFunction<SaveEntityIn, Object[], SaveEntityOut> saveFunction;
+
+	/**
+	 * Functions executed in sequence in the {@link #preSaveAll(Object, Object...)
+	 * preSaveAll} method
+	 */
+	protected final List<FacadeBiFunction<SaveEntitiesIn>> saveAllPreFunctions = new ArrayList<>();
+
+	/**
+	 * Functions executed in sequence in the {@link #posSaveAll(Object, Object...)
+	 * posSaveAll} method
+	 */
+	protected final List<FacadeBiFunction<SaveEntitiesOut>> saveAllPosFunctions = new ArrayList<>();
+
+	/**
+	 * Functions executed in sequence in the
+	 * {@link #errorSaveAll(Object, Object, Object...) errorSaveAll} method
+	 */
+	protected final List<FacadeTriFunction<Exception, SaveEntitiesIn>> saveAllErrorFunctions = new ArrayList<>();
+
+	/**
 	 * Function that executes the save all (bunch save) operation in the
 	 * {@link #saveAll(Object, Object...) saveAll} method
 	 */
 	protected final BiFunction<SaveEntitiesIn, Object[], SaveEntitiesOut> saveAllFunction;
 
 	/**
+	 * Functions executed in sequence in the {@link #preUpdate(Object, Object...)
+	 * preUpdate} method
+	 */
+	protected final List<FacadeBiFunction<UpdateEntityIn>> updatePreFunctions = new ArrayList<>();
+
+	/**
+	 * Functions executed in sequence in the {@link #posUpdate(Object, Object...)
+	 * posUpdate} method
+	 */
+	protected final List<FacadeBiFunction<UpdateEntityOut>> updatePosFunctions = new ArrayList<>();
+
+	/**
+	 * Functions executed in sequence in the
+	 * {@link #errorUpdate(Object, Object, Object...) errorUpdate} method
+	 */
+	protected final List<FacadeTriFunction<Exception, UpdateEntityIn>> updateErrorFunctions = new ArrayList<>();
+
+	/**
 	 * Function that executes the update operation in the
 	 * {@link #update(Object, Object...) update} method
 	 */
 	protected final BiFunction<UpdateEntityIn, Object[], UpdateEntityOut> updateFunction;
+
+	/**
+	 * Functions executed in sequence in the {@link #preUpdateAll(Object, Object...)
+	 * preUpdateAll} method
+	 */
+	protected final List<FacadeBiFunction<UpdateEntitiesIn>> updateAllPreFunctions = new ArrayList<>();
+
+	/**
+	 * Functions executed in sequence in the {@link #posUpdateAll(Object, Object...)
+	 * posUpdateAll} method
+	 */
+	protected final List<FacadeBiFunction<UpdateEntitiesOut>> updateAllPosFunctions = new ArrayList<>();
+
+	/**
+	 * Functions executed in sequence in the
+	 * {@link #errorUpdateAll(Object, Object, Object...) errorUpdateAll} method
+	 */
+	protected final List<FacadeTriFunction<Exception, UpdateEntitiesIn>> updateAllErrorFunctions = new ArrayList<>();
 
 	/**
 	 * Function that executes the update all (bunch update) operation in the
@@ -246,15 +299,19 @@ public non-sealed class CommandFacade< // generics
 	 * the {@link #saveAllFunction saveAllFunction}, use it to configure, change,
 	 * etc. the input.
 	 * 
-	 * @param saveEntiesIn The objects you want to save on the persistence
-	 *                     mechanism
-	 * @param directives   Objects used to configure the saveAll operation
+	 * @param saveEntitiesIn The objects you want to save on the persistence
+	 *                       mechanism
+	 * @param directives     Objects used to configure the saveAll operation
 	 * 
 	 * @return A {@code SaveEntitiesIn} object
 	 */
-	protected SaveEntitiesIn preSaveAll(final SaveEntitiesIn saveEntiesIn, final Object... directives) {
-		LOGGER.debug("Default preSaveAll, saveEntiesIn {}, directives {} ", saveEntiesIn, directives);
-		return saveEntiesIn;
+	protected SaveEntitiesIn preSaveAll(final SaveEntitiesIn saveEntitiesIn, final Object... directives) {
+		LOGGER.debug("Default preSaveAll, saveEntiesIn {}, directives {} ", saveEntitiesIn, directives);
+
+		final var saveEntiesInResult = executeFunctions("preSaveAll", saveEntitiesIn, saveAllPreFunctions, directives);
+
+		LOGGER.debug("Default preSaveAll, saveEntityInResult {}, directives {} ", saveEntiesInResult, directives);
+		return saveEntiesInResult;
 	}
 
 	/**
@@ -262,14 +319,23 @@ public non-sealed class CommandFacade< // generics
 	 * {@link #saveAllFunction saveAllFunction}, use it to configure, change, etc.
 	 * the output.
 	 * 
-	 * @param saveEntiesOut The objects you saved on the persistence mechanism
-	 * @param directives    Objects used to configure the saveAll operation
+	 * @param saveEntitiesOut The objects you saved on the persistence mechanism
+	 * 
+	 * @param directives      Objects used to configure the saveAll operation
 	 * 
 	 * @return A {@code SaveEntitiesOut} object
 	 */
-	protected SaveEntitiesOut posSaveAll(final SaveEntitiesOut saveEntiesOut, final Object... directives) {
-		LOGGER.debug("Default posSaveAll, saveEntiesOut {}, directives {} ", saveEntiesOut, directives);
-		return saveEntiesOut;
+	protected SaveEntitiesOut posSaveAll(final SaveEntitiesOut saveEntitiesOut, final Object... directives) {
+		LOGGER.debug("Default posSaveAll, saveEntiesOut {}, directives {} ", saveEntitiesOut, directives);
+
+		final var saveEntitiesOutResult = executeFunctions(
+				"posSaveAll",
+				saveEntitiesOut,
+				saveAllPosFunctions,
+				directives);
+
+		LOGGER.debug("Default posSaveAll, saveEntitiesOutResult {}, directives {} ", saveEntitiesOutResult, directives);
+		return saveEntitiesOut;
 	}
 
 	/**
@@ -290,7 +356,19 @@ public non-sealed class CommandFacade< // generics
 		LOGGER.debug(
 				"Default errorSaveAll, saveEntitiesIn {}, exception {}, directives {} ",
 				saveEntitiesIn, getRootCause(exception), directives);
-		return exception;
+
+		final var exceptionResult = executeFunctions(
+				"errorSaveAll",
+				exception,
+				saveEntitiesIn,
+				saveAllErrorFunctions,
+				directives);
+
+		LOGGER.debug("Default errorSave, saveEntitiesIn {}, exceptionResult {}, directives {} ",
+				saveEntitiesIn,
+				exceptionResult,
+				directives);
+		return exceptionResult;
 	}
 
 	/**
@@ -315,13 +393,17 @@ public non-sealed class CommandFacade< // generics
 	 * 
 	 * @param updateEntityIn The object you want to update on the persistence
 	 *                       mechanism
-	 * @param directives     Objects used to configure the save operation
+	 * @param directives     Objects used to configure the update operation
 	 * 
 	 * @return A {@code UpdateEntityIn} object
 	 */
 	protected UpdateEntityIn preUpdate(final UpdateEntityIn updateEntityIn, final Object... directives) {
 		LOGGER.debug("Default preUpdate, updateEntityIn {}, directives {} ", updateEntityIn, directives);
-		return updateEntityIn;
+
+		final var updateEntityInResult = executeFunctions("preUpdate", updateEntityIn, updatePreFunctions, directives);
+
+		LOGGER.debug("Default preUpdate, updateEntityInResult {}, directives {} ", updateEntityInResult, directives);
+		return updateEntityInResult;
 	}
 
 	/**
@@ -330,13 +412,21 @@ public non-sealed class CommandFacade< // generics
 	 * the output.
 	 * 
 	 * @param updateEntityOut The object you updated on the persistence mechanism
-	 * @param directives      Objects used to configure the save operation
+	 * @param directives      Objects used to configure the update operation
 	 * 
 	 * @return A {@code UpdateEntityOut} object
 	 */
 	protected UpdateEntityOut posUpdate(final UpdateEntityOut updateEntityOut, final Object... directives) {
 		LOGGER.debug("Default preUpdate, updateEntityOut {}, directives {} ", updateEntityOut, directives);
-		return updateEntityOut;
+
+		final var updateEntityOutResult = executeFunctions(
+				"posUpdate",
+				updateEntityOut,
+				updatePosFunctions,
+				directives);
+
+		LOGGER.debug("Default posUpdate, updateEntityOutResult {}, directives {} ", updateEntityOutResult, directives);
+		return updateEntityOutResult;
 	}
 
 	/**
@@ -345,8 +435,8 @@ public non-sealed class CommandFacade< // generics
 	 * 
 	 * @param updateEntityIn The object you tried to update on the persistence
 	 *                       mechanism
-	 * @param exception      Exception thrown by save operation
-	 * @param directives     Objects used to configure the save operation
+	 * @param exception      Exception thrown by update operation
+	 * @param directives     Objects used to configure the update operation
 	 * 
 	 * @return The handled exception
 	 */
@@ -356,6 +446,18 @@ public non-sealed class CommandFacade< // generics
 			final Object... directives) {
 		LOGGER.debug("Default errorUpdate, updateEntityIn {}, exception {}, directives {} ",
 				updateEntityIn, getRootCause(exception), directives);
+
+		final var exceptionResult = executeFunctions(
+				"errorUpdate",
+				exception,
+				updateEntityIn,
+				updateErrorFunctions,
+				directives);
+
+		LOGGER.debug("Default errorUpdate, updateEntityIn {}, exceptionResult {}, directives {} ",
+				updateEntityIn,
+				exceptionResult,
+				directives);
 		return exception;
 	}
 
@@ -387,7 +489,15 @@ public non-sealed class CommandFacade< // generics
 	 */
 	protected UpdateEntitiesIn preUpdateAll(final UpdateEntitiesIn updateEntitiesIn, final Object... directives) {
 		LOGGER.debug("Default preUpdateAll, updateEntityIn {}, directives {} ", updateEntitiesIn, directives);
-		return updateEntitiesIn;
+
+		final var updateEntiesInResult = executeFunctions(
+				"preUpdateAll",
+				updateEntitiesIn,
+				updateAllPreFunctions,
+				directives);
+
+		LOGGER.debug("Default preUpdateAll, updateEntiesInResult {}, directives {} ", updateEntiesInResult, directives);
+		return updateEntiesInResult;
 	}
 
 	/**
@@ -402,17 +512,27 @@ public non-sealed class CommandFacade< // generics
 	 */
 	protected UpdateEntitiesOut posUpdateAll(final UpdateEntitiesOut updateEntitiesOut, final Object... directives) {
 		LOGGER.debug("Default posUpdateAll, updateEntitiesOut {}, directives {} ", updateEntitiesOut, directives);
-		return updateEntitiesOut;
+
+		final var updateEntitiesOutResult = executeFunctions(
+				"posUpdateAll",
+				updateEntitiesOut,
+				updateAllPosFunctions,
+				directives);
+
+		LOGGER.debug(
+				"Default posUpdateAll, updateEntitiesOutResult {}, directives {} ",
+				updateEntitiesOutResult, directives);
+		return updateEntitiesOutResult;
 	}
 
 	/**
 	 * Method executed in {@link #updateAll(Object, Object...) updateAll} method to
-	 * handle {@link #saveAllFunction saveAllFunction} errors.
+	 * handle {@link #updateAllFunction updateAllFunction} errors.
 	 * 
-	 * @param updateEntitiesIn The objects you tried to updateall on the persistence
-	 *                         mechanism
-	 * @param exception        Exception thrown by updateAll operation
-	 * @param directives       Objects used to configure the save operation
+	 * @param updateEntitiesIn The objects you tried to update all on the
+	 *                         persistence mechanism
+	 * @param exception        Exception thrown by update all operation
+	 * @param directives       Objects used to configure the update all operation
 	 * 
 	 * @return The handled exception
 	 */
@@ -422,7 +542,19 @@ public non-sealed class CommandFacade< // generics
 			final Object... directives) {
 		LOGGER.debug("Default errorUpdateAll, updateEntitiesIn {}, exception {}, directives {} ",
 				updateEntitiesIn, getRootCause(exception), directives);
-		return exception;
+
+		final var exceptionResult = executeFunctions(
+				"errorUpdateAll",
+				exception,
+				updateEntitiesIn,
+				updateAllErrorFunctions,
+				directives);
+
+		LOGGER.debug("Default errorUpdateAll, updateEntitiesIn {}, exceptionResult {}, directives {} ",
+				updateEntitiesIn,
+				exceptionResult,
+				directives);
+		return exceptionResult;
 	}
 
 	/**
@@ -436,9 +568,11 @@ public non-sealed class CommandFacade< // generics
 				updateEntitiesIn, UPDATE_ENTITIES, this::preUpdateAll,
 				this::posUpdateAll, updateAllFunction::apply, this::errorUpdateAll, directives);
 
-		LOGGER.debug("Default update, updateEntitiesOut {}, directives {} ", updateEntitiesOut, directives);
+		LOGGER.debug("Default updateAll, updateEntitiesOut {}, directives {} ", updateEntitiesOut, directives);
 		return updateEntitiesOut;
 	}
+
+	// ---------------------------------------------------------------------------------------------
 
 	/**
 	 * Method executed in {@link #delete(Object, Object...) delete} method before

@@ -2,8 +2,10 @@ package org.reusablecomponents.base.core.application.base;
 
 import static java.text.MessageFormat.format;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.application_example.application.TestEntiyBaseFacade;
@@ -30,6 +32,7 @@ import org.reusablecomponents.base.translation.InterfaceI18nService;
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 class BaseFacadeHappyPathTest {
+
 	final InterfaceI18nService i18nService = (code, params) -> "translated!";
 	final InterfaceSecurityService interfaceSecurityService = new DummySecurityService();
 	final InterfaceExceptionAdapterService exceptionTranslatorService = new DefaultExceptionAdapterService();
@@ -138,7 +141,7 @@ class BaseFacadeHappyPathTest {
 		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
 		final var company = new Manager("x2", "Business Happy");
 		final var department = new Department("00001", "Development 01", "Technology", company);
-		final var exception = new IllegalArgumentException("null");
+		final var exception = new NullPointerException("null");
 
 		final var functions = getTriFunctions();
 
@@ -148,6 +151,99 @@ class BaseFacadeHappyPathTest {
 		// then
 		assertThat(result)
 				.isInstanceOf(IllegalStateException.class);
+	}
+
+	@Test
+	@Order(6)
+	@DisplayName("Test execute bi functions with retrow first one")
+	void executeBiFunctionsUntilThrowExceptionTest() {
+		// given
+		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
+		final var company = new Manager("x2", "Business Happy");
+		final var department = new Department("00001", "Development 01", "Technology", company);
+
+		final var functions = new ArrayList<FacadeBiFunction<Department>>(getBiFunctions());
+
+		final var functionThrow01 = new FacadeBiFunction<Department>() {
+
+			@Override
+			public Department apply(final Department department, final Object[] directives) {
+				throw new IllegalStateException("State exception");
+			}
+
+			@Override
+			public boolean reTrowException() {
+				return true;
+			}
+		};
+		functions.add(functionThrow01);
+
+		final var functionThrow02 = new FacadeBiFunction<Department>() {
+
+			@Override
+			public Department apply(final Department department, final Object[] directives) {
+				throw new IllegalArgumentException("Argument exception");
+			}
+
+			@Override
+			public boolean reTrowException() {
+				return true;
+			}
+		};
+		functions.add(functionThrow02);
+
+		// when
+		assertThatThrownBy(() -> facade.executeFunctions("testException", department, functions))
+				// then
+				.isInstanceOf(IllegalStateException.class)
+				.hasMessageContaining("State exception");
+	}
+
+	@Test
+	@Order(7)
+	@DisplayName("Test execute tri functions with retrow first one")
+	void executeTriFunctionsUntilThrowExceptionTest() {
+		// given
+		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
+		final var company = new Manager("x2", "Business Happy");
+		final var department = new Department("00001", "Development 01", "Technology", company);
+		final var exception = new NullPointerException("null");
+
+		final var functions = new ArrayList<FacadeTriFunction<Exception, Department>>(getTriFunctions());
+		final var functionThrow01 = new FacadeTriFunction<Exception, Department>() {
+
+			@Override
+			public Exception apply(final Exception exception, final Department department, final Object[] directives) {
+				throw new IllegalStateException("State exception");
+			}
+
+			@Override
+			public boolean reTrowException() {
+				return true;
+			}
+		};
+
+		final var functionThrow02 = new FacadeTriFunction<Exception, Department>() {
+
+			@Override
+			public Exception apply(final Exception exception, final Department department, final Object[] directives) {
+				throw new IllegalArgumentException("Argument exception");
+			}
+
+			@Override
+			public boolean reTrowException() {
+				return true;
+			}
+		};
+
+		functions.add(functionThrow01);
+		functions.add(functionThrow02);
+
+		// when
+		assertThatThrownBy(() -> facade.executeFunctions("testException", exception, department, functions))
+				// then
+				.isInstanceOf(IllegalStateException.class)
+				.hasMessageContaining("State exception");
 	}
 
 	private List<FacadeBiFunction<Department>> getBiFunctions() {

@@ -1,9 +1,9 @@
 package org.reusablecomponents.base.core.infra.util.operation;
 
 /**
- * Command's operations, relate to <code>EntityCommandFacade</code>.
+ * Command's operations (save, update, delete, etc.)
  */
-public enum CommandTypesOperation implements InterfaceOperationType {
+public enum CommandOperation implements InterfaceOperation {
 
     /**
      * Save an entity operation

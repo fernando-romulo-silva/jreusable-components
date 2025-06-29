@@ -24,7 +24,7 @@ import org.reusablecomponents.base.core.application.query.entity.specification.Q
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.util.QuadFunction;
-import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperationType;
+import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.slf4j.Logger;
@@ -136,7 +136,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @param <In>            The input type
 	 * @param <Out>           The output type
 	 * @param in              The operation input
-	 * @param type            The operation type, used to categorize and log
+	 * @param operationType   The operation type, used to categorize and log
 	 *                        informations
 	 * @param preOperation    The function executed before the operation
 	 * @param posOperationThe The function executed after the operation
@@ -148,7 +148,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 */
 	protected <In, Out> Out executeOperation(
 			final In in,
-			final InterfaceOperationType type,
+			final InterfaceOperation operationType,
 			final BiFunction<In, Object[], In> preOperation,
 			final BiFunction<Out, Object[], Out> posOperation,
 			final BiFunction<In, Object[], Out> operation,
@@ -156,13 +156,13 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			final Object... directives) {
 
 		final var session = securityService.getSession();
-		final var operationName = type.getName();
+		final var operationName = operationType.getName();
 
-		final var inName = type.getReceiver().concat("In");
+		final var inName = operationType.getReceiver().concat("In");
 		final var preInName = PRE_LOG.concat(inName);
 		final var finalInName = FINAL_LOG.concat(inName);
 
-		final var outName = type.getReceiver().concat("Out");
+		final var outName = operationType.getReceiver().concat("Out");
 		final var preOutName = PRE_LOG.concat(outName);
 		final var finalOutName = FINAL_LOG.concat(outName);
 
@@ -175,7 +175,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_PRE_OPERATION_LOG, operationName, finalInName, in, session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, type, getEntityClazz(), in);
+			throw exceptionAdapterService.convert(ex, i18nService, operationType, getEntityClazz(), in);
 		}
 
 		final var finalIn = ofNullable(preIn)
@@ -196,7 +196,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			LOGGER.debug(ERROR_ON_OPERATION_LOG, operationName, finalInName, finalIn, session, exceptionClass);
 
 			throw exceptionAdapterService.convert(
-					finalException, i18nService, type, getEntityClazz(), finalIn);
+					finalException, i18nService, operationType, getEntityClazz(), finalIn);
 		}
 
 		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, out, session, directives);
@@ -207,7 +207,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_PRE_OPERATION_LOG, operationName, finalOutName, out, session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, type, getEntityClazz(), in);
+			throw exceptionAdapterService.convert(ex, i18nService, operationType, getEntityClazz(), in);
 		}
 
 		final var finalOut = ofNullable(posOut)
@@ -240,7 +240,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	protected <In1, In2, Out> Out executeOperation(
 			final In1 in1,
 			final In2 in2,
-			final InterfaceOperationType type,
+			final InterfaceOperation type,
 			final TriFunction<In1, In2, Object[], Entry<In1, In2>> preOperation,
 			final BiFunction<Out, Object[], Out> posOperation,
 			final TriFunction<In1, In2, Object[], Out> operation,
@@ -321,7 +321,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @return The function operation result
 	 */
 	protected <Out> Out executeOperation(
-			final InterfaceOperationType type,
+			final InterfaceOperation type,
 			final UnaryOperator<Object[]> preOperation,
 			final BiFunction<Out, Object[], Out> posOperation,
 			final Function<Object[], Out> operation,
@@ -425,7 +425,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 				LOGGER.debug("Function {} executed, result {}", functionName, nextIn);
 				executedFunctions.add(functionName);
 			} catch (final Exception ex) {
-				if (function.reTrowError()) {
+				if (function.reTrowException()) {
 					throw ex;
 				}
 				withErrorFunctions.add(functionName);
@@ -493,7 +493,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 				LOGGER.debug("Function {} executed, result {}", functionName, nextIn1);
 				executedFunctions.add(functionName);
 			} catch (final Exception ex) {
-				if (function.reTrowError()) {
+				if (function.reTrowException()) {
 					throw ex;
 				}
 				withErrorFunctions.add(functionName);

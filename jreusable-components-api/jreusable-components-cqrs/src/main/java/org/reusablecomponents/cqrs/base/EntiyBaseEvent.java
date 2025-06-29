@@ -16,7 +16,7 @@ import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperationType;
+import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.messaging.InterfaceEventPublisherSerice;
@@ -90,7 +90,7 @@ public class EntiyBaseEvent {
 			final String dataOut,
 			final String origin,
 			final InterfaceEventStatus status,
-			final InterfaceOperationType operation) {
+			final InterfaceOperation operation) {
 
 		LOGGER.debug("Creating event with '{}' operation", operation);
 
@@ -160,7 +160,7 @@ public class EntiyBaseEvent {
 			final String dataOut,
 			final String origin,
 			final InterfaceEventStatus status,
-			final InterfaceOperationType operation) {
+			final InterfaceOperation operation) {
 
 		LOGGER.debug("Publishing event with operation '{}'", operation);
 
@@ -266,7 +266,7 @@ public class EntiyBaseEvent {
 	protected <In, Out> void publishCommandEvent(
 			final In in,
 			final Out entityOut,
-			final InterfaceOperationType operation,
+			final InterfaceOperation operation,
 			final Function<In, String> inToMsgFunction,
 			final Function<Out, String> outToMsgFunction,
 			final Object... directives) {
@@ -308,7 +308,7 @@ public class EntiyBaseEvent {
 	protected <In> void publishCommandEvent(
 			final In in,
 			final Exception exception,
-			final InterfaceOperationType operation,
+			final InterfaceOperation operation,
 			final Function<In, String> inToMsgFunction,
 			final Function<Exception, String> exceptionToMsgFunction,
 			final Object... directives) {

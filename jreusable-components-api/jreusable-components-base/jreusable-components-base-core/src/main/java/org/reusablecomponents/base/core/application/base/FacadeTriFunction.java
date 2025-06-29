@@ -2,22 +2,14 @@ package org.reusablecomponents.base.core.application.base;
 
 import org.apache.commons.lang3.function.TriFunction;
 
+/**
+ * Especialized function used by <code>BaseFacade.executeFunctions</code> to
+ * execute code in operations.
+ * 
+ * @param <T> The function input one data type
+ * @param <Q> The function input two data type
+ */
 @FunctionalInterface
-public interface FacadeTriFunction<T, Q> extends TriFunction<T, Q, Object[], T> {
+public non-sealed interface FacadeTriFunction<T, Q> extends TriFunction<T, Q, Object[], T>, BaseFunction {
 
-    default boolean isActice() {
-        return true;
-    }
-
-    default String getName() {
-        return this.getClass().getSimpleName();
-    }
-
-    /**
-     * 
-     * @return
-     */
-    default boolean reTrowError() {
-        return false;
-    }
 }

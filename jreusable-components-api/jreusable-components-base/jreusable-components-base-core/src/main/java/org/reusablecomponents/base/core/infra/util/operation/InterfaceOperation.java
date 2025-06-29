@@ -8,7 +8,7 @@ import static org.reusablecomponents.base.core.infra.util.Const.CAMEL_REGEX;
 /**
  * Describe a operation on framework, event, etc.
  */
-public interface InterfaceOperationType {
+public interface InterfaceOperation {
 
     /**
      * Return operation's name
