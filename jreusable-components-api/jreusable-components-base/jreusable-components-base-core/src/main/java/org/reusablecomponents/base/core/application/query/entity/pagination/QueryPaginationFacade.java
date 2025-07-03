@@ -84,7 +84,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	@Override
 	@SafeVarargs
 	public final MultiplePagedResult findAll(final Pageable pageable, final Object... directives) {
-		return executeOperation(
+		return execute(
 				pageable, FIND_ALL_ENTITIES_PAGEABLE, this::preFindAll,
 				this::posFindAll, findAllFunction::apply, this::errorFindAll, directives);
 	}
@@ -134,7 +134,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 */
 	@Override
 	public OneResult findOne(final Sort sort, final Object... directives) {
-		return executeOperation(
+		return execute(
 				sort, FIND_ENTITY_SORTED, this::preFindOne,
 				this::posFindOne, findFirstFunction::apply, this::errorFindOne, directives);
 	}

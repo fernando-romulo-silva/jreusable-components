@@ -36,6 +36,8 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 
 	protected final Function<Object[], ExistsResult> existsAllFunction;
 
+	protected final Class<QueryIdIn> queryIdInClazz;
+
 	/**
 	 * Default constructor
 	 * 
@@ -49,6 +51,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 		this.findAllFunction = builder.findAllFunction;
 		this.countAllFunction = builder.countAllFunction;
 		this.existsAllFunction = builder.existsAllFunction;
+		this.queryIdInClazz = retrieveTypeClazz();
 	}
 
 	/**
@@ -109,7 +112,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	public MultipleResult findAll(final Object... directives) {
 		LOGGER.debug("Default findAll, directives {} ", directives);
 
-		final var multipleResult = executeOperation(
+		final var multipleResult = execute(
 				FIND_ALL_ENTITIES, this::preFindAll, this::posFindAll,
 				findAllFunction::apply, this::errorFindAll, directives);
 
@@ -175,7 +178,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	public OneResult findById(final QueryIdIn queryIdIn, final Object... directives) {
 		LOGGER.debug("Default findById, queryIdIn {}, directives {}", queryIdIn, directives);
 
-		final var oneResult = executeOperation(
+		final var oneResult = execute(
 				queryIdIn, FIND_ENTITY_BY_ID, this::preFindBy, this::posFindBy,
 				findByIdFunction::apply, this::errorFindBy, directives);
 
@@ -242,7 +245,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 */
 	@Override
 	public ExistsResult existsById(final QueryIdIn queryIdIn, final Object... directives) {
-		return executeOperation(
+		return execute(
 				queryIdIn, EXISTS_BY_ID, this::preExistsBy,
 				this::posExistsBy, existsByIdFunction::apply, this::errorExistsBy, directives);
 	}
@@ -287,7 +290,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 */
 	@Override
 	public CountResult countAll(final Object... directives) {
-		return executeOperation(
+		return execute(
 				COUNT_ALL, this::preCountdAll, this::posCountAll,
 				countAllFunction::apply, this::errorCountAll, directives);
 	}
@@ -330,7 +333,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 */
 	@Override
 	public ExistsResult existsAll(final Object... directives) {
-		return executeOperation(
+		return execute(
 				EXISTS_ALL, this::preExistsAll, this::posExistsAll,
 				existsAllFunction::apply, this::errorExistsAll, directives);
 	}

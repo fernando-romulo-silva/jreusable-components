@@ -126,7 +126,7 @@ class BaseFacadeHappyPathTest {
 		final var functions = getBiFunctions();
 
 		// when
-		final var result = facade.executeFunctions("myTest", department, functions);
+		final var result = facade.execute("myTest", department, functions);
 
 		// then
 		assertThat(result.getName())
@@ -146,7 +146,7 @@ class BaseFacadeHappyPathTest {
 		final var functions = getTriFunctions();
 
 		// when
-		final var result = facade.executeFunctions("myTest", exception, department, functions);
+		final var result = facade.execute("myTest", exception, department, functions);
 
 		// then
 		assertThat(result)
@@ -193,7 +193,7 @@ class BaseFacadeHappyPathTest {
 		functions.add(functionThrow02);
 
 		// when
-		assertThatThrownBy(() -> facade.executeFunctions("testException", department, functions))
+		assertThatThrownBy(() -> facade.execute("testException", department, functions))
 				// then
 				.isInstanceOf(IllegalStateException.class)
 				.hasMessageContaining("State exception");
@@ -240,7 +240,7 @@ class BaseFacadeHappyPathTest {
 		functions.add(functionThrow02);
 
 		// when
-		assertThatThrownBy(() -> facade.executeFunctions("testException", exception, department, functions))
+		assertThatThrownBy(() -> facade.execute("testException", exception, department, functions))
 				// then
 				.isInstanceOf(IllegalStateException.class)
 				.hasMessageContaining("State exception");

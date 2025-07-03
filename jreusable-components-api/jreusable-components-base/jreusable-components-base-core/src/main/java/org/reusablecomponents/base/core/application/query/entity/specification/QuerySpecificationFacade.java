@@ -95,7 +95,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	public MultipleResult findBySpec(
 			final Specification specification,
 			final Object... directives) {
-		return executeOperation(
+		return execute(
 				specification, FIND_ENTITIES_BY_SPECIFICATION, this::preFindBy, this::posFindBy,
 				findBySpecificationFunction::apply, this::errorFindBySpecification, directives);
 	}
@@ -149,7 +149,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	public OneResult findOneBySpec(
 			final Specification specification,
 			final Object... directives) {
-		return executeOperation(
+		return execute(
 				specification, FIND_ENTITY_BY_SPECIFICATION, this::preFindOneBy, this::posFindOneBy,
 				findOneByFunction::apply, this::errorFindOneBySpecification, directives);
 	}
@@ -198,7 +198,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 */
 	@Override
 	public final ExistsResult existsBySpec(final Specification specification, final Object... directives) {
-		return executeOperation(
+		return execute(
 				specification, EXISTS_BY_SPECIFICATION, this::preExistsBy, this::posExistsBy,
 				existsBySpecificationFunction::apply, this::errorExistsBySpecification, directives);
 	}
@@ -247,7 +247,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 */
 	@Override
 	public final CountResult countBySpec(final Specification specification, final Object... directives) {
-		return executeOperation(
+		return execute(
 				specification, COUNT_BY_SPECIFICATION, this::preCountBy, this::posCountBy,
 				countBySpecificationFunction::apply, this::errorCountBySpecification, directives);
 	}

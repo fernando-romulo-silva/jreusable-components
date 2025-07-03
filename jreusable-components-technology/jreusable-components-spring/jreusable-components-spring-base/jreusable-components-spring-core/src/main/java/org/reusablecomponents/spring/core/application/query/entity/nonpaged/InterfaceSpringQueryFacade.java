@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.reusablecomponents.base.core.application.query.entity.simple.InterfaceQueryFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -23,7 +22,6 @@ public interface InterfaceSpringQueryFacade<Entity extends AbstractEntity<Id>, I
    * {@inheritDoc}
    */
   @Override
-  @Cacheable
   @Transactional(readOnly = true, propagation = SUPPORTS)
   Optional<Entity> findById(final Id id, final Object... directives);
 
@@ -31,7 +29,6 @@ public interface InterfaceSpringQueryFacade<Entity extends AbstractEntity<Id>, I
    * {@inheritDoc}
    */
   @Override
-  @Cacheable
   @Transactional(readOnly = true, propagation = SUPPORTS)
   Iterable<Entity> findAll(final Object... directives);
 
@@ -39,7 +36,6 @@ public interface InterfaceSpringQueryFacade<Entity extends AbstractEntity<Id>, I
    * {@inheritDoc}
    */
   @Override
-  @Cacheable
   @Transactional(readOnly = true, propagation = SUPPORTS)
   Boolean existsById(final Id id, final Object... directives);
 
@@ -47,7 +43,6 @@ public interface InterfaceSpringQueryFacade<Entity extends AbstractEntity<Id>, I
    * {@inheritDoc}
    */
   @Override
-  @Cacheable
   @Transactional(readOnly = true, propagation = SUPPORTS)
   Long countAll(final Object... directives);
 }

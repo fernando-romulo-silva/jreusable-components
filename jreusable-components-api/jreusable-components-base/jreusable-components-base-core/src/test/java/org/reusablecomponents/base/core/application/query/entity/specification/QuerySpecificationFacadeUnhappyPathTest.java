@@ -107,7 +107,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultQueryFacade.findOneBySpec(specNull))
 				// then
 				.isInstanceOf(NullPointerException.class)
-				.hasMessageContaining("The object '%s' cannot be null", "preSpecificationIn");
+				.hasMessageContaining("Please pass a non-null '%s'", "in");
 	}
 
 	@Test
@@ -153,7 +153,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultQueryFacade.findBySpec(specNull))
 				// then
 				.isInstanceOf(NullPointerException.class)
-				.hasMessageContaining("The object '%s' cannot be null", "preSpecificationIn");
+				.hasMessageContaining("Please pass a non-null '%s'", "in");
 	}
 
 	@Test
@@ -185,7 +185,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultQueryFacade.countBySpec(specNull))
 				// then
 				.isInstanceOf(NullPointerException.class)
-				.hasMessageContaining("The object '%s' cannot be null", "preSpecificationIn");
+				.hasMessageContaining("Please pass a non-null '%s'", "in");
 	}
 
 	@Test
@@ -217,7 +217,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultQueryFacade.existsBySpec(specNull))
 				// then
 				.isInstanceOf(NullPointerException.class)
-				.hasMessageContaining("The object '%s' cannot be null", "preSpecificationIn");
+				.hasMessageContaining("Please pass a non-null '%s'", "in");
 	}
 
 	@Test

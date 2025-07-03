@@ -9,7 +9,9 @@ import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapte
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.spring.core.domain.InterfaceSpringRepository;
+import org.springframework.cache.annotation.Cacheable;
 
+@Cacheable
 public class SpringQueryFacade<Entity extends AbstractEntity<Id>, Id>
 		// base class
 		extends QueryFacade<Entity, Id, // basic

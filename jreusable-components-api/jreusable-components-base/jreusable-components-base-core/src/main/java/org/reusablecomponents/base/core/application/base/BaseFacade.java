@@ -1,5 +1,6 @@
 package org.reusablecomponents.base.core.application.base;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
@@ -83,8 +84,8 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		final var finalBuilder = ofNullable(builder)
 				.orElseThrow(createNullPointerException("builder"));
 
-		this.entityClazz = retrieveEntityClazz();
-		this.idClazz = retrieveIdClazz();
+		this.entityClazz = retrieveTypeClazz();
+		this.idClazz = retrieveTypeClazz();
 
 		this.i18nService = finalBuilder.i18nService;
 		this.securityService = finalBuilder.securityService;
@@ -92,77 +93,66 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	}
 
 	/**
-	 * Capture the entity class type
+	 * Capture the generic class type
 	 * 
-	 * @return A <code>Class<Entity></code> object
+	 * @return A <code>Class<Type></code> object
 	 */
 	@SuppressWarnings("unchecked")
-	private final Class<Entity> retrieveEntityClazz() {
-
+	protected final <Type> Class<Type> retrieveTypeClazz() {
 		final var entityTypeToken = new TypeToken<Entity>(getClass()) {
 			private static final long serialVersionUID = 1L;
 		};
-
-		final var rawType = (Class<Entity>) entityTypeToken.getRawType();
-
+		final var rawType = (Class<Type>) entityTypeToken.getRawType();
 		LOGGER.debug("Class type '{}'", rawType);
-
 		return rawType;
 	}
 
 	/**
-	 * Capture the entity id class type
+	 * Execute operations like save, delete, saveAll, etc.
+	 * An operation is built of a main function, pre-function, pos-function, and
+	 * error-function.
 	 * 
-	 * @return A <code>Class<Id></code> object
-	 */
-	@SuppressWarnings("unchecked")
-	private final Class<Id> retrieveIdClazz() {
-
-		final var idTypeToken = new TypeToken<Id>(getClass()) {
-			private static final long serialVersionUID = 1L;
-		};
-
-		final var rawType = (Class<Id>) idTypeToken.getRawType();
-
-		LOGGER.debug("Class type '{}'", rawType);
-
-		return rawType;
-	}
-
-	/**
-	 * Execute commons operations like save, delete, saveAll, etc operations
-	 * (functions) in a same execution structure.
+	 * @param <In>          The input type
+	 * @param <Out>         The output type
 	 * 
-	 * @param <In>            The input type
-	 * @param <Out>           The output type
-	 * @param in              The operation input
-	 * @param operationType   The operation type, used to categorize and log
-	 *                        informations
-	 * @param preOperation    The function executed before the operation
-	 * @param posOperationThe The function executed after the operation
-	 * @param operation       The main function
-	 * @param errorOperation  The function executed after a error
-	 * @param directives      A set objects used to configure the function
+	 * @param in            The operation input
+	 * @param operation     The operation data, used for logs
+	 * @param preFunction   The function executed before the main function
+	 * @param posFunction   The function executed after the main function
+	 * @param mainFunction  The main function
+	 * @param errorFunction The function executed after main function error
+	 * @param directives    A set objects used to configure pre, main, pos, and
+	 *                      error functions
 	 * 
 	 * @return The function operation result
 	 */
-	protected <In, Out> Out executeOperation(
+	protected <In, Out> Out execute(
 			final In in,
-			final InterfaceOperation operationType,
-			final BiFunction<In, Object[], In> preOperation,
-			final BiFunction<Out, Object[], Out> posOperation,
-			final BiFunction<In, Object[], Out> operation,
-			final TriFunction<In, Exception, Object[], Exception> errorOperation,
+			final InterfaceOperation operation,
+			final BiFunction<In, Object[], In> preFunction,
+			final BiFunction<Out, Object[], Out> posFunction,
+			final BiFunction<In, Object[], Out> mainFunction,
+			final TriFunction<In, Exception, Object[], Exception> errorFunction,
 			final Object... directives) {
 
-		final var session = securityService.getSession();
-		final var operationName = operationType.getName();
+		final var clazz = getEntityClazz();
 
-		final var inName = operationType.getReceiver().concat("In");
+		checkNotNull(in, "Please pass a non-null " + clazz.getSimpleName());
+		checkNotNull(operation, "Please pass a non-null 'operation'");
+		checkNotNull(preFunction, "Please pass a non-null 'preFunction'");
+		checkNotNull(posFunction, "Please pass a non-null 'posFunction'");
+		checkNotNull(mainFunction, "Please pass a non-null 'mainFunction'");
+		checkNotNull(errorFunction, "Please pass a non-null 'errorFunction'");
+		checkNotNull(directives, "Please pass a non-null 'directives'");
+
+		final var session = securityService.getSession();
+		final var operationName = operation.getName();
+
+		final var inName = operation.getReceiver().concat("In");
 		final var preInName = PRE_LOG.concat(inName);
 		final var finalInName = FINAL_LOG.concat(inName);
 
-		final var outName = operationType.getReceiver().concat("Out");
+		final var outName = operation.getReceiver().concat("Out");
 		final var preOutName = PRE_LOG.concat(outName);
 		final var finalOutName = FINAL_LOG.concat(outName);
 
@@ -171,11 +161,11 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 		final In preIn;
 		try {
-			preIn = preOperation.apply(in, directives);
+			preIn = preFunction.apply(in, directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_PRE_OPERATION_LOG, operationName, finalInName, in, session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, operationType, getEntityClazz(), in);
+			throw exceptionAdapterService.convert(ex, i18nService, operation, getEntityClazz(), in);
 		}
 
 		final var finalIn = ofNullable(preIn)
@@ -185,76 +175,84 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 				operationName, finalInName, finalIn, session, directives);
 
 		final Out out;
-
 		try {
-			out = operation.apply(finalIn, directives);
+			out = mainFunction.apply(finalIn, directives);
 		} catch (final Exception ex) {
-
-			final var finalException = errorOperation.apply(finalIn, ex, directives);
+			final var finalException = errorFunction.apply(finalIn, ex, directives);
 			final var exceptionClass = getRootCause(finalException).getClass().getSimpleName();
 
 			LOGGER.debug(ERROR_ON_OPERATION_LOG, operationName, finalInName, finalIn, session, exceptionClass);
 
 			throw exceptionAdapterService.convert(
-					finalException, i18nService, operationType, getEntityClazz(), finalIn);
+					finalException, i18nService, operation, getEntityClazz(), finalIn);
 		}
 
 		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, out, session, directives);
 
 		final Out posOut;
 		try {
-			posOut = posOperation.apply(out, directives);
+			posOut = posFunction.apply(out, directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_PRE_OPERATION_LOG, operationName, finalOutName, out, session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, operationType, getEntityClazz(), in);
+			throw exceptionAdapterService.convert(ex, i18nService, operation, getEntityClazz(), in);
 		}
 
 		final var finalOut = ofNullable(posOut)
 				.orElseThrow(createNullPointerException(i18nService, preOutName));
 
 		LOGGER.debug(POS_OPERATION_LOG, operationName, finalOutName, finalOut, session, directives);
-
 		return finalOut;
 	}
 
 	/**
-	 * Execute commons operations like save, delete, saveAll, etc operations
-	 * (functions) in a same execution structure, but with two inputs.
+	 * Execute operations like save, delete, saveAll, etc.
+	 * An operation is built of a main function, pre-function, pos-function, and
+	 * error-function.
 	 * 
-	 * @param <In1>          The first input type
-	 * @param <In2>          The second input type
-	 * @param <Out>          The output type
-	 * @param in1            The first operation input
-	 * @param in2            The second operation input
-	 * @param type           The operation type, used to categorize and log
-	 *                       informations
-	 * @param preOperation   The function executed before the operation
-	 * @param posOperation   The function executed after the operation
-	 * @param operation      The main function
-	 * @param errorOperation The function executed after a error
-	 * @param directives     A set objects used to configure the function
+	 * @param <In1>         The first input type
+	 * @param <In2>         The second input type
+	 * @param <Out>         The output type
+	 * 
+	 * @param in1           The first operation input
+	 * @param in2           The second operation input
+	 * @param operation     The operation data, used for logs
+	 * @param preFunction   The function executed before the main function
+	 * @param posFunction   The function executed after the main function
+	 * @param mainFunction  The main function
+	 * @param errorFunction The function executed after main function error
+	 * @param directives    A set objects used to configure pre, main, pos, and
+	 *                      error functions
 	 * 
 	 * @return The function operation result
 	 */
-	protected <In1, In2, Out> Out executeOperation(
+	protected <In1, In2, Out> Out execute(
 			final In1 in1,
 			final In2 in2,
-			final InterfaceOperation type,
-			final TriFunction<In1, In2, Object[], Entry<In1, In2>> preOperation,
-			final BiFunction<Out, Object[], Out> posOperation,
-			final TriFunction<In1, In2, Object[], Out> operation,
-			final QuadFunction<In1, In2, Exception, Object[], Exception> errorOperation,
+			final InterfaceOperation operation,
+			final TriFunction<In1, In2, Object[], Entry<In1, In2>> preFunction,
+			final BiFunction<Out, Object[], Out> posFunction,
+			final TriFunction<In1, In2, Object[], Out> mainFunction,
+			final QuadFunction<In1, In2, Exception, Object[], Exception> errorFunction,
 			final Object... directives) {
 
-		final var session = securityService.getSession();
-		final var operationName = type.getName();
+		checkNotNull(in1, "Please pass a non-null 'in1'");
+		checkNotNull(in2, "Please pass a non-null 'in2'");
+		checkNotNull(operation, "Please pass a non-null 'operation'");
+		checkNotNull(preFunction, "Please pass a non-null 'preFunction'");
+		checkNotNull(posFunction, "Please pass a non-null 'posFunction'");
+		checkNotNull(mainFunction, "Please pass a non-null 'mainFunction'");
+		checkNotNull(errorFunction, "Please pass a non-null 'errorFunction'");
+		checkNotNull(directives, "Please pass a non-null 'directives'");
 
-		final var inName = type.getReceiver().concat("In");
+		final var session = securityService.getSession();
+		final var operationName = operation.getName();
+
+		final var inName = operation.getReceiver().concat("In");
 		final var preInName = PRE_LOG.concat(inName);
 		final var finalInName = FINAL_LOG.concat(inName);
 
-		final var outName = type.getReceiver().concat("Out");
+		final var outName = operation.getReceiver().concat("Out");
 		final var preOutName = PRE_LOG.concat(outName);
 		final var finalOutName = FINAL_LOG.concat(outName);
 
@@ -264,13 +262,13 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		final In1 preIn1;
 		final In2 preIn2;
 		try {
-			final var preInEntry = preOperation.apply(in1, in2, directives);
+			final var preInEntry = preFunction.apply(in1, in2, directives);
 			preIn1 = preInEntry.getKey();
 			preIn2 = preInEntry.getValue();
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_PRE_OPERATION_LOG, operationName, finalInName, "", session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, type, getEntityClazz(), in1, in2);
+			throw exceptionAdapterService.convert(ex, i18nService, operation, getEntityClazz(), in1, in2);
 		}
 
 		final var finalIn1 = ofNullable(preIn1)
@@ -285,17 +283,17 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		final Out out;
 
 		try {
-			out = operation.apply(finalIn1, finalIn2, directives);
+			out = mainFunction.apply(finalIn1, finalIn2, directives);
 		} catch (final Exception ex) {
-			final var finalException = errorOperation.apply(finalIn1, finalIn2, ex, directives);
+			final var finalException = errorFunction.apply(finalIn1, finalIn2, ex, directives);
 			final var exceptionClass = getRootCause(finalException).getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_POS_OPERATION_LOG, operationName, finalInName, finalIn1, session, exceptionClass);
-			throw exceptionAdapterService.convert(finalException, i18nService, type, getEntityClazz(), finalIn1);
+			throw exceptionAdapterService.convert(finalException, i18nService, operation, getEntityClazz(), finalIn1);
 		}
 
 		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, out, session, directives);
 
-		final var posOut = posOperation.apply(out, directives);
+		final var posOut = posFunction.apply(out, directives);
 
 		final var finalOut = ofNullable(posOut)
 				.orElseThrow(createNullPointerException(i18nService, preOutName));
@@ -306,43 +304,52 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	}
 
 	/**
-	 * Execute commons operations like save, delete, saveAll, etc operations
-	 * (functions) in a same execution structure, but with no inputs.
+	 * Execute operations like save, delete, saveAll, etc.
+	 * An operation is built of a main function, pre-function, pos-function, and
+	 * error-function.
 	 * 
-	 * @param <Out>          The output type
-	 * @param type           The operation type, used to categorize and log
-	 *                       informations
-	 * @param preOperation   The function executed before the operation
-	 * @param posOperation   The function executed after the operation
-	 * @param operation      The main function
-	 * @param errorOperation The function executed after a error
-	 * @param directives     A set objects used to configure the function
+	 * @param <Out>         The output type
+	 * 
+	 * @param operation     The operation data, used for logs
+	 * @param preFunction   The function executed before the main function
+	 * @param posFunction   The function executed after the main function
+	 * @param mainFunction  The main function
+	 * @param errorFunction The function executed after main function error
+	 * @param directives    A set objects used to configure pre, main, pos, and
+	 *                      error functions
 	 * 
 	 * @return The function operation result
 	 */
-	protected <Out> Out executeOperation(
-			final InterfaceOperation type,
-			final UnaryOperator<Object[]> preOperation,
-			final BiFunction<Out, Object[], Out> posOperation,
-			final Function<Object[], Out> operation,
-			final BiFunction<Exception, Object[], Exception> errorOperation,
+	protected <Out> Out execute(
+			final InterfaceOperation operation,
+			final UnaryOperator<Object[]> preFunction,
+			final BiFunction<Out, Object[], Out> posFunction,
+			final Function<Object[], Out> mainFunction,
+			final BiFunction<Exception, Object[], Exception> errorFunction,
 			final Object... directives) {
 
-		final var session = securityService.getSession();
-		final var operationName = type.getName();
+		checkNotNull(operation, "Please pass a non-null 'operation'");
+		checkNotNull(preFunction, "Please pass a non-null 'preFunction'");
+		checkNotNull(posFunction, "Please pass a non-null 'posFunction'");
+		checkNotNull(mainFunction, "Please pass a non-null 'mainFunction'");
+		checkNotNull(errorFunction, "Please pass a non-null 'errorFunction'");
+		checkNotNull(directives, "Please pass a non-null 'directives'");
 
-		final var inName = type.getReceiver().concat("In");
+		final var session = securityService.getSession();
+		final var operationName = operation.getName();
+
+		final var inName = operation.getReceiver().concat("In");
 		final var preInName = PRE_LOG.concat(inName);
 		final var finalInName = FINAL_LOG.concat(inName);
 
-		final var outName = type.getReceiver().concat("Out");
+		final var outName = operation.getReceiver().concat("Out");
 		final var preOutName = PRE_LOG.concat(outName);
 		final var finalOutName = FINAL_LOG.concat(outName);
 
 		LOGGER.debug("Pre executing {} operation session '{}', and directives '{}'",
 				operationName, session, directives);
 
-		final var preIn = preOperation.apply(directives);
+		final var preIn = preFunction.apply(directives);
 
 		final var finalIn = ofNullable(preIn)
 				.orElseThrow(createNullPointerException(i18nService, preInName));
@@ -353,21 +360,20 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		final Out out;
 
 		try {
-			out = operation.apply(directives);
+			out = mainFunction.apply(directives);
 		} catch (final Exception ex) {
-
-			final var finalException = errorOperation.apply(ex, directives);
+			final var finalException = errorFunction.apply(ex, directives);
 			final var exceptionClass = getRootCause(finalException).getClass().getSimpleName();
 
 			LOGGER.debug(ERROR_ON_OPERATION_LOG, operationName, finalInName, finalIn, session, exceptionClass);
 
 			throw exceptionAdapterService.convert(
-					finalException, i18nService, type, getEntityClazz(), finalIn);
+					finalException, i18nService, operation, getEntityClazz(), finalIn);
 		}
 
 		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, out, session, directives);
 
-		final var posOut = posOperation.apply(out, directives);
+		final var posOut = posFunction.apply(out, directives);
 
 		final var finalOut = ofNullable(posOut)
 				.orElseThrow(createNullPointerException(i18nService, preOutName));
@@ -382,6 +388,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * (preSave, posUpdate, etc.)
 	 * 
 	 * @param <In>       The function input type
+	 * 
 	 * @param operation  The method caller name, used on logs
 	 * @param in         The function input object, the value used to create the
 	 *                   result
@@ -390,11 +397,17 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @return A updated <code>in</code> object
 	 */
 	@NotNull
-	protected <In> In executeFunctions(
+	protected <In> In execute(
 			final String operation,
 			final In in,
 			final Collection<FacadeBiFunction<In>> functions,
 			final Object... directives) {
+
+		checkNotNull(operation, "Please pass a non-null 'operation'");
+		checkNotNull(in, "Please pass a non-null 'in'");
+		checkNotNull(functions, "Please pass a non-null 'functions'");
+		checkNotNull(directives, "Please pass a non-null 'directives'");
+
 		if (ObjectUtils.isEmpty(functions)) {
 			LOGGER.debug("No functions to execute on {} operation with input {} and directires {}",
 					operation, in, directives);
@@ -448,6 +461,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * 
 	 * @param <In1>      The first function input type
 	 * @param <In2>      The second function input type
+	 * 
 	 * @param operation  The method caller name, used on logs
 	 * @param in1        The first function input object, the value used to create
 	 *                   the result
@@ -458,11 +472,19 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @return A updated <code>in1</code> object
 	 */
 	@NotNull
-	protected <In1, In2> In1 executeFunctions(
+	protected <In1, In2> In1 execute(
 			final String operation,
-			final In1 in1, final In2 in2,
+			final In1 in1,
+			final In2 in2,
 			final Collection<FacadeTriFunction<In1, In2>> functions,
 			final Object... directives) {
+
+		checkNotNull(operation, "Please pass a non-null 'operation'");
+		checkNotNull(in1, "Please pass a non-null 'in1'");
+		checkNotNull(in2, "Please pass a non-null 'in2'");
+		checkNotNull(functions, "Please pass a non-null 'functions'");
+		checkNotNull(directives, "Please pass a non-null 'directives'");
+
 		if (ObjectUtils.isEmpty(functions)) {
 			LOGGER.debug("No functions to execute on {} operation with inputs [{} {}] and directires {}",
 					operation, in1, in2, directives);

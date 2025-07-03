@@ -94,7 +94,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 			final Pageable pageable,
 			final Specification specification,
 			final Object... directives) {
-		return executeOperation(
+		return execute(
 				pageable, specification, FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE,
 				this::preFindBy, this::posFindBy, findBySpecificationFunction::apply,
 				this::errorFindBy, directives);
@@ -143,7 +143,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 			final Sort sort,
 			final Specification specification,
 			final Object... directives) {
-		return executeOperation(
+		return execute(
 				sort, specification,
 				FIND_ENTITY_BY_SPECIFICATION_SORTED,
 				this::preFindOneBy,

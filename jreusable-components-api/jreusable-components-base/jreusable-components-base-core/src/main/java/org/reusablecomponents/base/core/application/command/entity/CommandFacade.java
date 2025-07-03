@@ -216,7 +216,7 @@ public non-sealed class CommandFacade< // generics
 	protected SaveEntityIn preSave(final SaveEntityIn saveEntityIn, final Object... directives) {
 		LOGGER.debug("Default preSave, saveEntityIn {}, directives {} ", saveEntityIn, directives);
 
-		final var saveEntityInResult = executeFunctions("preSave", saveEntityIn, savePreFunctions, directives);
+		final var saveEntityInResult = execute("preSave", saveEntityIn, savePreFunctions, directives);
 
 		LOGGER.debug("Default preSave, saveEntityInResult {}, directives {} ", saveEntityInResult, directives);
 		return saveEntityInResult;
@@ -237,7 +237,7 @@ public non-sealed class CommandFacade< // generics
 	protected SaveEntityOut posSave(final SaveEntityOut saveEntityOut, final Object... directives) {
 		LOGGER.debug("Default posSave, saveEntityOut {}, directives {} ", saveEntityOut, directives);
 
-		final var saveEntityOutResult = executeFunctions("posSave", saveEntityOut, savePosFunctions, directives);
+		final var saveEntityOutResult = execute("posSave", saveEntityOut, savePosFunctions, directives);
 
 		LOGGER.debug("Default posSave, saveEntityOutResult {}, directives {} ", saveEntityOutResult, directives);
 		return saveEntityOutResult;
@@ -265,7 +265,7 @@ public non-sealed class CommandFacade< // generics
 				exception,
 				directives);
 
-		final var exceptionResult = executeFunctions(
+		final var exceptionResult = execute(
 				"errorSave",
 				exception,
 				saveEntityIn,
@@ -286,7 +286,7 @@ public non-sealed class CommandFacade< // generics
 	public SaveEntityOut save(final SaveEntityIn saveEntityIn, final Object... directives) {
 		LOGGER.debug("Default save, saveEntityIn {}, directives {} ", saveEntityIn, directives);
 
-		final var saveEntityOut = executeOperation(
+		final var saveEntityOut = execute(
 				saveEntityIn, SAVE_ENTITY, this::preSave,
 				this::posSave, saveFunction::apply, this::errorSave, directives);
 
@@ -308,7 +308,7 @@ public non-sealed class CommandFacade< // generics
 	protected SaveEntitiesIn preSaveAll(final SaveEntitiesIn saveEntitiesIn, final Object... directives) {
 		LOGGER.debug("Default preSaveAll, saveEntiesIn {}, directives {} ", saveEntitiesIn, directives);
 
-		final var saveEntiesInResult = executeFunctions("preSaveAll", saveEntitiesIn, saveAllPreFunctions, directives);
+		final var saveEntiesInResult = execute("preSaveAll", saveEntitiesIn, saveAllPreFunctions, directives);
 
 		LOGGER.debug("Default preSaveAll, saveEntityInResult {}, directives {} ", saveEntiesInResult, directives);
 		return saveEntiesInResult;
@@ -328,7 +328,7 @@ public non-sealed class CommandFacade< // generics
 	protected SaveEntitiesOut posSaveAll(final SaveEntitiesOut saveEntitiesOut, final Object... directives) {
 		LOGGER.debug("Default posSaveAll, saveEntiesOut {}, directives {} ", saveEntitiesOut, directives);
 
-		final var saveEntitiesOutResult = executeFunctions(
+		final var saveEntitiesOutResult = execute(
 				"posSaveAll",
 				saveEntitiesOut,
 				saveAllPosFunctions,
@@ -357,17 +357,11 @@ public non-sealed class CommandFacade< // generics
 				"Default errorSaveAll, saveEntitiesIn {}, exception {}, directives {} ",
 				saveEntitiesIn, getRootCause(exception), directives);
 
-		final var exceptionResult = executeFunctions(
-				"errorSaveAll",
-				exception,
-				saveEntitiesIn,
-				saveAllErrorFunctions,
-				directives);
+		final var exceptionResult = execute(
+				"errorSaveAll", exception, saveEntitiesIn, saveAllErrorFunctions, directives);
 
 		LOGGER.debug("Default errorSave, saveEntitiesIn {}, exceptionResult {}, directives {} ",
-				saveEntitiesIn,
-				exceptionResult,
-				directives);
+				saveEntitiesIn, exceptionResult, directives);
 		return exceptionResult;
 	}
 
@@ -378,7 +372,7 @@ public non-sealed class CommandFacade< // generics
 	public SaveEntitiesOut saveAll(final SaveEntitiesIn saveEntitiesIn, final Object... directives) {
 		LOGGER.debug("Default saveAll, saveEntitiesIn {}, directives {} ", saveEntitiesIn, directives);
 
-		final var saveEntitiesOut = executeOperation(
+		final var saveEntitiesOut = execute(
 				saveEntitiesIn, SAVE_ENTITIES, this::preSaveAll,
 				this::posSaveAll, saveAllFunction::apply, this::errorSaveAll, directives);
 
@@ -400,7 +394,7 @@ public non-sealed class CommandFacade< // generics
 	protected UpdateEntityIn preUpdate(final UpdateEntityIn updateEntityIn, final Object... directives) {
 		LOGGER.debug("Default preUpdate, updateEntityIn {}, directives {} ", updateEntityIn, directives);
 
-		final var updateEntityInResult = executeFunctions("preUpdate", updateEntityIn, updatePreFunctions, directives);
+		final var updateEntityInResult = execute("preUpdate", updateEntityIn, updatePreFunctions, directives);
 
 		LOGGER.debug("Default preUpdate, updateEntityInResult {}, directives {} ", updateEntityInResult, directives);
 		return updateEntityInResult;
@@ -419,7 +413,7 @@ public non-sealed class CommandFacade< // generics
 	protected UpdateEntityOut posUpdate(final UpdateEntityOut updateEntityOut, final Object... directives) {
 		LOGGER.debug("Default preUpdate, updateEntityOut {}, directives {} ", updateEntityOut, directives);
 
-		final var updateEntityOutResult = executeFunctions(
+		final var updateEntityOutResult = execute(
 				"posUpdate",
 				updateEntityOut,
 				updatePosFunctions,
@@ -447,7 +441,7 @@ public non-sealed class CommandFacade< // generics
 		LOGGER.debug("Default errorUpdate, updateEntityIn {}, exception {}, directives {} ",
 				updateEntityIn, getRootCause(exception), directives);
 
-		final var exceptionResult = executeFunctions(
+		final var exceptionResult = execute(
 				"errorUpdate",
 				exception,
 				updateEntityIn,
@@ -468,7 +462,7 @@ public non-sealed class CommandFacade< // generics
 	public UpdateEntityOut update(final UpdateEntityIn updateEntityIn, final Object... directives) {
 		LOGGER.debug("Default update, updateEntityIn {}, directives {} ", updateEntityIn, directives);
 
-		final var updateEntityOut = executeOperation(
+		final var updateEntityOut = execute(
 				updateEntityIn, UPDATE_ENTITY, this::preUpdate,
 				this::posUpdate, updateFunction::apply, this::errorUpdate, directives);
 
@@ -490,7 +484,7 @@ public non-sealed class CommandFacade< // generics
 	protected UpdateEntitiesIn preUpdateAll(final UpdateEntitiesIn updateEntitiesIn, final Object... directives) {
 		LOGGER.debug("Default preUpdateAll, updateEntityIn {}, directives {} ", updateEntitiesIn, directives);
 
-		final var updateEntiesInResult = executeFunctions(
+		final var updateEntiesInResult = execute(
 				"preUpdateAll",
 				updateEntitiesIn,
 				updateAllPreFunctions,
@@ -513,7 +507,7 @@ public non-sealed class CommandFacade< // generics
 	protected UpdateEntitiesOut posUpdateAll(final UpdateEntitiesOut updateEntitiesOut, final Object... directives) {
 		LOGGER.debug("Default posUpdateAll, updateEntitiesOut {}, directives {} ", updateEntitiesOut, directives);
 
-		final var updateEntitiesOutResult = executeFunctions(
+		final var updateEntitiesOutResult = execute(
 				"posUpdateAll",
 				updateEntitiesOut,
 				updateAllPosFunctions,
@@ -543,7 +537,7 @@ public non-sealed class CommandFacade< // generics
 		LOGGER.debug("Default errorUpdateAll, updateEntitiesIn {}, exception {}, directives {} ",
 				updateEntitiesIn, getRootCause(exception), directives);
 
-		final var exceptionResult = executeFunctions(
+		final var exceptionResult = execute(
 				"errorUpdateAll",
 				exception,
 				updateEntitiesIn,
@@ -564,7 +558,7 @@ public non-sealed class CommandFacade< // generics
 	public UpdateEntitiesOut updateAll(final UpdateEntitiesIn updateEntitiesIn, final Object... directives) {
 		LOGGER.debug("Default updateAll, updateEntityIn {}, directives {} ", updateEntitiesIn, directives);
 
-		final var updateEntitiesOut = executeOperation(
+		final var updateEntitiesOut = execute(
 				updateEntitiesIn, UPDATE_ENTITIES, this::preUpdateAll,
 				this::posUpdateAll, updateAllFunction::apply, this::errorUpdateAll, directives);
 
@@ -632,7 +626,7 @@ public non-sealed class CommandFacade< // generics
 	public DeleteEntityOut delete(final DeleteEntityIn deleteEntityIn, final Object... directives) {
 		LOGGER.debug("Default delete, deleteEntityIn {}, directives {}", deleteEntityIn, directives);
 
-		final var deleteEntityOut = executeOperation(
+		final var deleteEntityOut = execute(
 				deleteEntityIn,
 				DELETE_ENTITY,
 				this::preDelete,
@@ -703,7 +697,7 @@ public non-sealed class CommandFacade< // generics
 	public DeleteEntitiesOut deleteAll(final DeleteEntitiesIn deleteEntitiesIn, final Object... directives) {
 		LOGGER.debug("Default deleteAll, deleteEntitiesIn {}, directives {} ", deleteEntitiesIn, directives);
 
-		final var deleteEntitiesOut = executeOperation(
+		final var deleteEntitiesOut = execute(
 				deleteEntitiesIn, DELETE_ENTITIES, this::preDeleteAll,
 				this::posDeleteAll, deleteAllFunction::apply, this::errorDeleteAll, directives);
 
@@ -769,7 +763,7 @@ public non-sealed class CommandFacade< // generics
 	public DeleteIdOut deleteBy(final DeleteIdIn deleteIdIn, final Object... directives) {
 		LOGGER.debug("Default deleteBy, deleteIdIn {}, directives {} ", deleteIdIn, directives);
 
-		final var deleteIdOut = executeOperation(
+		final var deleteIdOut = execute(
 				deleteIdIn, DELETE_BY_ID, this::preDeleteBy, this::posDeleteBy,
 				deleteByIdFunction::apply, this::errorDeleteBy, directives);
 
@@ -835,7 +829,7 @@ public non-sealed class CommandFacade< // generics
 	public DeleteIdsOut deleteAllBy(final DeleteIdsIn deleteIdsIn, final Object... directives) {
 		LOGGER.debug("Default deleteAllBy, deleteIdsIn {}, directives {} ", deleteIdsIn, directives);
 
-		final var deleteIdsOut = executeOperation(
+		final var deleteIdsOut = execute(
 				deleteIdsIn, DELETE_BY_IDS, this::preDeleteAllBy, this::posDeleteAllBy,
 				deleteAllByIdFunction::apply, this::errorDeleteAllBy, directives);
 

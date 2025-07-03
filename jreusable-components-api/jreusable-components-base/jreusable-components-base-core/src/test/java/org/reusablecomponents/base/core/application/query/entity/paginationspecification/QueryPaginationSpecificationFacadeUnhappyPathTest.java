@@ -109,21 +109,22 @@ class QueryPaginationSpecificationFacadeUnhappyPathTest {
 		final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(), "Default 01");
 
 		return Stream.of(
-				Arguments.of(sort, null),
-				Arguments.of(null, spec));
+				Arguments.of(sort, null, "in2"),
+				Arguments.of(null, spec, "in1"));
 	}
 
 	@Order(1)
 	@ParameterizedTest(name = "Pos {index} : sort ''{0}'', specification ''{1}''")
 	@MethodSource("findOneByWithNullParamsData")
 	@DisplayName("Find one sorted with null sort")
-	void findOneByWithNullParamsTest(final Comparator<Department> sort, final Predicate<Department> specification) {
+	void findOneByWithNullParamsTest(final Comparator<Department> sort, final Predicate<Department> specification,
+			final String parameter) {
 
 		// when
 		assertThatThrownBy(() -> defaultQueryFacade.findOneBy(sort, specification))
 				// then
 				.isInstanceOf(NullPointerException.class)
-				.hasMessageContaining("The object '%s' cannot be null", "preSortedIn");
+				.hasMessageContaining("Please pass a non-null '%s'", parameter);
 	}
 
 	@Order(2)
@@ -157,21 +158,24 @@ class QueryPaginationSpecificationFacadeUnhappyPathTest {
 		final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(), "Default 01");
 
 		return Stream.of(
-				Arguments.of(pageable, null),
-				Arguments.of(null, spec));
+				Arguments.of(pageable, null, "in2"),
+				Arguments.of(null, spec, "in1"));
 	}
 
 	@Order(3)
 	@ParameterizedTest(name = "Pos {index} : pageable ''{0}'', specification ''{1}''")
 	@MethodSource("findByWithNullParamsData")
 	@DisplayName("Find one sorted with null sort")
-	void findByWithNullParamsTest(final PageList<Department> pageable, final Predicate<Department> specification) {
+	void findByWithNullParamsTest(
+			final PageList<Department> pageable,
+			final Predicate<Department> specification,
+			final String parameter) {
 
 		// when
 		assertThatThrownBy(() -> defaultQueryFacade.findBy(pageable, specification))
 				// then
 				.isInstanceOf(NullPointerException.class)
-				.hasMessageContaining("The object '%s' cannot be null", "prePageableIn");
+				.hasMessageContaining("Please pass a non-null '%s'", parameter);
 	}
 
 	@Order(4)

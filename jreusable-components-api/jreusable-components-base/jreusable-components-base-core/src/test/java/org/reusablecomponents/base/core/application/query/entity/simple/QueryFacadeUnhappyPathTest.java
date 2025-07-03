@@ -97,7 +97,7 @@ class QueryFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultQueryFacade.findById(nullId))
 				// then
 				.isInstanceOf(NullPointerException.class)
-				.hasMessageContaining("The object '%s' cannot be null", "preIdIn");
+				.hasMessageContaining("Please pass a non-null '%s'", "in");
 	}
 
 	@Test
@@ -207,7 +207,7 @@ class QueryFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultQueryFacade.existsById(nullId))
 				// then
 				.isInstanceOf(NullPointerException.class)
-				.hasMessageContaining("The object '%s' cannot be null", "preIdIn");
+				.hasMessageContaining("Please pass a non-null '%s'", "in");
 	}
 
 	@Test

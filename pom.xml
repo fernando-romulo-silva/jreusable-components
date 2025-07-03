@@ -41,7 +41,7 @@
 		<commons-text.version>1.12.0</commons-text.version>
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 
-		<guava.version>33.3.1-jre</guava.version>
+		<guava.version>33.4.8-jre</guava.version>
 
 		<jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
 		<jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>

@@ -95,7 +95,7 @@ class QueryPaginationFacadeUnhappyPathTest {
         assertThatThrownBy(() -> defaultQueryFacade.findOne(sort))
                 // then
                 .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("The object '%s' cannot be null", "preSortedIn");
+                .hasMessageContaining("Please pass a non-null '%s'", "in");
     }
 
     @Test
@@ -126,7 +126,7 @@ class QueryPaginationFacadeUnhappyPathTest {
         assertThatThrownBy(() -> defaultQueryFacade.findAll(pageable))
                 // then
                 .isInstanceOf(NullPointerException.class)
-                .hasMessageContaining("The object '%s' cannot be null", "prePageableIn");
+                .hasMessageContaining("Please pass a non-null '%s'", "in");
     }
 
     @Test
