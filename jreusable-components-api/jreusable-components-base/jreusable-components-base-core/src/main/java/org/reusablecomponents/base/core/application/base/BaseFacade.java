@@ -47,6 +47,18 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		permits EmptyFacade, CommandFacade, QueryFacade,
 		QuerySpecificationFacade, QueryPaginationFacade, QueryPaginationSpecificationFacade {
 
+	private static final String NON_NULL_DIRECTIVES_MSG = "Please pass a non-null 'directives'";
+
+	private static final String NON_NULL_ERROR_FUNCTION_MSG = "Please pass a non-null 'errorFunction'";
+
+	private static final String NON_NULL_MAIN_FUNCTION_MSG = "Please pass a non-null 'mainFunction'";
+
+	private static final String NON_NULL_POS_FUNCTION_MSG = "Please pass a non-null 'posFunction'";
+
+	private static final String NON_NULL_PRE_FUNCTION_MSG = "Please pass a non-null 'preFunction'";
+
+	private static final String NON_NULL_OPERATION_MSG = "Please pass a non-null 'operation'";
+
 	private static final String POS_OPERATION_LOG = "Pos {} operation with {} '{}', session '{}', and directives '{}'";
 
 	private static final String OPERATION_EXECUTED_LOG = "{} operation executed, with {} '{}', session '{}', and directives '{}'";
@@ -134,16 +146,8 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			final BiFunction<In, Object[], Out> mainFunction,
 			final TriFunction<In, Exception, Object[], Exception> errorFunction,
 			final Object... directives) {
-
-		final var clazz = getEntityClazz();
-
-		checkNotNull(in, "Please pass a non-null " + clazz.getSimpleName());
-		checkNotNull(operation, "Please pass a non-null 'operation'");
-		checkNotNull(preFunction, "Please pass a non-null 'preFunction'");
-		checkNotNull(posFunction, "Please pass a non-null 'posFunction'");
-		checkNotNull(mainFunction, "Please pass a non-null 'mainFunction'");
-		checkNotNull(errorFunction, "Please pass a non-null 'errorFunction'");
-		checkNotNull(directives, "Please pass a non-null 'directives'");
+		checkNotNull(in, "Please pass a non-null 'in'");
+		checkParamsNotNull(operation, preFunction, posFunction, mainFunction, errorFunction, directives);
 
 		final var session = securityService.getSession();
 		final var operationName = operation.getName();
@@ -238,12 +242,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 		checkNotNull(in1, "Please pass a non-null 'in1'");
 		checkNotNull(in2, "Please pass a non-null 'in2'");
-		checkNotNull(operation, "Please pass a non-null 'operation'");
-		checkNotNull(preFunction, "Please pass a non-null 'preFunction'");
-		checkNotNull(posFunction, "Please pass a non-null 'posFunction'");
-		checkNotNull(mainFunction, "Please pass a non-null 'mainFunction'");
-		checkNotNull(errorFunction, "Please pass a non-null 'errorFunction'");
-		checkNotNull(directives, "Please pass a non-null 'directives'");
+		checkParamsNotNull(operation, preFunction, posFunction, mainFunction, errorFunction, directives);
 
 		final var session = securityService.getSession();
 		final var operationName = operation.getName();
@@ -327,13 +326,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			final Function<Object[], Out> mainFunction,
 			final BiFunction<Exception, Object[], Exception> errorFunction,
 			final Object... directives) {
-
-		checkNotNull(operation, "Please pass a non-null 'operation'");
-		checkNotNull(preFunction, "Please pass a non-null 'preFunction'");
-		checkNotNull(posFunction, "Please pass a non-null 'posFunction'");
-		checkNotNull(mainFunction, "Please pass a non-null 'mainFunction'");
-		checkNotNull(errorFunction, "Please pass a non-null 'errorFunction'");
-		checkNotNull(directives, "Please pass a non-null 'directives'");
+		checkParamsNotNull(operation, preFunction, posFunction, mainFunction, errorFunction, directives);
 
 		final var session = securityService.getSession();
 		final var operationName = operation.getName();
@@ -403,10 +396,10 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			final Collection<FacadeBiFunction<In>> functions,
 			final Object... directives) {
 
-		checkNotNull(operation, "Please pass a non-null 'operation'");
+		checkNotNull(operation, NON_NULL_OPERATION_MSG);
 		checkNotNull(in, "Please pass a non-null 'in'");
 		checkNotNull(functions, "Please pass a non-null 'functions'");
-		checkNotNull(directives, "Please pass a non-null 'directives'");
+		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
 
 		if (ObjectUtils.isEmpty(functions)) {
 			LOGGER.debug("No functions to execute on {} operation with input {} and directires {}",
@@ -479,11 +472,11 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			final Collection<FacadeTriFunction<In1, In2>> functions,
 			final Object... directives) {
 
-		checkNotNull(operation, "Please pass a non-null 'operation'");
+		checkNotNull(operation, NON_NULL_OPERATION_MSG);
 		checkNotNull(in1, "Please pass a non-null 'in1'");
 		checkNotNull(in2, "Please pass a non-null 'in2'");
 		checkNotNull(functions, "Please pass a non-null 'functions'");
-		checkNotNull(directives, "Please pass a non-null 'directives'");
+		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
 
 		if (ObjectUtils.isEmpty(functions)) {
 			LOGGER.debug("No functions to execute on {} operation with inputs [{} {}] and directires {}",
@@ -529,6 +522,21 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 				skippedFunctions,
 				withErrorFunctions);
 		return nextIn1;
+	}
+
+	private void checkParamsNotNull(
+			final Object operation,
+			final Object preFunction,
+			final Object posFunction,
+			final Object mainFunction,
+			final Object errorFunction,
+			final Object... directives) {
+		checkNotNull(operation, NON_NULL_OPERATION_MSG);
+		checkNotNull(preFunction, NON_NULL_PRE_FUNCTION_MSG);
+		checkNotNull(posFunction, NON_NULL_POS_FUNCTION_MSG);
+		checkNotNull(mainFunction, NON_NULL_MAIN_FUNCTION_MSG);
+		checkNotNull(errorFunction, NON_NULL_ERROR_FUNCTION_MSG);
+		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
 	}
 
 	/**

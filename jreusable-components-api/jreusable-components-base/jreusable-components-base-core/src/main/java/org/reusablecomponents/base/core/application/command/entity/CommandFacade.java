@@ -1,5 +1,6 @@
 package org.reusablecomponents.base.core.application.command.entity;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_ID;
 import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_IDS;
@@ -56,6 +57,12 @@ public non-sealed class CommandFacade< // generics
 
 				DeleteIdIn, DeleteIdOut, // id
 				DeleteIdsIn, DeleteIdsOut> { // ids
+
+	private static final String NON_NULL_GROUP_OF_ENTITIES_MSG = "Please pass a non-null group of %s entities";
+
+	private static final String NON_NULL_DIRECTIVES_MSG = "Please pass a non-null directives";
+
+	private static final String NON_NULL_ENTITY_MSG = "Please pass a non-null %s entity";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommandFacade.class);
 
@@ -286,6 +293,9 @@ public non-sealed class CommandFacade< // generics
 	public SaveEntityOut save(final SaveEntityIn saveEntityIn, final Object... directives) {
 		LOGGER.debug("Default save, saveEntityIn {}, directives {} ", saveEntityIn, directives);
 
+		checkNotNull(saveEntityIn, NON_NULL_ENTITY_MSG, getEntityClazz().getSimpleName());
+		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
+
 		final var saveEntityOut = execute(
 				saveEntityIn, SAVE_ENTITY, this::preSave,
 				this::posSave, saveFunction::apply, this::errorSave, directives);
@@ -371,6 +381,9 @@ public non-sealed class CommandFacade< // generics
 	@Override
 	public SaveEntitiesOut saveAll(final SaveEntitiesIn saveEntitiesIn, final Object... directives) {
 		LOGGER.debug("Default saveAll, saveEntitiesIn {}, directives {} ", saveEntitiesIn, directives);
+
+		checkNotNull(saveEntitiesIn, NON_NULL_GROUP_OF_ENTITIES_MSG, getEntityClazz().getSimpleName());
+		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
 
 		final var saveEntitiesOut = execute(
 				saveEntitiesIn, SAVE_ENTITIES, this::preSaveAll,

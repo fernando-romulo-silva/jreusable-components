@@ -92,7 +92,71 @@ class CommandFacadeUnhappyPathTest {
 		VALIDATOR_FACTORY.close();
 	}
 
-	@Order(0)
+	// given
+	Stream<Arguments> createInvalidSaveData() {
+
+		final Department nullDepartment = null;
+		final Department repeatedDepartment = new Department("x1", "Development 01", "Technology", manager);
+		final Department invalidDepartment = new Department(null, "Development 01", "Technology", manager);
+
+		final var elementAlreadyExistsParams = List.of(
+				"org.application_example.domain.Department");
+
+		return Stream.of(
+				Arguments.of(nullDepartment, NullPointerException.class, "Please pass a non-null '%s' entity",
+						new Object[] {}, List.of("Department")),
+
+				Arguments.of(repeatedDepartment, ElementAlreadyExistsException.class,
+						"The object '%s", new Object[] {}, elementAlreadyExistsParams),
+
+				Arguments.of(invalidDepartment, ElementInvalidException.class,
+						"The object '%s", new Object[] {}, elementAlreadyExistsParams));
+	}
+
+	@Order(1)
+	@ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
+	@MethodSource("createInvalidSaveData")
+	@DisplayName("Try to save an entity test")
+	void invalidSaveTest(
+			final Department department,
+			final Class<?> exceptionClass,
+			final String exceptionMessage,
+			final Object[] directives,
+			final List<Object> exceptionParams) {
+
+		// when
+		assertThatThrownBy(() -> defaultFacade.save(department, directives))
+				// then
+				.isInstanceOf(exceptionClass)
+				.hasMessageContaining(exceptionMessage, exceptionParams.stream().toArray(Object[]::new));
+	}
+
+	// given
+	Stream<Arguments> createInvalidSaveAllData() {
+
+		final List<Department> nullList = null;
+		final var repeatedDepartment = new Department("x2", "Development 01", "Technology", manager);
+		final var correctDepartment = new Department("x3", "Default 02", "Resource", manager);
+		final var invalidDepartment = new Department(null, "Development 01", "Technology", manager);
+
+		final var elementAlreadyExistsParams = List.of(
+				"org.application_example.domain.Department");
+
+		return Stream.of(
+				Arguments.of(nullList, NullPointerException.class,
+						"Please pass a non-null '%s'",
+						List.of("in")),
+
+				Arguments.of(List.of(repeatedDepartment, correctDepartment),
+						ElementAlreadyExistsException.class,
+						"The object '[%s", elementAlreadyExistsParams),
+
+				Arguments.of(List.of(invalidDepartment, correctDepartment),
+						ElementInvalidException.class,
+						"The object '[%s", elementAlreadyExistsParams));
+	}
+
+	@Order(2)
 	@ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
 	@MethodSource("createInvalidSaveAllData")
 	@DisplayName("Try to save invalid entities test")
@@ -108,71 +172,6 @@ class CommandFacadeUnhappyPathTest {
 				.isInstanceOf(exceptionClass)
 				.hasMessageContaining(exceptionMessage,
 						exceptionParams.stream().toArray(Object[]::new));
-	}
-
-	// given
-	Stream<Arguments> createInvalidSaveData() {
-
-		final Department nullDepartment = null;
-		final Department repeatedDepartment = new Department("x1", "Development 01", "Technology", manager);
-		final Department invalidDepartment = new Department(null, "Development 01", "Technology", manager);
-
-		final var elementAlreadyExistsParams = List.of(
-				"org.application_example.domain.Department");
-
-		final var nullPointerParams = List.of("in");
-
-		return Stream.of(
-				Arguments.of(nullDepartment, NullPointerException.class,
-						"Please pass a non-null '%s'", nullPointerParams),
-				Arguments.of(repeatedDepartment, ElementAlreadyExistsException.class,
-						"The object '%s", elementAlreadyExistsParams),
-				Arguments.of(invalidDepartment, ElementInvalidException.class,
-						"The object '%s", elementAlreadyExistsParams));
-	}
-
-	// given
-	Stream<Arguments> createInvalidSaveAllData() {
-
-		final List<Department> nullList = null;
-		final var repeatedDepartment = new Department("x2", "Development 01", "Technology", manager);
-		final var correctDepartment = new Department("x3", "Default 02", "Resource", manager);
-		final var invalidDepartment = new Department(null, "Development 01", "Technology", manager);
-
-		final var nullListParams = List.of("in");
-
-		final var elementAlreadyExistsParams = List.of(
-				"org.application_example.domain.Department");
-
-		return Stream.of(
-				Arguments.of(nullList, NullPointerException.class,
-						"Please pass a non-null '%s'",
-						nullListParams),
-
-				Arguments.of(List.of(repeatedDepartment, correctDepartment),
-						ElementAlreadyExistsException.class,
-						"The object '[%s", elementAlreadyExistsParams),
-
-				Arguments.of(List.of(invalidDepartment, correctDepartment),
-						ElementInvalidException.class,
-						"The object '[%s", elementAlreadyExistsParams));
-	}
-
-	@Order(1)
-	@ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
-	@MethodSource("createInvalidSaveData")
-	@DisplayName("Try to save an entity test")
-	void invalidSaveTest(
-			final Department department,
-			final Class<?> exceptionClass,
-			final String exceptionMessage,
-			final List<Object> exceptionParams) {
-
-		// when
-		assertThatThrownBy(() -> defaultFacade.save(department))
-				// then
-				.isInstanceOf(exceptionClass)
-				.hasMessageContaining(exceptionMessage, exceptionParams.stream().toArray(Object[]::new));
 	}
 
 	@Test
@@ -473,7 +472,7 @@ class CommandFacadeUnhappyPathTest {
 						elementHasConflictParams));
 	}
 
-	@Order(7)
+	@Order(8)
 	@ParameterizedTest(name = "Pos {index} : id department ''{0}'', exception ''{1}''")
 	@MethodSource("createInvalidDeleteAllByIdData")
 	@DisplayName("Try to delete all entities by id test")
