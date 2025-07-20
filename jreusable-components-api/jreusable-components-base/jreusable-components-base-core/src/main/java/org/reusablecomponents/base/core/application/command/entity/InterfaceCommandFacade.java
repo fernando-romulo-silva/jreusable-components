@@ -92,7 +92,7 @@ public non-sealed interface InterfaceCommandFacade<Entity extends AbstractEntity
          * 
          * @param directives     Objects used to configure the save all action
          * 
-         * @throws NullPointerException          If the parameter is null
+         * @throws NullPointerException          If any parameter is null
          * @throws ElementAlreadyExistsException If you try store an entity with same
          *                                       {@code Id}
          * @throws ElementInvalidException       If an entity has constraints errors

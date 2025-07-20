@@ -16,6 +16,8 @@ import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.reflect.TypeToken;
+
 /**
  * The default <code>InterfaceEntityQueryFacade</code>'s implementation.
  */
@@ -51,7 +53,17 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 		this.findAllFunction = builder.findAllFunction;
 		this.countAllFunction = builder.countAllFunction;
 		this.existsAllFunction = builder.existsAllFunction;
-		this.queryIdInClazz = retrieveTypeClazz();
+		this.queryIdInClazz = retrieveQueryIdClazz();
+	}
+
+	@SuppressWarnings("unchecked")
+	private Class<QueryIdIn> retrieveQueryIdClazz() {
+		final var entityTypeToken = new TypeToken<QueryIdIn>(getClass()) {
+			private static final long serialVersionUID = 1L;
+		};
+		final var rawType = (Class<QueryIdIn>) entityTypeToken.getRawType();
+		LOGGER.debug("Class QueryIdIn '{}'", rawType);
+		return rawType;
 	}
 
 	/**

@@ -47,6 +47,8 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		permits EmptyFacade, CommandFacade, QueryFacade,
 		QuerySpecificationFacade, QueryPaginationFacade, QueryPaginationSpecificationFacade {
 
+	private static final String NON_NULL_FUNCTIONS_MSG = "Please pass a non-null 'functions'";
+
 	private static final String NON_NULL_DIRECTIVES_MSG = "Please pass a non-null 'directives'";
 
 	private static final String NON_NULL_ERROR_FUNCTION_MSG = "Please pass a non-null 'errorFunction'";
@@ -96,8 +98,8 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		final var finalBuilder = ofNullable(builder)
 				.orElseThrow(createNullPointerException("builder"));
 
-		this.entityClazz = retrieveTypeClazz();
-		this.idClazz = retrieveTypeClazz();
+		this.entityClazz = retrieveEntityClazz();
+		this.idClazz = retrieveIdClazz();
 
 		this.i18nService = finalBuilder.i18nService;
 		this.securityService = finalBuilder.securityService;
@@ -107,15 +109,30 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	/**
 	 * Capture the generic class type
 	 * 
-	 * @return A <code>Class<Type></code> object
+	 * @return A <code>Class<Entity></code> object
 	 */
 	@SuppressWarnings("unchecked")
-	protected final <Type> Class<Type> retrieveTypeClazz() {
+	protected final Class<Entity> retrieveEntityClazz() {
 		final var entityTypeToken = new TypeToken<Entity>(getClass()) {
 			private static final long serialVersionUID = 1L;
 		};
-		final var rawType = (Class<Type>) entityTypeToken.getRawType();
-		LOGGER.debug("Class type '{}'", rawType);
+		final var rawType = (Class<Entity>) entityTypeToken.getRawType();
+		LOGGER.debug("Class Entity '{}'", rawType);
+		return rawType;
+	}
+
+	/**
+	 * Capture the generic class type
+	 * 
+	 * @return A <code>Class<Entity></code> object
+	 */
+	@SuppressWarnings("unchecked")
+	protected final Class<Id> retrieveIdClazz() {
+		final var entityTypeToken = new TypeToken<Id>(getClass()) {
+			private static final long serialVersionUID = 1L;
+		};
+		final var rawType = (Class<Id>) entityTypeToken.getRawType();
+		LOGGER.debug("Class Id '{}'", rawType);
 		return rawType;
 	}
 
@@ -135,6 +152,8 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @param errorFunction The function executed after main function error
 	 * @param directives    A set objects used to configure pre, main, pos, and
 	 *                      error functions
+	 * 
+	 * @throws NullPointerException If any parameter is null
 	 * 
 	 * @return The function operation result
 	 */
@@ -228,6 +247,8 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @param directives    A set objects used to configure pre, main, pos, and
 	 *                      error functions
 	 * 
+	 * @throws NullPointerException If any parameter is null
+	 * 
 	 * @return The function operation result
 	 */
 	protected <In1, In2, Out> Out execute(
@@ -239,7 +260,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			final TriFunction<In1, In2, Object[], Out> mainFunction,
 			final QuadFunction<In1, In2, Exception, Object[], Exception> errorFunction,
 			final Object... directives) {
-
 		checkNotNull(in1, "Please pass a non-null 'in1'");
 		checkNotNull(in2, "Please pass a non-null 'in2'");
 		checkParamsNotNull(operation, preFunction, posFunction, mainFunction, errorFunction, directives);
@@ -280,7 +300,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 				operationName, finalInName, finalIn1, session, directives);
 
 		final Out out;
-
 		try {
 			out = mainFunction.apply(finalIn1, finalIn2, directives);
 		} catch (final Exception ex) {
@@ -316,6 +335,8 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @param errorFunction The function executed after main function error
 	 * @param directives    A set objects used to configure pre, main, pos, and
 	 *                      error functions
+	 * 
+	 * @throws NullPointerException If any parameter is null
 	 * 
 	 * @return The function operation result
 	 */
@@ -387,6 +408,9 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 *                   result
 	 * @param functions  A collection of <code>FacadeBiFunction</code> objects
 	 * @param directives Objects used to perform the functions
+	 * 
+	 * @throws NullPointerException If any parameter is null
+	 * 
 	 * @return A updated <code>in</code> object
 	 */
 	@NotNull
@@ -395,10 +419,9 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			final In in,
 			final Collection<FacadeBiFunction<In>> functions,
 			final Object... directives) {
-
 		checkNotNull(operation, NON_NULL_OPERATION_MSG);
 		checkNotNull(in, "Please pass a non-null 'in'");
-		checkNotNull(functions, "Please pass a non-null 'functions'");
+		checkNotNull(functions, NON_NULL_FUNCTIONS_MSG);
 		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
 
 		if (ObjectUtils.isEmpty(functions)) {
@@ -462,6 +485,9 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 *                   result
 	 * @param functions  A collection of <code>	</code> objects
 	 * @param directives Objects used to perform the functions
+	 * 
+	 * @throws NullPointerException If any parameter is null
+	 * 
 	 * @return A updated <code>in1</code> object
 	 */
 	@NotNull
@@ -471,11 +497,10 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			final In2 in2,
 			final Collection<FacadeTriFunction<In1, In2>> functions,
 			final Object... directives) {
-
 		checkNotNull(operation, NON_NULL_OPERATION_MSG);
 		checkNotNull(in1, "Please pass a non-null 'in1'");
 		checkNotNull(in2, "Please pass a non-null 'in2'");
-		checkNotNull(functions, "Please pass a non-null 'functions'");
+		checkNotNull(functions, NON_NULL_FUNCTIONS_MSG);
 		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
 
 		if (ObjectUtils.isEmpty(functions)) {

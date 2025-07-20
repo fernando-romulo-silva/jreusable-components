@@ -103,7 +103,7 @@ class CommandFacadeUnhappyPathTest {
 				"org.application_example.domain.Department");
 
 		return Stream.of(
-				Arguments.of(nullDepartment, NullPointerException.class, "Please pass a non-null '%s' entity",
+				Arguments.of(nullDepartment, NullPointerException.class, "Please pass a non-null %s entity",
 						new Object[] {}, List.of("Department")),
 
 				Arguments.of(repeatedDepartment, ElementAlreadyExistsException.class,
@@ -144,8 +144,8 @@ class CommandFacadeUnhappyPathTest {
 
 		return Stream.of(
 				Arguments.of(nullList, NullPointerException.class,
-						"Please pass a non-null '%s'",
-						List.of("in")),
+						"Please pass a non-null group of %s entities",
+						List.of("Department")),
 
 				Arguments.of(List.of(repeatedDepartment, correctDepartment),
 						ElementAlreadyExistsException.class,
@@ -193,7 +193,6 @@ class CommandFacadeUnhappyPathTest {
 
 	// given
 	Stream<Arguments> createInvalidUpdateData() {
-
 		final Department nullDepartment = null;
 		final Department unknownDepartment = new Department("x34", "Development 01", "Technology", manager);
 		final Department invalidDepartment = new Department(null, "Development 01", "Technology", manager);
@@ -201,11 +200,9 @@ class CommandFacadeUnhappyPathTest {
 		final var elementNotExistsParams = List.of(
 				"org.application_example.domain.Department");
 
-		final var nullPointerParams = List.of("in");
-
 		return Stream.of(
 				Arguments.of(nullDepartment, NullPointerException.class,
-						"Please pass a non-null '%s'", nullPointerParams),
+						"Please pass a non-null %s entity", List.of("Department")),
 
 				Arguments.of(unknownDepartment, ElementNotFoundException.class,
 						"The object '%s", elementNotExistsParams),
@@ -239,14 +236,12 @@ class CommandFacadeUnhappyPathTest {
 		final var correctDepartment = new Department("x3", "Default 02", "Resource", manager);
 		final var invalidDepartment = new Department(null, "Development 01", "Technology", manager);
 
-		final var nullListParams = List.of("in");
-
 		final var elementAlreadyExistsParams = List.of(
 				"org.application_example.domain.Department");
 
 		return Stream.of(
-				Arguments.of(nullList, NullPointerException.class, "Please pass a non-null '%s'",
-						nullListParams),
+				Arguments.of(nullList, NullPointerException.class,
+						"Please pass a non-null group of %s entities", List.of("Department")),
 
 				Arguments.of(List.of(unknownDepartment, correctDepartment),
 						ElementNotFoundException.class,
@@ -271,8 +266,7 @@ class CommandFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultFacade.updateAll(departments))
 				// then
 				.isInstanceOf(exceptionClass)
-				.hasMessageContaining(exceptionMessage,
-						exceptionParams.stream().toArray(Object[]::new));
+				.hasMessageContaining(exceptionMessage, exceptionParams.stream().toArray(Object[]::new));
 	}
 
 	// given
@@ -284,8 +278,6 @@ class CommandFacadeUnhappyPathTest {
 
 		final var elementNotExistsParams = List.of("org.application_example.domain.Department");
 
-		final var nullPointerParams = List.of("in");
-
 		final var invalidDepartment = new Department(null, "Development 01", "Technology", manager);
 		invalidDepartment.removeManager();
 
@@ -293,7 +285,7 @@ class CommandFacadeUnhappyPathTest {
 
 		return Stream.of(
 				Arguments.of(nullDepartment, NullPointerException.class,
-						"Please pass a non-null '%s'", nullPointerParams),
+						"Please pass a non-null %s entity", List.of("Department")),
 
 				Arguments.of(unknownDepartment, ElementNotFoundException.class,
 						"The object '%s", elementNotExistsParams),
@@ -333,8 +325,6 @@ class CommandFacadeUnhappyPathTest {
 
 		final var elementNotExistsParams = List.of("org.application_example.domain.Department");
 
-		final var nullPointerParams = List.of("in");
-
 		final var invalidDepartment = new Department(null, "Development 01", "Technology", manager);
 		invalidDepartment.removeManager();
 
@@ -345,8 +335,8 @@ class CommandFacadeUnhappyPathTest {
 		return Stream.of(
 				Arguments.of(nullList,
 						NullPointerException.class,
-						"lease pass a non-null '%s'",
-						nullPointerParams),
+						"Please pass a non-null group of %s entities",
+						List.of("Department")),
 
 				Arguments.of(List.of(unknownDepartment, invalidDepartment),
 						ElementInvalidException.class,
@@ -376,8 +366,7 @@ class CommandFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultFacade.deleteAll(departments))
 				// then
 				.isInstanceOf(exceptionClass)
-				.hasMessageContaining(exceptionMessage,
-						exceptionParams.stream().toArray(Object[]::new));
+				.hasMessageContaining(exceptionMessage, exceptionParams.stream().toArray(Object[]::new));
 	}
 
 	// given
@@ -389,8 +378,6 @@ class CommandFacadeUnhappyPathTest {
 
 		final var elementNotExistsParams = List.of(unknownDepartment.getId(), "Department");
 
-		final var nullPointerParams = List.of("in");
-
 		final var invalidDepartment = new Department("", "Development 01", "Technology", manager);
 		invalidDepartment.removeManager();
 
@@ -399,7 +386,7 @@ class CommandFacadeUnhappyPathTest {
 
 		return Stream.of(
 				Arguments.of(nullDepartmentId, NullPointerException.class,
-						"Please pass a non-null '%s'", nullPointerParams),
+						"Please pass a non-null %s id", List.of("Department")),
 
 				Arguments.of(unknownDepartment.getId(), ElementWithIdNotFoundException.class,
 						"The id '%s' not found for '%s' type", elementNotExistsParams),
@@ -441,8 +428,6 @@ class CommandFacadeUnhappyPathTest {
 		final var elementNotExistsParams = List.of(unknownDepartment.getId() + ", " + correctDepartment.getId(),
 				"Department");
 
-		final var nullPointerParams = List.of("in");
-
 		final var invalidDepartment = new Department("", "Development 01", "Technology", manager);
 		invalidDepartment.removeManager();
 
@@ -454,8 +439,8 @@ class CommandFacadeUnhappyPathTest {
 		final var elementInvalidParams = List.of(invalidDepartment.getId() + ", " + correctDepartment.getId());
 
 		return Stream.of(
-				Arguments.of(nullList, NullPointerException.class, "Please pass a non-null '%s'",
-						nullPointerParams),
+				Arguments.of(nullList, NullPointerException.class,
+						"Please pass a non-null group of %s ids", List.of("Department")),
 
 				Arguments.of(List.of(unknownDepartment.getId(),
 						correctDepartment.getId()),
@@ -481,12 +466,10 @@ class CommandFacadeUnhappyPathTest {
 			final Class<?> exceptionClass,
 			final String exceptionMessage,
 			final List<Object> exceptionParams) {
-
 		// when
 		assertThatThrownBy(() -> defaultFacade.deleteAllBy(departmentIds))
 				// then
 				.isInstanceOf(exceptionClass)
 				.hasMessageContaining(exceptionMessage, exceptionParams.stream().toArray(Object[]::new));
 	}
-
 }
