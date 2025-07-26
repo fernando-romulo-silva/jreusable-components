@@ -55,7 +55,6 @@ class BaseFacadeUnhappyPathTest {
 	@Order(1)
 	@DisplayName("Test the constructor values")
 	void constructorValuesTest() {
-
 		assertThatThrownBy(() -> new BaseFacade<Department, String>(null))
 				// then
 				.isInstanceOf(NullPointerException.class)
@@ -107,7 +106,6 @@ class BaseFacadeUnhappyPathTest {
 			final TriFunction<Department, Exception, Object[], Exception> errorFunction,
 			final Object[] directives,
 			final String exceptionMessage) {
-
 		// when
 		assertThatThrownBy(
 				() -> facade.execute(in, operation, preFunction, posFunction,
@@ -169,7 +167,6 @@ class BaseFacadeUnhappyPathTest {
 			final QuadFunction<Department, Manager, Exception, Object[], Exception> errorFunction,
 			final Object[] directives,
 			final String exceptionMessage) {
-
 		// when
 		assertThatThrownBy(
 				() -> facade.execute(in1, in2, operation, preFunction,
@@ -181,9 +178,7 @@ class BaseFacadeUnhappyPathTest {
 
 	// given
 	Stream<Arguments> createInvalidExecuteData03() {
-
 		final InterfaceOperation operation = CommandOperation.SAVE_ENTITY;
-
 		final UnaryOperator<Object[]> preFunction = directives -> directives;
 		final BiFunction<Department, Object[], Department> posFunction = (department, directives) -> department;
 		final Function<Object[], Department> mainFunction = directives -> null;
@@ -219,7 +214,6 @@ class BaseFacadeUnhappyPathTest {
 			final BiFunction<Exception, Object[], Exception> errorFunction,
 			final Object[] directives,
 			final String exceptionMessage) {
-
 		// when
 		assertThatThrownBy(
 				() -> facade.execute(operation, preFunction, posFunction, mainFunction, errorFunction, directives))

@@ -239,6 +239,24 @@ public non-sealed class CommandFacade< // generics
 	protected final BiFunction<DeleteIdIn, Object[], DeleteIdOut> deleteByIdFunction;
 
 	/**
+	 * Functions executed in sequence in the
+	 * {@link #preDeleteAllBy(Object, Object...) preDeleteAllBy} method
+	 */
+	protected final List<FacadeBiFunction<DeleteIdsIn>> deleteAllByIdPreFunctions = new ArrayList<>();
+
+	/**
+	 * Functions executed in sequence in the
+	 * {@link #posDeleteAllBy(Object, Object...) posDeleteAllBy} method
+	 */
+	protected final List<FacadeBiFunction<DeleteIdsOut>> deleteAllByIdPosFunctions = new ArrayList<>();
+
+	/**
+	 * Functions executed in sequence in the
+	 * {@link #errorDeleteAllBy(Object, Object, Object...) errorDeleteAllBy} method
+	 */
+	protected final List<FacadeTriFunction<Exception, DeleteIdsIn>> deleteAllByIdErrorFunctions = new ArrayList<>();
+
+	/**
 	 * Function that executes the delete all by id (bunch delete by id) operation in
 	 * the {@link #deleteAllBy(Object, Object...) deleteAllBy} method
 	 */
@@ -964,7 +982,7 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public DeleteIdOut deleteBy(final DeleteIdIn deleteIdIn, final Object... directives) {
-		LOGGER.debug("Default deleteBy, deleteIdIn {}, directives {} ", deleteIdIn, directives);
+		LOGGER.debug("Executing default deleteBy, deleteIdIn {}, directives {} ", deleteIdIn, directives);
 
 		checkNotNull(deleteIdIn, NON_NULL_ID_MSG, getEntityClazz().getSimpleName());
 		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
@@ -973,16 +991,17 @@ public non-sealed class CommandFacade< // generics
 				deleteIdIn, DELETE_BY_ID, this::preDeleteBy, this::posDeleteBy,
 				deleteByIdFunction::apply, this::errorDeleteBy, directives);
 
-		LOGGER.debug("Default deleteBy, deleteIdOut {}, directives {} ", deleteIdOut, directives);
+		LOGGER.debug("Default deleteBy executed, deleteIdOut {}, directives {} ", deleteIdOut, directives);
 		return deleteIdOut;
 	}
-
-	// ---------------------------------------------------------------------------------------------
 
 	/**
 	 * Method executed in {@link #deleteAllBy(Object, Object...) deleteAllBy} method
 	 * before the {@link #deleteAllByIdFunction deleteAllByIdFunction}, use it to
 	 * configure, change, etc. the input.
+	 * 
+	 * This method execute {@link #deleteAllByIdPreFunctions
+	 * deleteAllByIdPreFunctions} in sequence
 	 * 
 	 * @param deleteIdsIn The object's ids you want to deleteBy on the persistence
 	 *                    mechanism
@@ -991,8 +1010,13 @@ public non-sealed class CommandFacade< // generics
 	 * @return A {@code DeleteIdsIn} object
 	 */
 	protected DeleteIdsIn preDeleteAllBy(final DeleteIdsIn deleteIdsIn, final Object... directives) {
-		LOGGER.debug("Default preDeleteAllBy, deleteIdsIn {}, directives {} ", deleteIdsIn, directives);
-		return deleteIdsIn;
+		LOGGER.debug("Executing default preDeleteAllBy, deleteIdsIn {}, directives {} ", deleteIdsIn, directives);
+
+		final var deleteIdsInResult = execute("preDeleteAllBy", deleteIdsIn, deleteAllByIdPreFunctions, directives);
+
+		LOGGER.debug("Default preDeleteAllBy executed, deleteIdInResult {}, directives {} ",
+				deleteIdsInResult, directives);
+		return deleteIdsInResult;
 	}
 
 	/**
@@ -1000,19 +1024,30 @@ public non-sealed class CommandFacade< // generics
 	 * after {@link #deleteAllByIdFunction deleteAllByIdFunction}, use it to change
 	 * values.
 	 * 
+	 * This method execute {@link #deleteAllByIdPosFunctions
+	 * deleteAllByIdPosFunctions} in sequence
+	 * 
 	 * @param deleteIdsOut The object's ids you deleted on the persistence mechanism
 	 * @param directives   Objects used to configure the delete operation
 	 * 
 	 * @return A {@code DeleteIdsOut} object
 	 */
 	protected DeleteIdsOut posDeleteAllBy(final DeleteIdsOut deleteIdsOut, final Object... directives) {
-		LOGGER.debug("Default posDeleteAllBy, deleteIdsOut {}, directives {} ", deleteIdsOut, directives);
+		LOGGER.debug("Executing default posDeleteAllBy, deleteIdsOut {}, directives {} ", deleteIdsOut, directives);
+
+		final var deleteIdsInResult = execute("posDeleteAllBy", deleteIdsOut, deleteAllByIdPosFunctions, directives);
+
+		LOGGER.debug("Default posDeleteAllBy executed, deleteIdInResult {}, directives {} ",
+				deleteIdsInResult, directives);
 		return deleteIdsOut;
 	}
 
 	/**
 	 * Method executed in {@link #deleteAllBy(Object, Object...) deleteAllBy} method
 	 * to handle {@link #deleteAllByIdFunction deleteAllByIdFunction} errors.
+	 * 
+	 * This method execute {@link #deleteAllByIdErrorFunctions
+	 * deleteAllByIdErrorFunctions} in sequence
 	 * 
 	 * @param deleteIdsIn The object's ids you tried to delete on the persistence
 	 *                    mechanism
@@ -1025,8 +1060,20 @@ public non-sealed class CommandFacade< // generics
 			final DeleteIdsIn deleteIdsIn,
 			final Exception exception,
 			final Object... directives) {
-		LOGGER.debug("Default errorDeleteAllBy, deleteIdsIn {}, exception {}, directives {} ",
+		LOGGER.debug("Executing default errorDeleteAllBy, deleteIdsIn {}, exception {}, directives {} ",
 				deleteIdsIn, getRootCause(exception), directives);
+
+		final var exceptionResult = execute(
+				"errorDeleteAllBy",
+				exception,
+				deleteIdsIn,
+				deleteAllByIdErrorFunctions,
+				directives);
+
+		LOGGER.debug("Default errorDeleteAllBy executed, deleteIdsIn {}, exceptionResult {}, directives {}",
+				deleteIdsIn,
+				exceptionResult,
+				directives);
 		return exception;
 	}
 
@@ -1035,7 +1082,7 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public DeleteIdsOut deleteAllBy(final DeleteIdsIn deleteIdsIn, final Object... directives) {
-		LOGGER.debug("Default deleteAllBy, deleteIdsIn {}, directives {} ", deleteIdsIn, directives);
+		LOGGER.debug("Executing default deleteAllBy, deleteIdsIn {}, directives {} ", deleteIdsIn, directives);
 
 		checkNotNull(deleteIdsIn, NON_NULL_GROUP_OF_IDS_MSG, getEntityClazz().getSimpleName());
 		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
@@ -1044,7 +1091,7 @@ public non-sealed class CommandFacade< // generics
 				deleteIdsIn, DELETE_BY_IDS, this::preDeleteAllBy, this::posDeleteAllBy,
 				deleteAllByIdFunction::apply, this::errorDeleteAllBy, directives);
 
-		LOGGER.debug("Default deleteAllBy, deleteIdsOut {}, directives {} ", deleteIdsOut, directives);
+		LOGGER.debug("Default deleteAllBy executed, deleteIdsOut {}, directives {} ", deleteIdsOut, directives);
 		return deleteIdsOut;
 	}
 }
