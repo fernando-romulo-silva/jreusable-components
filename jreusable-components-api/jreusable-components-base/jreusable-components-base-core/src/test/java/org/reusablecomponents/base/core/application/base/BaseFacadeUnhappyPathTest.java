@@ -6,14 +6,13 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import java.util.AbstractMap;
 import java.util.Map.Entry;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.function.TriFunction;
 import org.application_example.domain.Department;
 import org.application_example.domain.Manager;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -26,7 +25,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reusablecomponents.base.core.application.empty.EmptyFacade;
+import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
 import org.reusablecomponents.base.core.infra.util.QuadFunction;
 import org.reusablecomponents.base.core.infra.util.operation.CommandOperation;
 import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
@@ -36,20 +35,9 @@ import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class BaseFacadeUnhappyPathTest {
+class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 
-	Manager defaultManager;
-
-	EmptyFacade<Department, String> facade;
-
-	String msg;
-
-	@BeforeAll
-	void setUpAll() {
-		defaultManager = new Manager("x2", "Business Happy");
-		facade = new EmptyFacade<>();
-		msg = "Please pass a non-null '%s'";
-	}
+	private final String msg = "Please pass a non-null '%s'";
 
 	@Test
 	@Order(1)
@@ -64,7 +52,7 @@ class BaseFacadeUnhappyPathTest {
 
 	// given
 	Stream<Arguments> createInvalidExecuteData01() {
-		final var in = new Department("x1", "Development 01", "Technology", defaultManager);
+		final var in = new Department("x1", "Development 01", "Technology", manager01);
 		final InterfaceOperation operation = CommandOperation.SAVE_ENTITY;
 		final BiFunction<Department, Object[], Department> preFunction = (department, directives) -> department;
 		final BiFunction<Department, Object[], Department> posFunction = (department, directives) -> department;
@@ -93,7 +81,7 @@ class BaseFacadeUnhappyPathTest {
 						msg.formatted("directives")));
 	}
 
-	@Order(1)
+	@Order(2)
 	@ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
 	@MethodSource("createInvalidExecuteData01")
 	@DisplayName("Try to execute 01 invalid test")
@@ -117,7 +105,7 @@ class BaseFacadeUnhappyPathTest {
 
 	// given
 	Stream<Arguments> createInvalidExecuteData02() {
-		final var in1 = new Department("x1", "Development 01", "Technology", defaultManager);
+		final var in1 = new Department("x1", "Development 01", "Technology", manager01);
 		final var in2 = new Manager("x3", "Business Happy");
 		final InterfaceOperation operation = CommandOperation.SAVE_ENTITY;
 
@@ -153,7 +141,7 @@ class BaseFacadeUnhappyPathTest {
 						null, msg.formatted("directives")));
 	}
 
-	@Order(2)
+	@Order(3)
 	@ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
 	@MethodSource("createInvalidExecuteData02")
 	@DisplayName("Try to execute 02 invalid test 2")
@@ -179,7 +167,7 @@ class BaseFacadeUnhappyPathTest {
 	// given
 	Stream<Arguments> createInvalidExecuteData03() {
 		final InterfaceOperation operation = CommandOperation.SAVE_ENTITY;
-		final UnaryOperator<Object[]> preFunction = directives -> directives;
+		final Consumer<Object[]> preFunction = System.out::println;
 		final BiFunction<Department, Object[], Department> posFunction = (department, directives) -> department;
 		final Function<Object[], Department> mainFunction = directives -> null;
 		final BiFunction<Exception, Object[], Exception> errorFunction = (exception, directives) -> exception;
@@ -187,8 +175,7 @@ class BaseFacadeUnhappyPathTest {
 		final Object[] directives = new Object[] {};
 
 		return Stream.of(
-				Arguments.of(null, preFunction, posFunction, mainFunction, errorFunction,
-						directives,
+				Arguments.of(null, preFunction, posFunction, mainFunction, errorFunction, directives,
 						msg.formatted("operation")),
 				Arguments.of(operation, null, posFunction, mainFunction, errorFunction, directives,
 						msg.formatted("preFunction")),
@@ -202,13 +189,13 @@ class BaseFacadeUnhappyPathTest {
 						msg.formatted("directives")));
 	}
 
-	@Order(3)
+	@Order(4)
 	@ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
 	@MethodSource("createInvalidExecuteData03")
 	@DisplayName("Try to execute 03 invalid test")
 	void invalidExecuteTest03(
 			final InterfaceOperation operation,
-			final UnaryOperator<Object[]> preFunction,
+			final Consumer<Object[]> preFunction,
 			final BiFunction<Department, Object[], Department> posFunction,
 			final Function<Object[], Department> mainFunction,
 			final BiFunction<Exception, Object[], Exception> errorFunction,
@@ -220,5 +207,104 @@ class BaseFacadeUnhappyPathTest {
 				// then
 				.isInstanceOf(NullPointerException.class)
 				.hasMessageContaining(exceptionMessage);
+	}
+
+	@Test
+	@Order(5)
+	@DisplayName("Test execute pre operation error, no inputs")
+	void executeNoInputOperationPreFunctionErrorTest() {
+		// given
+		final Consumer<Object[]> preFunctionNoInputError = directives -> {
+			throw new IllegalArgumentException();
+		};
+
+		assertThatThrownBy(
+				// when
+				() -> facade.execute(
+						operation, preFunctionNoInputError, posFunctionNoInput,
+						directives -> department01, errorFunctionNoInput))
+				// then
+				.isInstanceOf(BaseApplicationException.class)
+				.hasRootCauseInstanceOf(IllegalArgumentException.class);
+	}
+
+	@Test
+	@Order(6)
+	@DisplayName("Test execute operation, no inputs")
+	void executeNoInputOperationMainFunctionErrorTest() {
+		// given
+		final Function<Object[], Department> mainFunctionNoInputError = directives -> {
+			throw new IllegalArgumentException();
+		};
+
+		assertThatThrownBy(
+				// when
+				() -> facade.execute(
+						operation, preFunctionNoInput, posFunctionNoInput,
+						mainFunctionNoInputError, errorFunctionNoInput))
+				// then
+				.isInstanceOf(BaseApplicationException.class)
+				.hasRootCauseInstanceOf(IllegalArgumentException.class);
+	}
+
+	@Test
+	@Order(7)
+	@DisplayName("Test execute pos operation error, no inputs")
+	void executeNoInputOperationPosFunctionErrorTest() {
+		// given
+		final BiFunction<Department, Object[], Department> posFunctionNoInputError = (
+				department, directives) -> {
+			throw new IllegalArgumentException();
+		};
+
+		assertThatThrownBy(
+				// when
+				() -> facade.execute(
+						operation, preFunctionNoInput, posFunctionNoInputError,
+						directives -> department01, errorFunctionNoInput))
+				// then
+				.isInstanceOf(BaseApplicationException.class)
+				.hasRootCauseInstanceOf(IllegalArgumentException.class);
+	}
+
+	@Test
+	@Order(6)
+	@DisplayName("Test execute operation, one input")
+	void executeSingleInputOperationTest() {
+		// given
+		final BiFunction<Department, Object[], Department> mainFunctionOneInputError = (
+				departmentFinal, directives) -> {
+			throw new IllegalArgumentException();
+		};
+
+		assertThatThrownBy(
+				// when
+				() -> facade.execute(
+						department01, operation, preFunctionOneInput,
+						posFunctionOneInput, mainFunctionOneInputError,
+						errorFunctionOneInput))
+				// then
+				.isInstanceOf(BaseApplicationException.class)
+				.hasRootCauseInstanceOf(IllegalArgumentException.class);
+	}
+
+	@Test
+	@Order(7)
+	@DisplayName("Test execute operation, two inputs")
+	void executeDoubleInputOperationTest() {
+		// given
+		final TriFunction<Department, Manager, Object[], DepartmenDto> mainFunctionTwoInputsError = (
+				departmentIn, managerIn, directives) -> {
+			throw new IllegalArgumentException();
+		};
+
+		assertThatThrownBy(
+				// when
+				() -> facade.execute(
+						department01, manager01, operation, preFunctionTwoInputs, posFunctionTwoInputs,
+						mainFunctionTwoInputsError, errorFunctionTwoInputs))
+				// then
+				.isInstanceOf(BaseApplicationException.class)
+				.hasRootCauseInstanceOf(IllegalArgumentException.class);
 	}
 }

@@ -5,13 +5,14 @@ import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 import static org.reusablecomponents.base.core.infra.util.Functions.createNullPointerException;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map.Entry;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.UnaryOperator;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -46,34 +47,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		implements InterfaceBaseFacade<Entity, Id>
 		permits EmptyFacade, CommandFacade, QueryFacade,
 		QuerySpecificationFacade, QueryPaginationFacade, QueryPaginationSpecificationFacade {
-
-	private static final String NON_NULL_FUNCTIONS_MSG = "Please pass a non-null 'functions'";
-
-	private static final String NON_NULL_DIRECTIVES_MSG = "Please pass a non-null 'directives'";
-
-	private static final String NON_NULL_ERROR_FUNCTION_MSG = "Please pass a non-null 'errorFunction'";
-
-	private static final String NON_NULL_MAIN_FUNCTION_MSG = "Please pass a non-null 'mainFunction'";
-
-	private static final String NON_NULL_POS_FUNCTION_MSG = "Please pass a non-null 'posFunction'";
-
-	private static final String NON_NULL_PRE_FUNCTION_MSG = "Please pass a non-null 'preFunction'";
-
-	private static final String NON_NULL_OPERATION_MSG = "Please pass a non-null 'operation'";
-
-	private static final String POS_OPERATION_LOG = "Pos {} operation with {} '{}', session '{}', and directives '{}'";
-
-	private static final String OPERATION_EXECUTED_LOG = "{} operation executed, with {} '{}', session '{}', and directives '{}'";
-
-	private static final String FINAL_LOG = "final";
-
-	private static final String PRE_LOG = "pre";
-
-	private static final String ERROR_ON_OPERATION_LOG = "Error on {} operation with {} '{}', session '{}', error '{}'";
-
-	private static final String ERROR_ON_PRE_OPERATION_LOG = "Error on pre {} operation with {} '{}', session '{}', error '{}'";
-
-	private static final String ERROR_ON_POS_OPERATION_LOG = "Error on pos {} operation with {} '{}', session '{}', error '{}'";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseFacade.class);
 
@@ -134,6 +107,84 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		final var rawType = (Class<Id>) entityTypeToken.getRawType();
 		LOGGER.debug("Class Id '{}'", rawType);
 		return rawType;
+	}
+
+	/**
+	 * Execute operations like save, delete, saveAll, etc.
+	 * An operation is built of a main function, pre-function, pos-function, and
+	 * error-function.
+	 * 
+	 * @param <Out>         The output type
+	 * 
+	 * @param operation     The operation data, used for logs
+	 * @param preFunction   The function executed before the main function
+	 * @param posFunction   The function executed after the main function
+	 * @param mainFunction  The main function
+	 * @param errorFunction The function executed after main function error
+	 * @param directives    A set objects used to configure pre, main, pos, and
+	 *                      error functions
+	 * 
+	 * @throws NullPointerException If any parameter is null
+	 * 
+	 * @return The function operation result
+	 */
+	protected <Out> Out execute(
+			final InterfaceOperation operation,
+			final Consumer<Object[]> preFunction,
+			final BiFunction<Out, Object[], Out> posFunction,
+			final Function<Object[], Out> mainFunction,
+			final BiFunction<Exception, Object[], Exception> errorFunction,
+			final Object... directives) {
+		checkParamsNotNull(operation, preFunction, posFunction, mainFunction, errorFunction, directives);
+
+		final var session = securityService.getSession();
+		final var operationName = operation.getName();
+
+		final var outName = operation.getReceiver().concat("Out");
+		final var preOutName = PRE_LOG.concat(outName);
+		final var finalOutName = FINAL_LOG.concat(outName);
+
+		LOGGER.debug("Pre executing {} operation session '{}', and directives '{}'",
+				operationName, session, directives);
+
+		try {
+			preFunction.accept(directives);
+		} catch (final Exception ex) {
+			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
+			LOGGER.debug(ERROR_ON_PRE_OPERATION_LOG, operationName, session, exceptionClass);
+			throw exceptionAdapterService.convert(ex, i18nService, operation, getEntityClazz());
+		}
+
+		LOGGER.debug("Executing {} operation session '{}', and directives '{}'",
+				operationName, session, directives);
+
+		final Out out;
+		try {
+			out = mainFunction.apply(directives);
+		} catch (final Exception ex) {
+			final var finalException = errorFunction.apply(ex, directives);
+			final var exceptionClass = getRootCause(finalException).getClass().getSimpleName();
+			LOGGER.debug("Error on {} operation, session '{}', error '{}'", operationName, session, exceptionClass);
+			throw exceptionAdapterService.convert(
+					finalException, i18nService, operation, getEntityClazz());
+		}
+
+		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, out, session, directives);
+
+		final Out posOut;
+		try {
+			posOut = posFunction.apply(out, directives);
+		} catch (final Exception ex) {
+			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
+			LOGGER.debug(ERROR_ON_POS_OPERATION_LOG, operationName, finalOutName, out, session, exceptionClass);
+			throw exceptionAdapterService.convert(ex, i18nService, operation, getEntityClazz());
+		}
+
+		final var finalOut = ofNullable(posOut)
+				.orElseThrow(createNullPointerException(i18nService, preOutName));
+
+		LOGGER.debug(POS_OPERATION_LOG, operationName, finalOutName, finalOut, session, directives);
+		return finalOut;
 	}
 
 	/**
@@ -217,7 +268,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			posOut = posFunction.apply(out, directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
-			LOGGER.debug(ERROR_ON_PRE_OPERATION_LOG, operationName, finalOutName, out, session, exceptionClass);
+			LOGGER.debug(ERROR_ON_POS_OPERATION_LOG, operationName, finalOutName, out, session, exceptionClass);
 			throw exceptionAdapterService.convert(ex, i18nService, operation, getEntityClazz(), in);
 		}
 
@@ -305,89 +356,20 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		} catch (final Exception ex) {
 			final var finalException = errorFunction.apply(finalIn1, finalIn2, ex, directives);
 			final var exceptionClass = getRootCause(finalException).getClass().getSimpleName();
-			LOGGER.debug(ERROR_ON_POS_OPERATION_LOG, operationName, finalInName, finalIn1, session, exceptionClass);
+			LOGGER.debug(ERROR_ON_OPERATION_LOG, operationName, finalInName, finalIn1, session, exceptionClass);
 			throw exceptionAdapterService.convert(finalException, i18nService, operation, getEntityClazz(), finalIn1);
 		}
 
 		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, out, session, directives);
 
-		final var posOut = posFunction.apply(out, directives);
-
-		final var finalOut = ofNullable(posOut)
-				.orElseThrow(createNullPointerException(i18nService, preOutName));
-
-		LOGGER.debug(POS_OPERATION_LOG, operationName, finalOutName, finalOut, session, directives);
-
-		return finalOut;
-	}
-
-	/**
-	 * Execute operations like save, delete, saveAll, etc.
-	 * An operation is built of a main function, pre-function, pos-function, and
-	 * error-function.
-	 * 
-	 * @param <Out>         The output type
-	 * 
-	 * @param operation     The operation data, used for logs
-	 * @param preFunction   The function executed before the main function
-	 * @param posFunction   The function executed after the main function
-	 * @param mainFunction  The main function
-	 * @param errorFunction The function executed after main function error
-	 * @param directives    A set objects used to configure pre, main, pos, and
-	 *                      error functions
-	 * 
-	 * @throws NullPointerException If any parameter is null
-	 * 
-	 * @return The function operation result
-	 */
-	protected <Out> Out execute(
-			final InterfaceOperation operation,
-			final UnaryOperator<Object[]> preFunction,
-			final BiFunction<Out, Object[], Out> posFunction,
-			final Function<Object[], Out> mainFunction,
-			final BiFunction<Exception, Object[], Exception> errorFunction,
-			final Object... directives) {
-		checkParamsNotNull(operation, preFunction, posFunction, mainFunction, errorFunction, directives);
-
-		final var session = securityService.getSession();
-		final var operationName = operation.getName();
-
-		final var inName = operation.getReceiver().concat("In");
-		final var preInName = PRE_LOG.concat(inName);
-		final var finalInName = FINAL_LOG.concat(inName);
-
-		final var outName = operation.getReceiver().concat("Out");
-		final var preOutName = PRE_LOG.concat(outName);
-		final var finalOutName = FINAL_LOG.concat(outName);
-
-		LOGGER.debug("Pre executing {} operation session '{}', and directives '{}'",
-				operationName, session, directives);
-
-		final var preIn = preFunction.apply(directives);
-
-		final var finalIn = ofNullable(preIn)
-				.orElseThrow(createNullPointerException(i18nService, preInName));
-
-		LOGGER.debug("Executing {} operation session '{}', and directives '{}'",
-				operationName, session, directives);
-
-		final Out out;
-
+		final Out posOut;
 		try {
-			out = mainFunction.apply(directives);
+			posOut = posFunction.apply(out, directives);
 		} catch (final Exception ex) {
-			final var finalException = errorFunction.apply(ex, directives);
-			final var exceptionClass = getRootCause(finalException).getClass().getSimpleName();
-
-			LOGGER.debug(ERROR_ON_OPERATION_LOG, operationName, finalInName, finalIn, session, exceptionClass);
-
-			throw exceptionAdapterService.convert(
-					finalException, i18nService, operation, getEntityClazz(), finalIn);
+			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
+			LOGGER.debug(ERROR_ON_POS_OPERATION_LOG, operationName, finalOutName, out, session, exceptionClass);
+			throw exceptionAdapterService.convert(ex, i18nService, operation, getEntityClazz());
 		}
-
-		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, out, session, directives);
-
-		final var posOut = posFunction.apply(out, directives);
 
 		final var finalOut = ofNullable(posOut)
 				.orElseThrow(createNullPointerException(i18nService, preOutName));
@@ -555,7 +537,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			final Object posFunction,
 			final Object mainFunction,
 			final Object errorFunction,
-			final Object... directives) {
+			final Object[] directives) {
 		checkNotNull(operation, NON_NULL_OPERATION_MSG);
 		checkNotNull(preFunction, NON_NULL_PRE_FUNCTION_MSG);
 		checkNotNull(posFunction, NON_NULL_POS_FUNCTION_MSG);

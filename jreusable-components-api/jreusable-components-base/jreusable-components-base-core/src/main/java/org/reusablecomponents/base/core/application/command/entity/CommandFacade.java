@@ -14,6 +14,8 @@ import static org.reusablecomponents.base.core.infra.util.operation.CommandOpera
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.reusablecomponents.base.core.application.base.BaseFacade;
 import org.reusablecomponents.base.core.application.base.FacadeBiFunction;
