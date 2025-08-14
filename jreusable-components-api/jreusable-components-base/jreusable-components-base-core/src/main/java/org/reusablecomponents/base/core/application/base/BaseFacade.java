@@ -164,9 +164,9 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		} catch (final Exception ex) {
 			final var finalException = errorFunction.apply(ex, directives);
 			final var exceptionClass = getRootCause(finalException).getClass().getSimpleName();
+
 			LOGGER.debug("Error on {} operation, session '{}', error '{}'", operationName, session, exceptionClass);
-			throw exceptionAdapterService.convert(
-					finalException, i18nService, operation, getEntityClazz());
+			throw exceptionAdapterService.convert(finalException, i18nService, operation, getEntityClazz());
 		}
 
 		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, out, session, directives);
@@ -385,7 +385,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * 
 	 * @param <In>       The function input type
 	 * 
-	 * @param operation  The method caller name, used on logs
 	 * @param in         The function input object, the value used to create the
 	 *                   result
 	 * @param functions  A collection of <code>FacadeBiFunction</code> objects
@@ -397,18 +396,15 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 */
 	@NotNull
 	protected <In> In execute(
-			final String operation,
 			final In in,
 			final Collection<FacadeBiFunction<In>> functions,
 			final Object... directives) {
-		checkNotNull(operation, NON_NULL_OPERATION_MSG);
 		checkNotNull(in, "Please pass a non-null 'in'");
 		checkNotNull(functions, NON_NULL_FUNCTIONS_MSG);
 		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
 
 		if (ObjectUtils.isEmpty(functions)) {
-			LOGGER.debug("No functions to execute on {} operation with input {} and directires {}",
-					operation, in, directives);
+			LOGGER.debug("No functions to execute with input {} and directires {}", in, directives);
 			return in;
 		}
 
@@ -420,8 +416,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		final var withErrorFunctions = new ArrayList<String>();
 		final var executedFunctions = new ArrayList<String>();
 
-		LOGGER.debug("Execute functions {} on {} operation with input {} and directires {}",
-				allFunctionsName, operation, in, directives);
+		LOGGER.debug("Execute functions {} with input {} and directires {}", allFunctionsName, in, directives);
 
 		var nextIn = in;
 		for (final var function : functions) {
@@ -460,7 +455,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @param <In1>      The first function input type
 	 * @param <In2>      The second function input type
 	 * 
-	 * @param operation  The method caller name, used on logs
 	 * @param in1        The first function input object, the value used to create
 	 *                   the result
 	 * @param in2        The second function input object, it is used to help the
@@ -474,20 +468,18 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 */
 	@NotNull
 	protected <In1, In2> In1 execute(
-			final String operation,
 			final In1 in1,
 			final In2 in2,
 			final Collection<FacadeTriFunction<In1, In2>> functions,
 			final Object... directives) {
-		checkNotNull(operation, NON_NULL_OPERATION_MSG);
 		checkNotNull(in1, "Please pass a non-null 'in1'");
 		checkNotNull(in2, "Please pass a non-null 'in2'");
 		checkNotNull(functions, NON_NULL_FUNCTIONS_MSG);
 		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
 
 		if (ObjectUtils.isEmpty(functions)) {
-			LOGGER.debug("No functions to execute on {} operation with inputs [{} {}] and directires {}",
-					operation, in1, in2, directives);
+			LOGGER.debug("No functions to execute with inputs [{} {}] and directires {}",
+					in1, in2, directives);
 			return in1;
 		}
 
@@ -499,8 +491,8 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		final var withErrorFunctions = new ArrayList<String>();
 		final var executedFunctions = new ArrayList<String>();
 
-		LOGGER.debug("Execute functions {} on {} operation with inputs [{} {}] and directires {}",
-				allFunctionsName, operation, in1, in2, directives);
+		LOGGER.debug("Execute functions {} with inputs [{} {}] and directires {}",
+				allFunctionsName, in1, in2, directives);
 
 		In1 nextIn1 = in1;
 		for (final var function : functions) {

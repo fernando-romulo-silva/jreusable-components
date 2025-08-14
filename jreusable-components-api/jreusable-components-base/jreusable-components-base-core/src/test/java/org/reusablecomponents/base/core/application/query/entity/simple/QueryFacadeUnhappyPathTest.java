@@ -26,7 +26,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
 import org.reusablecomponents.base.core.infra.exception.common.UnexpectedException;
 
@@ -163,7 +162,7 @@ class QueryFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultQueryFacade.findAll(directives))
 				// then
 				.isInstanceOf(UnexpectedException.class)
-				// .hasRootCauseInstanceOf(UnsupportedOperationException.class)
+				.hasRootCauseInstanceOf(IllegalStateException.class)
 				.hasMessageContaining("Unexpecte error happened");
 	}
 

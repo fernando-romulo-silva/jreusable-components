@@ -29,8 +29,6 @@ public class ElementNotFoundException extends BaseApplicationException {
             final InterfaceI18nService i18nService,
             final Throwable ex,
             final Object object) {
-
         super(ELEMENT_NOT_FOUND_EXCEPTION_MSG, i18nService, ex, object);
     }
-
 }

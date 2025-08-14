@@ -43,7 +43,7 @@ public class ListExceptionAdapterService implements InterfaceExceptionAdapterSer
                 default -> throw new IllegalArgumentException("Unexpected value: " + commandOperation);
             };
 
-        } else if (directives.length == 3
+        } else if (directives.length >= 2
                 && directives[0] instanceof QueryOperation queryOperation
                 && directives[1] instanceof Class clazz) {
 

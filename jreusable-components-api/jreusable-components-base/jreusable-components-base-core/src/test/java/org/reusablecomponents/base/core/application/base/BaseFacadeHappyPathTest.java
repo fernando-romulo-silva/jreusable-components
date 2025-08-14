@@ -2,7 +2,6 @@ package org.reusablecomponents.base.core.application.base;
 
 import static java.text.MessageFormat.format;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 import java.util.ArrayList;
@@ -167,7 +166,7 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 		final var functions = getBiFunctions();
 
 		// when
-		final var result = facade.execute("myTest", department01, functions);
+		final var result = facade.execute(department01, functions);
 
 		// then
 		assertThat(result.getName())
@@ -183,7 +182,7 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 		final var functions = new ArrayList<FacadeBiFunction<Department>>();
 
 		// when
-		final var result = facade.execute("myTest", department01, functions);
+		final var result = facade.execute(department01, functions);
 
 		// then
 		assertThat(result.getName())
@@ -201,7 +200,7 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 		final var functions = getTriFunctions();
 
 		// when
-		final var result = facade.execute("myTest", exception, department01, functions);
+		final var result = facade.execute(exception, department01, functions);
 
 		// then
 		assertThat(result)
@@ -219,97 +218,11 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 		final var functions = new ArrayList<FacadeTriFunction<Exception, Department>>();
 
 		// when
-		final var result = facade.execute("myTest", exception, department01, functions);
+		final var result = facade.execute(exception, department01, functions);
 
 		// then
 		assertThat(result)
 				.isInstanceOf(NullPointerException.class);
 	}
 
-	@Test
-	@Order(11)
-	@DisplayName("Test execute bi functions with retrow first one")
-	void executeBiFunctionsUntilThrowExceptionTest() {
-		// given
-		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
-
-		final var functions = new ArrayList<FacadeBiFunction<Department>>(getBiFunctions());
-
-		final var functionThrow01 = new FacadeBiFunction<Department>() {
-
-			@Override
-			public Department apply(final Department department, final Object[] directives) {
-				throw new IllegalStateException("State exception");
-			}
-
-			@Override
-			public boolean reTrowException() {
-				return true;
-			}
-		};
-		functions.add(functionThrow01);
-
-		final var functionThrow02 = new FacadeBiFunction<Department>() {
-
-			@Override
-			public Department apply(final Department department, final Object[] directives) {
-				throw new IllegalArgumentException("Argument exception");
-			}
-
-			@Override
-			public boolean reTrowException() {
-				return true;
-			}
-		};
-		functions.add(functionThrow02);
-
-		// when
-		assertThatThrownBy(() -> facade.execute("testException", department01, functions))
-				// then
-				.isInstanceOf(IllegalStateException.class)
-				.hasMessageContaining("State exception");
-	}
-
-	@Test
-	@Order(12)
-	@DisplayName("Test execute tri functions with retrow first one")
-	void executeTriFunctionsUntilThrowExceptionTest() {
-		// given
-		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
-		final var exception = new NullPointerException("null");
-
-		final var functions = new ArrayList<FacadeTriFunction<Exception, Department>>(getTriFunctions());
-		final var functionThrow01 = new FacadeTriFunction<Exception, Department>() {
-			@Override
-			public Exception apply(final Exception exception, final Department department, final Object[] directives) {
-				throw new IllegalStateException("State exception");
-			}
-
-			@Override
-			public boolean reTrowException() {
-				return true;
-			}
-		};
-
-		final var functionThrow02 = new FacadeTriFunction<Exception, Department>() {
-			@Override
-			public Exception apply(final Exception exception, final Department department, final Object[] directives) {
-				throw new IllegalArgumentException("Argument exception");
-			}
-
-			@Override
-			public boolean reTrowException() {
-				return true;
-			}
-		};
-
-		functions.add(functionThrow01);
-		functions.add(functionThrow02);
-
-		// when
-		assertThatThrownBy(() -> facade.execute("testException", exception, department01, functions))
-				// then
-				.isInstanceOf(IllegalStateException.class)
-				.hasMessageContaining("State exception");
-	}
 }

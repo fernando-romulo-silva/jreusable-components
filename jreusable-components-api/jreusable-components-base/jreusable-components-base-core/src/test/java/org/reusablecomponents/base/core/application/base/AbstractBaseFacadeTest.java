@@ -53,13 +53,13 @@ abstract class AbstractBaseFacadeTest {
             departmentIn, exception, directives) -> exception;
 
     // ---------------- two inputs
-    final TriFunction<Department, Manager, Object[], Entry<Department, Manager>> preFunctionTwoInputs = (
+    protected final TriFunction<Department, Manager, Object[], Entry<Department, Manager>> preFunctionTwoInputs = (
             departmentIn, managerIn, directives) -> new AbstractMap.SimpleEntry<>(department02, manager02);
 
-    final BiFunction<DepartmenDto, Object[], DepartmenDto> posFunctionTwoInputs = (
+    protected final BiFunction<DepartmenDto, Object[], DepartmenDto> posFunctionTwoInputs = (
             departmentDtoIn, directives) -> departmentDtoIn;
 
-    final QuadFunction<Department, Manager, Exception, Object[], Exception> errorFunctionTwoInputs = (
+    protected final QuadFunction<Department, Manager, Exception, Object[], Exception> errorFunctionTwoInputs = (
             departmentIn, managerIn, exception, directives) -> exception;
 
     // ------------------------------------------------------

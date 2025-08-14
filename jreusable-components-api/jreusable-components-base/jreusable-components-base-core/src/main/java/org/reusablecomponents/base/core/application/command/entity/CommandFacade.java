@@ -14,8 +14,6 @@ import static org.reusablecomponents.base.core.infra.util.operation.CommandOpera
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import org.reusablecomponents.base.core.application.base.BaseFacade;
 import org.reusablecomponents.base.core.application.base.FacadeBiFunction;
@@ -301,7 +299,7 @@ public non-sealed class CommandFacade< // generics
 	protected SaveEntityIn preSave(final SaveEntityIn saveEntityIn, final Object... directives) {
 		LOGGER.debug("Executing default preSave, saveEntityIn {}, directives {} ", saveEntityIn, directives);
 
-		final var saveEntityInResult = execute("preSave", saveEntityIn, savePreFunctions, directives);
+		final var saveEntityInResult = execute(saveEntityIn, savePreFunctions, directives);
 
 		LOGGER.debug("Default preSave executed, saveEntityInResult {}, directives {} ", saveEntityInResult, directives);
 		return saveEntityInResult;
@@ -322,7 +320,7 @@ public non-sealed class CommandFacade< // generics
 	protected SaveEntityOut posSave(final SaveEntityOut saveEntityOut, final Object... directives) {
 		LOGGER.debug("Executing default posSave, saveEntityOut {}, directives {} ", saveEntityOut, directives);
 
-		final var saveEntityOutResult = execute("posSave", saveEntityOut, savePosFunctions, directives);
+		final var saveEntityOutResult = execute(saveEntityOut, savePosFunctions, directives);
 
 		LOGGER.debug("Default posSave executed, saveEntityOutResult {}, directives {} ",
 				saveEntityOutResult, directives);
@@ -352,7 +350,6 @@ public non-sealed class CommandFacade< // generics
 				directives);
 
 		final var exceptionResult = execute(
-				"errorSave",
 				exception,
 				saveEntityIn,
 				saveErrorFunctions,
@@ -400,7 +397,7 @@ public non-sealed class CommandFacade< // generics
 	protected SaveEntitiesIn preSaveAll(final SaveEntitiesIn saveEntitiesIn, final Object... directives) {
 		LOGGER.debug("Executing default preSaveAll, saveEntiesIn {}, directives {} ", saveEntitiesIn, directives);
 
-		final var saveEntiesInResult = execute("preSaveAll", saveEntitiesIn, saveAllPreFunctions, directives);
+		final var saveEntiesInResult = execute(saveEntitiesIn, saveAllPreFunctions, directives);
 
 		LOGGER.debug("Default preSaveAll executed, saveEntityInResult {}, directives {} ",
 				saveEntiesInResult, directives);
@@ -425,7 +422,6 @@ public non-sealed class CommandFacade< // generics
 		LOGGER.debug("Executing default posSaveAll, saveEntiesOut {}, directives {} ", saveEntitiesOut, directives);
 
 		final var saveEntitiesOutResult = execute(
-				"posSaveAll",
 				saveEntitiesOut,
 				saveAllPosFunctions,
 				directives);
@@ -457,8 +453,7 @@ public non-sealed class CommandFacade< // generics
 				"Executing default errorSaveAll, saveEntitiesIn {}, exception {}, directives {} ",
 				saveEntitiesIn, getRootCause(exception), directives);
 
-		final var exceptionResult = execute(
-				"errorSaveAll", exception, saveEntitiesIn, saveAllErrorFunctions, directives);
+		final var exceptionResult = execute(exception, saveEntitiesIn, saveAllErrorFunctions, directives);
 
 		LOGGER.debug("Default errorSaveAll executed, saveEntitiesIn {}, exceptionResult {}, directives {} ",
 				saveEntitiesIn, exceptionResult, directives);
@@ -500,7 +495,7 @@ public non-sealed class CommandFacade< // generics
 	protected UpdateEntityIn preUpdate(final UpdateEntityIn updateEntityIn, final Object... directives) {
 		LOGGER.debug("Executing default preUpdate, updateEntityIn {}, directives {} ", updateEntityIn, directives);
 
-		final var updateEntityInResult = execute("preUpdate", updateEntityIn, updatePreFunctions, directives);
+		final var updateEntityInResult = execute(updateEntityIn, updatePreFunctions, directives);
 
 		LOGGER.debug("Default preUpdate executed, updateEntityInResult {}, directives {} ",
 				updateEntityInResult, directives);
@@ -524,7 +519,6 @@ public non-sealed class CommandFacade< // generics
 		LOGGER.debug("Executing default preUpdate, updateEntityOut {}, directives {} ", updateEntityOut, directives);
 
 		final var updateEntityOutResult = execute(
-				"posUpdate",
 				updateEntityOut,
 				updatePosFunctions,
 				directives);
@@ -556,7 +550,6 @@ public non-sealed class CommandFacade< // generics
 				updateEntityIn, getRootCause(exception), directives);
 
 		final var exceptionResult = execute(
-				"errorUpdate",
 				exception,
 				updateEntityIn,
 				updateErrorFunctions,
@@ -605,7 +598,6 @@ public non-sealed class CommandFacade< // generics
 		LOGGER.debug("Executing default preUpdateAll, updateEntityIn {}, directives {} ", updateEntitiesIn, directives);
 
 		final var updateEntiesInResult = execute(
-				"preUpdateAll",
 				updateEntitiesIn,
 				updateAllPreFunctions,
 				directives);
@@ -633,7 +625,6 @@ public non-sealed class CommandFacade< // generics
 				updateEntitiesOut, directives);
 
 		final var updateEntitiesOutResult = execute(
-				"posUpdateAll",
 				updateEntitiesOut,
 				updateAllPosFunctions,
 				directives);
@@ -666,7 +657,6 @@ public non-sealed class CommandFacade< // generics
 				updateEntitiesIn, getRootCause(exception), directives);
 
 		final var exceptionResult = execute(
-				"errorUpdateAll",
 				exception,
 				updateEntitiesIn,
 				updateAllErrorFunctions,
@@ -714,7 +704,7 @@ public non-sealed class CommandFacade< // generics
 	protected DeleteEntityIn preDelete(final DeleteEntityIn deleteEntityIn, final Object... directives) {
 		LOGGER.debug("Executing default preDelete, deleteEntityIn {}, directives {} ", deleteEntityIn, directives);
 
-		final var deleteEntityInResult = execute("preDelete", deleteEntityIn, deletePreFunctions, directives);
+		final var deleteEntityInResult = execute(deleteEntityIn, deletePreFunctions, directives);
 
 		LOGGER.debug("Default preSave executed, saveEntityInResult {}, directives {} ",
 				deleteEntityInResult, directives);
@@ -737,7 +727,7 @@ public non-sealed class CommandFacade< // generics
 	protected DeleteEntityOut posDelete(final DeleteEntityOut deleteEntityOut, final Object... directives) {
 		LOGGER.debug("Executing default posDelete, deleteEntityOut {}, directives {} ", deleteEntityOut, directives);
 
-		final var delteEntityOutResult = execute("posSave", deleteEntityOut, deletePosFunctions, directives);
+		final var delteEntityOutResult = execute(deleteEntityOut, deletePosFunctions, directives);
 
 		LOGGER.debug("Default posDelete executed, delteEntityOutResult {}, directives {} ",
 				delteEntityOutResult, directives);
@@ -767,7 +757,6 @@ public non-sealed class CommandFacade< // generics
 				deleteEntityIn, getRootCause(exception), directives);
 
 		final var exceptionResult = execute(
-				"errorSave",
 				exception,
 				deleteEntityIn,
 				deleteErrorFunctions,
@@ -820,7 +809,7 @@ public non-sealed class CommandFacade< // generics
 	protected DeleteEntitiesIn preDeleteAll(final DeleteEntitiesIn deleteEntitiesIn, final Object... directives) {
 		LOGGER.debug("Default preDeleteAll, deleteEntityIn {}, directives {}", deleteEntitiesIn, directives);
 
-		final var deleteEntiesInResult = execute("preDeleteAll", deleteEntitiesIn, deleteAllPreFunctions, directives);
+		final var deleteEntiesInResult = execute(deleteEntitiesIn, deleteAllPreFunctions, directives);
 
 		LOGGER.debug("Default preDeleteAll executed, deleteEntiesInResult {}, directives {} ",
 				deleteEntiesInResult, directives);
@@ -844,7 +833,7 @@ public non-sealed class CommandFacade< // generics
 		LOGGER.debug("Executing default posDeleteAll, deleteEntitiesOut {}, directives {}",
 				deleteEntitiesOut, directives);
 
-		final var deleteEntiesOutResult = execute("posDeleteAll", deleteEntitiesOut, deleteAllPosFunctions, directives);
+		final var deleteEntiesOutResult = execute(deleteEntitiesOut, deleteAllPosFunctions, directives);
 
 		LOGGER.debug("Default posDeleteAll executed, deleteEntiesOutResult {}, directives {} ",
 				deleteEntiesOutResult, directives);
@@ -872,8 +861,7 @@ public non-sealed class CommandFacade< // generics
 		LOGGER.debug("Executing default errorDeleteAll, deleteEntitiesIn {}, exception {}, directives {} ",
 				deleteEntitiesIn, getRootCause(exception), directives);
 
-		final var exceptionResult = execute(
-				"errorSaveAll", exception, deleteEntitiesIn, deleteAllErrorFunctions, directives);
+		final var exceptionResult = execute(exception, deleteEntitiesIn, deleteAllErrorFunctions, directives);
 
 		LOGGER.debug("Default errorDeleteAll executed, deleteEntitiesIn {}, exceptionResult {}, directives {} ",
 				deleteEntitiesIn, exceptionResult, directives);
@@ -915,7 +903,7 @@ public non-sealed class CommandFacade< // generics
 	protected DeleteIdIn preDeleteBy(final DeleteIdIn deleteIdIn, final Object... directives) {
 		LOGGER.debug("Executing default preDeleteBy, deleteIdIn {}, directives {} ", deleteIdIn, directives);
 
-		final var deleteIdInResult = execute("preDeleteBy", deleteIdIn, deleteByIdPreFunctions, directives);
+		final var deleteIdInResult = execute(deleteIdIn, deleteByIdPreFunctions, directives);
 
 		LOGGER.debug("Default preDeleteBy executed, deleteIdInResult {}, directives {} ", deleteIdInResult, directives);
 		return deleteIdInResult;
@@ -937,7 +925,7 @@ public non-sealed class CommandFacade< // generics
 	protected DeleteIdOut posDeleteBy(final DeleteIdOut deleteIdOut, final Object... directives) {
 		LOGGER.debug("Executing default posDeleteBy, deleteIdOut {}, directives {} ", deleteIdOut, directives);
 
-		final var deleteIdOutResult = execute("preDeleteBy", deleteIdOut, deleteByIdPosFunctions, directives);
+		final var deleteIdOutResult = execute(deleteIdOut, deleteByIdPosFunctions, directives);
 
 		LOGGER.debug("Default posDeleteBy executed, deleteIdOut {}, directives {} ", deleteIdOutResult, directives);
 		return deleteIdOutResult;
@@ -965,7 +953,6 @@ public non-sealed class CommandFacade< // generics
 				deleteIdIn, getRootCause(exception), directives);
 
 		final var exceptionResult = execute(
-				"errorDeleteBy",
 				exception,
 				deleteIdIn,
 				deleteByIdErrorFunctions,
@@ -1014,7 +1001,7 @@ public non-sealed class CommandFacade< // generics
 	protected DeleteIdsIn preDeleteAllBy(final DeleteIdsIn deleteIdsIn, final Object... directives) {
 		LOGGER.debug("Executing default preDeleteAllBy, deleteIdsIn {}, directives {} ", deleteIdsIn, directives);
 
-		final var deleteIdsInResult = execute("preDeleteAllBy", deleteIdsIn, deleteAllByIdPreFunctions, directives);
+		final var deleteIdsInResult = execute(deleteIdsIn, deleteAllByIdPreFunctions, directives);
 
 		LOGGER.debug("Default preDeleteAllBy executed, deleteIdInResult {}, directives {} ",
 				deleteIdsInResult, directives);
@@ -1037,7 +1024,7 @@ public non-sealed class CommandFacade< // generics
 	protected DeleteIdsOut posDeleteAllBy(final DeleteIdsOut deleteIdsOut, final Object... directives) {
 		LOGGER.debug("Executing default posDeleteAllBy, deleteIdsOut {}, directives {} ", deleteIdsOut, directives);
 
-		final var deleteIdsInResult = execute("posDeleteAllBy", deleteIdsOut, deleteAllByIdPosFunctions, directives);
+		final var deleteIdsInResult = execute(deleteIdsOut, deleteAllByIdPosFunctions, directives);
 
 		LOGGER.debug("Default posDeleteAllBy executed, deleteIdInResult {}, directives {} ",
 				deleteIdsInResult, directives);
@@ -1066,7 +1053,6 @@ public non-sealed class CommandFacade< // generics
 				deleteIdsIn, getRootCause(exception), directives);
 
 		final var exceptionResult = execute(
-				"errorDeleteAllBy",
 				exception,
 				deleteIdsIn,
 				deleteAllByIdErrorFunctions,
