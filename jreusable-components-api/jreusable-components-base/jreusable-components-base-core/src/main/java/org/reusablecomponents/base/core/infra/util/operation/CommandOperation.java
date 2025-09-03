@@ -44,5 +44,4 @@ public enum CommandOperation implements InterfaceOperation {
      * Delete entities by id operation
      */
     DELETE_BY_IDS,
-
 }

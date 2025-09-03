@@ -1,17 +1,21 @@
 package org.reusablecomponents.base.core.application.query.entity.simple;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.COUNT_ALL;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_ALL;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_BY_ID;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ALL_ENTITIES;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_ID;
 
-import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
-
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.reusablecomponents.base.core.application.base.BaseFacade;
+import org.reusablecomponents.base.core.application.base.FacadeBiFunction;
+import org.reusablecomponents.base.core.application.base.FacadeFunction;
+import org.reusablecomponents.base.core.application.base.FacadeTriFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,23 +25,56 @@ import com.google.common.reflect.TypeToken;
 /**
  * The default <code>InterfaceEntityQueryFacade</code>'s implementation.
  */
-public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
+public non-sealed class QueryFacade< // generics
+		// default
+		Entity extends AbstractEntity<Id>, Id, // basic
+		// input id
+		QueryIdIn, //
+		// results
+		OneResult, MultipleResult, CountResult, ExistsResult>
+		// Base Facade
 		extends BaseFacade<Entity, Id>
-		implements
-		InterfaceQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> {
+		// Interface QueryFacade
+		implements InterfaceQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> {
+
+	private static final String NON_NULL_ID_MSG = "Please pass a non-null %s id";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(QueryFacade.class);
 
-	protected final BiFunction<QueryIdIn, Object[], ExistsResult> existsByIdFunction;
-
+	/**
+	 * Function that executes the find by id operation in the
+	 * {@link #findById(Object, Object...) findById} method
+	 */
 	protected final BiFunction<QueryIdIn, Object[], OneResult> findByIdFunction;
 
+	/**
+	 * Function that executes the find all operation in the
+	 * {@link #findAll(Object...) findAll} method
+	 */
 	protected final Function<Object[], MultipleResult> findAllFunction;
 
+	/**
+	 * Function that executes the count all operation in the
+	 * {@link #countAll(Object...) countAll} method
+	 */
 	protected final Function<Object[], CountResult> countAllFunction;
 
+	/**
+	 * Function that executes the exists all operation in the
+	 * {@link #existsAll(Object...) existsAll} method
+	 */
 	protected final Function<Object[], ExistsResult> existsAllFunction;
 
+	/**
+	 * Function that executes the exists by id operation in the
+	 * {@link #existsById(Object, Object...) existsById} method
+	 */
+	protected final BiFunction<QueryIdIn, Object[], ExistsResult> existsByIdFunction;
+
+	/**
+	 * QueryIdIn class used on find by id {@link #findById(Object, Object...)
+	 * findById} method
+	 */
 	protected final Class<QueryIdIn> queryIdInClazz;
 
 	/**
@@ -71,7 +108,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * the {@link #findAllFunction findAllFunction}, use it to configure, change,
 	 * etc. the input.
 	 * 
-	 * @param directives Objects used to configure the save operation
+	 * @param directives Objects used to configure the find all operation
 	 * 
 	 * @return A {@code Object[]} object
 	 */
@@ -82,8 +119,20 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 		// .flatMap(Arrays::stream)
 		// .collect(Collectors.toList());
 		// .anyMatch("full"::equalsIgnoreCase);
-		LOGGER.debug("Default preFindAll, directives {} ", directives);
+		LOGGER.debug("Default preFindAll, directives {}", directives);
+
+		compose(getFindAllPreFunctions(), directives);
+
+		LOGGER.debug("Default preFindAll executed, directives {}", directives);
 		return directives;
+	}
+
+	/**
+	 * Get functions executed in sequence in the {@link #preFindAll(Object...)
+	 * preFindAll} method
+	 */
+	protected List<FacadeFunction> getFindAllPreFunctions() {
+		return List.of();
 	}
 
 	/**
@@ -98,7 +147,20 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 */
 	protected MultipleResult posFindAll(final MultipleResult multipleResult, final Object... directives) {
 		LOGGER.debug("Default posFindAll, multipleResult {}, directives {} ", multipleResult, directives);
+
+		final var finalMultipleResult = compose(multipleResult, getFindAllPosFunctions(), directives);
+
+		LOGGER.debug("Default preFindAll executed, finalMultipleResult {}, directives {}", finalMultipleResult,
+				directives);
 		return multipleResult;
+	}
+
+	/**
+	 * Get functions executed in sequence in the
+	 * {@link #posFindById(Object, Object...) posFindById} method
+	 */
+	protected List<FacadeBiFunction<MultipleResult>> getFindAllPosFunctions() {
+		return List.of();
 	}
 
 	/**
@@ -114,7 +176,21 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 			final Exception exception,
 			final Object... directives) {
 		LOGGER.debug("Default errorFindAll, exception {}, directives {}", getRootCause(exception), directives);
+
+		final var exceptionResult = compose(exception, getFindAllErrorFunctions(), directives);
+
+		LOGGER.debug("Default errorFindAll executed, exceptionResult {}, directives {}",
+				exceptionResult,
+				directives);
 		return exception;
+	}
+
+	/**
+	 * Get functions executed in sequence in the {@link #findAll(Object...) findAll}
+	 * method
+	 */
+	protected List<FacadeBiFunction<Exception>> getFindAllErrorFunctions() {
+		return List.of();
 	}
 
 	/**
@@ -133,9 +209,9 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	}
 
 	/**
-	 * Method executed in {@link #findBy(Object, Object...) findBy} method before
-	 * the {@link #findByIdFunction findByIdFunction}, use it to configure, change,
-	 * etc. the input.
+	 * Method executed in {@link #findById(Object, Object...) findById} method
+	 * before the {@link #findByIdFunction findByIdFunction}, use it to configure,
+	 * change, etc. the input.
 	 * 
 	 * @param queryIdIn  The object id you want to use to retrieve on the
 	 *                   persistence mechanism
@@ -143,28 +219,53 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * 
 	 * @return A new {@code QueryIdIn} object
 	 */
-	protected QueryIdIn preFindBy(final QueryIdIn queryIdIn, final Object... directives) {
-		LOGGER.debug("Default preFindBy, queryIdIn {}, directives {} ", queryIdIn, directives);
-		return queryIdIn;
+	protected QueryIdIn preFindById(final QueryIdIn queryIdIn, final Object... directives) {
+		LOGGER.debug("Executing default preFindBy, queryIdIn {}, directives {} ", queryIdIn, directives);
+
+		final var queryIdInResult = compose(queryIdIn, getFindByIdPreFunctions(), directives);
+
+		LOGGER.debug("Default preFindBy executed, queryIdInResult {}, directives {} ", queryIdInResult, directives);
+		return queryIdInResult;
 	}
 
 	/**
-	 * Method executed in {@link #findBy(Object, Object...) findBy} method after
+	 * Get functions executed in sequence in the
+	 * {@link #preFindById(Object, Object...) preFindById} method
+	 */
+	protected List<FacadeBiFunction<QueryIdIn>> getFindByIdPreFunctions() {
+		return List.of();
+	}
+
+	/**
+	 * Method executed in {@link #findById(Object, Object...) findById} method after
 	 * the {@link #findByIdFunction findByIdFunction}, use it to configure, change,
 	 * etc. the result.
+	 * 
 	 * 
 	 * @param oneResult  The findBy result object
 	 * @param directives Objects used to configure the findBy operation
 	 * 
 	 * @return A new {@code OneResult} object
 	 */
-	protected OneResult posFindBy(final OneResult oneResult, final Object... directives) {
-		LOGGER.debug("Default posFindBy, queryIdIn {}, directives {} ", oneResult, directives);
-		return oneResult;
+	protected OneResult posFindById(final OneResult oneResult, final Object... directives) {
+		LOGGER.debug("Executing default posFindBy, oneResult {}, directives {} ", oneResult, directives);
+
+		final var finalOneResult = compose(oneResult, getFindByIdPosFunctions(), directives);
+
+		LOGGER.debug("Default posFindBy executed, finalOneResult {}, directives {} ", finalOneResult, directives);
+		return finalOneResult;
 	}
 
 	/**
-	 * Method executed in {@link #findBy(Object, Object...) findBy} method to
+	 * Get functions executed in sequence in the
+	 * {@link #posFindById(Object, Object...) posFindById} method
+	 */
+	protected List<FacadeBiFunction<OneResult>> getFindByIdPosFunctions() {
+		return List.of();
+	}
+
+	/**
+	 * Method executed in {@link #findById(Object, Object...) findById} method to
 	 * handle {@link #findByIdFunction findByIdFunction} errors.
 	 * 
 	 * @param queryIdIn  The object used to find by id
@@ -173,14 +274,30 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * 
 	 * @return The handled exception
 	 */
-	protected Exception errorFindBy(
+	protected Exception errorFindById(
 			final QueryIdIn queryIdIn,
 			final Exception exception,
 			final Object... directives) {
-		LOGGER.debug(
-				"Default errorFindBy, queryIdIn {}, exception {}, directives {}", queryIdIn,
-				getRootCause(exception), directives);
+		LOGGER.debug("Executing default errorFindById, queryIdIn {}, exception {}, directives {} ",
+				queryIdIn,
+				exception,
+				directives);
+
+		final var exceptionResult = compose(exception, queryIdIn, getFindByIdErrorFunctions(), directives);
+
+		LOGGER.debug("Default errorFindById executed, queryIdIn {}, exceptionResult {}, directives {} ",
+				queryIdIn,
+				exceptionResult,
+				directives);
 		return exception;
+	}
+
+	/**
+	 * Get functions executed in sequence in the
+	 * {@link #errorFindById(Object, Object, Object...) errorFindById} method
+	 */
+	protected List<FacadeTriFunction<Exception, QueryIdIn>> getFindByIdErrorFunctions() {
+		return List.of();
 	}
 
 	/**
@@ -190,111 +307,95 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	public OneResult findById(final QueryIdIn queryIdIn, final Object... directives) {
 		LOGGER.debug("Default findById, queryIdIn {}, directives {}", queryIdIn, directives);
 
+		checkNotNull(queryIdIn, NON_NULL_ID_MSG, getEntityClazz().getSimpleName());
+
 		final var oneResult = execute(
-				queryIdIn, FIND_ENTITY_BY_ID, this::preFindBy, this::posFindBy,
-				findByIdFunction::apply, this::errorFindBy, directives);
+				queryIdIn, FIND_ENTITY_BY_ID, this::preFindById, this::posFindById,
+				findByIdFunction::apply, this::errorFindById, directives);
 
 		LOGGER.debug("Default findById, oneResult {}, directives {}", oneResult, directives);
 		return oneResult;
 	}
 
-	// =============================================================================================================
-
 	/**
-	 * Method used to change queryIdIn object before use it (existsBy method).
+	 * Method executed in {@link #countAll(Object...) countAll} method before
+	 * the {@link #countAllFunction countAllFunction}, use it to configure, change,
+	 * etc. the input.
 	 * 
-	 * @param queryIdIn  The entity id
-	 * @param directives Params used to configure the query
-	 * 
-	 * @return A new {@code QueryIdIn} object
-	 */
-
-	/**
-	 * Method executed in {@link #exists(Object, Object...) #preExists} method
-	 * before the {@link #preExistsFunction findByIdFunction}, use it to configure,
-	 * change, etc. the input.
-	 * 
-	 * @param queryIdIn  The object id you want to use to retrieve on the
-	 *                   persistence mechanism
-	 * @param directives Objects used to configure the findBy operation
-	 * 
-	 * @return A new {@code QueryIdIn} object
-	 */
-	protected QueryIdIn preExistsBy(final QueryIdIn queryIdIn, final Object... directives) {
-		return queryIdIn;
-	}
-
-	/**
-	 * Method used to change existsResult object after use it (existsBy method).
-	 * 
-	 * @param existsResult The object to be changed
-	 * @param directives   Params used to configure the query
-	 * 
-	 * @return A new {@code ExistsResult} object
-	 */
-	protected ExistsResult posExistsBy(final ExistsResult existsResult, final Object... directives) {
-		return existsResult;
-	}
-
-	/**
-	 * Method used to handle exists by id operation.
-	 * 
-	 * @param queryIdIn  The object used to exists by id
-	 * @param exception  Exception thrown by exists by id operation
-	 * @param directives Params used to configure the query
-	 * 
-	 * @return The handled exception
-	 */
-	protected Exception errorExistsBy(
-			final QueryIdIn queryIdIn,
-			final Exception exception,
-			final Object... directives) {
-		return exception;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExistsResult existsById(final QueryIdIn queryIdIn, final Object... directives) {
-		return execute(
-				queryIdIn, EXISTS_BY_ID, this::preExistsBy,
-				this::posExistsBy, existsByIdFunction::apply, this::errorExistsBy, directives);
-	}
-
-	// =============================================================================================================
-
-	/**
-	 * Method used to change directives object before use it (CountAll method).
-	 * 
-	 * @param directives Objects used to configure the find all query
+	 * @param directives Objects used to configure the find all operation
 	 * 
 	 * @return A {@code Object[]} object
 	 */
-	protected Object[] preCountdAll(final Object... directives) {
+	protected Object[] preCountAll(final Object... directives) {
+		LOGGER.debug("Default preCountAll, directives {}", directives);
+
+		compose(getPreCountAllFunctions(), directives);
+
+		LOGGER.debug("Default preCountAll executed, directives {}", directives);
 		return directives;
 	}
 
 	/**
-	 * Method used to change countResult object after use it (countAll method).
-	 * 
-	 * @param countResult The object to be changed
-	 * 
-	 * @return A new {@code CountResult} object
+	 * Get functions executed in sequence in the {@link #preCountAll(Object...)
+	 * preCountAll} method
 	 */
-	protected CountResult posCountAll(final CountResult countResult, final Object... directives) {
-		return countResult;
+	protected List<FacadeFunction> getPreCountAllFunctions() {
+		return List.of();
 	}
 
 	/**
-	 * Method used to handle count all operation.
+	 * Method executed in {@link #countAll(Object...) countAll} method after
+	 * {@link #countAllFunction countAllFunction}, use it to configure, change, etc.
+	 * the output.
 	 * 
-	 * @param exception Exception thrown by count all operation
+	 * @param countResult The count all result object
+	 * @param directives  Objects used to configure the findAll operation
+	 * 
+	 * @return A {@code MultipleResult} object
+	 */
+	protected CountResult posCountAll(final CountResult countResult, final Object... directives) {
+		LOGGER.debug("Default posCountAll, countResult {}, directives {} ", countResult, directives);
+
+		final var finalCountResult = compose(countResult, getPosCountAllFunctions(), directives);
+
+		LOGGER.debug("Default posCountAll executed, countResult {}, directives {}", finalCountResult, directives);
+		return finalCountResult;
+	}
+
+	/**
+	 * Get functions executed in sequence in the {@link #posCountAll(Object...)
+	 * posCountAll} method
+	 */
+	protected List<FacadeBiFunction<CountResult>> getPosCountAllFunctions() {
+		return List.of();
+	}
+
+	/**
+	 * Method executed in {@link #countAll(Object...) countAll} method to handle
+	 * {@link #countAllFunction countAllFunction} errors.
+	 * 
+	 * @param exception  Exception thrown by count all operation
+	 * @param directives Objects used to configure the count all operation
 	 * 
 	 * @return The handled exception
 	 */
 	protected Exception errorCountAll(final Exception exception, final Object... directives) {
-		return exception;
+		LOGGER.debug("Default errorCountAll, exception {}, directives {}", getRootCause(exception), directives);
+
+		final var exceptionResult = compose(exception, getCountAllErrorFunctions(), directives);
+
+		LOGGER.debug("Default errorCountAll executed, exceptionResult {}, directives {}",
+				exceptionResult,
+				directives);
+		return exceptionResult;
+	}
+
+	/**
+	 * Get functions executed in sequence in the
+	 * {@link #errorCountAll(Object...) errorCountAll} method
+	 */
+	protected List<FacadeBiFunction<Exception>> getCountAllErrorFunctions() {
+		return List.of();
 	}
 
 	/**
@@ -302,42 +403,95 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 */
 	@Override
 	public CountResult countAll(final Object... directives) {
-		return execute(
-				COUNT_ALL, this::preCountdAll, this::posCountAll,
+		LOGGER.debug("Default countAll, directives {} ", directives);
+
+		final var countResult = execute(
+				COUNT_ALL, this::preCountAll, this::posCountAll,
 				countAllFunction::apply, this::errorCountAll, directives);
-	}
 
-	/**
-	 * Method used to change directives object before use it (CountAll method).
-	 * 
-	 * @param directives Objects used to configure the find all query
-	 * 
-	 * @return A {@code Object[]} object
-	 */
-	protected Object[] preExistsAll(final Object... directives) {
-		return directives;
-	}
-
-	/**
-	 * Method used to change countResult object after use it (countAll method).
-	 * 
-	 * @param countResult The object to be changed
-	 * 
-	 * @return A new {@code ExistsResult} object
-	 */
-	protected ExistsResult posExistsAll(final ExistsResult countResult, final Object... directives) {
+		LOGGER.debug("Default countAll executed, countResult {}, directives {}", countResult, directives);
 		return countResult;
 	}
 
 	/**
-	 * Method used to handle exists all operation.
+	 * Method executed in {@link #existsAll(Object...) #existsAll} method
+	 * before the {@link #existsAllFunction existsAllFunction}, use it to
+	 * configure, change, etc. the input.
 	 * 
-	 * @param exception Exception thrown by exists all operation
+	 * @param directives Objects used to configure the findBy operation
+	 * 
+	 * @return A new {@code Object[]} object
+	 */
+	protected Object[] preExistsAll(final Object... directives) {
+		LOGGER.debug("Default preExistsAll, directives {}", directives);
+
+		compose(getPreExistsAllFunctions(), directives);
+
+		LOGGER.debug("Default preExistsAll executed, directives {}", directives);
+		return directives;
+	}
+
+	/**
+	 * Get functions executed in sequence in the {@link #preExistsAll(Object...)
+	 * preExistsAll} method
+	 */
+	protected List<FacadeFunction> getPreExistsAllFunctions() {
+		return List.of();
+	}
+
+	/**
+	 * Method executed in {@link #existsAll(Object...) existsAll} method after
+	 * {@link #existsAllFunction existsAllFunction}, use it to configure, change,
+	 * etc. the output.
+	 * 
+	 * @param existsResult The exists all result object
+	 * @param directives   Objects used to configure the findAll operation
+	 * 
+	 * @return A {@code ExistsResult} object
+	 */
+	protected ExistsResult posExistsAll(final ExistsResult existsResult, final Object... directives) {
+		LOGGER.debug("Default posCountAll, countResult {}, directives {} ", existsResult, directives);
+
+		final var finalExistsResult = compose(existsResult, getPosExistsAllFunctions(), directives);
+
+		LOGGER.debug("Default posCountAll executed, countResult {}, directives {}", finalExistsResult, directives);
+		return finalExistsResult;
+	}
+
+	/**
+	 * Get functions executed in sequence in the {@link #posExistsAll(Object...)
+	 * posExistsAll} method
+	 */
+	protected List<FacadeBiFunction<ExistsResult>> getPosExistsAllFunctions() {
+		return List.of();
+	}
+
+	/**
+	 * Method executed in {@link #existsAll(Object...) existsAll} method to handle
+	 * {@link #existsAllFunction existsAllFunction} errors.
+	 * 
+	 * @param exception  Exception thrown by exists all operation
+	 * @param directives Objects used to configure the exists all operation
 	 * 
 	 * @return The handled exception
 	 */
 	protected Exception errorExistsAll(final Exception exception, final Object... directives) {
-		return exception;
+		LOGGER.debug("Default errorCountAll, exception {}, directives {}", getRootCause(exception), directives);
+
+		final var exceptionResult = compose(exception, getExistsAllErrorFunctions(), directives);
+
+		LOGGER.debug("Default errorCountAll executed, exceptionResult {}, directives {}",
+				exceptionResult,
+				directives);
+		return exceptionResult;
+	}
+
+	/**
+	 * Get functions executed in sequence in the
+	 * {@link #existsAll(Object...) existsAll} method
+	 */
+	protected List<FacadeBiFunction<Exception>> getExistsAllErrorFunctions() {
+		return List.of();
 	}
 
 	/**
@@ -345,8 +499,128 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 */
 	@Override
 	public ExistsResult existsAll(final Object... directives) {
-		return execute(
+		LOGGER.debug("Default existsAll, directives {} ", directives);
+
+		final var existsResult = execute(
 				EXISTS_ALL, this::preExistsAll, this::posExistsAll,
 				existsAllFunction::apply, this::errorExistsAll, directives);
+
+		LOGGER.debug("Default existsAll executed, existsResult {}, directives {}", existsResult, directives);
+		return existsResult;
+	}
+
+	/**
+	 * Method executed in {@link #existsById(Object, Object...) #existsById} method
+	 * before the {@link #existsByIdFunction existsByIdFunction}, use it to
+	 * configure, change, etc. the input.
+	 * 
+	 * This method execute {@link #existsByIdPreFunctions existsByIdPreFunctions} in
+	 * sequence
+	 * 
+	 * @param queryIdIn  The object id you want to use to retrieve on the
+	 *                   persistence mechanism
+	 * @param directives Objects used to configure the findBy operation
+	 * 
+	 * @return A new {@code QueryIdIn} object
+	 */
+	protected QueryIdIn preExistsById(final QueryIdIn queryIdIn, final Object... directives) {
+		LOGGER.debug("Executing default preExistsById, queryIdIn {}, directives {} ", queryIdIn, directives);
+
+		final var queryIdInResult = compose(queryIdIn, getExistsByIdPreFunctions(), directives);
+
+		LOGGER.debug("Default preExistsById executed, queryIdInResult {}, directives {} ", queryIdInResult, directives);
+		return queryIdInResult;
+	}
+
+	/**
+	 * Return functions executed in sequence in the
+	 * {@link #preExistsById(Object, Object...) preExistsById} method
+	 */
+	protected List<FacadeBiFunction<QueryIdIn>> getExistsByIdPreFunctions() {
+		return List.of();
+	}
+
+	/**
+	 * Method executed in {@link #existsById(Object, Object...) #existsById} method
+	 * after the {@link #existsByIdFunction existsByIdFunction}, use it to
+	 * configure, change, etc. the output.
+	 * 
+	 * @param existsResult The result of existsByIdFunction
+	 * @param directives   Objects used to configure the findById operation
+	 * 
+	 * @return A new {@code ExistsResult} object
+	 */
+	protected ExistsResult posExistsById(final ExistsResult existsResult, final Object... directives) {
+		LOGGER.debug("Executing default posExistsById, existsResult {}, directives {} ", existsResult, directives);
+
+		final var existsResultResult = compose(existsResult, getExistsByIdPosFunctions(), directives);
+
+		LOGGER.debug("Default posExistsById executed, existsResultResult {}, directives {} ", existsResultResult,
+				directives);
+		return existsResultResult;
+	}
+
+	/**
+	 * Get functions executed in sequence in the
+	 * {@link #posExistsById(Object, Object...) posExistsById} method
+	 */
+	protected List<FacadeBiFunction<ExistsResult>> getExistsByIdPosFunctions() {
+		return List.of();
+	}
+
+	/**
+	 * Method executed in {@link #existsById(Object, Object...) existsById} method
+	 * to handle {@link #existsByIdFunction existsByIdFunction} errors. <br />
+	 * 
+	 * This method execute {@link #existsByIdErrorFunctions
+	 * existsByIdErrorFunctions} in sequence
+	 * 
+	 * @param queryIdIn  The object you tried to use on query by id operation
+	 * @param exception  Exception thrown by existsByIdFunction
+	 * @param directives Objects used to configure the save operation
+	 * 
+	 * @return The handled exception
+	 */
+	protected Exception errorExistsById(
+			final QueryIdIn queryIdIn,
+			final Exception exception,
+			final Object... directives) {
+		LOGGER.debug("Executing default errorExistsById, queryIdIn {}, exception {}, directives {} ",
+				queryIdIn,
+				exception,
+				directives);
+
+		final var exceptionResult = compose(exception, queryIdIn, getExistsByIdErrorFunctions(), directives);
+
+		LOGGER.debug("Default errorExistsById executed, queryIdIn {}, exceptionResult {}, directives {} ",
+				queryIdIn,
+				exceptionResult,
+				directives);
+		return exceptionResult;
+	}
+
+	/**
+	 * Get functions executed in sequence in the
+	 * {@link #errorExistsById(Object, Object, Object...) errorExistsById} method
+	 */
+	protected List<FacadeTriFunction<Exception, QueryIdIn>> getExistsByIdErrorFunctions() {
+		return List.of();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExistsResult existsById(final QueryIdIn queryIdIn, final Object... directives) {
+		LOGGER.debug("Executing default existsById, queryIdIn {}, directives {} ", queryIdIn, directives);
+
+		checkNotNull(queryIdIn, NON_NULL_ID_MSG, getEntityClazz().getSimpleName());
+
+		final var existsResult = execute(
+				queryIdIn, EXISTS_BY_ID, this::preExistsById,
+				this::posExistsById, existsByIdFunction::apply, this::errorExistsById, directives);
+
+		LOGGER.debug("Default existsById executed, existsResult {}, directives {} ", existsResult, directives);
+		return existsResult;
 	}
 }

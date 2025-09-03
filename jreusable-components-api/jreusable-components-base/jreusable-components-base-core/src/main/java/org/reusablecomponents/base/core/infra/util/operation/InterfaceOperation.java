@@ -51,7 +51,6 @@ public interface InterfaceOperation {
      * @return A <code>String</code> object
      */
     default String getReceiver() {
-
         if (this instanceof Enum<?> varEnum) {
             final var name = substringAfterLast(varEnum.name(), "_");
             return capitalize(name.toLowerCase());

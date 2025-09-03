@@ -94,7 +94,6 @@ class CommandFacadeUnhappyPathTest {
 
 	// given
 	Stream<Arguments> createInvalidSaveData() {
-
 		final Department nullDepartment = null;
 		final Department repeatedDepartment = new Department("x1", "Development 01", "Technology", manager);
 		final Department invalidDepartment = new Department(null, "Development 01", "Technology", manager);
@@ -133,7 +132,6 @@ class CommandFacadeUnhappyPathTest {
 
 	// given
 	Stream<Arguments> createInvalidSaveAllData() {
-
 		final List<Department> nullList = null;
 		final var repeatedDepartment = new Department("x2", "Development 01", "Technology", manager);
 		final var correctDepartment = new Department("x3", "Default 02", "Resource", manager);
@@ -271,7 +269,6 @@ class CommandFacadeUnhappyPathTest {
 
 	// given
 	Stream<Arguments> createInvalidDeleteData() {
-
 		final Department nullDepartment = null;
 		final Department unknownDepartment = new Department("x34", "Development 01", "Technology", manager);
 		unknownDepartment.removeManager();
@@ -316,7 +313,6 @@ class CommandFacadeUnhappyPathTest {
 
 	// given
 	Stream<Arguments> createInvalidDeleteAllData() {
-
 		final List<Department> nullList = null;
 		final Department unknownDepartment = new Department("x34", "Development 01", "Technology", manager);
 		unknownDepartment.removeManager();
@@ -371,7 +367,6 @@ class CommandFacadeUnhappyPathTest {
 
 	// given
 	Stream<Arguments> createInvalidDeleteByIdData() {
-
 		final String nullDepartmentId = null;
 		final var unknownDepartment = new Department("x34", "Development 01", "Technology", manager);
 		unknownDepartment.removeManager();
@@ -417,7 +412,6 @@ class CommandFacadeUnhappyPathTest {
 
 	// given
 	Stream<Arguments> createInvalidDeleteAllByIdData() {
-
 		final var correctDepartment = new Department("x3", "Default 02", "Resource", manager);
 
 		final List<Department> nullList = null;

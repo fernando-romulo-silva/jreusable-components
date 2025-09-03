@@ -3,7 +3,7 @@ package org.reusablecomponents.base.core.application.base;
 /*
  *  Commons methods used on functions
  */
-sealed interface BaseFunction permits FacadeBiFunction, FacadeTriFunction {
+sealed interface BaseFunction permits FacadeFunction, FacadeBiFunction, FacadeTriFunction {
 
     /**
      * A function flag control to check if execute or not it, the default's true

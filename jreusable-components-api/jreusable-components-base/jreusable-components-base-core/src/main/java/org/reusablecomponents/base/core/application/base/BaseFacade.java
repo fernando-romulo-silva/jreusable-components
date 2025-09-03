@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.function.TriFunction;
 import org.reusablecomponents.base.core.application.command.entity.CommandFacade;
@@ -59,6 +60,8 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	protected final Class<Entity> entityClazz;
 
 	protected final Class<Id> idClazz;
+
+	protected final StackWalker walker = StackWalker.getInstance();
 
 	/**
 	 * Default constructor
@@ -383,6 +386,65 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * Execute a collection of functions in sequence, used in pre and pos operations
 	 * (preSave, posUpdate, etc.)
 	 * 
+	 * @param functions  A collection of <code>FacadeFunction</code> objects
+	 * @param directives Objects used to perform the functions
+	 * 
+	 * @throws NullPointerException If any parameter is null
+	 */
+	@NotNull
+	protected void compose(
+			final Collection<FacadeFunction> functions,
+			final Object... directives) {
+		checkNotNull(functions, NON_NULL_FUNCTIONS_MSG);
+		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
+
+		if (ObjectUtils.isEmpty(functions)) {
+			LOGGER.debug("No functions to execute with directires {}", directives);
+			return;
+		}
+
+		final var allFunctionsName = functions.stream()
+				.map(FacadeFunction::getName)
+				.collect(joining(", "));
+
+		final var skippedFunctions = new ArrayList<String>();
+		final var withErrorFunctions = new ArrayList<String>();
+		final var executedFunctions = new ArrayList<String>();
+
+		LOGGER.debug("Execute functions {} with directires {}", allFunctionsName, directives);
+
+		for (final var function : functions) {
+			final var functionName = function.getName();
+			try {
+				if (!function.isActice()) {
+					LOGGER.debug("Function {} disabled, it won't execute", functionName);
+					skippedFunctions.add(functionName);
+					continue;
+				}
+				function.accept(directives);
+				LOGGER.debug("Function {} executed", functionName);
+				executedFunctions.add(functionName);
+			} catch (final Exception ex) {
+				if (function.reTrowException()) {
+					throw ex;
+				}
+				withErrorFunctions.add(functionName);
+				final var rootCause = ExceptionUtils.getRootCause(ex);
+				final var rootCauseMessage = rootCause.getMessage();
+				LOGGER.debug("Function {} with execution error {}", functionName, rootCauseMessage);
+			}
+		}
+
+		LOGGER.debug("Functions {} executed, skipped {}, with errors {}",
+				executedFunctions,
+				skippedFunctions,
+				withErrorFunctions);
+	}
+
+	/**
+	 * Execute a collection of functions in sequence, used in pre and pos operations
+	 * (preSave, posUpdate, etc.)
+	 * 
 	 * @param <In>       The function input type
 	 * 
 	 * @param in         The function input object, the value used to create the
@@ -395,7 +457,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @return A updated <code>in</code> object
 	 */
 	@NotNull
-	protected <In> In execute(
+	protected <In> In compose(
 			final In in,
 			final Collection<FacadeBiFunction<In>> functions,
 			final Object... directives) {
@@ -467,7 +529,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @return A updated <code>in1</code> object
 	 */
 	@NotNull
-	protected <In1, In2> In1 execute(
+	protected <In1, In2> In1 compose(
 			final In1 in1,
 			final In2 in2,
 			final Collection<FacadeTriFunction<In1, In2>> functions,
@@ -536,6 +598,19 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		checkNotNull(mainFunction, NON_NULL_MAIN_FUNCTION_MSG);
 		checkNotNull(errorFunction, NON_NULL_ERROR_FUNCTION_MSG);
 		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
+	}
+
+	/**
+	 * Return the method's caller name.
+	 * 
+	 * @return A String with caller name or empty string if didn't
+	 */
+	protected final String getCallerName() {
+		return walker.walk(s -> s
+				.skip(2) // Skip getCallerName() and clientMethod() itself
+				.findFirst()
+				.map(StackWalker.StackFrame::getMethodName))
+				.orElse(StringUtils.EMPTY);
 	}
 
 	/**

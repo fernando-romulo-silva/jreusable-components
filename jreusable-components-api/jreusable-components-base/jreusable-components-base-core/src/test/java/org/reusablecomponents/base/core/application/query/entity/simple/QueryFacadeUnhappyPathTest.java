@@ -97,7 +97,7 @@ class QueryFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultQueryFacade.findById(nullId))
 				// then
 				.isInstanceOf(NullPointerException.class)
-				.hasMessageContaining("Please pass a non-null '%s'", "in");
+				.hasMessageContaining("Please pass a non-null %s", "Department id");
 	}
 
 	@Test
@@ -208,7 +208,7 @@ class QueryFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultQueryFacade.existsById(nullId))
 				// then
 				.isInstanceOf(NullPointerException.class)
-				.hasMessageContaining("Please pass a non-null '%s'", "in");
+				.hasMessageContaining("Please pass a non-null %s id", "Department");
 	}
 
 	@Test

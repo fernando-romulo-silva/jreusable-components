@@ -159,14 +159,14 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 
 	@Test
 	@Order(7)
-	@DisplayName("Test execute bi functions active and inactives")
-	void executeBiFunctionsTest() {
+	@DisplayName("Test compose bi functions active and inactives")
+	void composeBiFunctionsTest() {
 		// given
 		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
 		final var functions = getBiFunctions();
 
 		// when
-		final var result = facade.execute(department01, functions);
+		final var result = facade.compose(department01, functions);
 
 		// then
 		assertThat(result.getName())
@@ -175,14 +175,14 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 
 	@Test
 	@Order(8)
-	@DisplayName("Test execute empty bi functions active and inactives")
-	void executeEmptyBiFunctionsTest() {
+	@DisplayName("Test compose empty bi functions active and inactives")
+	void composeEmptyBiFunctionsTest() {
 		// given
 		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
 		final var functions = new ArrayList<FacadeBiFunction<Department>>();
 
 		// when
-		final var result = facade.execute(department01, functions);
+		final var result = facade.compose(department01, functions);
 
 		// then
 		assertThat(result.getName())
@@ -191,8 +191,8 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 
 	@Test
 	@Order(9)
-	@DisplayName("Test execute tri functions active and inactives")
-	void executeTriFunctionsTest() {
+	@DisplayName("Test compose tri functions active and inactives")
+	void composeTriFunctionsTest() {
 		// given
 		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
 		final var exception = new NullPointerException("null");
@@ -200,7 +200,7 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 		final var functions = getTriFunctions();
 
 		// when
-		final var result = facade.execute(exception, department01, functions);
+		final var result = facade.compose(exception, department01, functions);
 
 		// then
 		assertThat(result)
@@ -209,8 +209,8 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 
 	@Test
 	@Order(10)
-	@DisplayName("Test execute tri functions active and inactives")
-	void executeEmptyTriFunctionsTest() {
+	@DisplayName("Test compose tri functions active and inactives")
+	void composeEmptyTriFunctionsTest() {
 		// given
 		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
 		final var exception = new NullPointerException("null");
@@ -218,7 +218,7 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 		final var functions = new ArrayList<FacadeTriFunction<Exception, Department>>();
 
 		// when
-		final var result = facade.execute(exception, department01, functions);
+		final var result = facade.compose(exception, department01, functions);
 
 		// then
 		assertThat(result)

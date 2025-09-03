@@ -422,8 +422,8 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 
 	@Test
 	@Order(14)
-	@DisplayName("Test execute bi functions with retrow first one")
-	void executeBiFunctionsUntilThrowExceptionTest() {
+	@DisplayName("Test compose bi functions with retrow first one")
+	void composeBiFunctionsUntilThrowExceptionTest() {
 		// given
 		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
 
@@ -458,7 +458,7 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		functions.add(functionThrow02);
 
 		// when
-		assertThatThrownBy(() -> facade.execute(department01, functions))
+		assertThatThrownBy(() -> facade.compose(department01, functions))
 				// then
 				.isInstanceOf(IllegalStateException.class)
 				.hasMessageContaining("State exception");
@@ -466,8 +466,8 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 
 	@Test
 	@Order(15)
-	@DisplayName("Test execute tri functions with retrow first one")
-	void executeTriFunctionsUntilThrowExceptionTest() {
+	@DisplayName("Test compose tri functions with retrow first one")
+	void composeTriFunctionsUntilThrowExceptionTest() {
 		// given
 		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
 		final var exception = new NullPointerException("null");
@@ -501,7 +501,7 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		functions.add(functionThrow02);
 
 		// when
-		assertThatThrownBy(() -> facade.execute(exception, department01, functions))
+		assertThatThrownBy(() -> facade.compose(exception, department01, functions))
 				// then
 				.isInstanceOf(IllegalStateException.class)
 				.hasMessageContaining("State exception");
