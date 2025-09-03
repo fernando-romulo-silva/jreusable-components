@@ -391,7 +391,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * 
 	 * @throws NullPointerException If any parameter is null
 	 */
-	@NotNull
 	protected void compose(
 			final Collection<FacadeFunction> functions,
 			final Object... directives) {
