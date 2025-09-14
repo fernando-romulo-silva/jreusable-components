@@ -17,14 +17,14 @@ public class QueryPaginationFacadeBuilder<Entity extends AbstractEntity<Id>, Id,
         extends BaseFacadeBuilder {
 
     /**
-     * Function that executes find all, but paged
+     * Function that executes find all paged
      */
     public BiFunction<Pageable, Object[], MultiplePagedResult> findAllFunction;
 
     /**
-     * Function that executes find first by a specific order
+     * Function that executes find one by a specific order
      */
-    public BiFunction<Sort, Object[], OneResult> findFirstFunction;
+    public BiFunction<Sort, Object[], OneResult> findOneFunction;
 
     /**
      * Default constructor.
@@ -39,6 +39,6 @@ public class QueryPaginationFacadeBuilder<Entity extends AbstractEntity<Id>, Id,
         function.accept(this);
 
         checkNotNull(findAllFunction, "Please pass a non-null 'findAllFunction'");
-        checkNotNull(findFirstFunction, "Please pass a non-null 'findFirstFunction'");
+        checkNotNull(findOneFunction, "Please pass a non-null 'findOneFunction'");
     }
 }

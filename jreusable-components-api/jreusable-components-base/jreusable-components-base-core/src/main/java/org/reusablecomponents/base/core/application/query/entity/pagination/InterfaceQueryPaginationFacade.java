@@ -8,14 +8,14 @@ import org.reusablecomponents.base.core.domain.AbstractEntity;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Interface responsible for establishing contracts to retrieve objects, using
+ * Interface responsible for establishing contracts to retrieve objects using
  * pagination.
  * 
  * @param <Entity>              The facade entity type
  * @param <Id>                  The facade entity id type
  * 
  * @param <OneResult>           The one-result type
- * @param <MultiplePagedResult> The multiple-result type
+ * @param <MultiplePagedResult> The paged multiple-result type
  * @param <Pageable>            The query result controll
  * 
  * @param <Sort>                The query result order
@@ -40,7 +40,7 @@ public non-sealed interface InterfaceQueryPaginationFacade<Entity extends Abstra
             final Object... directives);
 
     /**
-     * Find and retrieve the first {@code OneResult}
+     * Find and retrieve one object {@code OneResult} based on sort parameter
      * 
      * @param sort       Object {@code Sort} used to order the query
      * @param directives Params used to configure the query's result

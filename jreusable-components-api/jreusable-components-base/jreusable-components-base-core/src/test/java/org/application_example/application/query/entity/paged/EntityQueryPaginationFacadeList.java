@@ -30,7 +30,7 @@ public class EntityQueryPaginationFacadeList<Entity extends AbstractEntity<Id>, 
     public EntityQueryPaginationFacadeList(final List<Entity> repository) {
         super(new QueryPaginationFacadeBuilder<>($ -> {
 
-            $.findFirstFunction = (sort, directives) -> {
+            $.findOneFunction = (sort, directives) -> {
                 validate(directives);
                 return repository
                         .stream()
