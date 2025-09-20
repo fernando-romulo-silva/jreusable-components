@@ -5,9 +5,12 @@ import static org.reusablecomponents.base.core.infra.util.operation.QueryOperati
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION;
 import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION;
 
+import java.util.List;
 import java.util.function.BiFunction;
 
 import org.reusablecomponents.base.core.application.base.BaseFacade;
+import org.reusablecomponents.base.core.application.base.FacadeBiFunction;
+import org.reusablecomponents.base.core.application.base.FacadeTriFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +26,28 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(QuerySpecificationFacade.class);
 
+	/**
+	 * Function that executes the find by an spec operation in the
+	 * {@link #findBySpec(Object, Object...) findBySpec} method
+	 */
 	protected final BiFunction<Specification, Object[], MultipleResult> findBySpecificationFunction;
 
-	protected final BiFunction<Specification, Object[], OneResult> findOneByFunction;
+	/**
+	 * Function that executes the find all operation in the
+	 * {@link #findOneBySpec(Object, Object...) findOneBySpec} method
+	 */
+	protected final BiFunction<Specification, Object[], OneResult> findOneBySpecFunction;
 
+	/**
+	 * Function that executes the find all operation in the
+	 * {@link #existsBySpec(Object, Object...) existsBySpec} method
+	 */
 	protected final BiFunction<Specification, Object[], ExistsResult> existsBySpecificationFunction;
 
+	/**
+	 * Function that executes the find all operation in the
+	 * {@link #countBySpec(Object, Object...) countBySpec} method
+	 */
 	protected final BiFunction<Specification, Object[], CountResult> countBySpecificationFunction;
 
 	/**
@@ -38,46 +57,79 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 */
 	protected QuerySpecificationFacade(
 			final QuerySpecificationFacadeBuilder<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> builder) {
-
 		super(builder);
-
 		this.findBySpecificationFunction = builder.findBySpecificationFunction;
-		this.findOneByFunction = builder.findOneByFunction;
+		this.findOneBySpecFunction = builder.findOneByFunction;
 		this.existsBySpecificationFunction = builder.existsBySpecificationFunction;
 		this.countBySpecificationFunction = builder.countBySpecificationFunction;
 	}
 
-	// ---------------------------------------------------------------------------
-
 	/**
-	 * Method used to change specification object before use it (FindBy method).
+	 * Method executed in {@link #findBySpec(Object, Object...) findBySpec} method
+	 * before the {@link #findBySpecificationFunction findBySpecificationFunction},
+	 * use it to configure, change, etc. the input.
 	 * 
-	 * @param specification The object to be changed
+	 * @param specification The query result controll
+	 * @param directives    Objects used to configure the find all operation
 	 * 
-	 * @return A new {@code Specification} object
+	 * @return A {@code Specification} object
 	 */
-	protected Specification preFindBy(final Specification specification, final Object... directives) {
-		return specification;
+	protected Specification preFindBySpec(final Specification specification, final Object... directives) {
+		LOGGER.debug("Executing default preFindBySpec, preFindBySpec {}, directives {}", specification, directives);
+
+		final var finalSpecification = compose(specification, getFindBySpecPreFunctions(), directives);
+
+		LOGGER.debug("Default preFindBySpec executed, finalSpecification {}, directives {}",
+				finalSpecification, directives);
+		return finalSpecification;
 	}
 
 	/**
-	 * Method used to change multipleResult object after use it (posFindBy method).
-	 * 
-	 * @param multipleResult The object to be changed
-	 * 
-	 * @return A new {@code MultipleResult} object
+	 * Get functions executed in sequence in the
+	 * {@link #preFindBySpec(Object, Object...) preFindBySpec} method
 	 */
-	protected MultipleResult posFindBy(final MultipleResult multipleResult, final Object... directives) {
-		return multipleResult;
+	protected List<FacadeBiFunction<Specification>> getFindBySpecPreFunctions() {
+		return List.of();
 	}
 
 	/**
-	 * Method used to handle find by specification errors.
+	 * Method executed in {@link #findBySpec(Object, Object...) findBySpec} method
+	 * after the {@link #findBySpecificationFunction findBySpecificationFunction},
+	 * use it to configure, change, etc. the result.
+	 * 
+	 * @param multipleResult The query result
+	 * @param directives     Objects used to configure the find all operation
+	 * 
+	 * @return A {@code MultipleResult} object
+	 */
+	protected MultipleResult posFindBySpec(final MultipleResult multipleResult, final Object... directives) {
+		LOGGER.debug("Executing default posFindBySpec, multipleResult {}, directives {}",
+				multipleResult,
+				directives);
+
+		final var finalMultipleResult = compose(multipleResult, getFindBySpecPosFunctions(), directives);
+
+		LOGGER.debug("Default posFindBySpec executed, finalMultipleResult {}, directives {}",
+				finalMultipleResult, directives);
+		return finalMultipleResult;
+	}
+
+	/**
+	 * Get functions executed in sequence in the
+	 * {@link #posFindBySpec(Object, Object...) posFindBySpec} method
+	 */
+	protected List<FacadeBiFunction<MultipleResult>> getFindBySpecPosFunctions() {
+		return List.of();
+	}
+
+	/**
+	 * Method executed in {@link #findBySpec(Object, Object...) findBySpec} method
+	 * to handle {@link #findBySpecificationFunction findBySpecificationFunction}
+	 * errors.
 	 * 
 	 * @param specification The object used to find by specification
 	 * @param exception     Exception thrown by find specification operation
-	 * @param directives    Objects used to configure the find by specification
-	 *                      operation
+	 * @param directives    Objects used to configure the findAll operation
 	 * 
 	 * @return The handled exception
 	 */
@@ -85,7 +137,29 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 			final Specification specification,
 			final Exception exception,
 			final Object... directives) {
-		return exception;
+		LOGGER.debug("Executing default errorFindBySpecification, specification {}, exception {}, directives {} ",
+				specification,
+				exception,
+				directives);
+
+		final var finalException = compose(exception, specification,
+				getFindBySpecificationErrorFunctions(),
+				directives);
+
+		LOGGER.debug("Default errorFindBySpecification executed, specification {}, finalException {}, directives {} ",
+				specification,
+				finalException,
+				directives);
+		return finalException;
+	}
+
+	/**
+	 * Get functions executed in sequence in the
+	 * {@link #errorFindBySpecification(Object, Object, Object...)
+	 * errorFindBySpecification} method
+	 */
+	protected List<FacadeTriFunction<Exception, Specification>> getFindBySpecificationErrorFunctions() {
+		return List.of();
 	}
 
 	/**
@@ -95,9 +169,16 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	public MultipleResult findBySpec(
 			final Specification specification,
 			final Object... directives) {
-		return execute(
-				specification, FIND_ENTITIES_BY_SPECIFICATION, this::preFindBy, this::posFindBy,
+		LOGGER.debug("Executing default findBySpec, specification {}, directives {}", specification, directives);
+
+		final var multipleResult = execute(
+				specification, FIND_ENTITIES_BY_SPECIFICATION, this::preFindBySpec, this::posFindBySpec,
 				findBySpecificationFunction::apply, this::errorFindBySpecification, directives);
+
+		LOGGER.debug("Default findBySpec executed, multipleResult {}, directives {}",
+				multipleResult,
+				directives);
+		return multipleResult;
 	}
 
 	// ---------------------------------------------------------------------------
@@ -151,7 +232,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 			final Object... directives) {
 		return execute(
 				specification, FIND_ENTITY_BY_SPECIFICATION, this::preFindOneBy, this::posFindOneBy,
-				findOneByFunction::apply, this::errorFindOneBySpecification, directives);
+				findOneBySpecFunction::apply, this::errorFindOneBySpecification, directives);
 	}
 
 	// ---------------------------------------------------------------------------

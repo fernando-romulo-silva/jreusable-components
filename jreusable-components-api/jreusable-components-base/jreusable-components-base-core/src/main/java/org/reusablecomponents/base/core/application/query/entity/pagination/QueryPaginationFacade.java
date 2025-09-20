@@ -131,7 +131,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 				pageable,
 				finalException,
 				directives);
-		return exception;
+		return finalException;
 	}
 
 	/**
@@ -150,14 +150,14 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	public final MultiplePagedResult findAll(final Pageable pageable, final Object... directives) {
 		LOGGER.debug("Executing default findAll, pageable {}, directives {}", pageable, directives);
 
-		final var finalMultipleResult = execute(
+		final var multipleResult = execute(
 				pageable, FIND_ALL_ENTITIES_PAGEABLE, this::preFindAll,
 				this::posFindAll, findAllFunction::apply, this::errorFindAll, directives);
 
-		LOGGER.debug("Default findAll executed, finalMultipleResult {}, directives {}",
-				finalMultipleResult,
+		LOGGER.debug("Default findAll executed, multipleResult {}, directives {}",
+				multipleResult,
 				directives);
-		return finalMultipleResult;
+		return multipleResult;
 	}
 
 	/**
