@@ -88,8 +88,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 			final MultiplePagedResult multiplePagedResult,
 			final Object... directives) {
 		LOGGER.debug("Executing default posFindAll, multiplePagedResult {}, directives {}",
-				multiplePagedResult,
-				directives);
+				multiplePagedResult, directives);
 
 		final var finalMultiplePagedResult = compose(multiplePagedResult, getFindAllPosFunctions(), directives);
 
@@ -121,16 +120,12 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 			final Exception exception,
 			final Object... directives) {
 		LOGGER.debug("Executing default errorFindAll, pageable {}, exception {}, directives {} ",
-				pageable,
-				exception,
-				directives);
+				pageable, exception, directives);
 
 		final var finalException = compose(exception, pageable, getFindAllErrorFunctions(), directives);
 
 		LOGGER.debug("Default errorFindAll executed, pageable {}, finalException {}, directives {} ",
-				pageable,
-				finalException,
-				directives);
+				pageable, finalException, directives);
 		return finalException;
 	}
 
@@ -154,9 +149,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 				pageable, FIND_ALL_ENTITIES_PAGEABLE, this::preFindAll,
 				this::posFindAll, findAllFunction::apply, this::errorFindAll, directives);
 
-		LOGGER.debug("Default findAll executed, multipleResult {}, directives {}",
-				multipleResult,
-				directives);
+		LOGGER.debug("Default findAll executed, multipleResult {}, directives {}", multipleResult, directives);
 		return multipleResult;
 	}
 
@@ -229,17 +222,13 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 			final Exception exception,
 			final Object... directives) {
 		LOGGER.debug("Executing default errorFindOne, pageable {}, exception {}, directives {} ",
-				sort,
-				exception,
-				directives);
+				sort, exception, directives);
 
 		final var finalException = compose(exception, sort, getFindOneErrorFunctions(), directives);
 
 		LOGGER.debug("Default errorFindOne executed, pageable {}, finalException {}, directives {} ",
-				sort,
-				finalException,
-				directives);
-		return exception;
+				sort, finalException, directives);
+		return finalException;
 	}
 
 	/**

@@ -213,9 +213,7 @@ public non-sealed class CommandFacade< // generics
 		final var finalException = compose(exception, saveEntityIn, getSaveErrorFunctions(), directives);
 
 		LOGGER.debug("Default errorSave executed, saveEntityIn {}, finalException {}, directives {} ",
-				saveEntityIn,
-				finalException,
-				directives);
+				saveEntityIn, finalException, directives);
 		return finalException;
 	}
 
@@ -543,9 +541,7 @@ public non-sealed class CommandFacade< // generics
 		final var finalException = compose(exception, updateEntitiesIn, getUpdateAllErrorFunctions(), directives);
 
 		LOGGER.debug("Default errorUpdateAll executed, updateEntitiesIn {}, exceptionResult {}, directives {} ",
-				updateEntitiesIn,
-				finalException,
-				directives);
+				updateEntitiesIn, finalException, directives);
 		return finalException;
 	}
 
@@ -652,9 +648,7 @@ public non-sealed class CommandFacade< // generics
 		final var finalException = compose(exception, deleteEntityIn, getDeleteErrorFunctions(), directives);
 
 		LOGGER.debug("Default errorDelete executed, deleteEntityIn {}, finalException {}, directives {} ",
-				deleteEntityIn,
-				finalException,
-				directives);
+				deleteEntityIn, finalException, directives);
 		return finalException;
 	}
 
@@ -873,9 +867,7 @@ public non-sealed class CommandFacade< // generics
 		final var finalException = compose(exception, deleteIdIn, getDeleteByIdErrorFunctions(), directives);
 
 		LOGGER.debug("Default errorDelete executed, deleteEntityIn {}, finalException {}, directives {}",
-				deleteIdIn,
-				finalException,
-				directives);
+				deleteIdIn, finalException, directives);
 		return finalException;
 	}
 
@@ -920,7 +912,7 @@ public non-sealed class CommandFacade< // generics
 
 		final var finalDeleteIdsIn = compose(deleteIdsIn, getDeleteAllByIdPreFunctions(), directives);
 
-		LOGGER.debug("Default preDeleteAllBy executed, finalDeleteIdsIn {}, directives {} ",
+		LOGGER.debug("Default preDeleteAllBy executed, finalDeleteIdsIn {}, directives {}",
 				finalDeleteIdsIn, directives);
 		return finalDeleteIdsIn;
 	}
@@ -980,15 +972,10 @@ public non-sealed class CommandFacade< // generics
 				deleteIdsIn, getRootCause(exception), directives);
 
 		final var finalException = compose(
-				exception,
-				deleteIdsIn,
-				getDeleteAllByIdErrorFunctions(),
-				directives);
+				exception, deleteIdsIn, getDeleteAllByIdErrorFunctions(), directives);
 
 		LOGGER.debug("Default errorDeleteAllBy executed, deleteIdsIn {}, finalException {}, directives {}",
-				deleteIdsIn,
-				finalException,
-				directives);
+				deleteIdsIn, finalException, directives);
 		return finalException;
 	}
 

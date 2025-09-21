@@ -150,8 +150,8 @@ public non-sealed class QueryFacade< // generics
 
 		final var finalMultipleResult = compose(multipleResult, getFindAllPosFunctions(), directives);
 
-		LOGGER.debug("Default preFindAll executed, finalMultipleResult {}, directives {}", finalMultipleResult,
-				directives);
+		LOGGER.debug("Default preFindAll executed, finalMultipleResult {}, directives {}",
+				finalMultipleResult, directives);
 		return multipleResult;
 	}
 
@@ -176,14 +176,12 @@ public non-sealed class QueryFacade< // generics
 			final Exception exception,
 			final Object... directives) {
 		LOGGER.debug("Executing default errorFindAll, exception {}, directives {}",
-				getRootCause(exception),
-				directives);
+				getRootCause(exception), directives);
 
 		final var finalException = compose(exception, getFindAllErrorFunctions(), directives);
 
 		LOGGER.debug("Default errorFindAll executed, finalException {}, directives {}",
-				finalException,
-				directives);
+				finalException, directives);
 		return exception;
 	}
 
@@ -281,16 +279,12 @@ public non-sealed class QueryFacade< // generics
 			final Exception exception,
 			final Object... directives) {
 		LOGGER.debug("Executing default errorFindById, queryIdIn {}, exception {}, directives {} ",
-				queryIdIn,
-				exception,
-				directives);
+				queryIdIn, exception, directives);
 
 		final var finalException = compose(exception, queryIdIn, getFindByIdErrorFunctions(), directives);
 
 		LOGGER.debug("Default errorFindById executed, queryIdIn {}, finalException {}, directives {} ",
-				queryIdIn,
-				finalException,
-				directives);
+				queryIdIn, finalException, directives);
 		return exception;
 	}
 
@@ -383,14 +377,11 @@ public non-sealed class QueryFacade< // generics
 	 */
 	protected Exception errorCountAll(final Exception exception, final Object... directives) {
 		LOGGER.debug("Executing default errorCountAll, exception {}, directives {}",
-				getRootCause(exception),
-				directives);
+				getRootCause(exception), directives);
 
 		final var finalException = compose(exception, getCountAllErrorFunctions(), directives);
 
-		LOGGER.debug("Default errorCountAll executed, finalException {}, directives {}",
-				finalException,
-				directives);
+		LOGGER.debug("Default errorCountAll executed, finalException {}, directives {}", finalException, directives);
 		return finalException;
 	}
 
@@ -459,8 +450,7 @@ public non-sealed class QueryFacade< // generics
 		final var finalExistsResult = compose(existsResult, getPosExistsAllFunctions(), directives);
 
 		LOGGER.debug("Default posExistsAll executed, finalExistsResult {}, directives {}",
-				finalExistsResult,
-				directives);
+				finalExistsResult, directives);
 		return finalExistsResult;
 	}
 
@@ -483,14 +473,11 @@ public non-sealed class QueryFacade< // generics
 	 */
 	protected Exception errorExistsAll(final Exception exception, final Object... directives) {
 		LOGGER.debug("Executing default errorCountAll, exception {}, directives {}",
-				getRootCause(exception),
-				directives);
+				getRootCause(exception), directives);
 
 		final var finalException = compose(exception, getExistsAllErrorFunctions(), directives);
 
-		LOGGER.debug("Default errorCountAll executed, finalException {}, directives {}",
-				finalException,
-				directives);
+		LOGGER.debug("Default errorCountAll executed, finalException {}, directives {}", finalException, directives);
 		return finalException;
 	}
 
@@ -563,8 +550,8 @@ public non-sealed class QueryFacade< // generics
 
 		final var finalExistsResult = compose(existsResult, getExistsByIdPosFunctions(), directives);
 
-		LOGGER.debug("Default posExistsById executed, finalExistsResult {}, directives {} ", finalExistsResult,
-				directives);
+		LOGGER.debug("Default posExistsById executed, finalExistsResult {}, directives {} ",
+				finalExistsResult, directives);
 		return finalExistsResult;
 	}
 
@@ -594,16 +581,12 @@ public non-sealed class QueryFacade< // generics
 			final Exception exception,
 			final Object... directives) {
 		LOGGER.debug("Executing default errorExistsById, queryIdIn {}, exception {}, directives {} ",
-				queryIdIn,
-				exception,
-				directives);
+				queryIdIn, exception, directives);
 
 		final var finalException = compose(exception, queryIdIn, getExistsByIdErrorFunctions(), directives);
 
 		LOGGER.debug("Default errorExistsById executed, queryIdIn {}, finalException {}, directives {} ",
-				queryIdIn,
-				finalException,
-				directives);
+				queryIdIn, finalException, directives);
 		return finalException;
 	}
 

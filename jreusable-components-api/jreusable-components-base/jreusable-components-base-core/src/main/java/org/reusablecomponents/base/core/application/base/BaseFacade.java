@@ -378,7 +378,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 				.orElseThrow(createNullPointerException(i18nService, preOutName));
 
 		LOGGER.debug(POS_OPERATION_LOG, operationName, finalOutName, finalOut, session, directives);
-
 		return finalOut;
 	}
 
@@ -435,9 +434,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		}
 
 		LOGGER.debug("Functions {} executed, skipped {}, with errors {}",
-				executedFunctions,
-				skippedFunctions,
-				withErrorFunctions);
+				executedFunctions, skippedFunctions, withErrorFunctions);
 	}
 
 	/**
@@ -557,7 +554,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 		In1 nextIn1 = in1;
 		for (final var function : functions) {
-			final var functionName = function.getClass().getSimpleName();
+			final var functionName = function.getName();
 			try {
 				if (!function.isActice()) {
 					LOGGER.debug("Function {} with input {} disabled, it won't execute", functionName, nextIn1);
@@ -578,9 +575,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		}
 
 		LOGGER.debug("Functions {} executed, skipped {}, with errors {}",
-				executedFunctions,
-				skippedFunctions,
-				withErrorFunctions);
+				executedFunctions, skippedFunctions, withErrorFunctions);
 		return nextIn1;
 	}
 
