@@ -290,7 +290,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * @return A {@code Specification} object
 	 */
 	protected Specification preExistsBy(final Specification specification, final Object... directives) {
-		LOGGER.debug("Executing default preExistsBy, preFindBySpec {}, directives {}", specification, directives);
+		LOGGER.debug("Executing default preExistsBy, specification {}, directives {}", specification, directives);
 
 		final var finalSpecification = compose(specification, getExistsBySpecPreFunctions(), directives);
 
@@ -385,43 +385,92 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 		return existsResult;
 	}
 
-	// ---------------------------------------------------------------------------
-
 	/**
-	 * Method used to change specification object before use it (countBy method).
+	 * Method executed in {@link #countBySpec(Object, Object...) countBySpec}
+	 * method before the {@link #countBySpecFunction countBySpecFunction}, use it
+	 * to configure, change, etc. the input.
 	 * 
-	 * @param specification The object to be changed
+	 * @param specification The query result controll
+	 * @param directives    Objects used to configure the find all operation
 	 * 
-	 * @return A new {@code Specification} object
+	 * @return A {@code Specification} object
 	 */
-	protected Specification preCountBy(final Specification specification, final Object... directives) {
-		return specification;
+	protected Specification preCountBySpec(final Specification specification, final Object... directives) {
+		LOGGER.debug("Executing default preCountBySpec, specification {}, directives {}", specification, directives);
+
+		final var finalSpecification = compose(specification, getCountBySpecPreFunctions(), directives);
+
+		LOGGER.debug("Default preCountBySpec executed, finalSpecification {}, directives {}",
+				finalSpecification, directives);
+		return finalSpecification;
 	}
 
 	/**
-	 * Method used to change countResult object after use it (countBy method).
-	 * 
-	 * @param countResult The object to be changed
-	 * 
-	 * @return A new {@code CountResult} object
+	 * Get functions executed in sequence in the
+	 * {@link #preCountBySpec(Object, Object...) preCountBySpec} method
 	 */
-	protected CountResult posCountBy(final CountResult countResult, final Object... directives) {
-		return countResult;
+	protected List<FacadeBiFunction<Specification>> getCountBySpecPreFunctions() {
+		return List.of();
 	}
 
 	/**
-	 * Method used to handle count by specification errors.
+	 * Method executed in {@link #countBySpec(Object, Object...) countBySpec}
+	 * method after the {@link #countBySpecFunction countBySpecFunction}, use it
+	 * to configure, change, etc. the result.
 	 * 
-	 * @param specification The object used to count by specification
-	 * @param exception     Exception thrown by count specification operation
+	 * @param countResult The query result
+	 * @param directives  Objects used to configure the count by operation
+	 * 
+	 * @return A {@code CountResult} object
+	 */
+	protected CountResult posCountBySpec(final CountResult countResult, final Object... directives) {
+		LOGGER.debug("Executing default posCountBySpec, oneResult {}, directives {}", countResult, directives);
+
+		final var finalCountResult = compose(countResult, getCountBySpecPosFunctions(), directives);
+
+		LOGGER.debug("Default posCountBySpec executed, finalOneResult {}, directives {}",
+				finalCountResult, directives);
+		return finalCountResult;
+	}
+
+	/**
+	 * Get functions executed in sequence in the
+	 * {@link #posCountBySpec(Object, Object...) posCountBySpec} method
+	 */
+	protected List<FacadeBiFunction<CountResult>> getCountBySpecPosFunctions() {
+		return List.of();
+	}
+
+	/**
+	 * Method executed in {@link #countBySpec(Object, Object...) countBySpec}
+	 * method to handle {@link #countBySpecFunction countBySpecFunction} errors.
+	 * 
+	 * @param specification The object used to find by specification
+	 * @param exception     Exception thrown by find specification operation
+	 * @param directives    Objects used to configure the findAll operation
 	 * 
 	 * @return The handled exception
 	 */
-	protected Exception errorCountBySpecification(
+	protected Exception errorCountBySpec(
 			final Specification specification,
 			final Exception exception,
 			final Object... directives) {
-		return exception;
+		LOGGER.debug("Executing default errorCountBySpec, specification {}, exception {}, directives {} ",
+				specification, exception, directives);
+
+		final var finalException = compose(exception, specification, getCountBySpecErrorFunctions(), directives);
+
+		LOGGER.debug("Default errorCountBySpec executed, specification {}, finalException {}, directives {} ",
+				specification, finalException, directives);
+		return finalException;
+	}
+
+	/**
+	 * Get functions executed in sequence in the
+	 * {@link #errorCountBySpec(Object, Object, Object...) errorCountBySpec} method
+	 */
+	protected List<FacadeTriFunction<Exception, Specification>> getCountBySpecErrorFunctions() {
+		return List.of();
 	}
 
 	/**
@@ -429,8 +478,14 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 */
 	@Override
 	public final CountResult countBySpec(final Specification specification, final Object... directives) {
-		return execute(
-				specification, COUNT_BY_SPECIFICATION, this::preCountBy, this::posCountBy,
-				countBySpecFunction::apply, this::errorCountBySpecification, directives);
+		LOGGER.debug("Executing default countBySpec, specification {}, directives {}", specification, directives);
+
+		final var countResult = execute(
+				specification, COUNT_BY_SPECIFICATION, this::preCountBySpec, this::posCountBySpec,
+				countBySpecFunction::apply, this::errorCountBySpec, directives);
+
+		LOGGER.debug("Default countBySpec executed, countResult {}, directives {}",
+				countResult, directives);
+		return countResult;
 	}
 }
