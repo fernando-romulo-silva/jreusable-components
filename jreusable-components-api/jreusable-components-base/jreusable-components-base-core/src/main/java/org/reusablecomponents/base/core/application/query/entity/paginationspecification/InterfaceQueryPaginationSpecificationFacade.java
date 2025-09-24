@@ -42,7 +42,7 @@ public non-sealed interface InterfaceQueryPaginationSpecificationFacade<Entity e
 	 * 
 	 * @return Return a {@code MultipleResult} object
 	 */
-	MultiplePagedResult findBy(
+	MultiplePagedResult findBySpec(
 			@NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Pageable pageable,
 			@NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Specification specification,
 			final Object... directives);

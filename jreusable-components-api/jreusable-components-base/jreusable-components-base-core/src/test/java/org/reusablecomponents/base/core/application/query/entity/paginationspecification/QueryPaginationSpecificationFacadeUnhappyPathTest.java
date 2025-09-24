@@ -172,7 +172,7 @@ class QueryPaginationSpecificationFacadeUnhappyPathTest {
 			final String parameter) {
 
 		// when
-		assertThatThrownBy(() -> defaultQueryFacade.findBy(pageable, specification))
+		assertThatThrownBy(() -> defaultQueryFacade.findBySpec(pageable, specification))
 				// then
 				.isInstanceOf(NullPointerException.class)
 				.hasMessageContaining("Please pass a non-null '%s'", parameter);

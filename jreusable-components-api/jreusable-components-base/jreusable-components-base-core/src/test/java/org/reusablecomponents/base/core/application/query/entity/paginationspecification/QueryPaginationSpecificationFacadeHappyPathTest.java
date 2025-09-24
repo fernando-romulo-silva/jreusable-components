@@ -98,7 +98,7 @@ class QueryPaginationSpecificationFacadeHappyPathTest {
         final var departmentOusidePage = defaultData.get(5);
 
         // when
-        final var result = defaultQueryFacade.findBy(pageable, spec01);
+        final var result = defaultQueryFacade.findBySpec(pageable, spec01);
 
         // then
         assertThat(result)
@@ -106,6 +106,6 @@ class QueryPaginationSpecificationFacadeHappyPathTest {
                 .returnToIterable()
                 .contains(departmentInsidePage)
                 .doesNotContain(departmentOusidePage)
-                .matches(e -> defaultQueryFacade.findBy(pageable, spec02).isEmpty());
+                .matches(e -> defaultQueryFacade.findBySpec(pageable, spec02).isEmpty());
     }
 }

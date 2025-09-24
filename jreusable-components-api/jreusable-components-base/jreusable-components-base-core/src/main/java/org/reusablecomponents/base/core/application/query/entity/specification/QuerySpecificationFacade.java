@@ -69,7 +69,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * before the {@link #findBySpecFunction findBySpecFunction}, use it to
 	 * configure, change, etc. the input.
 	 * 
-	 * @param specification The query result controll
+	 * @param specification The query result filter
 	 * @param directives    Objects used to configure the find all operation
 	 * 
 	 * @return A {@code Specification} object
@@ -126,7 +126,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * Method executed in {@link #findBySpec(Object, Object...) findBySpec} method
 	 * to handle {@link #findBySpecFunction findBySpecFunction} errors.
 	 * 
-	 * @param specification The object used to find by specification
+	 * @param specification The query result filter
 	 * @param exception     Exception thrown by find specification operation
 	 * @param directives    Objects used to configure the findAll operation
 	 * 
@@ -177,7 +177,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * method before the {@link #findOneBySpecFunction findOneBySpecFunction}, use
 	 * it to configure, change, etc. the input.
 	 * 
-	 * @param specification The query result controll
+	 * @param specification The query result filter
 	 * @param directives    Objects used to configure the find all operation
 	 * 
 	 * @return A {@code Specification} object
@@ -232,7 +232,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * Method executed in {@link #findOneBySpec(Object, Object...) findOneBySpec}
 	 * method to handle {@link #findBySpecFunction findBySpecFunction} errors.
 	 * 
-	 * @param specification The object used to find by specification
+	 * @param specification The query result filter
 	 * @param exception     Exception thrown by find specification operation
 	 * @param directives    Objects used to configure the findAll operation
 	 * 
@@ -284,7 +284,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * method before the {@link #existsBySpecFunction existsBySpecFunction}, use it
 	 * to configure, change, etc. the input.
 	 * 
-	 * @param specification The query result controll
+	 * @param specification The query result filter
 	 * @param directives    Objects used to configure the find all operation
 	 * 
 	 * @return A {@code Specification} object
@@ -340,7 +340,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * Method executed in {@link #existsBySpec(Object, Object...) existsBySpec}
 	 * method to handle {@link #existsBySpecFunction existsBySpecFunction} errors.
 	 * 
-	 * @param specification The object used to find by specification
+	 * @param specification The query result filter
 	 * @param exception     Exception thrown by find specification operation
 	 * @param directives    Objects used to configure the findAll operation
 	 * 
@@ -390,7 +390,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * method before the {@link #countBySpecFunction countBySpecFunction}, use it
 	 * to configure, change, etc. the input.
 	 * 
-	 * @param specification The query result controll
+	 * @param specification The query result filter
 	 * @param directives    Objects used to configure the find all operation
 	 * 
 	 * @return A {@code Specification} object
@@ -445,7 +445,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * Method executed in {@link #countBySpec(Object, Object...) countBySpec}
 	 * method to handle {@link #countBySpecFunction countBySpecFunction} errors.
 	 * 
-	 * @param specification The object used to find by specification
+	 * @param specification The query result filter
 	 * @param exception     Exception thrown by find specification operation
 	 * @param directives    Objects used to configure the findAll operation
 	 * 

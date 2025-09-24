@@ -20,12 +20,12 @@ public class QueryPaginationSpecificationFacadeBuilder<Entity extends AbstractEn
 	/**
 	 * Function that executes find By Specificationid algorithm
 	 */
-	public TriFunction<Pageable, Specification, Object[], MultiplePagedResult> findBySpecificationFunction;
+	public TriFunction<Pageable, Specification, Object[], MultiplePagedResult> findByPagAndSpecFunction;
 
 	/**
 	 * Function that executes find One By Specificationid and Sort algorithm
 	 */
-	public TriFunction<Sort, Specification, Object[], OneResult> findOneByFunctionWithOrder;
+	public TriFunction<Sort, Specification, Object[], OneResult> findOneByPagAndSpecFunction;
 
 	/**
 	 * Default constructor.
@@ -39,8 +39,8 @@ public class QueryPaginationSpecificationFacadeBuilder<Entity extends AbstractEn
 
 		function.accept(this);
 
-		checkNotNull(findBySpecificationFunction, "Please pass a non-null 'findBySpecificationFunction'");
-		checkNotNull(findOneByFunctionWithOrder, "Please pass a non-null 'findOneByFunctionWithOrder'");
+		checkNotNull(findByPagAndSpecFunction, "Please pass a non-null 'findBySpecificationFunction'");
+		checkNotNull(findOneByPagAndSpecFunction, "Please pass a non-null 'findOneByFunctionWithOrder'");
 	}
 
 }

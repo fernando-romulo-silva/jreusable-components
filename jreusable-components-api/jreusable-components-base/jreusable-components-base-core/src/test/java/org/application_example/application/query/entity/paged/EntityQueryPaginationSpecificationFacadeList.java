@@ -32,7 +32,7 @@ public class EntityQueryPaginationSpecificationFacadeList<Entity extends Abstrac
     public EntityQueryPaginationSpecificationFacadeList(final List<Entity> repository) {
         super(new QueryPaginationSpecificationFacadeBuilder<>($ -> {
 
-            $.findBySpecificationFunction = (pageable, specification, directives) -> {
+            $.findByPagAndSpecFunction = (pageable, specification, directives) -> {
                 validate(directives);
                 return pageable.getData()
                         .stream()
@@ -40,7 +40,7 @@ public class EntityQueryPaginationSpecificationFacadeList<Entity extends Abstrac
                         .toList();
             };
 
-            $.findOneByFunctionWithOrder = (sort, specification, directives) -> {
+            $.findOneByPagAndSpecFunction = (sort, specification, directives) -> {
                 validate(directives);
                 return repository
                         .stream()
