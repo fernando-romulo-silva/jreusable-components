@@ -22,6 +22,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionOneArg;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 
 @Tag("unit")
@@ -179,7 +181,7 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 	void composeEmptyBiFunctionsTest() {
 		// given
 		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
-		final var functions = new ArrayList<FacadeBiFunction<Department>>();
+		final var functions = new ArrayList<FacadeFunctionOneArg<Department>>();
 
 		// when
 		final var result = facade.compose(department01, functions);
@@ -215,7 +217,7 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
 		final var exception = new NullPointerException("null");
 
-		final var functions = new ArrayList<FacadeTriFunction<Exception, Department>>();
+		final var functions = new ArrayList<FacadeFunctionTwoArgs<Exception, Department>>();
 
 		// when
 		final var result = facade.compose(exception, department01, functions);

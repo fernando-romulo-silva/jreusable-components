@@ -27,6 +27,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionOneArg;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
 import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
 import org.reusablecomponents.base.core.infra.util.QuadFunction;
 import org.reusablecomponents.base.core.infra.util.operation.CommandOperation;
@@ -427,9 +429,9 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		// given
 		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
 
-		final var functions = new ArrayList<FacadeBiFunction<Department>>(getBiFunctions());
+		final var functions = new ArrayList<FacadeFunctionOneArg<Department>>(getBiFunctions());
 
-		final var functionThrow01 = new FacadeBiFunction<Department>() {
+		final var functionThrow01 = new FacadeFunctionOneArg<Department>() {
 
 			@Override
 			public Department apply(final Department department, final Object[] directives) {
@@ -443,7 +445,7 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		};
 		functions.add(functionThrow01);
 
-		final var functionThrow02 = new FacadeBiFunction<Department>() {
+		final var functionThrow02 = new FacadeFunctionOneArg<Department>() {
 
 			@Override
 			public Department apply(final Department department, final Object[] directives) {
@@ -472,8 +474,8 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
 		final var exception = new NullPointerException("null");
 
-		final var functions = new ArrayList<FacadeTriFunction<Exception, Department>>(getTriFunctions());
-		final var functionThrow01 = new FacadeTriFunction<Exception, Department>() {
+		final var functions = new ArrayList<FacadeFunctionTwoArgs<Exception, Department>>(getTriFunctions());
+		final var functionThrow01 = new FacadeFunctionTwoArgs<Exception, Department>() {
 			@Override
 			public Exception apply(final Exception exception, final Department department, final Object[] directives) {
 				throw new IllegalStateException("State exception");
@@ -485,7 +487,7 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 			}
 		};
 
-		final var functionThrow02 = new FacadeTriFunction<Exception, Department>() {
+		final var functionThrow02 = new FacadeFunctionTwoArgs<Exception, Department>() {
 			@Override
 			public Exception apply(final Exception exception, final Department department, final Object[] directives) {
 				throw new IllegalArgumentException("Argument exception");

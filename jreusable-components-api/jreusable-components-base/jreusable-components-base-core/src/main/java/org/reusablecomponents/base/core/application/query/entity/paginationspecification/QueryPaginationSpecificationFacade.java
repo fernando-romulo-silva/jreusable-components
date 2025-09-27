@@ -9,8 +9,9 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.function.TriFunction;
 import org.reusablecomponents.base.core.application.base.BaseFacade;
-import org.reusablecomponents.base.core.application.base.FacadeBiFunction;
-import org.reusablecomponents.base.core.application.base.FacadeTriFunction;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionOneArg;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionThreeArgs;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +66,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	 * Get functions executed in sequence in the
 	 * {@link #preFindBy(Object, Object...) preFindBy} method
 	 */
-	protected List<FacadeBiFunction<Specification>> getFindByPreFunctions() {
+	protected List<FacadeFunctionOneArg<Specification>> getFindByPreFunctions() {
 		return List.of();
 	}
 
@@ -87,7 +88,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	 * Get functions executed in sequence in the
 	 * {@link #posFindBy(Object, Object...) posFindBy} method
 	 */
-	protected List<FacadeBiFunction<MultiplePagedResult>> getFindByPosFunctions() {
+	protected List<FacadeFunctionOneArg<MultiplePagedResult>> getFindByPosFunctions() {
 		return List.of();
 	}
 
@@ -114,7 +115,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	 * Get functions executed in sequence in the
 	 * {@link #errorFindBy(Object, Object, Object...) errorFindBy} method
 	 */
-	protected List<FacadeTriFunction<Exception, Specification>> getFindByErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, Specification>> getFindByErrorFunctions() {
 		return List.of();
 	}
 
@@ -132,15 +133,16 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 				this::errorFindBy, directives);
 	}
 
-	// ---------------------------------------------------------------------------
-
 	/**
+	 * Method executed in {@link #findOneBy(Object, Object...) findOneBy} method
+	 * before the {@link #findOneByPagAndSpecFunction findOneByPagAndSpecFunction},
+	 * use it to configure, change, etc. the input.
 	 * 
-	 * @param specification
+	 * @param sort          The query result order
+	 * @param specification The query result filter
+	 * @param directives    Objects used to configure the find all operation
 	 * 
-	 * @param sort
-	 * 
-	 * @return
+	 * @return A {@code Specification} object
 	 */
 	protected Entry<Sort, Specification> preFindOneBy(
 			final Sort sort,
@@ -150,21 +152,60 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	}
 
 	/**
+	 * Method executed in {@link #findOneBy(Object, Object...) findOneBy} method
+	 * after the {@link #findOneByPagAndSpecFunction findOneByPagAndSpecFunction},
+	 * use it to configure, change, etc. the result.
 	 * 
-	 * @param oneResult
+	 * @param oneResult  The query result
+	 * @param directives Objects used to configure the find all operation
 	 * 
-	 * @return
+	 * @return A {@code oneResult} object
 	 */
 	protected OneResult posFindOneBy(final OneResult oneResult, final Object... directives) {
-		return oneResult;
+		LOGGER.debug("Executing default posFindOneBy, oneResult {}, directives {}", oneResult, directives);
+
+		final var finalOneResult = compose(oneResult, getFindOnePosFunctions(), directives);
+
+		LOGGER.debug("Default posFindOneBy executed, finalOneResult {}, directives {}",
+				finalOneResult, directives);
+		return finalOneResult;
 	}
 
+	/**
+	 * Get functions executed in sequence in the
+	 * {@link #posFindOneBy(Object, Object...) posFindOneBy} method
+	 */
+	protected List<FacadeFunctionOneArg<OneResult>> getFindOnePosFunctions() {
+		return List.of();
+	}
+
+	/**
+	 * Method executed in {@link #findOneBy(Object, Object...) findOneBy} method to
+	 * handle {@link #findOneByPagAndSpecFunction findOneByPagAndSpecFunction}
+	 * errors.
+	 * 
+	 * @param sort          The query result order
+	 * @param specification The query result filter
+	 * @param exception     Exception thrown by find specification operation
+	 * @param directives    Objects used to configure the findAll operation
+	 * 
+	 * @return The handled exception
+	 */
 	protected Exception errorFindOneBy(
 			final Sort sort,
 			final Specification specification,
 			final Exception exception,
 			final Object... directives) {
 		return exception;
+	}
+
+	/**
+	 * Get functions executed in sequence in the
+	 * {@link #errorFindOneBy(Object, Object, Object, Object...) errorFindOneBy}
+	 * method
+	 */
+	protected List<FacadeFunctionThreeArgs<Exception, Sort, Specification>> getFindOneErrorFunctions() {
+		return List.of();
 	}
 
 	/**
@@ -175,12 +216,19 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 			final Sort sort,
 			final Specification specification,
 			final Object... directives) {
-		return execute(
+		LOGGER.debug("Executing default findOneBy, sort {}, specification {}, directives {}",
+				sort, specification, directives);
+
+		final var oneResult = execute(
 				sort, specification,
 				FIND_ENTITY_BY_SPECIFICATION_SORTED,
 				this::preFindOneBy,
 				this::posFindOneBy,
 				findOneByPagAndSpecFunction::apply,
 				this::errorFindOneBy, directives);
+
+		LOGGER.debug("Default findOneBy executed, oneResult {}, directives {}",
+				oneResult, directives);
+		return oneResult;
 	}
 }

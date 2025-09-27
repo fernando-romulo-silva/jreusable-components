@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import org.reusablecomponents.base.core.application.base.BaseFacade;
-import org.reusablecomponents.base.core.application.base.FacadeBiFunction;
-import org.reusablecomponents.base.core.application.base.FacadeTriFunction;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionOneArg;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,7 +160,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the {@link #preSave(Object, Object...)
 	 * preSave} method
 	 */
-	protected List<FacadeBiFunction<SaveEntityIn>> getSavePreFunctions() {
+	protected List<FacadeFunctionOneArg<SaveEntityIn>> getSavePreFunctions() {
 		return List.of();
 	}
 
@@ -187,7 +187,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the {@link #posSave(Object, Object...)
 	 * posSave} method
 	 */
-	protected List<FacadeBiFunction<SaveEntityOut>> getSavePosFunctions() {
+	protected List<FacadeFunctionOneArg<SaveEntityOut>> getSavePosFunctions() {
 		return List.of();
 	}
 
@@ -221,7 +221,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #errorSave(Object, Object, Object...) errorSave} method
 	 */
-	protected List<FacadeTriFunction<Exception, SaveEntityIn>> getSaveErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, SaveEntityIn>> getSaveErrorFunctions() {
 		return List.of();
 	}
 
@@ -267,7 +267,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #preSaveAll(Object, Object...) preSaveAll} method
 	 */
-	protected List<FacadeBiFunction<SaveEntitiesIn>> getSaveAllPreFunctions() {
+	protected List<FacadeFunctionOneArg<SaveEntitiesIn>> getSaveAllPreFunctions() {
 		return List.of();
 	}
 
@@ -296,7 +296,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #posSaveAll(Object, Object...) posSaveAll} method
 	 */
-	protected List<FacadeBiFunction<SaveEntitiesOut>> getSaveAllPosFunctions() {
+	protected List<FacadeFunctionOneArg<SaveEntitiesOut>> getSaveAllPosFunctions() {
 		return List.of();
 	}
 
@@ -330,7 +330,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #errorSaveAll(Object, Object, Object...) errorSaveAll} method
 	 */
-	protected List<FacadeTriFunction<Exception, SaveEntitiesIn>> getSaveAllErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, SaveEntitiesIn>> getSaveAllErrorFunctions() {
 		return List.of();
 	}
 
@@ -376,7 +376,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #preUpdate(Object, Object...) preUpdate} method
 	 */
-	protected List<FacadeBiFunction<UpdateEntityIn>> getUpdatePreFunctions() {
+	protected List<FacadeFunctionOneArg<UpdateEntityIn>> getUpdatePreFunctions() {
 		return List.of();
 	}
 
@@ -405,7 +405,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #posUpdate(Object, Object...) posUpdate} method
 	 */
-	protected List<FacadeBiFunction<UpdateEntityOut>> getUpdatePosFunctions() {
+	protected List<FacadeFunctionOneArg<UpdateEntityOut>> getUpdatePosFunctions() {
 		return List.of();
 	}
 
@@ -440,7 +440,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #errorUpdate(Object, Object, Object...) errorUpdate} method
 	 */
-	protected List<FacadeTriFunction<Exception, UpdateEntityIn>> getUpdateErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, UpdateEntityIn>> getUpdateErrorFunctions() {
 		return List.of();
 	}
 
@@ -486,7 +486,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #preUpdateAll(Object, Object...) preUpdateAll} method
 	 */
-	protected List<FacadeBiFunction<UpdateEntitiesIn>> getUpdateAllPreFunctions() {
+	protected List<FacadeFunctionOneArg<UpdateEntitiesIn>> getUpdateAllPreFunctions() {
 		return List.of();
 	}
 
@@ -516,7 +516,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #posUpdateAll(Object, Object...) posUpdateAll} method
 	 */
-	protected List<FacadeBiFunction<UpdateEntitiesOut>> getUpdateAllPosFunctions() {
+	protected List<FacadeFunctionOneArg<UpdateEntitiesOut>> getUpdateAllPosFunctions() {
 		return List.of();
 	}
 
@@ -549,7 +549,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #errorUpdateAll(Object, Object, Object...) errorUpdateAll} method
 	 */
-	protected List<FacadeTriFunction<Exception, UpdateEntitiesIn>> getUpdateAllErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, UpdateEntitiesIn>> getUpdateAllErrorFunctions() {
 		return List.of();
 	}
 
@@ -595,7 +595,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #preDelete(Object, Object...) preDelete} method
 	 */
-	protected List<FacadeBiFunction<DeleteEntityIn>> getDeletePreFunctions() {
+	protected List<FacadeFunctionOneArg<DeleteEntityIn>> getDeletePreFunctions() {
 		return List.of();
 	}
 
@@ -623,7 +623,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #posDelete(Object, Object...) posDelete} method
 	 */
-	protected List<FacadeBiFunction<DeleteEntityOut>> getDeletePosFunctions() {
+	protected List<FacadeFunctionOneArg<DeleteEntityOut>> getDeletePosFunctions() {
 		return List.of();
 	}
 
@@ -656,7 +656,7 @@ public non-sealed class CommandFacade< // generics
 	 * Functions executed in sequence in the
 	 * {@link #errorDelete(Object, Object, Object...) errorDelete} method
 	 */
-	protected List<FacadeTriFunction<Exception, DeleteEntityIn>> getDeleteErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, DeleteEntityIn>> getDeleteErrorFunctions() {
 		return List.of();
 	}
 
@@ -707,7 +707,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #preDeleteAll(Object, Object...) preDeleteAll} method
 	 */
-	protected List<FacadeBiFunction<DeleteEntitiesIn>> getDeleteAllPreFunctions() {
+	protected List<FacadeFunctionOneArg<DeleteEntitiesIn>> getDeleteAllPreFunctions() {
 		return List.of();
 	}
 
@@ -737,7 +737,7 @@ public non-sealed class CommandFacade< // generics
 	 * {@link #posDeleteAll(Object, Object...)
 	 * posDeleteAll} method
 	 */
-	protected List<FacadeBiFunction<DeleteEntitiesOut>> getDeleteAllPosFunctions() {
+	protected List<FacadeFunctionOneArg<DeleteEntitiesOut>> getDeleteAllPosFunctions() {
 		return List.of();
 	}
 
@@ -770,7 +770,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #errorDeleteAll(Object, Object, Object...) errorDeleteAll} method
 	 */
-	protected List<FacadeTriFunction<Exception, DeleteEntitiesIn>> getDeleteAllErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, DeleteEntitiesIn>> getDeleteAllErrorFunctions() {
 		return List.of();
 	}
 
@@ -815,7 +815,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #preDeleteBy(Object, Object...) preDeleteBy} method
 	 */
-	protected List<FacadeBiFunction<DeleteIdIn>> getDeleteByIdPreFunctions() {
+	protected List<FacadeFunctionOneArg<DeleteIdIn>> getDeleteByIdPreFunctions() {
 		return List.of();
 	}
 
@@ -842,7 +842,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #posDeleteBy(Object, Object...) posDeleteBy} method
 	 */
-	protected List<FacadeBiFunction<DeleteIdOut>> getDeleteByIdPosFunctions() {
+	protected List<FacadeFunctionOneArg<DeleteIdOut>> getDeleteByIdPosFunctions() {
 		return List.of();
 	}
 
@@ -875,7 +875,7 @@ public non-sealed class CommandFacade< // generics
 	 * Functions executed in sequence in the
 	 * {@link #errorDeleteBy(Object, Object, Object...) errorDeleteBy} method
 	 */
-	protected List<FacadeTriFunction<Exception, DeleteIdIn>> getDeleteByIdErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, DeleteIdIn>> getDeleteByIdErrorFunctions() {
 		return List.of();
 	}
 
@@ -921,7 +921,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #preDeleteAllBy(Object, Object...) preDeleteAllBy} method
 	 */
-	protected List<FacadeBiFunction<DeleteIdsIn>> getDeleteAllByIdPreFunctions() {
+	protected List<FacadeFunctionOneArg<DeleteIdsIn>> getDeleteAllByIdPreFunctions() {
 		return List.of();
 	}
 
@@ -949,7 +949,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #posDeleteAllBy(Object, Object...) posDeleteAllBy} method
 	 */
-	protected List<FacadeBiFunction<DeleteIdsOut>> getDeleteAllByIdPosFunctions() {
+	protected List<FacadeFunctionOneArg<DeleteIdsOut>> getDeleteAllByIdPosFunctions() {
 		return List.of();
 	}
 
@@ -983,7 +983,7 @@ public non-sealed class CommandFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #errorDeleteAllBy(Object, Object, Object...) errorDeleteAllBy} method
 	 */
-	protected List<FacadeTriFunction<Exception, DeleteIdsIn>> getDeleteAllByIdErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, DeleteIdsIn>> getDeleteAllByIdErrorFunctions() {
 		return List.of();
 	}
 

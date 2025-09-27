@@ -18,6 +18,9 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.function.TriFunction;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionNoArgs;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionOneArg;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
 import org.reusablecomponents.base.core.application.command.entity.CommandFacade;
 import org.reusablecomponents.base.core.application.empty.EmptyFacade;
 import org.reusablecomponents.base.core.application.query.entity.pagination.QueryPaginationFacade;
@@ -391,7 +394,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @throws NullPointerException If any parameter is null
 	 */
 	protected void compose(
-			final Collection<FacadeFunction> functions,
+			final Collection<FacadeFunctionNoArgs> functions,
 			final Object... directives) {
 		checkNotNull(functions, NON_NULL_FUNCTIONS_MSG);
 		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
@@ -402,7 +405,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		}
 
 		final var allFunctionsName = functions.stream()
-				.map(FacadeFunction::getName)
+				.map(FacadeFunctionNoArgs::getName)
 				.collect(joining(", "));
 
 		final var skippedFunctions = new ArrayList<String>();
@@ -455,7 +458,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	@NotNull
 	protected <In> In compose(
 			final In in,
-			final Collection<FacadeBiFunction<In>> functions,
+			final Collection<FacadeFunctionOneArg<In>> functions,
 			final Object... directives) {
 		checkNotNull(in, "Please pass a non-null 'in'");
 		checkNotNull(functions, NON_NULL_FUNCTIONS_MSG);
@@ -467,7 +470,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		}
 
 		final var allFunctionsName = functions.stream()
-				.map(FacadeBiFunction::getName)
+				.map(FacadeFunctionOneArg::getName)
 				.collect(joining(", "));
 
 		final var skippedFunctions = new ArrayList<String>();
@@ -528,7 +531,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	protected <In1, In2> In1 compose(
 			final In1 in1,
 			final In2 in2,
-			final Collection<FacadeTriFunction<In1, In2>> functions,
+			final Collection<FacadeFunctionTwoArgs<In1, In2>> functions,
 			final Object... directives) {
 		checkNotNull(in1, "Please pass a non-null 'in1'");
 		checkNotNull(in2, "Please pass a non-null 'in2'");
@@ -542,7 +545,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		}
 
 		final var allFunctionsName = functions.stream()
-				.map(FacadeTriFunction::getName)
+				.map(FacadeFunctionTwoArgs::getName)
 				.collect(joining(", "));
 
 		final var skippedFunctions = new ArrayList<String>();

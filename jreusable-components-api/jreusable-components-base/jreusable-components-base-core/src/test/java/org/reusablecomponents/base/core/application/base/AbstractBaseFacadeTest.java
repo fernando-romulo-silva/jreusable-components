@@ -12,6 +12,8 @@ import org.application_example.domain.Department;
 import org.application_example.domain.Manager;
 import org.application_example.infra.DummySecurityService;
 import org.junit.jupiter.api.BeforeEach;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionOneArg;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
 import org.reusablecomponents.base.core.infra.exception.DefaultExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.util.QuadFunction;
@@ -72,8 +74,8 @@ abstract class AbstractBaseFacadeTest {
         department02 = new Department("00002", "Development 02", "Technology", manager02);
     }
 
-    protected List<FacadeBiFunction<Department>> getBiFunctions() {
-        final var function01 = new FacadeBiFunction<Department>() {
+    protected List<FacadeFunctionOneArg<Department>> getBiFunctions() {
+        final var function01 = new FacadeFunctionOneArg<Department>() {
             @Override
             public Department apply(final Department department, final Object[] directives) {
                 final var name = department.getName();
@@ -93,7 +95,7 @@ abstract class AbstractBaseFacadeTest {
             }
         };
 
-        final var function02 = new FacadeBiFunction<Department>() {
+        final var function02 = new FacadeFunctionOneArg<Department>() {
             @Override
             public Department apply(final Department department, final Object[] directives) {
                 final var name = department.getName();
@@ -103,14 +105,14 @@ abstract class AbstractBaseFacadeTest {
             }
         };
 
-        final var function03 = new FacadeBiFunction<Department>() {
+        final var function03 = new FacadeFunctionOneArg<Department>() {
             @Override
             public Department apply(final Department department, final Object[] directives) {
                 throw new IllegalArgumentException("Some error");
             }
         };
 
-        final var function04 = new FacadeBiFunction<Department>() {
+        final var function04 = new FacadeFunctionOneArg<Department>() {
             @Override
             public Department apply(final Department department, final Object[] directives) {
                 final var name = department.getName();
@@ -120,11 +122,11 @@ abstract class AbstractBaseFacadeTest {
             }
         };
 
-        return List.<FacadeBiFunction<Department>>of(function01, function02, function03, function04);
+        return List.<FacadeFunctionOneArg<Department>>of(function01, function02, function03, function04);
     }
 
-    protected List<FacadeTriFunction<Exception, Department>> getTriFunctions() {
-        final var function01 = new FacadeTriFunction<Exception, Department>() {
+    protected List<FacadeFunctionTwoArgs<Exception, Department>> getTriFunctions() {
+        final var function01 = new FacadeFunctionTwoArgs<Exception, Department>() {
             @Override
             public Exception apply(
                     final Exception exception,
@@ -144,24 +146,24 @@ abstract class AbstractBaseFacadeTest {
             }
         };
 
-        final FacadeTriFunction<Exception, Department> function02 = (exception, department,
+        final FacadeFunctionTwoArgs<Exception, Department> function02 = (exception, department,
                 directives) -> new IllegalStateException("Illegal State Exception");
 
-        final var function03 = new FacadeTriFunction<Exception, Department>() {
+        final var function03 = new FacadeFunctionTwoArgs<Exception, Department>() {
             @Override
             public Exception apply(final Exception exception, final Department department, final Object[] directives) {
                 throw new IllegalArgumentException("Some error");
             }
         };
 
-        final var function04 = new FacadeTriFunction<Exception, Department>() {
+        final var function04 = new FacadeFunctionTwoArgs<Exception, Department>() {
             @Override
             public Exception apply(final Exception exception, final Department department, final Object[] directives) {
                 return new IllegalStateException("Illegal State Exception");
             }
         };
 
-        return List.<FacadeTriFunction<Exception, Department>>of(function01, function02, function03, function04);
+        return List.<FacadeFunctionTwoArgs<Exception, Department>>of(function01, function02, function03, function04);
     }
 
     protected static class TestOperation implements InterfaceOperation {

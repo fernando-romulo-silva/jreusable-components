@@ -1,4 +1,4 @@
-package org.reusablecomponents.base.core.application.base;
+package org.reusablecomponents.base.core.application.base.functions;
 
 import java.util.function.Consumer;
 
@@ -7,6 +7,6 @@ import java.util.function.Consumer;
  * execute code in operations.
  */
 @FunctionalInterface
-public non-sealed interface FacadeFunction extends Consumer<Object[]>, BaseFunction {
+public non-sealed interface FacadeFunctionNoArgs extends Consumer<Object[]>, BaseFunction {
 
 }

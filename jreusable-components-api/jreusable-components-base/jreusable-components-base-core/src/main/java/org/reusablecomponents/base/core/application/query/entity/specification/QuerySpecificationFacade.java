@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import org.reusablecomponents.base.core.application.base.BaseFacade;
-import org.reusablecomponents.base.core.application.base.FacadeBiFunction;
-import org.reusablecomponents.base.core.application.base.FacadeTriFunction;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionOneArg;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +88,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * Get functions executed in sequence in the
 	 * {@link #preFindBySpec(Object, Object...) preFindBySpec} method
 	 */
-	protected List<FacadeBiFunction<Specification>> getFindBySpecPreFunctions() {
+	protected List<FacadeFunctionOneArg<Specification>> getFindBySpecPreFunctions() {
 		return List.of();
 	}
 
@@ -118,7 +118,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * Get functions executed in sequence in the
 	 * {@link #posFindBySpec(Object, Object...) posFindBySpec} method
 	 */
-	protected List<FacadeBiFunction<MultipleResult>> getFindBySpecPosFunctions() {
+	protected List<FacadeFunctionOneArg<MultipleResult>> getFindBySpecPosFunctions() {
 		return List.of();
 	}
 
@@ -150,7 +150,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * Get functions executed in sequence in the
 	 * {@link #errorFindBySpec(Object, Object, Object...) errorFindBySpec} method
 	 */
-	protected List<FacadeTriFunction<Exception, Specification>> getFindBySpecErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, Specification>> getFindBySpecErrorFunctions() {
 		return List.of();
 	}
 
@@ -196,7 +196,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * Get functions executed in sequence in the
 	 * {@link #preFindOneBySpec(Object, Object...) preFindOneBySpec} method
 	 */
-	protected List<FacadeBiFunction<Specification>> getFindOneBySpecPreFunctions() {
+	protected List<FacadeFunctionOneArg<Specification>> getFindOneBySpecPreFunctions() {
 		return List.of();
 	}
 
@@ -224,7 +224,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * Get functions executed in sequence in the
 	 * {@link #posFindOneBySpec(Object, Object...) posFindOneBySpec} method
 	 */
-	protected List<FacadeBiFunction<OneResult>> getFindOneBySpecPosFunctions() {
+	protected List<FacadeFunctionOneArg<OneResult>> getFindOneBySpecPosFunctions() {
 		return List.of();
 	}
 
@@ -257,7 +257,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * {@link #errorFindOneBySpec(Object, Object, Object...) errorFindOneBySpec}
 	 * method
 	 */
-	protected List<FacadeTriFunction<Exception, Specification>> getFindOneBySpecErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, Specification>> getFindOneBySpecErrorFunctions() {
 		return List.of();
 	}
 
@@ -303,7 +303,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * Get functions executed in sequence in the
 	 * {@link #preExistsBy(Object, Object...) preExistsBy} method
 	 */
-	protected List<FacadeBiFunction<Specification>> getExistsBySpecPreFunctions() {
+	protected List<FacadeFunctionOneArg<Specification>> getExistsBySpecPreFunctions() {
 		return List.of();
 	}
 
@@ -332,7 +332,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * Get functions executed in sequence in the
 	 * {@link #posExistsBy(Object, Object...) posExistsBy} method
 	 */
-	protected List<FacadeBiFunction<ExistsResult>> getExistsBySpecPosFunctions() {
+	protected List<FacadeFunctionOneArg<ExistsResult>> getExistsBySpecPosFunctions() {
 		return List.of();
 	}
 
@@ -365,7 +365,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * {@link #errorExistsBySpec(Object, Object, Object...) errorExistsBySpec}
 	 * method
 	 */
-	protected List<FacadeTriFunction<Exception, Specification>> getExistsBySpecErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, Specification>> getExistsBySpecErrorFunctions() {
 		return List.of();
 	}
 
@@ -409,7 +409,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * Get functions executed in sequence in the
 	 * {@link #preCountBySpec(Object, Object...) preCountBySpec} method
 	 */
-	protected List<FacadeBiFunction<Specification>> getCountBySpecPreFunctions() {
+	protected List<FacadeFunctionOneArg<Specification>> getCountBySpecPreFunctions() {
 		return List.of();
 	}
 
@@ -428,8 +428,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 
 		final var finalCountResult = compose(countResult, getCountBySpecPosFunctions(), directives);
 
-		LOGGER.debug("Default posCountBySpec executed, finalOneResult {}, directives {}",
-				finalCountResult, directives);
+		LOGGER.debug("Default posCountBySpec executed, finalOneResult {}, directives {}", finalCountResult, directives);
 		return finalCountResult;
 	}
 
@@ -437,7 +436,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * Get functions executed in sequence in the
 	 * {@link #posCountBySpec(Object, Object...) posCountBySpec} method
 	 */
-	protected List<FacadeBiFunction<CountResult>> getCountBySpecPosFunctions() {
+	protected List<FacadeFunctionOneArg<CountResult>> getCountBySpecPosFunctions() {
 		return List.of();
 	}
 
@@ -469,7 +468,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 * Get functions executed in sequence in the
 	 * {@link #errorCountBySpec(Object, Object, Object...) errorCountBySpec} method
 	 */
-	protected List<FacadeTriFunction<Exception, Specification>> getCountBySpecErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, Specification>> getCountBySpecErrorFunctions() {
 		return List.of();
 	}
 
@@ -484,8 +483,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 				specification, COUNT_BY_SPECIFICATION, this::preCountBySpec, this::posCountBySpec,
 				countBySpecFunction::apply, this::errorCountBySpec, directives);
 
-		LOGGER.debug("Default countBySpec executed, countResult {}, directives {}",
-				countResult, directives);
+		LOGGER.debug("Default countBySpec executed, countResult {}, directives {}", countResult, directives);
 		return countResult;
 	}
 }

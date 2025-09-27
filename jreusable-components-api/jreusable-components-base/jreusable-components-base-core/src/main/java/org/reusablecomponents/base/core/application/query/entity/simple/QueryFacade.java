@@ -13,9 +13,9 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.reusablecomponents.base.core.application.base.BaseFacade;
-import org.reusablecomponents.base.core.application.base.FacadeBiFunction;
-import org.reusablecomponents.base.core.application.base.FacadeFunction;
-import org.reusablecomponents.base.core.application.base.FacadeTriFunction;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionNoArgs;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionOneArg;
+import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,7 +131,7 @@ public non-sealed class QueryFacade< // generics
 	 * Get functions executed in sequence in the {@link #preFindAll(Object...)
 	 * preFindAll} method
 	 */
-	protected List<FacadeFunction> getFindAllPreFunctions() {
+	protected List<FacadeFunctionNoArgs> getFindAllPreFunctions() {
 		return List.of();
 	}
 
@@ -159,7 +159,7 @@ public non-sealed class QueryFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #posFindById(Object, Object...) posFindById} method
 	 */
-	protected List<FacadeBiFunction<MultipleResult>> getFindAllPosFunctions() {
+	protected List<FacadeFunctionOneArg<MultipleResult>> getFindAllPosFunctions() {
 		return List.of();
 	}
 
@@ -189,7 +189,7 @@ public non-sealed class QueryFacade< // generics
 	 * Get functions executed in sequence in the {@link #findAll(Object...) findAll}
 	 * method
 	 */
-	protected List<FacadeBiFunction<Exception>> getFindAllErrorFunctions() {
+	protected List<FacadeFunctionOneArg<Exception>> getFindAllErrorFunctions() {
 		return List.of();
 	}
 
@@ -232,7 +232,7 @@ public non-sealed class QueryFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #preFindById(Object, Object...) preFindById} method
 	 */
-	protected List<FacadeBiFunction<QueryIdIn>> getFindByIdPreFunctions() {
+	protected List<FacadeFunctionOneArg<QueryIdIn>> getFindByIdPreFunctions() {
 		return List.of();
 	}
 
@@ -260,7 +260,7 @@ public non-sealed class QueryFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #posFindById(Object, Object...) posFindById} method
 	 */
-	protected List<FacadeBiFunction<OneResult>> getFindByIdPosFunctions() {
+	protected List<FacadeFunctionOneArg<OneResult>> getFindByIdPosFunctions() {
 		return List.of();
 	}
 
@@ -292,7 +292,7 @@ public non-sealed class QueryFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #errorFindById(Object, Object, Object...) errorFindById} method
 	 */
-	protected List<FacadeTriFunction<Exception, QueryIdIn>> getFindByIdErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, QueryIdIn>> getFindByIdErrorFunctions() {
 		return List.of();
 	}
 
@@ -335,7 +335,7 @@ public non-sealed class QueryFacade< // generics
 	 * Get functions executed in sequence in the {@link #preCountAll(Object...)
 	 * preCountAll} method
 	 */
-	protected List<FacadeFunction> getPreCountAllFunctions() {
+	protected List<FacadeFunctionNoArgs> getPreCountAllFunctions() {
 		return List.of();
 	}
 
@@ -362,7 +362,7 @@ public non-sealed class QueryFacade< // generics
 	 * Get functions executed in sequence in the {@link #posCountAll(Object...)
 	 * posCountAll} method
 	 */
-	protected List<FacadeBiFunction<CountResult>> getPosCountAllFunctions() {
+	protected List<FacadeFunctionOneArg<CountResult>> getPosCountAllFunctions() {
 		return List.of();
 	}
 
@@ -389,7 +389,7 @@ public non-sealed class QueryFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #errorCountAll(Object...) errorCountAll} method
 	 */
-	protected List<FacadeBiFunction<Exception>> getCountAllErrorFunctions() {
+	protected List<FacadeFunctionOneArg<Exception>> getCountAllErrorFunctions() {
 		return List.of();
 	}
 
@@ -430,7 +430,7 @@ public non-sealed class QueryFacade< // generics
 	 * Get functions executed in sequence in the {@link #preExistsAll(Object...)
 	 * preExistsAll} method
 	 */
-	protected List<FacadeFunction> getPreExistsAllFunctions() {
+	protected List<FacadeFunctionNoArgs> getPreExistsAllFunctions() {
 		return List.of();
 	}
 
@@ -458,7 +458,7 @@ public non-sealed class QueryFacade< // generics
 	 * Get functions executed in sequence in the {@link #posExistsAll(Object...)
 	 * posExistsAll} method
 	 */
-	protected List<FacadeBiFunction<ExistsResult>> getPosExistsAllFunctions() {
+	protected List<FacadeFunctionOneArg<ExistsResult>> getPosExistsAllFunctions() {
 		return List.of();
 	}
 
@@ -485,7 +485,7 @@ public non-sealed class QueryFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #existsAll(Object...) existsAll} method
 	 */
-	protected List<FacadeBiFunction<Exception>> getExistsAllErrorFunctions() {
+	protected List<FacadeFunctionOneArg<Exception>> getExistsAllErrorFunctions() {
 		return List.of();
 	}
 
@@ -531,7 +531,7 @@ public non-sealed class QueryFacade< // generics
 	 * Return functions executed in sequence in the
 	 * {@link #preExistsById(Object, Object...) preExistsById} method
 	 */
-	protected List<FacadeBiFunction<QueryIdIn>> getExistsByIdPreFunctions() {
+	protected List<FacadeFunctionOneArg<QueryIdIn>> getExistsByIdPreFunctions() {
 		return List.of();
 	}
 
@@ -559,7 +559,7 @@ public non-sealed class QueryFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #posExistsById(Object, Object...) posExistsById} method
 	 */
-	protected List<FacadeBiFunction<ExistsResult>> getExistsByIdPosFunctions() {
+	protected List<FacadeFunctionOneArg<ExistsResult>> getExistsByIdPosFunctions() {
 		return List.of();
 	}
 
@@ -594,7 +594,7 @@ public non-sealed class QueryFacade< // generics
 	 * Get functions executed in sequence in the
 	 * {@link #errorExistsById(Object, Object, Object...) errorExistsById} method
 	 */
-	protected List<FacadeTriFunction<Exception, QueryIdIn>> getExistsByIdErrorFunctions() {
+	protected List<FacadeFunctionTwoArgs<Exception, QueryIdIn>> getExistsByIdErrorFunctions() {
 		return List.of();
 	}
 

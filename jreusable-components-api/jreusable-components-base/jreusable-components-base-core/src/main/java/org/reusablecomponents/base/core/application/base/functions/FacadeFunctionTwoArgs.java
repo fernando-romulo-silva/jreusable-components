@@ -1,4 +1,4 @@
-package org.reusablecomponents.base.core.application.base;
+package org.reusablecomponents.base.core.application.base.functions;
 
 import org.apache.commons.lang3.function.TriFunction;
 
@@ -10,6 +10,6 @@ import org.apache.commons.lang3.function.TriFunction;
  * @param <Q> The function input two data type
  */
 @FunctionalInterface
-public non-sealed interface FacadeTriFunction<T, Q> extends TriFunction<T, Q, Object[], T>, BaseFunction {
+public non-sealed interface FacadeFunctionTwoArgs<T, Q> extends TriFunction<T, Q, Object[], T>, BaseFunction {
 
 }
