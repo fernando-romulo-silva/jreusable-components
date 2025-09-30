@@ -48,7 +48,7 @@ public non-sealed interface InterfaceQueryPaginationSpecificationFacade<Entity e
 			final Object... directives);
 
 	/**
-	 * * Find and retrieve one entity filtered by specification using pagination
+	 * Find and retrieve one entity filtered by specification using pagination
 	 * 
 	 * @param sort          Object {@code Sort} used to order the query
 	 * @param specification Object {@code Pageable} used to filter query's result

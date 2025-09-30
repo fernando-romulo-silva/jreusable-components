@@ -39,7 +39,6 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	protected QueryPaginationSpecificationFacade(
 			final QueryPaginationSpecificationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification> builder) {
 		super(builder);
-
 		this.findByPagAndSpecFunction = builder.findByPagAndSpecFunction;
 		this.findOneByPagAndSpecFunction = builder.findOneByPagAndSpecFunction;
 	}
@@ -93,8 +92,8 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	}
 
 	/**
-	 * Method used to handle {@link #findBySpec(Object, Object, Object...) findBy}
-	 * errors.
+	 * Method used to handle {@link #findBySpec(Object, Object, Object...)
+	 * findBySpec} errors.
 	 * 
 	 * @param pageable      The object used to find by pageable
 	 * @param specification The object used to find by specification
@@ -127,10 +126,17 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 			final Pageable pageable,
 			final Specification specification,
 			final Object... directives) {
-		return execute(
+		LOGGER.debug("Executing default findBySpec, pageable {}, specification {}, directives {}",
+				pageable, specification, directives);
+
+		final var multiplePagedResult = execute(
 				pageable, specification, FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE,
 				this::preFindBy, this::posFindBy, findByPagAndSpecFunction::apply,
 				this::errorFindBy, directives);
+
+		LOGGER.debug("Default findBySpec executed, multiplePagedResult {}, directives {}",
+				multiplePagedResult, directives);
+		return multiplePagedResult;
 	}
 
 	/**

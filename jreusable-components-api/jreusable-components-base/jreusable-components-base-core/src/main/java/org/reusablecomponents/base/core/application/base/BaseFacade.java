@@ -18,6 +18,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.function.TriFunction;
+import org.reusablecomponents.base.core.application.base.functions.BaseFunction;
 import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionNoArgs;
 import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionOneArg;
 import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
@@ -405,7 +406,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		}
 
 		final var allFunctionsName = functions.stream()
-				.map(FacadeFunctionNoArgs::getName)
+				.map(BaseFunction::getName)
 				.collect(joining(", "));
 
 		final var skippedFunctions = new ArrayList<String>();
@@ -470,7 +471,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		}
 
 		final var allFunctionsName = functions.stream()
-				.map(FacadeFunctionOneArg::getName)
+				.map(BaseFunction::getName)
 				.collect(joining(", "));
 
 		final var skippedFunctions = new ArrayList<String>();
@@ -545,7 +546,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		}
 
 		final var allFunctionsName = functions.stream()
-				.map(FacadeFunctionTwoArgs::getName)
+				.map(BaseFunction::getName)
 				.collect(joining(", "));
 
 		final var skippedFunctions = new ArrayList<String>();

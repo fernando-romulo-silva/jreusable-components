@@ -3,7 +3,7 @@ package org.reusablecomponents.base.core.application.base.functions;
 /*
  *  Commons methods used on functions
  */
-sealed interface BaseFunction
+public sealed interface BaseFunction
         permits FacadeFunctionNoArgs, FacadeFunctionOneArg, FacadeFunctionTwoArgs, FacadeFunctionThreeArgs {
 
     /**
