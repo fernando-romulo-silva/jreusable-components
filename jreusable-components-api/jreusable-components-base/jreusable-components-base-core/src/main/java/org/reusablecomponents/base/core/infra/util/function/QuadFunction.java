@@ -1,4 +1,4 @@
-package org.reusablecomponents.base.core.infra.util;
+package org.reusablecomponents.base.core.infra.util.function;
 
 import java.util.function.Function;
 

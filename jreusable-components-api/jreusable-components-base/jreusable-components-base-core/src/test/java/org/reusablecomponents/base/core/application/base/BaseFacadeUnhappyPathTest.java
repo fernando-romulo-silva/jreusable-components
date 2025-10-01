@@ -30,7 +30,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionOneArg;
 import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
 import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
-import org.reusablecomponents.base.core.infra.util.QuadFunction;
+import org.reusablecomponents.base.core.infra.util.function.QuadFunction;
 import org.reusablecomponents.base.core.infra.util.operation.CommandOperation;
 import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
 

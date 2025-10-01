@@ -46,4 +46,5 @@ open module org.reusablecomponent.base.core {
     exports org.reusablecomponents.base.core.infra.constants;
     exports org.reusablecomponents.base.core.infra.util;
     exports org.reusablecomponents.base.core.infra.util.operation;
+    exports org.reusablecomponents.base.core.infra.util.function;
 }

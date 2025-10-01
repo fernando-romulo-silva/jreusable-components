@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
-import static org.reusablecomponents.base.core.infra.util.Functions.createNullPointerException;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.*;
+import static org.reusablecomponents.base.core.infra.util.function.Functions.createNullPointerException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +30,7 @@ import org.reusablecomponents.base.core.application.query.entity.simple.QueryFac
 import org.reusablecomponents.base.core.application.query.entity.specification.QuerySpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.core.infra.util.QuadFunction;
+import org.reusablecomponents.base.core.infra.util.function.QuadFunction;
 import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;

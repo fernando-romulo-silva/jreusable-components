@@ -16,7 +16,7 @@ import org.reusablecomponents.base.core.application.base.functions.FacadeFunctio
 import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
 import org.reusablecomponents.base.core.infra.exception.DefaultExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.core.infra.util.QuadFunction;
+import org.reusablecomponents.base.core.infra.util.function.QuadFunction;
 import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;

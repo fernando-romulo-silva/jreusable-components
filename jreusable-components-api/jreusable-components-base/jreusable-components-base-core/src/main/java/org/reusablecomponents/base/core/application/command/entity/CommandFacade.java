@@ -206,9 +206,7 @@ public non-sealed class CommandFacade< // generics
 			final Exception exception,
 			final Object... directives) {
 		LOGGER.debug("Executing default errorSave, saveEntityIn {}, exception {}, directives {} ",
-				saveEntityIn,
-				exception,
-				directives);
+				saveEntityIn, exception, directives);
 
 		final var finalException = compose(exception, saveEntityIn, getSaveErrorFunctions(), directives);
 
