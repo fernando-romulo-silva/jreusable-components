@@ -138,9 +138,9 @@ public interface InterfacePagedFacade<Entity extends AbstractEntity<Id>, Id, // 
      * {@inheritDoc}
      */
     @Override
-    default MultiplePagedResult findBySpec(final Pageable pageable, final Specification specification,
+    default MultiplePagedResult findBy(final Pageable pageable, final Specification specification,
             final Object... directives) {
-        return getEntityQueryPaginationSpecificationFacade().findBySpec(pageable, specification, directives);
+        return getEntityQueryPaginationSpecificationFacade().findBy(pageable, specification, directives);
     }
 
     /**

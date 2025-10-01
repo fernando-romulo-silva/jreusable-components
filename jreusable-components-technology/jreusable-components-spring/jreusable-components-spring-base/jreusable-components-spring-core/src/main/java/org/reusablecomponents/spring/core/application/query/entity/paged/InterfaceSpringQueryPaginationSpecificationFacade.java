@@ -29,7 +29,7 @@ public interface InterfaceSpringQueryPaginationSpecificationFacade<Entity extend
    */
   @Override
   @Cacheable
-  Page<Entity> findBySpec(final Pageable pageable, final Specification specification, final Object... directives);
+  Page<Entity> findBy(final Pageable pageable, final Specification specification, final Object... directives);
 
   /**
    * {@inheritDoc}

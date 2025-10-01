@@ -44,7 +44,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	}
 
 	/**
-	 * Method executed in {@link #findBySpec(Object, Object, Object...) findBySpec}
+	 * Method executed in {@link #findBy(Object, Object, Object...) findBySpec}
 	 * method before the {@link #findByPagAndSpecFunction findByPagAndSpecFunction},
 	 * use it to configure, change, etc. the input.
 	 * 
@@ -70,7 +70,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	}
 
 	/**
-	 * Method executed in {@link #findBySpec(Object, Object, Object...) findBySpec}
+	 * Method executed in {@link #findBy(Object, Object, Object...) findBySpec}
 	 * method after the {@link #findByPagAndSpecFunction findByPagAndSpecFunction},
 	 * use it to configure, change, etc. the result.
 	 * 
@@ -92,7 +92,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	}
 
 	/**
-	 * Method used to handle {@link #findBySpec(Object, Object, Object...)
+	 * Method used to handle {@link #findBy(Object, Object, Object...)
 	 * findBySpec} errors.
 	 * 
 	 * @param pageable      The object used to find by pageable
@@ -122,7 +122,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	 * {@inheritDoc}
 	 */
 	@Override
-	public MultiplePagedResult findBySpec(
+	public MultiplePagedResult findBy(
 			final Pageable pageable,
 			final Specification specification,
 			final Object... directives) {
