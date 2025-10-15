@@ -43,7 +43,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reusablecomponents.base.core.util.AbstractValidatorTest;
+import org.reusablecomponents.base.core.infra.util.AbstractValidatorTest;
 
 import com.jparams.verifier.tostring.ToStringVerifier;
 

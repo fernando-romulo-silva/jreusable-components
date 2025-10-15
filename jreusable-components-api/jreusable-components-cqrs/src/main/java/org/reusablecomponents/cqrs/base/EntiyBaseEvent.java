@@ -5,7 +5,7 @@ import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.NULL_POINTER_EXCEPTION_MSG;
-import static org.reusablecomponents.base.core.infra.util.function.Functions.createNullPointerException;
+import static org.reusablecomponents.base.core.infra.util.function.FunctionCommonUtils.createNullPointerException;
 import static org.reusablecomponents.messaging.MessagingConst.JSON_LAYOUT;
 import static org.reusablecomponents.messaging.event.DefaultEventStatus.FAILURE;
 import static org.reusablecomponents.messaging.event.DefaultEventStatus.SUCCESS;

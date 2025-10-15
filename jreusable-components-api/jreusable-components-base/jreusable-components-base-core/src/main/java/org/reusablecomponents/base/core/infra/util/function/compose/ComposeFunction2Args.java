@@ -1,4 +1,4 @@
-package org.reusablecomponents.base.core.application.base.functions;
+package org.reusablecomponents.base.core.infra.util.function.compose;
 
 import java.util.function.BiFunction;
 
@@ -9,6 +9,6 @@ import java.util.function.BiFunction;
  * @param <T> The function input data type
  */
 @FunctionalInterface
-public non-sealed interface FacadeFunctionOneArg<T> extends BiFunction<T, Object[], T>, BaseFunction {
+public non-sealed interface ComposeFunction2Args<T> extends BiFunction<T, Object[], T>, ComposeFunction {
 
 }

@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import org.reusablecomponents.base.core.application.base.BaseFacade;
-import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionOneArg;
-import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction2Args;
+import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction3Args;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +70,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 * Get functions executed in sequence in the
 	 * {@link #preFindAll(Object, Object...) preFindAll} method
 	 */
-	protected List<FacadeFunctionOneArg<Pageable>> getFindAllPreFunctions() {
+	protected List<ComposeFunction2Args<Pageable>> getFindAllPreFunctions() {
 		return List.of();
 	}
 
@@ -101,7 +101,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 * Get functions executed in sequence in the
 	 * {@link #posFindAll(Object, Object...) posFindAll} method
 	 */
-	protected List<FacadeFunctionOneArg<MultiplePagedResult>> getFindAllPosFunctions() {
+	protected List<ComposeFunction2Args<MultiplePagedResult>> getFindAllPosFunctions() {
 		return List.of();
 	}
 
@@ -133,7 +133,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 * Get functions executed in sequence in the
 	 * {@link #errorFindAll(Object, Object, Object...) errorFindAll} method
 	 */
-	protected List<FacadeFunctionTwoArgs<Exception, Pageable>> getFindAllErrorFunctions() {
+	protected List<ComposeFunction3Args<Exception, Pageable>> getFindAllErrorFunctions() {
 		return List.of();
 	}
 
@@ -176,7 +176,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 * Get functions executed in sequence in the
 	 * {@link #preFindOne(Object, Object...) preFindOne} method
 	 */
-	protected List<FacadeFunctionOneArg<Sort>> getFindOnePreFunctions() {
+	protected List<ComposeFunction2Args<Sort>> getFindOnePreFunctions() {
 		return List.of();
 	}
 
@@ -203,7 +203,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 * Get functions executed in sequence in the
 	 * {@link #posFindOne(Object, Object...) posFindOne} method
 	 */
-	protected List<FacadeFunctionOneArg<OneResult>> getFindOnePosFunctions() {
+	protected List<ComposeFunction2Args<OneResult>> getFindOnePosFunctions() {
 		return List.of();
 	}
 
@@ -235,7 +235,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 * Get functions executed in sequence in the
 	 * {@link #errorFindOne(Object, Object, Object...) errorFindOne} method
 	 */
-	protected List<FacadeFunctionTwoArgs<Exception, Sort>> getFindOneErrorFunctions() {
+	protected List<ComposeFunction3Args<Exception, Sort>> getFindOneErrorFunctions() {
 		return List.of();
 	}
 

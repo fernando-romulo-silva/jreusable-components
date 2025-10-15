@@ -12,11 +12,11 @@ import org.application_example.domain.Department;
 import org.application_example.domain.Manager;
 import org.application_example.infra.DummySecurityService;
 import org.junit.jupiter.api.BeforeEach;
-import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionOneArg;
-import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
 import org.reusablecomponents.base.core.infra.exception.DefaultExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.core.infra.util.function.QuadFunction;
+import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction2Args;
+import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction3Args;
+import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction4Args;
 import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
@@ -61,7 +61,7 @@ abstract class AbstractBaseFacadeTest {
     protected final BiFunction<DepartmenDto, Object[], DepartmenDto> posFunctionTwoInputs = (
             departmentDtoIn, directives) -> departmentDtoIn;
 
-    protected final QuadFunction<Department, Manager, Exception, Object[], Exception> errorFunctionTwoInputs = (
+    protected final OperationFunction4Args<Department, Manager, Exception, Object[], Exception> errorFunctionTwoInputs = (
             departmentIn, managerIn, exception, directives) -> exception;
 
     // ------------------------------------------------------
@@ -74,8 +74,8 @@ abstract class AbstractBaseFacadeTest {
         department02 = new Department("00002", "Development 02", "Technology", manager02);
     }
 
-    protected List<FacadeFunctionOneArg<Department>> getBiFunctions() {
-        final var function01 = new FacadeFunctionOneArg<Department>() {
+    protected List<ComposeFunction2Args<Department>> getBiFunctions() {
+        final var function01 = new ComposeFunction2Args<Department>() {
             @Override
             public Department apply(final Department department, final Object[] directives) {
                 final var name = department.getName();
@@ -95,7 +95,7 @@ abstract class AbstractBaseFacadeTest {
             }
         };
 
-        final var function02 = new FacadeFunctionOneArg<Department>() {
+        final var function02 = new ComposeFunction2Args<Department>() {
             @Override
             public Department apply(final Department department, final Object[] directives) {
                 final var name = department.getName();
@@ -105,14 +105,14 @@ abstract class AbstractBaseFacadeTest {
             }
         };
 
-        final var function03 = new FacadeFunctionOneArg<Department>() {
+        final var function03 = new ComposeFunction2Args<Department>() {
             @Override
             public Department apply(final Department department, final Object[] directives) {
                 throw new IllegalArgumentException("Some error");
             }
         };
 
-        final var function04 = new FacadeFunctionOneArg<Department>() {
+        final var function04 = new ComposeFunction2Args<Department>() {
             @Override
             public Department apply(final Department department, final Object[] directives) {
                 final var name = department.getName();
@@ -122,11 +122,11 @@ abstract class AbstractBaseFacadeTest {
             }
         };
 
-        return List.<FacadeFunctionOneArg<Department>>of(function01, function02, function03, function04);
+        return List.<ComposeFunction2Args<Department>>of(function01, function02, function03, function04);
     }
 
-    protected List<FacadeFunctionTwoArgs<Exception, Department>> getTriFunctions() {
-        final var function01 = new FacadeFunctionTwoArgs<Exception, Department>() {
+    protected List<ComposeFunction3Args<Exception, Department>> getTriFunctions() {
+        final var function01 = new ComposeFunction3Args<Exception, Department>() {
             @Override
             public Exception apply(
                     final Exception exception,
@@ -146,24 +146,24 @@ abstract class AbstractBaseFacadeTest {
             }
         };
 
-        final FacadeFunctionTwoArgs<Exception, Department> function02 = (exception, department,
+        final ComposeFunction3Args<Exception, Department> function02 = (exception, department,
                 directives) -> new IllegalStateException("Illegal State Exception");
 
-        final var function03 = new FacadeFunctionTwoArgs<Exception, Department>() {
+        final var function03 = new ComposeFunction3Args<Exception, Department>() {
             @Override
             public Exception apply(final Exception exception, final Department department, final Object[] directives) {
                 throw new IllegalArgumentException("Some error");
             }
         };
 
-        final var function04 = new FacadeFunctionTwoArgs<Exception, Department>() {
+        final var function04 = new ComposeFunction3Args<Exception, Department>() {
             @Override
             public Exception apply(final Exception exception, final Department department, final Object[] directives) {
                 return new IllegalStateException("Illegal State Exception");
             }
         };
 
-        return List.<FacadeFunctionTwoArgs<Exception, Department>>of(function01, function02, function03, function04);
+        return List.<ComposeFunction3Args<Exception, Department>>of(function01, function02, function03, function04);
     }
 
     protected static class TestOperation implements InterfaceOperation {

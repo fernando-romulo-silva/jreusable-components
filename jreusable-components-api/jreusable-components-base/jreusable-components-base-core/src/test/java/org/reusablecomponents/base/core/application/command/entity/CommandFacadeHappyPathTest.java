@@ -70,7 +70,7 @@ class CommandFacadeHappyPathTest {
 		// then
 		assertThat(department).isEqualTo(result);
 		assertThat(data).contains(department);
-		assertThat(result).extracting("operation").isEqualTo(2);
+		assertThat(result).extracting("operation").isEqualTo(0);
 	}
 
 	@Test

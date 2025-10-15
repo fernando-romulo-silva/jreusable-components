@@ -1,6 +1,6 @@
 package org.application_example.domain;
 
-import static org.reusablecomponents.base.core.util.AbstractValidatorTest.VALIDATOR;
+import static org.reusablecomponents.base.core.infra.util.AbstractValidatorTest.VALIDATOR;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -12,11 +12,13 @@ import org.reusablecomponents.rest.rest.command.EntityCommandHttpControllerBuild
 import org.reusablecomponents.spring.core.application.command.entity.InterfaceSpringCommandFacade;
 import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringQueryFacade;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @param <Entity>
  * @param <Id>
  */
+@RestController
 public class SpringEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id>
 		extends EntityCommandHttpController<Entity, Id, // basic
 				Id, Entity, //
@@ -61,10 +63,10 @@ public class SpringEntityCommandHttpController<Entity extends AbstractEntity<Id>
 				return entity;
 			};
 
-			$.createResponseDelete = (voidValue) -> ResponseEntity.noContent().build();
-			$.createResponsePatch = (entity) -> ResponseEntity.noContent().build();
-			$.createResponsePut = (entity) -> ResponseEntity.noContent().build();
-			$.createResponsePost = (entity) -> ResponseEntity.ok(entity);
+			$.createResponseDelete = voidValue -> ResponseEntity.noContent().build();
+			$.createResponsePatch = entity -> ResponseEntity.noContent().build();
+			$.createResponsePut = entity -> ResponseEntity.noContent().build();
+			$.createResponsePost = ResponseEntity::ok;
 
 			$.entityCommandFacade = springCommandFacade;
 		}));

@@ -1,4 +1,4 @@
-package org.reusablecomponents.base.core.application.base.functions;
+package org.reusablecomponents.base.core.infra.util.function.compose;
 
 /**
  * Especialized function used by <code>BaseFacade.executeFunctions</code> to
@@ -9,7 +9,7 @@ package org.reusablecomponents.base.core.application.base.functions;
  * @param <V> The function input three data type
  */
 @FunctionalInterface
-public non-sealed interface FacadeFunctionThreeArgs<T, U, V> extends BaseFunction {
+public non-sealed interface ComposeFunction4Args<T, U, V> extends ComposeFunction {
 
     T apply(T t, U u, V v, Object[] directives);
 

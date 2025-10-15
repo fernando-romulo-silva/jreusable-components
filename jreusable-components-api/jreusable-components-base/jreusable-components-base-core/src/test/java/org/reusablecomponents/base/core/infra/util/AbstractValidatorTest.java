@@ -1,4 +1,4 @@
-package org.reusablecomponents.base.core.util;
+package org.reusablecomponents.base.core.infra.util;
 
 import java.util.Locale;
 

@@ -14,43 +14,46 @@ public class DepartmentCommandFacade extends EntityCommandFacadeList<Department,
     public DepartmentCommandFacade(final List<Department> data) {
         super(data);
     }
-
-    @Override
-    protected Department preSave(final Department saveEntityIn, final Object... directives) {
-
-        super.preSave(saveEntityIn, directives);
-
-        if (ObjectUtils.allNull(saveEntityIn)) {
-            return saveEntityIn;
-        }
-
-        saveEntityIn.increaseOperation();
-        return saveEntityIn;
-    }
-
-    @Override
-    protected Department posSave(final Department saveEntityIn, final Object... directives) {
-
-        super.posSave(saveEntityIn, directives);
-
-        if (ObjectUtils.allNull(saveEntityIn)) {
-            return saveEntityIn;
-        }
-
-        saveEntityIn.increaseOperation();
-        return saveEntityIn;
-    }
-
-    @Override
-    protected Exception errorSave(
-            final Department saveEntityIn,
-            final Exception exception,
-            final Object... directives) {
-
-        super.errorSave(saveEntityIn, exception, directives);
-
-        LOGGER.debug("Error Save");
-
-        return exception;
-    }
+    /*
+     * @Override
+     * protected Department preSave(final Department saveEntityIn, final Object...
+     * directives) {
+     * 
+     * super.preSave(saveEntityIn, directives);
+     * 
+     * if (ObjectUtils.allNull(saveEntityIn)) {
+     * return saveEntityIn;
+     * }
+     * 
+     * saveEntityIn.increaseOperation();
+     * return saveEntityIn;
+     * }
+     * 
+     * @Override
+     * protected Department posSave(final Department saveEntityIn, final Object...
+     * directives) {
+     * 
+     * super.posSave(saveEntityIn, directives);
+     * 
+     * if (ObjectUtils.allNull(saveEntityIn)) {
+     * return saveEntityIn;
+     * }
+     * 
+     * saveEntityIn.increaseOperation();
+     * return saveEntityIn;
+     * }
+     * 
+     * @Override
+     * protected Exception errorSave(
+     * final Department saveEntityIn,
+     * final Exception exception,
+     * final Object... directives) {
+     * 
+     * super.errorSave(saveEntityIn, exception, directives);
+     * 
+     * LOGGER.debug("Error Save");
+     * 
+     * return exception;
+     * }
+     */
 }

@@ -1,6 +1,8 @@
-package org.reusablecomponents.base.core.infra.util.function;
+package org.reusablecomponents.base.core.infra.util.function.operation;
 
 import java.util.function.Function;
+
+import org.apache.commons.lang3.function.TriFunction;
 
 /**
  * Represents a function that accepts four arguments and produces a result.
@@ -16,12 +18,11 @@ import java.util.function.Function;
  * @see TriFunction
  */
 @FunctionalInterface
-public interface QuadFunction<T, U, V, W, R> {
+public non-sealed interface OperationFunction4Args<T, U, V, W, R> extends OperationFunction {
 
     R apply(T t, U u, V v, W w);
 
-    default <S> QuadFunction<T, U, V, W, S> andThen(Function<? super R, S> after) {
+    default <S> OperationFunction4Args<T, U, V, W, S> andThen(Function<? super R, S> after) {
         return (t, u, v, w) -> after.apply(apply(t, u, v, w));
     }
-
 }

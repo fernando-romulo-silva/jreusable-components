@@ -3,9 +3,23 @@ package org.reusablecomponents.base.core.application.base;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
+import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
-import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.*;
-import static org.reusablecomponents.base.core.infra.util.function.Functions.createNullPointerException;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.ERROR_ON_OPERATION_LOG;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.ERROR_ON_POS_OPERATION_LOG;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.ERROR_ON_PRE_OPERATION_LOG;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.FINAL_LOG;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_DIRECTIVES_MSG;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_ERROR_FUNCTION_MSG;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_FUNCTIONS_MSG;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_MAIN_FUNCTION_MSG;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_OPERATION_MSG;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_POS_FUNCTION_MSG;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_PRE_FUNCTION_MSG;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.OPERATION_EXECUTED_LOG;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.POS_OPERATION_LOG;
+import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.PRE_LOG;
+import static org.reusablecomponents.base.core.infra.util.function.FunctionCommonUtils.createNullPointerException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,15 +28,9 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.function.TriFunction;
-import org.reusablecomponents.base.core.application.base.functions.BaseFunction;
-import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionNoArgs;
-import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionOneArg;
-import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
-import org.reusablecomponents.base.core.application.command.entity.CommandFacade;
+import org.reusablecomponents.base.core.application.command.entity.AbstractCommandFacade;
 import org.reusablecomponents.base.core.application.empty.EmptyFacade;
 import org.reusablecomponents.base.core.application.query.entity.pagination.QueryPaginationFacade;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.QueryPaginationSpecificationFacade;
@@ -30,7 +38,11 @@ import org.reusablecomponents.base.core.application.query.entity.simple.QueryFac
 import org.reusablecomponents.base.core.application.query.entity.specification.QuerySpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.core.infra.util.function.QuadFunction;
+import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction;
+import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction1Args;
+import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction2Args;
+import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction3Args;
+import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction4Args;
 import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
@@ -50,7 +62,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		implements InterfaceBaseFacade<Entity, Id>
-		permits EmptyFacade, CommandFacade, QueryFacade,
+		permits EmptyFacade, AbstractCommandFacade, QueryFacade,
 		QuerySpecificationFacade, QueryPaginationFacade, QueryPaginationSpecificationFacade {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseFacade.class);
@@ -316,7 +328,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			final TriFunction<In1, In2, Object[], Entry<In1, In2>> preFunction,
 			final BiFunction<Out, Object[], Out> posFunction,
 			final TriFunction<In1, In2, Object[], Out> mainFunction,
-			final QuadFunction<In1, In2, Exception, Object[], Exception> errorFunction,
+			final OperationFunction4Args<In1, In2, Exception, Object[], Exception> errorFunction,
 			final Object... directives) {
 		checkNotNull(in1, "Please pass a non-null 'in1'");
 		checkNotNull(in2, "Please pass a non-null 'in2'");
@@ -395,18 +407,18 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @throws NullPointerException If any parameter is null
 	 */
 	protected void compose(
-			final Collection<FacadeFunctionNoArgs> functions,
+			final Collection<ComposeFunction1Args> functions,
 			final Object... directives) {
 		checkNotNull(functions, NON_NULL_FUNCTIONS_MSG);
 		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
 
-		if (ObjectUtils.isEmpty(functions)) {
+		if (isEmpty(functions)) {
 			LOGGER.debug("No functions to execute with directires {}", directives);
 			return;
 		}
 
 		final var allFunctionsName = functions.stream()
-				.map(BaseFunction::getName)
+				.map(ComposeFunction::getName)
 				.collect(joining(", "));
 
 		final var skippedFunctions = new ArrayList<String>();
@@ -423,7 +435,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 					skippedFunctions.add(functionName);
 					continue;
 				}
-				function.accept(directives);
+				function.apply(directives);
 				LOGGER.debug("Function {} executed", functionName);
 				executedFunctions.add(functionName);
 			} catch (final Exception ex) {
@@ -459,19 +471,19 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	@NotNull
 	protected <In> In compose(
 			final In in,
-			final Collection<FacadeFunctionOneArg<In>> functions,
+			final Collection<? extends ComposeFunction2Args<In>> functions,
 			final Object... directives) {
 		checkNotNull(in, "Please pass a non-null 'in'");
 		checkNotNull(functions, NON_NULL_FUNCTIONS_MSG);
 		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
 
-		if (ObjectUtils.isEmpty(functions)) {
+		if (isEmpty(functions)) {
 			LOGGER.debug("No functions to execute with input {} and directires {}", in, directives);
 			return in;
 		}
 
 		final var allFunctionsName = functions.stream()
-				.map(BaseFunction::getName)
+				.map(ComposeFunction::getName)
 				.collect(joining(", "));
 
 		final var skippedFunctions = new ArrayList<String>();
@@ -504,9 +516,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		}
 
 		LOGGER.debug("Functions {} executed, skipped {}, with errors {}",
-				executedFunctions,
-				skippedFunctions,
-				withErrorFunctions);
+				executedFunctions, skippedFunctions, withErrorFunctions);
 		return nextIn;
 	}
 
@@ -532,21 +542,21 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	protected <In1, In2> In1 compose(
 			final In1 in1,
 			final In2 in2,
-			final Collection<FacadeFunctionTwoArgs<In1, In2>> functions,
+			final Collection<? extends ComposeFunction3Args<In1, In2>> functions,
 			final Object... directives) {
 		checkNotNull(in1, "Please pass a non-null 'in1'");
 		checkNotNull(in2, "Please pass a non-null 'in2'");
 		checkNotNull(functions, NON_NULL_FUNCTIONS_MSG);
 		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
 
-		if (ObjectUtils.isEmpty(functions)) {
+		if (isEmpty(functions)) {
 			LOGGER.debug("No functions to execute with inputs [{} {}] and directires {}",
 					in1, in2, directives);
 			return in1;
 		}
 
 		final var allFunctionsName = functions.stream()
-				.map(BaseFunction::getName)
+				.map(ComposeFunction::getName)
 				.collect(joining(", "));
 
 		final var skippedFunctions = new ArrayList<String>();
@@ -583,6 +593,15 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		return nextIn1;
 	}
 
+	/**
+	 * 
+	 * @param operation
+	 * @param preFunction
+	 * @param posFunction
+	 * @param mainFunction
+	 * @param errorFunction
+	 * @param directives
+	 */
 	private void checkParamsNotNull(
 			final Object operation,
 			final Object preFunction,
@@ -596,19 +615,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		checkNotNull(mainFunction, NON_NULL_MAIN_FUNCTION_MSG);
 		checkNotNull(errorFunction, NON_NULL_ERROR_FUNCTION_MSG);
 		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
-	}
-
-	/**
-	 * Return the method's caller name.
-	 * 
-	 * @return A String with caller name or empty string if didn't
-	 */
-	protected final String getCallerName() {
-		return walker.walk(s -> s
-				.skip(2) // Skip getCallerName() and clientMethod() itself
-				.findFirst()
-				.map(StackWalker.StackFrame::getMethodName))
-				.orElse(StringUtils.EMPTY);
 	}
 
 	/**

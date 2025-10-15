@@ -9,10 +9,10 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.function.TriFunction;
 import org.reusablecomponents.base.core.application.base.BaseFacade;
-import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionOneArg;
-import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionThreeArgs;
-import org.reusablecomponents.base.core.application.base.functions.FacadeFunctionTwoArgs;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction2Args;
+import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction4Args;
+import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction3Args;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +65,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	 * Get functions executed in sequence in the
 	 * {@link #preFindBy(Object, Object...) preFindBy} method
 	 */
-	protected List<FacadeFunctionOneArg<Specification>> getFindByPreFunctions() {
+	protected List<ComposeFunction2Args<Specification>> getFindByPreFunctions() {
 		return List.of();
 	}
 
@@ -87,7 +87,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	 * Get functions executed in sequence in the
 	 * {@link #posFindBy(Object, Object...) posFindBy} method
 	 */
-	protected List<FacadeFunctionOneArg<MultiplePagedResult>> getFindByPosFunctions() {
+	protected List<ComposeFunction2Args<MultiplePagedResult>> getFindByPosFunctions() {
 		return List.of();
 	}
 
@@ -114,7 +114,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	 * Get functions executed in sequence in the
 	 * {@link #errorFindBy(Object, Object, Object...) errorFindBy} method
 	 */
-	protected List<FacadeFunctionTwoArgs<Exception, Specification>> getFindByErrorFunctions() {
+	protected List<ComposeFunction3Args<Exception, Specification>> getFindByErrorFunctions() {
 		return List.of();
 	}
 
@@ -181,7 +181,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	 * Get functions executed in sequence in the
 	 * {@link #posFindOneBy(Object, Object...) posFindOneBy} method
 	 */
-	protected List<FacadeFunctionOneArg<OneResult>> getFindOnePosFunctions() {
+	protected List<ComposeFunction2Args<OneResult>> getFindOnePosFunctions() {
 		return List.of();
 	}
 
@@ -210,7 +210,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	 * {@link #errorFindOneBy(Object, Object, Object, Object...) errorFindOneBy}
 	 * method
 	 */
-	protected List<FacadeFunctionThreeArgs<Exception, Sort, Specification>> getFindOneErrorFunctions() {
+	protected List<ComposeFunction4Args<Exception, Sort, Specification>> getFindOneErrorFunctions() {
 		return List.of();
 	}
 
