@@ -1,9 +1,10 @@
 package org.reusablecomponents.base.core.application.query.entity.paginationspecification;
 
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE;
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION_SORTED;
-
 import java.util.AbstractMap.SimpleEntry;
+
+import static org.reusablecomponents.base.core.infra.util.function.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE;
+import static org.reusablecomponents.base.core.infra.util.function.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION_SORTED;
+
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -230,7 +231,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 				FIND_ENTITY_BY_SPECIFICATION_SORTED,
 				this::preFindOneBy,
 				this::posFindOneBy,
-				findOneByPagAndSpecFunction::apply,
+				findOneByPagAndSpecFunction,
 				this::errorFindOneBy, directives);
 
 		LOGGER.debug("Default findOneBy executed, oneResult {}, directives {}",

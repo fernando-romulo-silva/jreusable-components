@@ -1,20 +1,20 @@
 package org.apptest.infra;
 
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
+import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementAlreadyExistsException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementConflictException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementInvalidException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementNotFoundException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
-import org.reusablecomponents.base.core.infra.util.operation.CommandOperation;
-import org.reusablecomponents.base.core.infra.util.operation.QueryOperation;
+import org.reusablecomponents.base.core.infra.util.function.operation.CommandOperation;
+import org.reusablecomponents.base.core.infra.util.function.operation.QueryOperation;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 
 public class ExceptionAdapterListService implements InterfaceExceptionAdapterService {
 
 	@Override
-	public BaseApplicationException convert(
+	public BaseException convert(
 			final Exception ex,
 			final InterfaceI18nService i18nService,
 			final Object... directives) {
@@ -55,7 +55,7 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
 		throw new UnsupportedOperationException("Unimplemented method 'convert'");
 	}
 
-	private BaseApplicationException saveEntityAndSaveEntitiesExceptionHandler(
+	private BaseException saveEntityAndSaveEntitiesExceptionHandler(
 			final Exception ex,
 			final InterfaceI18nService i18nService,
 			final Object object) {
@@ -69,7 +69,7 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
 		};
 	}
 
-	private BaseApplicationException updateEntityAndUpdateEntitiesExceptionHandler(
+	private BaseException updateEntityAndUpdateEntitiesExceptionHandler(
 			final Exception ex,
 			final InterfaceI18nService i18nService,
 			final Object object) {
@@ -83,7 +83,7 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
 		};
 	}
 
-	private BaseApplicationException deleteEntityAndDeleteEntitiesExceptionHandler(
+	private BaseException deleteEntityAndDeleteEntitiesExceptionHandler(
 			final Exception ex,
 			final InterfaceI18nService i18nService,
 			final Object object) {
@@ -97,7 +97,7 @@ public class ExceptionAdapterListService implements InterfaceExceptionAdapterSer
 		};
 	}
 
-	private BaseApplicationException deleteByIdAndDeleteByIdsExceptionHandler(
+	private BaseException deleteByIdAndDeleteByIdsExceptionHandler(
 			final Exception ex,
 			final Class<?> clazz,
 			final InterfaceI18nService i18nService,

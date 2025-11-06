@@ -27,12 +27,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
-import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction2Args;
-import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction3Args;
+import org.reusablecomponents.base.core.infra.exception.common.BaseException;
+import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction4Args;
-import org.reusablecomponents.base.core.infra.util.operation.CommandOperation;
-import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
 
 @Tag("unit")
 @DisplayName("Test the EntiyBaseFacade entity test, unhappy Path :( ")
@@ -57,7 +54,6 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 	// given
 	Stream<Arguments> createInvalidExecuteData01() {
 		final var in = new Department("x1", "Development 01", "Technology", manager01);
-		final InterfaceOperation operation = CommandOperation.SAVE_ENTITY;
 		final BiFunction<Department, Object[], Department> preFunction = (department, directives) -> department;
 		final BiFunction<Department, Object[], Department> posFunction = (department, directives) -> department;
 		final BiFunction<Department, Object[], Department> mainFunction = (department,
@@ -67,21 +63,21 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		final Object[] directives = new Object[] {};
 
 		return Stream.of(
-				Arguments.of(null, operation, preFunction, posFunction, mainFunction, errorFunction,
+				Arguments.of(null, preFunction, posFunction, mainFunction, errorFunction,
 						directives,
 						msg.formatted("in")),
 				Arguments.of(in, null, preFunction, posFunction, mainFunction, errorFunction,
 						directives,
 						msg.formatted("operation")),
-				Arguments.of(in, operation, null, posFunction, mainFunction, errorFunction, directives,
+				Arguments.of(in, null, posFunction, mainFunction, errorFunction, directives,
 						msg.formatted("preFunction")),
-				Arguments.of(in, operation, preFunction, null, mainFunction, errorFunction, directives,
+				Arguments.of(in, preFunction, null, mainFunction, errorFunction, directives,
 						msg.formatted("posFunction")),
-				Arguments.of(in, operation, preFunction, posFunction, null, errorFunction, directives,
+				Arguments.of(in, preFunction, posFunction, null, errorFunction, directives,
 						msg.formatted("mainFunction")),
-				Arguments.of(in, operation, preFunction, posFunction, mainFunction, null, directives,
+				Arguments.of(in, preFunction, posFunction, mainFunction, null, directives,
 						msg.formatted("errorFunction")),
-				Arguments.of(in, operation, preFunction, posFunction, mainFunction, errorFunction, null,
+				Arguments.of(in, preFunction, posFunction, mainFunction, errorFunction, null,
 						msg.formatted("directives")));
 	}
 
@@ -91,7 +87,6 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 	@DisplayName("Try to execute 01 invalid test")
 	void invalidExecuteTest01(
 			final Department in,
-			final InterfaceOperation operation,
 			final BiFunction<Department, Object[], Department> preFunction,
 			final BiFunction<Department, Object[], Department> posFunction,
 			final BiFunction<Department, Object[], Department> mainFunction,
@@ -100,8 +95,8 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 			final String exceptionMessage) {
 		// when
 		assertThatThrownBy(
-				() -> facade.execute(in, operation, preFunction, posFunction,
-						mainFunction, errorFunction, directives))
+				() -> facade.execute(in, preFunction,
+						mainFunction, posFunction, errorFunction, directives))
 				// then
 				.isInstanceOf(NullPointerException.class)
 				.hasMessageContaining(exceptionMessage);
@@ -111,7 +106,6 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 	Stream<Arguments> createInvalidExecuteData02() {
 		final var in1 = new Department("x1", "Development 01", "Technology", manager01);
 		final var in2 = new Manager("x3", "Business Happy");
-		final InterfaceOperation operation = CommandOperation.SAVE_ENTITY;
 
 		final TriFunction<Department, Manager, Object[], Entry<Department, Manager>> preFunction = (department,
 				manager, directives) -> new AbstractMap.SimpleEntry<>(department, manager);
@@ -127,21 +121,21 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		final Object[] directives = new Object[] {};
 
 		return Stream.of(
-				Arguments.of(null, in2, operation, preFunction, posFunction, mainFunction,
+				Arguments.of(null, in2, preFunction, posFunction, mainFunction,
 						errorFunction, directives, msg.formatted("in1")),
-				Arguments.of(in1, null, operation, preFunction, posFunction, mainFunction,
+				Arguments.of(in1, null, preFunction, posFunction, mainFunction,
 						errorFunction, directives, msg.formatted("in2")),
 				Arguments.of(in1, in2, null, preFunction, posFunction, mainFunction, errorFunction,
 						directives, msg.formatted("operation")),
-				Arguments.of(in1, in2, operation, null, posFunction, mainFunction, errorFunction,
+				Arguments.of(in1, in2, null, posFunction, mainFunction, errorFunction,
 						directives, msg.formatted("preFunction")),
-				Arguments.of(in1, in2, operation, preFunction, null, mainFunction, errorFunction,
+				Arguments.of(in1, in2, preFunction, null, mainFunction, errorFunction,
 						directives, msg.formatted("posFunction")),
-				Arguments.of(in1, in2, operation, preFunction, posFunction, null, errorFunction,
+				Arguments.of(in1, in2, preFunction, posFunction, null, errorFunction,
 						directives, msg.formatted("mainFunction")),
-				Arguments.of(in1, in2, operation, preFunction, posFunction, mainFunction, null,
+				Arguments.of(in1, in2, preFunction, posFunction, mainFunction, null,
 						directives, msg.formatted("errorFunction")),
-				Arguments.of(in1, in2, operation, preFunction, posFunction, mainFunction, errorFunction,
+				Arguments.of(in1, in2, preFunction, posFunction, mainFunction, errorFunction,
 						null, msg.formatted("directives")));
 	}
 
@@ -152,8 +146,7 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 	void invalidExecuteTest02(
 			final Department in1,
 			final Manager in2,
-			final InterfaceOperation operation,
-			final TriFunction<Department, Manager, Object[], Entry<Department, Manager>> preFunction,
+			final OperationFunction 			final TriFunction<Department, Manager, Object[], Entry<Department, Manager>> preFunction,
 			final BiFunction<Department, Object[], Department> posFunction,
 			final TriFunction<Department, Manager, Object[], Department> mainFunction,
 			final OperationFunction4Args<Department, Manager, Exception, Object[], Exception> errorFunction,
@@ -161,7 +154,7 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 			final String exceptionMessage) {
 		// when
 		assertThatThrownBy(
-				() -> facade.execute(in1, in2, operation, preFunction,
+				() -> facade.execute(in1, in2, preFunction,
 						posFunction, mainFunction, errorFunction, directives))
 				// then
 				.isInstanceOf(NullPointerException.class)
@@ -170,7 +163,7 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 
 	// given
 	Stream<Arguments> createInvalidExecuteData03() {
-		final InterfaceOperation operation = CommandOperation.SAVE_ENTITY;
+		final OperationFunction operation = CommandOperation.SAVE_ENTITY;
 		final Consumer<Object[]> preFunction = System.out::println;
 		final BiFunction<Department, Object[], Department> posFunction = (department, directives) -> department;
 		final Function<Object[], Department> mainFunction = directives -> null;
@@ -181,15 +174,15 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		return Stream.of(
 				Arguments.of(null, preFunction, posFunction, mainFunction, errorFunction, directives,
 						msg.formatted("operation")),
-				Arguments.of(operation, null, posFunction, mainFunction, errorFunction, directives,
+				Arguments.of(null, posFunction, mainFunction, errorFunction, directives,
 						msg.formatted("preFunction")),
-				Arguments.of(operation, preFunction, null, mainFunction, errorFunction, directives,
+				Arguments.of(preFunction, null, mainFunction, errorFunction, directives,
 						msg.formatted("posFunction")),
-				Arguments.of(operation, preFunction, posFunction, null, errorFunction, directives,
+				Arguments.of(preFunction, posFunction, null, errorFunction, directives,
 						msg.formatted("mainFunction")),
-				Arguments.of(operation, preFunction, posFunction, mainFunction, null, directives,
+				Arguments.of(preFunction, posFunction, mainFunction, null, directives,
 						msg.formatted("errorFunction")),
-				Arguments.of(operation, preFunction, posFunction, mainFunction, errorFunction, null,
+				Arguments.of(preFunction, posFunction, mainFunction, errorFunction, null,
 						msg.formatted("directives")));
 	}
 
@@ -198,7 +191,6 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 	@MethodSource("createInvalidExecuteData03")
 	@DisplayName("Try to execute 03 invalid test")
 	void invalidExecuteTest03(
-			final InterfaceOperation operation,
 			final Consumer<Object[]> preFunction,
 			final BiFunction<Department, Object[], Department> posFunction,
 			final Function<Object[], Department> mainFunction,
@@ -207,7 +199,7 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 			final String exceptionMessage) {
 		// when
 		assertThatThrownBy(
-				() -> facade.execute(operation, preFunction, posFunction, mainFunction, errorFunction, directives))
+				() -> facade.execute(preFunction, posFunction, mainFunction, errorFunction, directives))
 				// then
 				.isInstanceOf(NullPointerException.class)
 				.hasMessageContaining(exceptionMessage);
@@ -227,17 +219,17 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		assertThatThrownBy(
 				// when
 				() -> facade.execute(
-						operation, preFunctionNoInputError, posFunctionNoInput,
+						preFunctionNoInputError, posFunctionNoInput,
 						directives -> department01, errorFunctionNoInput))
 				// then
-				.isInstanceOf(BaseApplicationException.class)
+				.isInstanceOf(BaseException.class)
 				.hasRootCauseInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining(errorMsg);
 	}
 
 	@Test
 	@Order(6)
-	@DisplayName("Test execute operation, no inputs")
+	@DisplayName("Test execute no inputs")
 	void executeNoInputOperationMainFunctionErrorTest() {
 		// given
 		final String errorMsg = "main function error, no inputs";
@@ -249,10 +241,10 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		assertThatThrownBy(
 				// when
 				() -> facade.execute(
-						operation, preFunctionNoInput, posFunctionNoInput,
+						preFunctionNoInput, posFunctionNoInput,
 						mainFunctionNoInputError, errorFunctionNoInput))
 				// then
-				.isInstanceOf(BaseApplicationException.class)
+				.isInstanceOf(BaseException.class)
 				.hasRootCauseInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining(errorMsg);
 	}
@@ -272,17 +264,17 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		assertThatThrownBy(
 				// when
 				() -> facade.execute(
-						operation, preFunctionNoInput, posFunctionNoInputError,
+						preFunctionNoInput, posFunctionNoInputError,
 						directives -> department01, errorFunctionNoInput))
 				// then
-				.isInstanceOf(BaseApplicationException.class)
+				.isInstanceOf(BaseException.class)
 				.hasRootCauseInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining(errorMsg);
 	}
 
 	@Test
 	@Order(8)
-	@DisplayName("Test execute pre operation, one input")
+	@DisplayName("Test execute pre one input")
 	void executeSingleInputOperationPreFunctionErrorTest() {
 		// given
 		final String errorMsg = "pre function error, one input";
@@ -294,18 +286,18 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		assertThatThrownBy(
 				// when
 				() -> facade.execute(
-						department01, operation, preFunctionOneInputError,
+						department01, preFunctionOneInputError,
 						posFunctionOneInput, (department, directives) -> department01,
 						errorFunctionOneInput))
 				// then
-				.isInstanceOf(BaseApplicationException.class)
+				.isInstanceOf(BaseException.class)
 				.hasRootCauseInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining(errorMsg);
 	}
 
 	@Test
 	@Order(9)
-	@DisplayName("Test execute operation, one input")
+	@DisplayName("Test execute one input")
 	void executeSingleInputOperationMainFunctionErrorTest() {
 		// given
 		final String errorMsg = "main function error, one input";
@@ -318,18 +310,18 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		assertThatThrownBy(
 				// when
 				() -> facade.execute(
-						department01, operation, preFunctionOneInput,
+						department01, preFunctionOneInput,
 						posFunctionOneInput, mainFunctionOneInputError,
 						errorFunctionOneInput))
 				// then
-				.isInstanceOf(BaseApplicationException.class)
+				.isInstanceOf(BaseException.class)
 				.hasRootCauseInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining(errorMsg);
 	}
 
 	@Test
 	@Order(10)
-	@DisplayName("Test execute pos operation, one input")
+	@DisplayName("Test execute pos one input")
 	void executeSingleInputOperationPosFunctionErrorTest() {
 		// given
 		final String errorMsg = "pos function error, one input";
@@ -342,18 +334,18 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		assertThatThrownBy(
 				// when
 				() -> facade.execute(
-						department01, operation, preFunctionOneInput,
+						department01, preFunctionOneInput,
 						posFunctionOneInputError, (department, directives) -> department01,
 						errorFunctionOneInput))
 				// then
-				.isInstanceOf(BaseApplicationException.class)
+				.isInstanceOf(BaseException.class)
 				.hasRootCauseInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining(errorMsg);
 	}
 
 	@Test
 	@Order(11)
-	@DisplayName("Test execute pre operation, two inputs")
+	@DisplayName("Test execute pre two inputs")
 	void executeDoubleInputOperationPreFunctionErrorTest() {
 		// given
 		final String errorMsg = "pre function error, two inputs";
@@ -367,17 +359,17 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		assertThatThrownBy(
 				// when
 				() -> facade.execute(
-						department01, manager01, operation, preFunctionTwoInputsError, posFunctionTwoInputs,
+						department01, manager01, preFunctionTwoInputsError, posFunctionTwoInputs,
 						(departmentIn, managerIn, directives) -> departmentDto, errorFunctionTwoInputs))
 				// then
-				.isInstanceOf(BaseApplicationException.class)
+				.isInstanceOf(BaseException.class)
 				.hasRootCauseInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining(errorMsg);
 	}
 
 	@Test
 	@Order(12)
-	@DisplayName("Test execute operation, two inputs")
+	@DisplayName("Test execute two inputs")
 	void executeDoubleInputOperationMainFunctionErrorTest() {
 		// given
 		final String errorMsg = "main function error, two inputs";
@@ -390,17 +382,17 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		assertThatThrownBy(
 				// when
 				() -> facade.execute(
-						department01, manager01, operation, preFunctionTwoInputs, posFunctionTwoInputs,
+						department01, manager01, preFunctionTwoInputs, posFunctionTwoInputs,
 						mainFunctionTwoInputsError, errorFunctionTwoInputs))
 				// then
-				.isInstanceOf(BaseApplicationException.class)
+				.isInstanceOf(BaseException.class)
 				.hasRootCauseInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining(errorMsg);
 	}
 
 	@Test
 	@Order(13)
-	@DisplayName("Test execute pos operation, two inputs")
+	@DisplayName("Test execute pos two inputs")
 	void executeDoubleInputOperationPosFunctionErrorTest() {
 		// given
 		final String errorMsg = "pos function error, two inputs";
@@ -414,98 +406,11 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		assertThatThrownBy(
 				// when
 				() -> facade.execute(
-						department01, manager01, operation, preFunctionTwoInputs, posFunctionTwoInputsError,
+						department01, manager01, preFunctionTwoInputs, posFunctionTwoInputsError,
 						(departmentIn, managerIn, directives) -> departmentDto, errorFunctionTwoInputs))
 				// then
-				.isInstanceOf(BaseApplicationException.class)
+				.isInstanceOf(BaseException.class)
 				.hasRootCauseInstanceOf(IllegalArgumentException.class)
 				.hasMessageContaining(errorMsg);
-	}
-
-	@Test
-	@Order(14)
-	@DisplayName("Test compose bi functions with retrow first one")
-	void composeBiFunctionsUntilThrowExceptionTest() {
-		// given
-		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
-
-		final var functions = new ArrayList<ComposeFunction2Args<Department>>(getBiFunctions());
-
-		final var functionThrow01 = new ComposeFunction2Args<Department>() {
-
-			@Override
-			public Department apply(final Department department, final Object[] directives) {
-				throw new IllegalStateException("State exception");
-			}
-
-			@Override
-			public boolean reTrowException() {
-				return true;
-			}
-		};
-		functions.add(functionThrow01);
-
-		final var functionThrow02 = new ComposeFunction2Args<Department>() {
-
-			@Override
-			public Department apply(final Department department, final Object[] directives) {
-				throw new IllegalArgumentException("Argument exception");
-			}
-
-			@Override
-			public boolean reTrowException() {
-				return true;
-			}
-		};
-		functions.add(functionThrow02);
-
-		// when
-		assertThatThrownBy(() -> facade.compose(department01, functions))
-				// then
-				.isInstanceOf(IllegalStateException.class)
-				.hasMessageContaining("State exception");
-	}
-
-	@Test
-	@Order(15)
-	@DisplayName("Test compose tri functions with retrow first one")
-	void composeTriFunctionsUntilThrowExceptionTest() {
-		// given
-		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, exceptionTranslatorService);
-		final var exception = new NullPointerException("null");
-
-		final var functions = new ArrayList<ComposeFunction3Args<Exception, Department>>(getTriFunctions());
-		final var functionThrow01 = new ComposeFunction3Args<Exception, Department>() {
-			@Override
-			public Exception apply(final Exception exception, final Department department, final Object[] directives) {
-				throw new IllegalStateException("State exception");
-			}
-
-			@Override
-			public boolean reTrowException() {
-				return true;
-			}
-		};
-
-		final var functionThrow02 = new ComposeFunction3Args<Exception, Department>() {
-			@Override
-			public Exception apply(final Exception exception, final Department department, final Object[] directives) {
-				throw new IllegalArgumentException("Argument exception");
-			}
-
-			@Override
-			public boolean reTrowException() {
-				return true;
-			}
-		};
-
-		functions.add(functionThrow01);
-		functions.add(functionThrow02);
-
-		// when
-		assertThatThrownBy(() -> facade.compose(exception, department01, functions))
-				// then
-				.isInstanceOf(IllegalStateException.class)
-				.hasMessageContaining("State exception");
 	}
 }

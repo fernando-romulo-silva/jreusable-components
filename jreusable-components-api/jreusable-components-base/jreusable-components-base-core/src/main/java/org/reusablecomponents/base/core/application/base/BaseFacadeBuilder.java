@@ -10,11 +10,15 @@ import org.reusablecomponents.base.security.DefaultSecurityService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The <code>EntiyBaseFacade</code> builder's class.
  */
 public class BaseFacadeBuilder {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BaseFacadeBuilder.class);
 
     /**
      * Security service, in case of null, the <code>DefaultSecurityService</code>
@@ -40,6 +44,7 @@ public class BaseFacadeBuilder {
      * @param function Consumer function
      */
     public BaseFacadeBuilder(final Consumer<? extends BaseFacadeBuilder> function) {
+        LOGGER.debug("Constructing BaseFacadeBuilder");
 
         @SuppressWarnings("unchecked")
         final var finalFunction = (Consumer<BaseFacadeBuilder>) function;
@@ -51,5 +56,7 @@ public class BaseFacadeBuilder {
         exceptionAdapterService = nonNull(exceptionAdapterService)
                 ? exceptionAdapterService
                 : new DefaultExceptionAdapterService();
+
+        LOGGER.debug("BaseFacadeBuilder constructed");
     }
 }

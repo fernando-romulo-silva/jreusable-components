@@ -4,7 +4,7 @@ import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages
 
 import org.reusablecomponents.base.core.application.base.InterfaceBaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
-import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
+import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementNotFoundException;
 import org.reusablecomponents.base.core.infra.exception.common.InvalidSpecificationException;
 
@@ -44,7 +44,7 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
 	 * @throws InvalidSpecificationException If specification is invalid
 	 * @throws NullPointerException          If the parameter 'specification' is
 	 *                                       null
-	 * @throws BaseApplicationException      If an unidentified error happened
+	 * @throws BaseException                 If an unidentified error happened
 	 * 
 	 * @return Return a {@code MultipleResult} object
 	 */
@@ -64,7 +64,7 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
 	 * @throws InvalidSpecificationException If specification is invalid
 	 * @throws NullPointerException          If the parameter 'specification' is
 	 *                                       null
-	 * @throws BaseApplicationException      If an unidentified error happened
+	 * @throws BaseException                 If an unidentified error happened
 	 * 
 	 * @return Return a {@code OneResult} object
 	 */
@@ -82,7 +82,7 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
 	 * @throws InvalidSpecificationException If specification is invalid
 	 * @throws NullPointerException          If the parameter 'specification' is
 	 *                                       null
-	 * @throws BaseApplicationException      If an unidentified error happened
+	 * @throws BaseException                 If an unidentified error happened
 	 * 
 	 * @return Return a {@code ExistsResult} object
 	 */
@@ -100,7 +100,7 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
 	 * @throws InvalidSpecificationException If specification is invalid
 	 * @throws NullPointerException          If the parameter 'specification' is
 	 *                                       null
-	 * @throws BaseApplicationException      If an unidentified error happened
+	 * @throws BaseException                 If an unidentified error happened
 	 * 
 	 * @return Return a {@code CountResult} object
 	 */

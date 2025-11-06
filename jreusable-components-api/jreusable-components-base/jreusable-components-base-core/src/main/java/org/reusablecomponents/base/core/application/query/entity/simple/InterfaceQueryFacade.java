@@ -4,7 +4,7 @@ import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages
 
 import org.reusablecomponents.base.core.application.base.InterfaceBaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
-import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
+import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
 
 import jakarta.validation.constraints.NotNull;
@@ -42,7 +42,7 @@ public non-sealed interface InterfaceQueryFacade<Entity extends AbstractEntity<I
 	 * @throws ElementWithIdNotFoundException If you try to retrieve an entity that
 	 *                                        doesn't exist
 	 * @throws NullPointerException           If the parameter 'queryIdIn' is null
-	 * @throws BaseApplicationException       If an unidentified error happened
+	 * @throws BaseException                  If an unidentified error happened
 	 * 
 	 * @return Return a {@code OneResult} object
 	 */
@@ -55,7 +55,7 @@ public non-sealed interface InterfaceQueryFacade<Entity extends AbstractEntity<I
 	 * 
 	 * @param directives Params used to configure the query
 	 * 
-	 * @throws BaseApplicationException If an unidentified error happened
+	 * @throws BaseException If an unidentified error happened
 	 * 
 	 * @return Return a {@code OneResult} object
 	 */
@@ -67,8 +67,8 @@ public non-sealed interface InterfaceQueryFacade<Entity extends AbstractEntity<I
 	 * @param queryIdIn  The entity id
 	 * @param directives Params used to configure the query
 	 * 
-	 * @throws NullPointerException     If the parameter 'queryIdIn' is null
-	 * @throws BaseApplicationException If an unidentified error happened
+	 * @throws NullPointerException If the parameter 'queryIdIn' is null
+	 * @throws BaseException        If an unidentified error happened
 	 * 
 	 * @return Return a {@code ExistsResult} object
 	 */
@@ -81,7 +81,7 @@ public non-sealed interface InterfaceQueryFacade<Entity extends AbstractEntity<I
 	 * 
 	 * @param directives Params used to configure the query
 	 * 
-	 * @throws BaseApplicationException If an unidentified error happened
+	 * @throws BaseException If an unidentified error happened
 	 * 
 	 * @return Return a {@code ExistsResult} object
 	 */
@@ -92,7 +92,7 @@ public non-sealed interface InterfaceQueryFacade<Entity extends AbstractEntity<I
 	 * 
 	 * @param directives Params used to configure the query
 	 * 
-	 * @throws BaseApplicationException If an unidentified error happened
+	 * @throws BaseException If an unidentified error happened
 	 * 
 	 * @return Return a {@code CountResult} object
 	 */

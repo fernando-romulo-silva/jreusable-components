@@ -1,10 +1,9 @@
 package org.reusablecomponents.cqrs.query.paged;
 
 import static org.apache.commons.lang3.StringUtils.SPACE;
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE;
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION_SORTED;
-
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.reusablecomponents.base.core.infra.util.function.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE;
+import static org.reusablecomponents.base.core.infra.util.function.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION_SORTED;
 import static org.reusablecomponents.messaging.event.DefaultEventStatus.SUCCESS;
 
 import java.util.Objects;

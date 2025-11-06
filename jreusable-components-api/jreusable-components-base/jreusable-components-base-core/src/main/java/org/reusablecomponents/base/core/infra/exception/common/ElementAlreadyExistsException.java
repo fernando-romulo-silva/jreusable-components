@@ -9,7 +9,7 @@ import org.reusablecomponents.base.translation.InterfaceI18nService;
  * 
  * @author Fernando Romulo da Silva
  */
-public class ElementAlreadyExistsException extends BaseApplicationException {
+public class ElementAlreadyExistsException extends BaseException {
 
 	private static final long serialVersionUID = 1L;
 

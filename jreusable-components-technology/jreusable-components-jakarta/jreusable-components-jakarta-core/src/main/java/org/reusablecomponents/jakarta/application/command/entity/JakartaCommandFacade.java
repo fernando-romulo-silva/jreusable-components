@@ -56,7 +56,7 @@ public class JakartaCommandFacade<Entity extends AbstractEntity<Id>, Id> // basi
 				return null;
 			};
 
-			$.deleteAllByIdFunction = (ids, directives) -> {
+			$.deleteByIdsFunction = (ids, directives) -> {
 				ids.forEach(repository::deleteById);
 				return null;
 			};

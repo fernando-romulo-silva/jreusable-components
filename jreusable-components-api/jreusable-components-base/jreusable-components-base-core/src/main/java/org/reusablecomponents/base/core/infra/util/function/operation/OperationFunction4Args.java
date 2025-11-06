@@ -9,20 +9,23 @@ import org.apache.commons.lang3.function.TriFunction;
  * This is a four-arity extension to the functional interfaces {@link Function}
  * and {@link java.util.function.BiFunction BiFunction} from the JDK.
  *
- * @param <T> the type of the first argument to the function
- * @param <U> the type of the second argument to the function
- * @param <V> the type of the third argument to the function
- * @param <W> the type of the fourth argument to the function
- * @param <R> the type of the result of the function
+ * @param <In1> the type of the first argument to the function
+ * @param <In2> the type of the second argument to the function
+ * @param <In3> the type of the third argument to the function
+ * @param <In4> the type of the fourth argument to the function
+ * @param <R>   the type of the result of the function
  *
  * @see TriFunction
  */
 @FunctionalInterface
-public non-sealed interface OperationFunction4Args<T, U, V, W, R> extends OperationFunction {
+public non-sealed interface OperationFunction4Args<In1, In2, In3, In4, Out> extends OperationFunction {
 
-    R apply(T t, U u, V v, W w);
-
-    default <S> OperationFunction4Args<T, U, V, W, S> andThen(Function<? super R, S> after) {
-        return (t, u, v, w) -> after.apply(apply(t, u, v, w));
-    }
+    /**
+     * Applies this function to the given arguments.
+     *
+     * @param t the first function argument
+     * @param u the second function argument
+     * @return the function result
+     */
+    Out apply(In1 in1, In2 in2, In3 in3, In4 in4);
 }

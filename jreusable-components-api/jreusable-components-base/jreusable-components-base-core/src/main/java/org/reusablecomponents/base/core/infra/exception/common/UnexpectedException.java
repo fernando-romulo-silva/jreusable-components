@@ -7,7 +7,7 @@ import org.reusablecomponents.base.translation.InterfaceI18nService;
 /**
  * 
  */
-public final class UnexpectedException extends BaseApplicationException {
+public final class UnexpectedException extends BaseException {
 
     private static final long serialVersionUID = 1L;
 

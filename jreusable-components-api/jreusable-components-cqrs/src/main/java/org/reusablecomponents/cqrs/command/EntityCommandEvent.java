@@ -1,14 +1,14 @@
 package org.reusablecomponents.cqrs.command;
 
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_ID;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_BY_IDS;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_ENTITIES;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.DELETE_ENTITY;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.SAVE_ENTITIES;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.SAVE_ENTITY;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.UPDATE_ENTITIES;
-import static org.reusablecomponents.base.core.infra.util.operation.CommandOperation.UPDATE_ENTITY;
+import static org.reusablecomponents.base.core.infra.util.function.operation.CommandOperation.DELETE_BY_ID;
+import static org.reusablecomponents.base.core.infra.util.function.operation.CommandOperation.DELETE_BY_IDS;
+import static org.reusablecomponents.base.core.infra.util.function.operation.CommandOperation.DELETE_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.function.operation.CommandOperation.DELETE_ENTITY;
+import static org.reusablecomponents.base.core.infra.util.function.operation.CommandOperation.SAVE_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.function.operation.CommandOperation.SAVE_ENTITY;
+import static org.reusablecomponents.base.core.infra.util.function.operation.CommandOperation.UPDATE_ENTITIES;
+import static org.reusablecomponents.base.core.infra.util.function.operation.CommandOperation.UPDATE_ENTITY;
 
 import java.util.Objects;
 

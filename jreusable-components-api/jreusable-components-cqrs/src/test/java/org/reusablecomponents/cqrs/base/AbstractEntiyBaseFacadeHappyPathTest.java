@@ -26,7 +26,7 @@ import org.reusablecomponents.base.core.application.base.BaseFacade;
 import org.reusablecomponents.base.core.application.empty.EmptyFacade;
 import org.reusablecomponents.base.core.infra.exception.DefaultExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
+import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
@@ -46,7 +46,7 @@ import ch.qos.logback.core.read.ListAppender;
 @TestMethodOrder(OrderAnnotation.class)
 class AbstractEntiyBaseFacadeHappyPathTest {
 
-	static class GenericError extends BaseApplicationException {
+	static class GenericError extends BaseException {
 
 		public GenericError(final Exception exception) {
 			super("Generic error", exception);

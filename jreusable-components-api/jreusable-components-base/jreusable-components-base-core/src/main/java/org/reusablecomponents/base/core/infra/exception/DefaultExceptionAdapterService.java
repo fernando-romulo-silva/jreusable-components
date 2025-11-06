@@ -1,6 +1,6 @@
 package org.reusablecomponents.base.core.infra.exception;
 
-import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
+import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 
 import jakarta.validation.constraints.NotNull;
@@ -14,10 +14,10 @@ public class DefaultExceptionAdapterService implements InterfaceExceptionAdapter
      * {@inheritDoc}
      */
     @Override
-    public BaseApplicationException convert(
+    public BaseException convert(
             @NotNull final Exception ex,
             @NotNull final InterfaceI18nService i18nService,
             @NotNull final Object... directives) {
-        return new BaseApplicationException(ex);
+        return new BaseException(ex);
     }
 }

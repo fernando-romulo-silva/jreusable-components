@@ -5,7 +5,6 @@ import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.NULL_POINTER_EXCEPTION_MSG;
-import static org.reusablecomponents.base.core.infra.util.function.FunctionCommonUtils.createNullPointerException;
 import static org.reusablecomponents.messaging.MessagingConst.JSON_LAYOUT;
 import static org.reusablecomponents.messaging.event.DefaultEventStatus.FAILURE;
 import static org.reusablecomponents.messaging.event.DefaultEventStatus.SUCCESS;
@@ -16,7 +15,7 @@ import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
-import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
+import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.messaging.InterfaceEventPublisherSerice;
@@ -90,7 +89,7 @@ public class EntiyBaseEvent {
 			final String dataOut,
 			final String origin,
 			final InterfaceEventStatus status,
-			final InterfaceOperation operation) {
+			final OperationFunction operation) {
 
 		LOGGER.debug("Creating event with '{}' operation", operation);
 
@@ -160,7 +159,7 @@ public class EntiyBaseEvent {
 			final String dataOut,
 			final String origin,
 			final InterfaceEventStatus status,
-			final InterfaceOperation operation) {
+			final OperationFunction operation) {
 
 		LOGGER.debug("Publishing event with operation '{}'", operation);
 
@@ -266,7 +265,7 @@ public class EntiyBaseEvent {
 	protected <In, Out> void publishCommandEvent(
 			final In in,
 			final Out entityOut,
-			final InterfaceOperation operation,
+			final OperationFunction operation,
 			final Function<In, String> inToMsgFunction,
 			final Function<Out, String> outToMsgFunction,
 			final Object... directives) {
@@ -308,7 +307,7 @@ public class EntiyBaseEvent {
 	protected <In> void publishCommandEvent(
 			final In in,
 			final Exception exception,
-			final InterfaceOperation operation,
+			final OperationFunction operation,
 			final Function<In, String> inToMsgFunction,
 			final Function<Exception, String> exceptionToMsgFunction,
 			final Object... directives) {

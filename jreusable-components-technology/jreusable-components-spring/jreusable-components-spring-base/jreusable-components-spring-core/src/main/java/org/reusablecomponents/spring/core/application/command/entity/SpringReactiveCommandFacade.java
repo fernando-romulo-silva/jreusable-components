@@ -60,7 +60,7 @@ public class SpringReactiveCommandFacade<Entity extends AbstractEntity<Id>, Id> 
 				repository.deleteById(id);
 				return null;
 			};
-			$.deleteAllByIdFunction = (ids, directives) -> {
+			$.deleteByIdsFunction = (ids, directives) -> {
 				repository.deleteById(ids);
 				return null;
 			};

@@ -158,7 +158,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 				return Boolean.TRUE;
 			};
 
-			$.deleteAllByIdFunction = (ids, directives) -> {
+			$.deleteByIdsFunction = (ids, directives) -> {
 
 				ids.stream().forEach(id -> {
 					if (id instanceof String idString && StringUtils.isBlank(idString)) {

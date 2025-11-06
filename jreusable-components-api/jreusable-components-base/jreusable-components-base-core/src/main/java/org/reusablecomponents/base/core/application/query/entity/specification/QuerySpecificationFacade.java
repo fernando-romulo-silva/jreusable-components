@@ -1,17 +1,10 @@
 package org.reusablecomponents.base.core.application.query.entity.specification;
 
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.COUNT_BY_SPECIFICATION;
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_BY_SPECIFICATION;
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION;
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION;
-
 import java.util.List;
 import java.util.function.BiFunction;
 
 import org.reusablecomponents.base.core.application.base.BaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
-import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction2Args;
-import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction3Args;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -3,7 +3,7 @@ package org.reusablecomponents.spring.core.infra.exception;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.springframework.stereotype.Component;
-import org.reusablecomponents.base.core.infra.exception.common.BaseApplicationException;
+import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 
 /**
  * 
@@ -14,7 +14,7 @@ public class SpringExceptionAdapterService implements InterfaceExceptionAdapterS
     /**
      * {@inheritDoc}
      */
-    public BaseApplicationException convert(
+    public BaseException convert(
             final Exception ex,
             final InterfaceI18nService i18nService,
             final Object... directives) {

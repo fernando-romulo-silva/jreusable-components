@@ -1,0 +1,15 @@
+		if (!function.isActice()) {
+			LOGGER.debug("Function {} disabled, it won't execute", functionName);
+			skippedFunctions.add(functionName);
+			continue;
+		}
+
+		if (function.reTrowException()) {
+			throw ex;
+		}
+		withErrorFunctions.add(functionName);	
+
+
+        		final var skippedFunctions = new ArrayList<String>();
+		final var withErrorFunctions = new ArrayList<String>();
+		final var executedFunctions = new ArrayList<String>();

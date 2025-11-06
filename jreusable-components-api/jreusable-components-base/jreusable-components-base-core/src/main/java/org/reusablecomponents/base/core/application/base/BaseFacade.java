@@ -13,7 +13,6 @@ import static org.reusablecomponents.base.core.application.base.BaseFacadeMessag
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_ERROR_FUNCTION_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_FUNCTIONS_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_MAIN_FUNCTION_MSG;
-import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_OPERATION_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_POS_FUNCTION_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_PRE_FUNCTION_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.OPERATION_EXECUTED_LOG;
@@ -24,6 +23,7 @@ import static org.reusablecomponents.base.core.infra.util.function.FunctionCommo
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -34,16 +34,19 @@ import org.reusablecomponents.base.core.application.command.entity.AbstractComma
 import org.reusablecomponents.base.core.application.empty.EmptyFacade;
 import org.reusablecomponents.base.core.application.query.entity.pagination.QueryPaginationFacade;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.QueryPaginationSpecificationFacade;
-import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacade;
+import org.reusablecomponents.base.core.application.query.entity.simple.AbstractQueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.specification.QuerySpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
+import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction;
 import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction1Args;
 import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction2Args;
 import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction3Args;
+import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction1Args;
+import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction2Args;
+import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction3Args;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction4Args;
-import org.reusablecomponents.base.core.infra.util.operation.InterfaceOperation;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.slf4j.Logger;
@@ -62,7 +65,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		implements InterfaceBaseFacade<Entity, Id>
-		permits EmptyFacade, AbstractCommandFacade, QueryFacade,
+		permits EmptyFacade, AbstractCommandFacade, AbstractQueryFacade,
 		QuerySpecificationFacade, QueryPaginationFacade, QueryPaginationSpecificationFacade {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseFacade.class);
@@ -86,7 +89,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 */
 	protected BaseFacade(@NotNull final BaseFacadeBuilder builder) {
 		super();
-
+		LOGGER.debug("Constructing BaseFacade with builder {}", builder);
 		final var finalBuilder = ofNullable(builder)
 				.orElseThrow(createNullPointerException("builder"));
 
@@ -96,6 +99,8 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		this.i18nService = finalBuilder.i18nService;
 		this.securityService = finalBuilder.securityService;
 		this.exceptionAdapterService = finalBuilder.exceptionAdapterService;
+
+		LOGGER.debug("BaseFacade constructed");
 	}
 
 	/**
@@ -148,30 +153,30 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @return The function operation result
 	 */
 	protected <Out> Out execute(
-			final InterfaceOperation operation,
-			final Consumer<Object[]> preFunction,
-			final BiFunction<Out, Object[], Out> posFunction,
-			final Function<Object[], Out> mainFunction,
-			final BiFunction<Exception, Object[], Exception> errorFunction,
+			final OperationFunction1Args<Object[], Object[]> preFunction,
+			final OperationFunction1Args<Object[], Out> mainFunction,
+			final OperationFunction2Args<Out, Object[], Out> posFunction,
+			final OperationFunction2Args<BaseException, Object[], BaseException> errorFunction,
 			final Object... directives) {
-		checkParamsNotNull(operation, preFunction, posFunction, mainFunction, errorFunction, directives);
+		checkParamsNotNull(preFunction, posFunction, mainFunction, errorFunction, directives);
 
 		final var session = securityService.getSession();
-		final var operationName = operation.getName();
+		final var operationName = mainFunction.getName();
 
-		final var outName = operation.getReceiver().concat("Out");
+		final var outName = mainFunction.getName();
 		final var preOutName = PRE_LOG.concat(outName);
 		final var finalOutName = FINAL_LOG.concat(outName);
 
 		LOGGER.debug("Pre executing {} operation session '{}', and directives '{}'",
 				operationName, session, directives);
 
+		final Object[] finalDirectives;
 		try {
-			preFunction.accept(directives);
+			finalDirectives = preFunction.apply(directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_PRE_OPERATION_LOG, operationName, session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, operation, getEntityClazz());
+			throw exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz());
 		}
 
 		LOGGER.debug("Executing {} operation session '{}', and directives '{}'",
@@ -179,24 +184,25 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 		final Out out;
 		try {
-			out = mainFunction.apply(directives);
+			out = mainFunction.apply(finalDirectives);
 		} catch (final Exception ex) {
-			final var finalException = errorFunction.apply(ex, directives);
-			final var exceptionClass = getRootCause(finalException).getClass().getSimpleName();
-
+			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			LOGGER.debug("Error on {} operation, session '{}', error '{}'", operationName, session, exceptionClass);
-			throw exceptionAdapterService.convert(finalException, i18nService, operation, getEntityClazz());
+
+			final var baseException = exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz());
+			throw errorFunction.apply(baseException, directives);
+
 		}
 
-		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, out, session, directives);
+		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, null, session, directives);
 
 		final Out posOut;
 		try {
 			posOut = posFunction.apply(out, directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
-			LOGGER.debug(ERROR_ON_POS_OPERATION_LOG, operationName, finalOutName, out, session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, operation, getEntityClazz());
+			LOGGER.debug(ERROR_ON_POS_OPERATION_LOG, operationName, finalOutName, session, exceptionClass);
+			throw exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz());
 		}
 
 		final var finalOut = ofNullable(posOut)
@@ -229,25 +235,20 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 */
 	protected <In, Out> Out execute(
 			final In in,
-			final InterfaceOperation operation,
-			final BiFunction<In, Object[], In> preFunction,
-			final BiFunction<Out, Object[], Out> posFunction,
-			final BiFunction<In, Object[], Out> mainFunction,
-			final TriFunction<In, Exception, Object[], Exception> errorFunction,
+			final OperationFunction2Args<In, Object[], In> preFunction,
+			final OperationFunction2Args<In, Object[], Out> mainFunction,
+			final OperationFunction2Args<Out, Object[], Out> posFunction,
+			final OperationFunction3Args<BaseException, In, Object[], BaseException> errorFunction,
 			final Object... directives) {
 		checkNotNull(in, "Please pass a non-null 'in'");
-		checkParamsNotNull(operation, preFunction, posFunction, mainFunction, errorFunction, directives);
+		checkParamsNotNull(preFunction, posFunction, mainFunction, errorFunction, directives);
 
 		final var session = securityService.getSession();
-		final var operationName = operation.getName();
+		final var operationName = mainFunction.getName();
 
-		final var inName = operation.getReceiver().concat("In");
+		final var inName = in.getClass().getSimpleName().concat("In");
 		final var preInName = PRE_LOG.concat(inName);
 		final var finalInName = FINAL_LOG.concat(inName);
-
-		final var outName = operation.getReceiver().concat("Out");
-		final var preOutName = PRE_LOG.concat(outName);
-		final var finalOutName = FINAL_LOG.concat(outName);
 
 		LOGGER.debug("Pre executing {} operation with {} '{}', session '{}', and directives '{}'",
 				operationName, inName, in, session, directives);
@@ -258,7 +259,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_PRE_OPERATION_LOG, operationName, finalInName, in, session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, operation, getEntityClazz(), in);
+			throw exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz(), in);
 		}
 
 		final var finalIn = ofNullable(preIn)
@@ -271,14 +272,18 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		try {
 			out = mainFunction.apply(finalIn, directives);
 		} catch (final Exception ex) {
-			final var finalException = errorFunction.apply(finalIn, ex, directives);
-			final var exceptionClass = getRootCause(finalException).getClass().getSimpleName();
-
+			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_OPERATION_LOG, operationName, finalInName, finalIn, session, exceptionClass);
 
-			throw exceptionAdapterService.convert(
-					finalException, i18nService, operation, getEntityClazz(), finalIn);
+			final var baseException = exceptionAdapterService.convert(
+					ex, i18nService, mainFunction, getEntityClazz(), finalIn);
+
+			throw errorFunction.apply(baseException, finalIn, directives);
 		}
+
+		final var outName = out.getClass().getSimpleName().concat("Out");
+		final var preOutName = PRE_LOG.concat(outName);
+		final var finalOutName = FINAL_LOG.concat(outName);
 
 		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, out, session, directives);
 
@@ -288,7 +293,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_POS_OPERATION_LOG, operationName, finalOutName, out, session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, operation, getEntityClazz(), in);
+			throw exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz(), in);
 		}
 
 		final var finalOut = ofNullable(posOut)
@@ -324,26 +329,21 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	protected <In1, In2, Out> Out execute(
 			final In1 in1,
 			final In2 in2,
-			final InterfaceOperation operation,
-			final TriFunction<In1, In2, Object[], Entry<In1, In2>> preFunction,
-			final BiFunction<Out, Object[], Out> posFunction,
-			final TriFunction<In1, In2, Object[], Out> mainFunction,
-			final OperationFunction4Args<In1, In2, Exception, Object[], Exception> errorFunction,
+			final OperationFunction3Args<In1, In2, Object[], Entry<In1, In2>> preFunction,
+			final OperationFunction2Args<Out, Object[], Out> posFunction,
+			final OperationFunction3Args<In1, In2, Object[], Out> mainFunction,
+			final OperationFunction4Args<BaseException, In1, In2, Object[], BaseException> errorFunction,
 			final Object... directives) {
 		checkNotNull(in1, "Please pass a non-null 'in1'");
 		checkNotNull(in2, "Please pass a non-null 'in2'");
-		checkParamsNotNull(operation, preFunction, posFunction, mainFunction, errorFunction, directives);
+		checkParamsNotNull(preFunction, posFunction, mainFunction, errorFunction, directives);
 
 		final var session = securityService.getSession();
-		final var operationName = operation.getName();
+		final var operationName = mainFunction.getName();
 
-		final var inName = operation.getReceiver().concat("In");
+		final var inName = in1.getClass().getSimpleName().concat("In");
 		final var preInName = PRE_LOG.concat(inName);
 		final var finalInName = FINAL_LOG.concat(inName);
-
-		final var outName = operation.getReceiver().concat("Out");
-		final var preOutName = PRE_LOG.concat(outName);
-		final var finalOutName = FINAL_LOG.concat(outName);
 
 		LOGGER.debug("Pre executing {} operation with {} '{}', session '{}', and directives '{}'",
 				operationName, inName, in1, session, directives);
@@ -357,7 +357,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_PRE_OPERATION_LOG, operationName, finalInName, "", session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, operation, getEntityClazz(), in1, in2);
+			throw exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz(), in1, in2);
 		}
 
 		final var finalIn1 = ofNullable(preIn1)
@@ -373,11 +373,19 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		try {
 			out = mainFunction.apply(finalIn1, finalIn2, directives);
 		} catch (final Exception ex) {
-			final var finalException = errorFunction.apply(finalIn1, finalIn2, ex, directives);
-			final var exceptionClass = getRootCause(finalException).getClass().getSimpleName();
+			final var finalException = exceptionAdapterService.convert(
+					ex, i18nService, mainFunction, getEntityClazz(), finalIn1);
+
+			errorFunction.apply(finalException, finalIn1, finalIn2, directives);
+
+			final var exceptionClass = finalException.getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_OPERATION_LOG, operationName, finalInName, finalIn1, session, exceptionClass);
-			throw exceptionAdapterService.convert(finalException, i18nService, operation, getEntityClazz(), finalIn1);
+			throw finalException;
 		}
+
+		final var outName = out.getClass().getSimpleName().concat("Out");
+		final var preOutName = PRE_LOG.concat(outName);
+		final var finalOutName = FINAL_LOG.concat(outName);
 
 		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, out, session, directives);
 
@@ -387,7 +395,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_POS_OPERATION_LOG, operationName, finalOutName, out, session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, operation, getEntityClazz());
+			throw exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz());
 		}
 
 		final var finalOut = ofNullable(posOut)
@@ -395,202 +403,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 		LOGGER.debug(POS_OPERATION_LOG, operationName, finalOutName, finalOut, session, directives);
 		return finalOut;
-	}
-
-	/**
-	 * Execute a collection of functions in sequence, used in pre and pos operations
-	 * (preSave, posUpdate, etc.)
-	 * 
-	 * @param functions  A collection of <code>FacadeFunction</code> objects
-	 * @param directives Objects used to perform the functions
-	 * 
-	 * @throws NullPointerException If any parameter is null
-	 */
-	protected void compose(
-			final Collection<ComposeFunction1Args> functions,
-			final Object... directives) {
-		checkNotNull(functions, NON_NULL_FUNCTIONS_MSG);
-		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
-
-		if (isEmpty(functions)) {
-			LOGGER.debug("No functions to execute with directires {}", directives);
-			return;
-		}
-
-		final var allFunctionsName = functions.stream()
-				.map(ComposeFunction::getName)
-				.collect(joining(", "));
-
-		final var skippedFunctions = new ArrayList<String>();
-		final var withErrorFunctions = new ArrayList<String>();
-		final var executedFunctions = new ArrayList<String>();
-
-		LOGGER.debug("Execute functions {} with directires {}", allFunctionsName, directives);
-
-		for (final var function : functions) {
-			final var functionName = function.getName();
-			try {
-				if (!function.isActice()) {
-					LOGGER.debug("Function {} disabled, it won't execute", functionName);
-					skippedFunctions.add(functionName);
-					continue;
-				}
-				function.apply(directives);
-				LOGGER.debug("Function {} executed", functionName);
-				executedFunctions.add(functionName);
-			} catch (final Exception ex) {
-				if (function.reTrowException()) {
-					throw ex;
-				}
-				withErrorFunctions.add(functionName);
-				final var rootCause = ExceptionUtils.getRootCause(ex);
-				final var rootCauseMessage = rootCause.getMessage();
-				LOGGER.debug("Function {} with execution error {}", functionName, rootCauseMessage);
-			}
-		}
-
-		LOGGER.debug("Functions {} executed, skipped {}, with errors {}",
-				executedFunctions, skippedFunctions, withErrorFunctions);
-	}
-
-	/**
-	 * Execute a collection of functions in sequence, used in pre and pos operations
-	 * (preSave, posUpdate, etc.)
-	 * 
-	 * @param <In>       The function input type
-	 * 
-	 * @param in         The function input object, the value used to create the
-	 *                   result
-	 * @param functions  A collection of <code>FacadeBiFunction</code> objects
-	 * @param directives Objects used to perform the functions
-	 * 
-	 * @throws NullPointerException If any parameter is null
-	 * 
-	 * @return A updated <code>in</code> object
-	 */
-	@NotNull
-	protected <In> In compose(
-			final In in,
-			final Collection<? extends ComposeFunction2Args<In>> functions,
-			final Object... directives) {
-		checkNotNull(in, "Please pass a non-null 'in'");
-		checkNotNull(functions, NON_NULL_FUNCTIONS_MSG);
-		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
-
-		if (isEmpty(functions)) {
-			LOGGER.debug("No functions to execute with input {} and directires {}", in, directives);
-			return in;
-		}
-
-		final var allFunctionsName = functions.stream()
-				.map(ComposeFunction::getName)
-				.collect(joining(", "));
-
-		final var skippedFunctions = new ArrayList<String>();
-		final var withErrorFunctions = new ArrayList<String>();
-		final var executedFunctions = new ArrayList<String>();
-
-		LOGGER.debug("Execute functions {} with input {} and directires {}", allFunctionsName, in, directives);
-
-		var nextIn = in;
-		for (final var function : functions) {
-			final var functionName = function.getName();
-			try {
-				if (!function.isActice()) {
-					LOGGER.debug("Function {} with input {} disabled, it won't execute", functionName, nextIn);
-					skippedFunctions.add(functionName);
-					continue;
-				}
-				nextIn = function.apply(nextIn, directives);
-				LOGGER.debug("Function {} executed, result {}", functionName, nextIn);
-				executedFunctions.add(functionName);
-			} catch (final Exception ex) {
-				if (function.reTrowException()) {
-					throw ex;
-				}
-				withErrorFunctions.add(functionName);
-				final var rootCause = ExceptionUtils.getRootCause(ex);
-				final var rootCauseMessage = rootCause.getMessage();
-				LOGGER.debug("Function {} with execution error {}", functionName, rootCauseMessage);
-			}
-		}
-
-		LOGGER.debug("Functions {} executed, skipped {}, with errors {}",
-				executedFunctions, skippedFunctions, withErrorFunctions);
-		return nextIn;
-	}
-
-	/**
-	 * Execute a collection of functions in sequence, used in pre, pos, and error
-	 * operations (preSave, posUpdate, errorDelete, etc.)
-	 * 
-	 * @param <In1>      The first function input type
-	 * @param <In2>      The second function input type
-	 * 
-	 * @param in1        The first function input object, the value used to create
-	 *                   the result
-	 * @param in2        The second function input object, it is used to help the
-	 *                   result
-	 * @param functions  A collection of <code>	</code> objects
-	 * @param directives Objects used to perform the functions
-	 * 
-	 * @throws NullPointerException If any parameter is null
-	 * 
-	 * @return A updated <code>in1</code> object
-	 */
-	@NotNull
-	protected <In1, In2> In1 compose(
-			final In1 in1,
-			final In2 in2,
-			final Collection<? extends ComposeFunction3Args<In1, In2>> functions,
-			final Object... directives) {
-		checkNotNull(in1, "Please pass a non-null 'in1'");
-		checkNotNull(in2, "Please pass a non-null 'in2'");
-		checkNotNull(functions, NON_NULL_FUNCTIONS_MSG);
-		checkNotNull(directives, NON_NULL_DIRECTIVES_MSG);
-
-		if (isEmpty(functions)) {
-			LOGGER.debug("No functions to execute with inputs [{} {}] and directires {}",
-					in1, in2, directives);
-			return in1;
-		}
-
-		final var allFunctionsName = functions.stream()
-				.map(ComposeFunction::getName)
-				.collect(joining(", "));
-
-		final var skippedFunctions = new ArrayList<String>();
-		final var withErrorFunctions = new ArrayList<String>();
-		final var executedFunctions = new ArrayList<String>();
-
-		LOGGER.debug("Execute functions {} with inputs [{} {}] and directires {}",
-				allFunctionsName, in1, in2, directives);
-
-		In1 nextIn1 = in1;
-		for (final var function : functions) {
-			final var functionName = function.getName();
-			try {
-				if (!function.isActice()) {
-					LOGGER.debug("Function {} with input {} disabled, it won't execute", functionName, nextIn1);
-					skippedFunctions.add(functionName);
-					continue;
-				}
-				nextIn1 = function.apply(nextIn1, in2, directives);
-				LOGGER.debug("Function {} executed, result {}", functionName, nextIn1);
-				executedFunctions.add(functionName);
-			} catch (final Exception ex) {
-				if (function.reTrowException()) {
-					throw ex;
-				}
-				withErrorFunctions.add(functionName);
-				final var rootCauseMessage = ExceptionUtils.getRootCauseMessage(ex);
-				LOGGER.debug("Function {} with execution error {}", functionName, rootCauseMessage);
-			}
-		}
-
-		LOGGER.debug("Functions {} executed, skipped {}, with errors {}",
-				executedFunctions, skippedFunctions, withErrorFunctions);
-		return nextIn1;
 	}
 
 	/**
@@ -603,13 +415,11 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * @param directives
 	 */
 	private void checkParamsNotNull(
-			final Object operation,
 			final Object preFunction,
 			final Object posFunction,
 			final Object mainFunction,
 			final Object errorFunction,
 			final Object[] directives) {
-		checkNotNull(operation, NON_NULL_OPERATION_MSG);
 		checkNotNull(preFunction, NON_NULL_PRE_FUNCTION_MSG);
 		checkNotNull(posFunction, NON_NULL_POS_FUNCTION_MSG);
 		checkNotNull(mainFunction, NON_NULL_MAIN_FUNCTION_MSG);

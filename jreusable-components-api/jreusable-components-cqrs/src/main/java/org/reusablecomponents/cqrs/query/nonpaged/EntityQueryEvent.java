@@ -1,11 +1,7 @@
 package org.reusablecomponents.cqrs.query.nonpaged;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.COUNT_ALL;
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_ALL;
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.EXISTS_BY_ID;
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ALL_ENTITIES;
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_BY_ID;
+
 import static org.reusablecomponents.messaging.event.DefaultEventStatus.SUCCESS;
 
 import java.util.Objects;

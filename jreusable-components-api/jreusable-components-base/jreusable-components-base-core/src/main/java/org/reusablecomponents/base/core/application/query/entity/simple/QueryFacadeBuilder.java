@@ -3,11 +3,13 @@ package org.reusablecomponents.base.core.application.query.entity.simple;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
-import org.reusablecomponents.base.core.application.base.BaseFacadeBuilder;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.count_all.CountAllFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_all.ExistsAllFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_by_id.ExistsByIdFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.find_all.FindAllFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id.FindByIdFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,34 +20,35 @@ import org.slf4j.LoggerFactory;
  * @see QueryFacade
  */
 public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
-		extends BaseFacadeBuilder {
+		extends
+		AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(QueryFacadeBuilder.class);
 
 	/**
-	 * Function that executes exists by id algorithm
+	 * Function that executes exists by id operation
 	 */
-	public BiFunction<QueryIdIn, Object[], ExistsResult> existsByIdFunction;
+	public ExistsByIdFunction<QueryIdIn, ExistsResult> existsByIdFunction;
 
 	/**
-	 * Function that executes find by id algorithm
+	 * Function that executes find by id operation
 	 */
-	public BiFunction<QueryIdIn, Object[], OneResult> findByIdFunction;
+	public FindByIdFunction<QueryIdIn, OneResult> findByIdFunction;
 
 	/**
-	 * Function that executes find all algorithm
+	 * Function that executes find all operation
 	 */
-	public Function<Object[], MultipleResult> findAllFunction;
+	public FindAllFunction<MultipleResult> findAllFunction;
 
 	/**
-	 * Function that executes count all algorithm
+	 * Function that executes count all operation
 	 */
-	public Function<Object[], CountResult> countAllFunction;
+	public CountAllFunction<CountResult> countAllFunction;
 
 	/**
-	 * Function that executes exist all algorithm
+	 * Function that executes exist all operation
 	 */
-	public Function<Object[], ExistsResult> existsAllFunction;
+	public ExistsAllFunction<ExistsResult> existsAllFunction;
 
 	/**
 	 * Default constructor.
@@ -54,10 +57,8 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	 */
 	public QueryFacadeBuilder(
 			final Consumer<QueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>> function) {
+		LOGGER.debug("Constructing QueryFacadeBuilder");
 		super(function);
-		LOGGER.debug("Constructing QueryFacadeBuilder function {} ", function);
-
-		function.accept(this);
 
 		checkNotNull(existsByIdFunction, "Please pass a non-null 'existsByIdFunction'");
 		checkNotNull(findByIdFunction, "Please pass a non-null 'findByIdFunction'");

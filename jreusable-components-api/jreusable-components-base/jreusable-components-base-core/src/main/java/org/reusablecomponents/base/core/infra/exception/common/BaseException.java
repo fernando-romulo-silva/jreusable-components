@@ -13,46 +13,46 @@ import org.reusablecomponents.base.translation.InterfaceI18nService;
  * 
  * @author Fernando Romulo da Silva
  */
-public class BaseApplicationException extends RuntimeException {
+public class BaseException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * Constructs a new BaseApplicationException exception.
+     * Constructs a new BaseException exception.
      * 
      * @param msg The exception's message
      */
-    public BaseApplicationException(final String msg) {
+    public BaseException(final String msg) {
         super(msg);
     }
 
     /**
-     * Constructs a new BaseApplicationException exception.
+     * Constructs a new BaseException exception.
      * 
      * @param ex The exception's cause
      */
-    public BaseApplicationException(final Throwable ex) {
+    public BaseException(final Throwable ex) {
         super(ex);
     }
 
     /**
-     * Constructs a new BaseApplicationException exception.
+     * Constructs a new BaseException exception.
      * 
      * @param msg The exception's message
      * @param ex  The exception's cause
      */
-    public BaseApplicationException(final String msg, final Throwable ex) {
+    public BaseException(final String msg, final Throwable ex) {
         super(msg, ex);
     }
 
     /**
-     * Constructs a new BaseApplicationException exception.
+     * Constructs a new BaseException exception.
      * 
      * @param code        The message code
      * @param i18nService The message translation service
      * @param params      The parameters used on message
      */
-    public BaseApplicationException(
+    public BaseException(
             final String code,
             final InterfaceI18nService i18nService,
             final Object... params) {
@@ -60,14 +60,14 @@ public class BaseApplicationException extends RuntimeException {
     }
 
     /**
-     * Constructs a new BaseApplicationException exception.
+     * Constructs a new BaseException exception.
      * 
      * @param code        The message code
      * @param i18nService The message translation service
      * @param ex          The exception's cause
      * @param params      The parameters used on message
      */
-    public BaseApplicationException(
+    public BaseException(
             final String code,
             final InterfaceI18nService i18nService,
             final Throwable ex,

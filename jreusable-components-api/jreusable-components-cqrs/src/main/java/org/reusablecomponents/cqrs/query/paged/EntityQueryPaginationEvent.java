@@ -1,7 +1,5 @@
 package org.reusablecomponents.cqrs.query.paged;
 
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ALL_ENTITIES_PAGEABLE;
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_SORTED;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.reusablecomponents.messaging.event.DefaultEventStatus.SUCCESS;
 

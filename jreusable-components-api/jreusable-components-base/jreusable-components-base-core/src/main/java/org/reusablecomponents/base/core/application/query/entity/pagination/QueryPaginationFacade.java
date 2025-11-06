@@ -1,15 +1,10 @@
 package org.reusablecomponents.base.core.application.query.entity.pagination;
 
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ALL_ENTITIES_PAGEABLE;
-import static org.reusablecomponents.base.core.infra.util.operation.QueryOperation.FIND_ENTITY_SORTED;
-
 import java.util.List;
 import java.util.function.BiFunction;
 
 import org.reusablecomponents.base.core.application.base.BaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
-import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction2Args;
-import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction3Args;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +55,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	protected Pageable preFindAll(final Pageable pageable, final Object... directives) {
 		LOGGER.debug("Executing default preFindAll, pageable {}, directives {}", pageable, directives);
 
-		final var finalPageable = compose(pageable, getFindAllPreFunctions(), directives);
+		final var finalPageable = compose(pageable, getPreFindAllComposeFunctions(), directives);
 
 		LOGGER.debug("Default preFindAll executed, finalPageable {}, directives {}", finalPageable, directives);
 		return finalPageable;
@@ -70,7 +65,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 * Get functions executed in sequence in the
 	 * {@link #preFindAll(Object, Object...) preFindAll} method
 	 */
-	protected List<ComposeFunction2Args<Pageable>> getFindAllPreFunctions() {
+	protected List<ComposeFunction2Args<Pageable>> getPreFindAllComposeFunctions() {
 		return List.of();
 	}
 
@@ -90,7 +85,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 		LOGGER.debug("Executing default posFindAll, multiplePagedResult {}, directives {}",
 				multiplePagedResult, directives);
 
-		final var finalMultiplePagedResult = compose(multiplePagedResult, getFindAllPosFunctions(), directives);
+		final var finalMultiplePagedResult = compose(multiplePagedResult, getPosFindAllComposeFunctions(), directives);
 
 		LOGGER.debug("Default posFindAll executed, finalMultiplePagedResult {}, directives {}",
 				finalMultiplePagedResult, directives);
@@ -101,7 +96,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 * Get functions executed in sequence in the
 	 * {@link #posFindAll(Object, Object...) posFindAll} method
 	 */
-	protected List<ComposeFunction2Args<MultiplePagedResult>> getFindAllPosFunctions() {
+	protected List<ComposeFunction2Args<MultiplePagedResult>> getPosFindAllComposeFunctions() {
 		return List.of();
 	}
 
@@ -122,7 +117,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 		LOGGER.debug("Executing default errorFindAll, pageable {}, exception {}, directives {} ",
 				pageable, exception, directives);
 
-		final var finalException = compose(exception, pageable, getFindAllErrorFunctions(), directives);
+		final var finalException = compose(exception, pageable, getErrorFindAllComposeFunctions(), directives);
 
 		LOGGER.debug("Default errorFindAll executed, pageable {}, finalException {}, directives {} ",
 				pageable, finalException, directives);
@@ -133,7 +128,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 * Get functions executed in sequence in the
 	 * {@link #errorFindAll(Object, Object, Object...) errorFindAll} method
 	 */
-	protected List<ComposeFunction3Args<Exception, Pageable>> getFindAllErrorFunctions() {
+	protected List<ComposeFunction3Args<Exception, Pageable>> getErrorFindAllComposeFunctions() {
 		return List.of();
 	}
 
@@ -146,7 +141,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 		LOGGER.debug("Executing default findAll, pageable {}, directives {}", pageable, directives);
 
 		final var multipleResult = execute(
-				pageable, FIND_ALL_ENTITIES_PAGEABLE, this::preFindAll,
+				pageable, this::preFindAll,
 				this::posFindAll, findAllFunction::apply, this::errorFindAll, directives);
 
 		LOGGER.debug("Default findAll executed, multipleResult {}, directives {}", multipleResult, directives);
@@ -247,7 +242,7 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 		LOGGER.debug("Executing default findOne, pageable {}, directives {}", sort, directives);
 
 		final var oneResult = execute(
-				sort, FIND_ENTITY_SORTED, this::preFindOne,
+				sort, this::preFindOne,
 				this::posFindOne, findOneFunction::apply, this::errorFindOne, directives);
 
 		LOGGER.debug("Default findOne executed, oneResult {}, directives {}", oneResult, directives);
