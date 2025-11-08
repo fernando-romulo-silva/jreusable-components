@@ -2,8 +2,6 @@ package org.reusablecomponents.base.core.application.base;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.joining;
-import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.ERROR_ON_OPERATION_LOG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.ERROR_ON_POS_OPERATION_LOG;
@@ -11,7 +9,6 @@ import static org.reusablecomponents.base.core.application.base.BaseFacadeMessag
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.FINAL_LOG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_DIRECTIVES_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_ERROR_FUNCTION_MSG;
-import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_FUNCTIONS_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_MAIN_FUNCTION_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_POS_FUNCTION_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_PRE_FUNCTION_MSG;
@@ -20,16 +17,8 @@ import static org.reusablecomponents.base.core.application.base.BaseFacadeMessag
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.PRE_LOG;
 import static org.reusablecomponents.base.core.infra.util.function.FunctionCommonUtils.createNullPointerException;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map.Entry;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.lang3.function.TriFunction;
 import org.reusablecomponents.base.core.application.command.entity.AbstractCommandFacade;
 import org.reusablecomponents.base.core.application.empty.EmptyFacade;
 import org.reusablecomponents.base.core.application.query.entity.pagination.QueryPaginationFacade;
@@ -39,10 +28,6 @@ import org.reusablecomponents.base.core.application.query.entity.specification.Q
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
-import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction;
-import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction1Args;
-import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction2Args;
-import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction3Args;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction1Args;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction2Args;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction3Args;
@@ -65,7 +50,8 @@ import jakarta.validation.constraints.NotNull;
  */
 public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		implements InterfaceBaseFacade<Entity, Id>
-		permits EmptyFacade, AbstractCommandFacade, AbstractQueryFacade,
+		permits EmptyFacade,
+		AbstractCommandFacade, AbstractQueryFacade,
 		QuerySpecificationFacade, QueryPaginationFacade, QueryPaginationSpecificationFacade {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseFacade.class);

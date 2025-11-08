@@ -111,15 +111,31 @@ public abstract sealed class AbstractQueryFacade< // generics
     protected final PosExistsAllFunction<ExistsResult> posExistsAllFunction;
 
     /**
-     * Method executed in {@link QueryFacade#existsAll(Object...) existsAll} method
-     * to handle link QueryFacade#existsAllFunction existsAllFunction} errors.
+     * Function executed in {@link QueryFacade#existsAll(Object...) existsAll}
+     * method to handle link QueryFacade#existsAllFunction existsAllFunction}
+     * errors.
      */
     protected final ErrorExistsAllFunction errorExistsAllFunction;
 
+    /**
+     * Function executed in {@link QueryFacade#existsById(Object, Object...)
+     * #existsById} method before the {@link QueryFacade#existsByIdFunction
+     * existsByIdFunction}, use it to configure, change, etc. the input.
+     */
     protected final PreExistsByIdFunction<QueryIdIn> preExistsByIdFunction;
 
+    /**
+     * Function executed in {@link QueryFacade#existsById(Object, Object...)
+     * #existsById} method after the {@link QueryFacade#existsByIdFunction
+     * existsByIdFunction}, use it to configure, change, etc. the output.
+     */
     protected final PosExistsByIdFunction<ExistsResult> posExistsByIdFunction;
 
+    /**
+     * Function executed in {@link QueryFacade#existsById(Object, Object...)
+     * existsById} method to handle {@link QueryFacade#existsByIdFunction
+     * existsByIdFunction} errors.
+     */
     protected final ErrorExistsByIdFunction<QueryIdIn> errorExistsByIdFunction;
 
     protected AbstractQueryFacade(
@@ -143,67 +159,11 @@ public abstract sealed class AbstractQueryFacade< // generics
         this.posExistsAllFunction = builder.posExistsAllFunction;
         this.errorExistsAllFunction = builder.errorExistsAllFunction;
 
-        this.preExistsByIdFunction = this::preExistsById;
-        this.posExistsByIdFunction = this::posExistsById;
-        this.errorExistsByIdFunction = this::errorExistsById;
+        this.preExistsByIdFunction = builder.preExistsByIdFunction;
+        this.posExistsByIdFunction = builder.posExistsByIdFunction;
+        this.errorExistsByIdFunction = builder.errorExistsByIdFunction;
 
         LOGGER.debug("AbstractQueryFacade constructed");
-    }
-
-    /**
-     * Method executed in {@link #existsById(Object, Object...) #existsById} method
-     * before the {@link #existsByIdFunction existsByIdFunction}, use it to
-     * configure, change, etc. the input.
-     * 
-     * This method execute {@link #existsByIdPreFunctions existsByIdPreFunctions} in
-     * sequence
-     * 
-     * @param queryIdIn  The object id you want to use to retrieve on the
-     *                   persistence mechanism
-     * @param directives Objects used to configure the findBy operation
-     * 
-     * @return A new {@code QueryIdIn} object
-     */
-    protected QueryIdIn preExistsById(final QueryIdIn queryIdIn, final Object... directives) {
-        LOGGER.debug("Default preExistsById, queryIdIn {}, directives {} ", queryIdIn, directives);
-        return queryIdIn;
-    }
-
-    /**
-     * Method executed in {@link #existsById(Object, Object...) #existsById} method
-     * after the {@link #existsByIdFunction existsByIdFunction}, use it to
-     * configure, change, etc. the output.
-     * 
-     * @param existsResult The result of existsByIdFunction
-     * @param directives   Objects used to configure the findById operation
-     * 
-     * @return A new {@code ExistsResult} object
-     */
-    protected ExistsResult posExistsById(final ExistsResult existsResult, final Object... directives) {
-        LOGGER.debug("Default posExistsById, existsResult {}, directives {} ", existsResult, directives);
-        return existsResult;
-    }
-
-    /**
-     * Method executed in {@link #existsById(Object, Object...) existsById} method
-     * to handle {@link #existsByIdFunction existsByIdFunction} errors. <br />
-     * 
-     * This method execute {@link #existsByIdErrorFunctions
-     * existsByIdErrorFunctions} in sequence
-     * 
-     * @param exception  Exception thrown by existsByIdFunction
-     * @param queryIdIn  The object you tried to use on query by id operation
-     * @param directives Objects used to configure the save operation
-     * 
-     * @return The handled exception
-     */
-    protected BaseException errorExistsById(
-            final BaseException exception,
-            final QueryIdIn queryIdIn,
-            final Object... directives) {
-        LOGGER.debug("Default errorExistsById, queryIdIn {}, exception {}, directives {}",
-                queryIdIn, exception, directives);
-        return exception;
     }
 
     @NotNull

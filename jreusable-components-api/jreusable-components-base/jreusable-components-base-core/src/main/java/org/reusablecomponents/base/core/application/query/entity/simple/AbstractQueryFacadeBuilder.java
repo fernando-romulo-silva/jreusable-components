@@ -11,6 +11,9 @@ import org.reusablecomponents.base.core.application.query.entity.simple.function
 import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_all.ErrorExistsAllFunction;
 import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_all.PosExistsAllFunction;
 import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_all.PreExistsAllFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_by_id.ErrorExistsByIdFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_by_id.PosExistsByIdFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_by_id.PreExistsByIdFunction;
 import org.reusablecomponents.base.core.application.query.entity.simple.function.find_all.ErrorFindAllFunction;
 import org.reusablecomponents.base.core.application.query.entity.simple.function.find_all.PosFindAllFunction;
 import org.reusablecomponents.base.core.application.query.entity.simple.function.find_all.PreFindAllFunction;
@@ -54,6 +57,12 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
 
     public ErrorExistsAllFunction errorExistsAllFunction;
 
+    public PreExistsByIdFunction<QueryIdIn> preExistsByIdFunction;
+
+    public PosExistsByIdFunction<ExistsResult> posExistsByIdFunction;
+
+    public ErrorExistsByIdFunction<QueryIdIn> errorExistsByIdFunction;
+
     protected AbstractQueryFacadeBuilder(
             Consumer<? extends AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>> function) {
         LOGGER.debug("Constructing AbstractQueryFacadeBuilder");
@@ -75,7 +84,42 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         this.posExistsAllFunction = getPosExistsAllFunction(posExistsAllFunction);
         this.errorExistsAllFunction = getErrorExistsAllFunction(errorExistsAllFunction);
 
+        this.preExistsByIdFunction = getPreExistsByIdFunction(preExistsByIdFunction);
+        this.posExistsByIdFunction = getPosExistsByIdFunction(posExistsByIdFunction);
+        this.errorExistsByIdFunction = getErrorExistsByIdFunction(errorExistsByIdFunction);
+
         LOGGER.debug("AbstractQueryFacadeBuilder constructed");
+    }
+
+    private PreExistsByIdFunction<QueryIdIn> getPreExistsByIdFunction(
+            final PreExistsByIdFunction<QueryIdIn> preExistsByIdFunction) {
+        return nonNull(preExistsByIdFunction)
+                ? preExistsByIdFunction
+                : (queryIdIn, directives) -> {
+                    LOGGER.debug("Default preExistsById, queryIdIn {}, directives {} ", queryIdIn, directives);
+                    return queryIdIn;
+                };
+    }
+
+    private ErrorExistsByIdFunction<QueryIdIn> getErrorExistsByIdFunction(
+            final ErrorExistsByIdFunction<QueryIdIn> errorExistsByIdFunction) {
+        return nonNull(errorExistsByIdFunction)
+                ? errorExistsByIdFunction
+                : (exception, queryIdIn, directives) -> {
+                    LOGGER.debug("Default errorExistsById, queryIdIn {}, exception {}, directives {}",
+                            queryIdIn, exception, directives);
+                    return exception;
+                };
+    }
+
+    private PosExistsByIdFunction<ExistsResult> getPosExistsByIdFunction(
+            final PosExistsByIdFunction<ExistsResult> posExistsByIdFunction) {
+        return nonNull(posExistsByIdFunction)
+                ? posExistsByIdFunction
+                : (existsResult, directives) -> {
+                    LOGGER.debug("Default posExistsById, existsResult {}, directives {} ", existsResult, directives);
+                    return existsResult;
+                };
     }
 
     private PreFindAllFunction getPreFindAllFunction(final PreFindAllFunction preFindAllFunction) {

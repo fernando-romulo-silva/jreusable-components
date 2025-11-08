@@ -1,7 +1,5 @@
 package org.reusablecomponents.base.core.application.command.entity;
 
-import static java.util.Objects.nonNull;
-
 import org.reusablecomponents.base.core.application.base.BaseFacade;
 import org.reusablecomponents.base.core.application.command.function.operation.delete.ErrorDeleteAllFunction;
 import org.reusablecomponents.base.core.application.command.function.operation.delete.ErrorDeleteByIdFunction;
@@ -28,7 +26,6 @@ import org.reusablecomponents.base.core.application.command.function.operation.u
 import org.reusablecomponents.base.core.application.command.function.operation.update.PreUpdateAllFunction;
 import org.reusablecomponents.base.core.application.command.function.operation.update.PreUpdateFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
-import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -118,34 +115,108 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 */
 	protected final ErrorUpdateFunction<UpdateEntityIn> errorUpdateFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#updateAll(Object, Object...)
+	 * updateAll} method before the {@link CommandFacade#updateAllFunction
+	 * updateAllFunction}, use it to change values.
+	 */
 	protected final PreUpdateAllFunction<UpdateEntitiesIn> preUpdateAllFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#updateAll(Object, Object...)
+	 * updateAll} method after {@link CommandFacade#updateAllFunction
+	 * updateAllFunction}, use it to configure, change, etc. the output.
+	 */
 	protected final PosUpdateAllFunction<UpdateEntitiesOut> posUpdateAllFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#updateAll(Object, Object...)
+	 * updateAll} method to handle {@link CommandFacade#updateAllFunction
+	 * updateAllFunction} errors.
+	 */
 	protected final ErrorUpdateAllFunction<UpdateEntitiesIn> errorUpdateAllFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#delete(Object, Object...) delete}
+	 * method before the {@link CommandFacade#deleteFunction deleteFunction}, use it
+	 * to configure, change, etc. the input.
+	 */
 	protected final PreDeleteFunction<DeleteEntityIn> preDeleteFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#delete(Object, Object...) delete}
+	 * method after {@link CommandFacade#deleteFunction deleteFunction}, use it to
+	 * configure, change, etc. the output.
+	 */
 	protected final PosDeleteFunction<DeleteEntityOut> posDeleteFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#delete(Object, Object...) delete}
+	 * method to handle {@link CommandFacade#deleteFunction deleteFunction} errors.
+	 */
 	protected final ErrorDeleteFunction<DeleteEntityIn> errorDeleteFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#deleteAll(Object, Object...)
+	 * deleteAll} method before the {@link CommandFacade#deleteAllFunction
+	 * deleteAllFunction}, use it to change values.
+	 */
 	protected final PreDeleteAllFunction<DeleteEntitiesIn> preDeleteAllFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#deleteAll(Object, Object...)
+	 * deleteAll} method after {@link CommandFacade#deleteAllFunction
+	 * deleteAllFunction}, use it to configure, change, etc. the output.
+	 */
 	protected final PosDeleteAllFunction<DeleteEntitiesOut> posDeleteAllFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#deleteAll(Object, Object...)
+	 * deleteAll} method to handle {@link CommandFacade#deleteAllFunction
+	 * deleteAllFunction} errors.
+	 */
 	protected final ErrorDeleteAllFunction<DeleteEntitiesIn> errorDeleteAllFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#deleteBy(Object, Object...)
+	 * deleteBy} method before the {@link CommandFacade#deleteByIdFunction
+	 * deleteByIdFunction}, use it to change values.
+	 */
 	protected final PreDeleteByIdFunction<DeleteIdIn> preDeleteByIdFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#deleteBy(Object, Object...)
+	 * deleteBy} method after {@link CommandFacade#deleteByIdFunction
+	 * deleteByIdFunction}, use it to configure, change, etc. the input.
+	 */
 	protected final PosDeleteByIdFunction<DeleteIdOut> posDeleteByIdFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#deleteBy(Object, Object...)
+	 * deleteBy} method to handle {@link CommandFacade#deleteByIdFunction
+	 * deleteByIdFunction} errors.
+	 */
 	protected final ErrorDeleteByIdFunction<DeleteIdIn> errorDeleteByIdFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#deleteAllBy(Object, Object...)
+	 * deleteAllBy} method before the {@link CommandFacade#deleteByIdsFunction
+	 * deleteAllByIdFunction}, use it to configure, change, etc. the input.
+	 */
 	protected final PreDeleteByIdsFunction<DeleteIdsIn> preDeleteByIdsFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#deleteAllBy(Object, Object...)
+	 * deleteAllBy} method after {@link CommandFacade#deleteByIdsFunction
+	 * deleteAllByIdFunction}, use it to change values.
+	 */
 	protected final PosDeleteByIdsFunction<DeleteIdsOut> posDeleteByIdsFunction;
 
+	/**
+	 * Function executed in {@link CommandFacade#deleteAllBy(Object, Object...)
+	 * deleteAllBy} method to handle {@link CommandFacade#deleteByIdsFunction
+	 * deleteAllByIdFunction} errors.
+	 */
 	protected final ErrorDeleteByIdsFunction<DeleteIdsIn> errorDeleteByIdsFunction;
 
 	/**
@@ -168,343 +239,168 @@ public abstract sealed class AbstractCommandFacade< // generics
 		this.posUpdateFunction = builder.posUpdateFunction;
 		this.errorUpdateFunction = builder.errorUpdateFunction;
 
-		this.preUpdateAllFunction = nonNull(builder.preUpdateAllFunction) ? builder.preUpdateAllFunction
-				: this::preUpdateAll;
-		this.posUpdateAllFunction = nonNull(builder.posUpdateAllFunction) ? builder.posUpdateAllFunction
-				: this::posUpdateAll;
-		this.errorUpdateAllFunction = nonNull(builder.errorUpdateAllFunction) ? builder.errorUpdateAllFunction
-				: this::errorUpdateAll;
+		this.preUpdateAllFunction = builder.preUpdateAllFunction;
+		this.posUpdateAllFunction = builder.posUpdateAllFunction;
+		this.errorUpdateAllFunction = builder.errorUpdateAllFunction;
 
-		this.preDeleteFunction = nonNull(builder.preDeleteFunction) ? builder.preDeleteFunction
-				: this::preDelete;
-		this.posDeleteFunction = nonNull(builder.posDeleteFunction) ? builder.posDeleteFunction
-				: this::posDelete;
-		this.errorDeleteFunction = nonNull(builder.errorDeleteFunction) ? builder.errorDeleteFunction
-				: this::errorDelete;
+		this.preDeleteFunction = builder.preDeleteFunction;
+		this.posDeleteFunction = builder.posDeleteFunction;
+		this.errorDeleteFunction = builder.errorDeleteFunction;
 
-		this.preDeleteAllFunction = nonNull(builder.preDeleteAllFunction) ? builder.preDeleteAllFunction
-				: this::preDeleteAll;
-		this.posDeleteAllFunction = nonNull(builder.posDeleteAllFunction) ? builder.posDeleteAllFunction
-				: this::posDeleteAll;
-		this.errorDeleteAllFunction = nonNull(builder.errorDeleteAllFunction) ? builder.errorDeleteAllFunction
-				: this::errorDeleteAll;
+		this.preDeleteAllFunction = builder.preDeleteAllFunction;
+		this.posDeleteAllFunction = builder.posDeleteAllFunction;
+		this.errorDeleteAllFunction = builder.errorDeleteAllFunction;
 
-		this.preDeleteByIdFunction = nonNull(builder.preDeleteByIdFunction) ? builder.preDeleteByIdFunction
-				: this::preDeleteBy;
-		this.posDeleteByIdFunction = nonNull(builder.posDeleteByIdFunction) ? builder.posDeleteByIdFunction
-				: this::posDeleteBy;
-		this.errorDeleteByIdFunction = nonNull(builder.errorDeleteByIdFunction)
-				? builder.errorDeleteByIdFunction
-				: this::errorDeleteBy;
+		this.preDeleteByIdFunction = builder.preDeleteByIdFunction;
+		this.posDeleteByIdFunction = builder.posDeleteByIdFunction;
+		this.errorDeleteByIdFunction = builder.errorDeleteByIdFunction;
 
-		this.preDeleteByIdsFunction = nonNull(builder.preDeleteByIdsFunction) ? builder.preDeleteByIdsFunction
-				: this::preDeleteAllBy;
-		this.posDeleteByIdsFunction = nonNull(builder.posDeleteByIdsFunction) ? builder.posDeleteByIdsFunction
-				: this::posDeleteAllBy;
-		this.errorDeleteByIdsFunction = nonNull(builder.errorDeleteByIdsFunction)
-				? builder.errorDeleteByIdsFunction
-				: this::errorDeleteAllBy;
+		this.preDeleteByIdsFunction = builder.preDeleteByIdsFunction;
+		this.posDeleteByIdsFunction = builder.posDeleteByIdsFunction;
+		this.errorDeleteByIdsFunction = builder.errorDeleteByIdsFunction;
 	}
 
 	@NotNull
 	protected PreSaveFunction<SaveEntityIn> getPreSaveFunction() {
-		LOGGER.debug("Returning pre save function {}", preSaveFunction.getName());
+		LOGGER.debug("Returning preSaveFunction function {}", preSaveFunction.getName());
 		return preSaveFunction;
 	}
 
 	@NotNull
 	protected PosSaveFunction<SaveEntityOut> getPosSaveFunction() {
-		LOGGER.debug("Returning pos save function {}", posSaveFunction.getName());
+		LOGGER.debug("Returning posSaveFunction function {}", posSaveFunction.getName());
 		return posSaveFunction;
 	}
 
 	@NotNull
 	protected ErrorSaveFunction<SaveEntityIn> getErrorSaveFunction() {
-		LOGGER.debug("Returning error save function {}", errorSaveFunction.getName());
+		LOGGER.debug("Returning errorSaveFunction function {}", errorSaveFunction.getName());
 		return errorSaveFunction;
 	}
 
 	@NotNull
 	protected PreSaveAllFunction<SaveEntitiesIn> getPreSaveAllFunction() {
-		LOGGER.debug("Returning pre save all function {}", preSaveAllFunction.getName());
+		LOGGER.debug("Returning preSaveAllFunction function {}", preSaveAllFunction.getName());
 		return preSaveAllFunction;
 	}
 
 	@NotNull
 	protected PosSaveAllFunction<SaveEntitiesOut> getPosSaveAllFunction() {
-		LOGGER.debug("Returning pos save all function {}", posSaveAllFunction.getName());
+		LOGGER.debug("Returning posSaveAllFunction function {}", posSaveAllFunction.getName());
 		return posSaveAllFunction;
 	}
 
 	@NotNull
 	protected ErrorSaveAllFunction<SaveEntitiesIn> getErrorSaveAllFunction() {
-		LOGGER.debug("Returning error save all function {}", errorSaveAllFunction.getName());
+		LOGGER.debug("Returning eerrorSaveAllFunction function {}", errorSaveAllFunction.getName());
 		return errorSaveAllFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#updateAll(Object, Object...)
-	 * updateAll} method before the {@link CommandFacade#updateAllFunction
-	 * updateAllFunction}, use it to change
-	 * values.
-	 * 
-	 * @param updateEntitiesIn The objects you want to save on the persistence
-	 *                         mechanism
-	 * @param directives       Objects used to configure the updateAll operation
-	 * 
-	 * @return A {@code UpdateEntitiesIn} object
-	 */
-	protected UpdateEntitiesIn preUpdateAll(final UpdateEntitiesIn updateEntitiesIn, final Object... directives) {
-		LOGGER.debug("Default preUpdateAll, updateEntityIn {}, directives {}", updateEntitiesIn, directives);
-		return updateEntitiesIn;
+	@NotNull
+	protected PreUpdateFunction<UpdateEntityIn> getPreUpdateFunction() {
+		LOGGER.debug("Returning error preUpdateFunction function {}", preUpdateFunction.getName());
+		return preUpdateFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#updateAll(Object, Object...)
-	 * updateAll} method after {@link CommandFacade#updateAllFunction
-	 * updateAllFunction}, use it to configure, change, etc. the output.
-	 * 
-	 * @param updateEntitiesOut The objects you updated on the persistence mechanism
-	 * @param directives        Objects used to configure the updateAll operation
-	 * 
-	 * @return A {@code SaveEntitiesOut} object
-	 */
-	protected UpdateEntitiesOut posUpdateAll(
-			final UpdateEntitiesOut updateEntitiesOut,
-			final Object... directives) {
-		LOGGER.debug("Default posUpdateAll, updateEntitiesOut {}, directives {} ",
-				updateEntitiesOut, directives);
-		return updateEntitiesOut;
+	@NotNull
+	protected PosUpdateFunction<UpdateEntityOut> getPosUpdateFunction() {
+		LOGGER.debug("Returning error posUpdateFunction function {}", posUpdateFunction.getName());
+		return posUpdateFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#updateAll(Object, Object...)
-	 * updateAll} method to handle {@link CommandFacade#updateAllFunction
-	 * updateAllFunction} errors.
-	 * 
-	 * @param exception        Exception thrown by update all operation
-	 * @param updateEntitiesIn The objects you tried to update all on the
-	 *                         persistence mechanism
-	 * @param directives       Objects used to configure the update all operation
-	 * 
-	 * @return The handled exception
-	 */
-	protected BaseException errorUpdateAll(
-			final BaseException exception,
-			final UpdateEntitiesIn updateEntitiesIn,
-			final Object... directives) {
-		LOGGER.debug("Default errorUpdateAll, updateEntitiesIn {}, exception {}, directives {} ",
-				updateEntitiesIn, exception, directives);
-		return exception;
+	@NotNull
+	protected ErrorUpdateFunction<UpdateEntityIn> getErrorUpdateFunction() {
+		LOGGER.debug("Returning error errorUpdateFunction function {}", errorUpdateFunction.getName());
+		return errorUpdateFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#delete(Object, Object...) delete}
-	 * method before the {@link CommandFacade#deleteFunction deleteFunction}, use it
-	 * to configure, change, etc. the input.
-	 * 
-	 * @param deleteEntityIn The object you want to delete on the persistence
-	 *                       mechanism
-	 * @param directives     Objects used to configure the delete operation
-	 * 
-	 * @return A {@code DeleteEntityIn} object
-	 */
-	protected DeleteEntityIn preDelete(final DeleteEntityIn deleteEntityIn, final Object... directives) {
-		LOGGER.debug("Default preDelete, deleteEntityIn {}, directives {} ", deleteEntityIn, directives);
-		return deleteEntityIn;
+	@NotNull
+	protected PreUpdateAllFunction<UpdateEntitiesIn> getPreUpdateAllFunction() {
+		LOGGER.debug("Returning error preUpdateAllFunction function {}", preUpdateAllFunction.getName());
+		return preUpdateAllFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#delete(Object, Object...) delete}
-	 * method after {@link CommandFacade#deleteFunction deleteFunction}, use it to
-	 * configure, change, etc. the output.
-	 * 
-	 * @param deleteEntityOut The object you deleted on the persistence mechanism
-	 * @param directives      Objects used to configure the delete operation
-	 * 
-	 * @return A {@code DeleteEntityOut} object
-	 */
-	protected DeleteEntityOut posDelete(final DeleteEntityOut deleteEntityOut, final Object... directives) {
-		LOGGER.debug("Default posDelete, deleteEntityOut {}, directives {} ", deleteEntityOut, directives);
-		return deleteEntityOut;
+	@NotNull
+	protected PosUpdateAllFunction<UpdateEntitiesOut> getPosUpdateAllFunction() {
+		LOGGER.debug("Returning error posUpdateAllFunction function {}", posUpdateAllFunction.getName());
+		return posUpdateAllFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#delete(Object, Object...) delete}
-	 * method to handle {@link CommandFacade#deleteFunction deleteFunction} errors.
-	 * 
-	 * @param deleteEntityIn The object you tried to delete on the persistence
-	 *                       mechanism
-	 * @param exception      Exception thrown by delete operation
-	 * @param directives     Objects used to configure the delete operation
-	 * 
-	 * @return The handled exception
-	 */
-	protected BaseException errorDelete(
-			final BaseException exception,
-			final DeleteEntityIn deleteEntityIn,
-			final Object... directives) {
-		LOGGER.debug("Default errorDelete, deleteEntityIn {}, exception {}, directives {}",
-				deleteEntityIn, exception, directives);
-		return exception;
+	@NotNull
+	protected ErrorUpdateAllFunction<UpdateEntitiesIn> getErrorUpdateAllFunction() {
+		LOGGER.debug("Returning error errorUpdateAllFunction function {}", errorUpdateAllFunction.getName());
+		return errorUpdateAllFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#deleteAll(Object, Object...)
-	 * deleteAll} method before the {@link CommandFacade#deleteAllFunction
-	 * deleteAllFunction}, use it to change values.
-	 * 
-	 * @param deleteEntitiesIn The objects you want to delete on the persistence
-	 *                         mechanism
-	 * @param directives       Objects used to configure the deleteAll operation
-	 * 
-	 * @return A {@code DeleteEntitiesIn} object
-	 */
-	protected DeleteEntitiesIn preDeleteAll(final DeleteEntitiesIn deleteEntitiesIn, final Object... directives) {
-		LOGGER.debug("Default preDeleteAll, deleteEntityIn {}, directives {}", deleteEntitiesIn, directives);
-		return deleteEntitiesIn;
+	@NotNull
+	protected PreDeleteFunction<DeleteEntityIn> getPreDeleteFunction() {
+		LOGGER.debug("Returning error preDeleteFunction function {}", preDeleteFunction.getName());
+		return preDeleteFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#deleteAll(Object, Object...)
-	 * deleteAll} method after {@link CommandFacade#deleteAllFunction
-	 * deleteAllFunction}, use it to configure, change, etc. the output.
-	 * 
-	 * @param deleteEntitiesOut The objects you deleted on the persistence mechanism
-	 * @param directives        Objects used to configure the deleteAll operation
-	 * 
-	 * @return A {@code SaveEntitiesOut} object
-	 */
-	protected DeleteEntitiesOut posDeleteAll(
-			final DeleteEntitiesOut deleteEntitiesOut,
-			final Object... directives) {
-		LOGGER.debug("Executing default posDeleteAll, deleteEntitiesOut {}, directives {}",
-				deleteEntitiesOut, directives);
-		return deleteEntitiesOut;
+	@NotNull
+	protected PosDeleteFunction<DeleteEntityOut> getPosDeleteFunction() {
+		LOGGER.debug("Returning error posDeleteFunction function {}", posDeleteFunction.getName());
+		return posDeleteFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#deleteAll(Object, Object...)
-	 * deleteAll} method to handle {@link CommandFacade#deleteAllFunction
-	 * deleteAllFunction} errors.
-	 * 
-	 * @param deleteEntitiesIn The objects you tried to delete on the persistence
-	 *                         mechanism
-	 * @param exception        Exception thrown by delete operation
-	 * @param directives       Objects used to configure the delete operation
-	 * 
-	 * @return The handled exception
-	 */
-	protected BaseException errorDeleteAll(
-			final BaseException exception,
-			final DeleteEntitiesIn deleteEntitiesIn,
-			final Object... directives) {
-		LOGGER.debug("Executing default errorDeleteAll, deleteEntitiesIn {}, exception {}, directives {} ",
-				deleteEntitiesIn, exception, directives);
-		return exception;
+	@NotNull
+	protected ErrorDeleteFunction<DeleteEntityIn> getErrorDeleteFunction() {
+		LOGGER.debug("Returning error errorDeleteFunction function {}", errorDeleteFunction.getName());
+		return errorDeleteFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#deleteBy(Object, Object...) deleteBy}
-	 * method before the {@link CommandFacade#deleteByIdFunction
-	 * deleteByIdFunction}, use it to change values.
-	 * 
-	 * @param deleteIdIn The object you tried to delete by on the persistence
-	 *                   mechanism
-	 * @param directives Objects used to configure the delete by operation
-	 * 
-	 * @return A {@code DeleteIdIn} object
-	 */
-	protected DeleteIdIn preDeleteBy(final DeleteIdIn deleteIdIn, final Object... directives) {
-		LOGGER.debug("Default preDeleteBy, deleteIdIn {}, directives {} ", deleteIdIn, directives);
-		return deleteIdIn;
+	@NotNull
+	protected PreDeleteAllFunction<DeleteEntitiesIn> getPreDeleteAllFunction() {
+		LOGGER.debug("Returning error preDeleteAllFunction function {}", preDeleteAllFunction.getName());
+		return preDeleteAllFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#deleteBy(Object, Object...) deleteBy}
-	 * method after {@link CommandFacade#deleteByIdFunction deleteByIdFunction}, use
-	 * it to configure, change, etc. the input.
-	 * 
-	 * @param deleteIdOut The object's id you deleted on the persistence mechanism
-	 * @param directives  Objects used to configure the delete operation
-	 * 
-	 * @return A {@code DeleteIdOut} object
-	 */
-	protected DeleteIdOut posDeleteBy(final DeleteIdOut deleteIdOut, final Object... directives) {
-		LOGGER.debug("Default posDeleteBy, deleteIdOut {}, directives {}", deleteIdOut, directives);
-		return deleteIdOut;
+	@NotNull
+	protected PosDeleteAllFunction<DeleteEntitiesOut> getPosDeleteAllFunction() {
+		LOGGER.debug("Returning error posDeleteAllFunction function {}", posDeleteAllFunction.getName());
+		return posDeleteAllFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#deleteBy(Object, Object...) deleteBy}
-	 * method to handle {@link CommandFacade#deleteByIdFunction deleteByIdFunction}
-	 * errors.
-	 * 
-	 * @param deleteIdIn The object's id you tried to delete on the persistence
-	 *                   mechanism
-	 * @param exception  Exception thrown by delete by id operation
-	 * @param directives Objects used to configure the delete operation
-	 * 
-	 * @return The handled exception
-	 */
-	protected BaseException errorDeleteBy(
-			final BaseException exception,
-			final DeleteIdIn deleteIdIn,
-			final Object... directives) {
-		LOGGER.debug("Default errorDeleteBy, deleteIdIn {}, exception {}, directives {}",
-				deleteIdIn, exception, directives);
-		return exception;
+	@NotNull
+	protected ErrorDeleteAllFunction<DeleteEntitiesIn> getErrorDeleteAllFunction() {
+		LOGGER.debug("Returning error errorDeleteAllFunction function {}", errorDeleteAllFunction.getName());
+		return errorDeleteAllFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#deleteAllBy(Object, Object...)
-	 * deleteAllBy} method before the {@link CommandFacade#deleteByIdsFunction
-	 * deleteAllByIdFunction}, use it to configure, change, etc. the input.
-	 * 
-	 * @param deleteIdsIn The object's ids you want to deleteBy on the persistence
-	 *                    mechanism
-	 * @param directives  Objects used to configure the deleteBy operation
-	 * 
-	 * @return A {@code DeleteIdsIn} object
-	 */
-	protected DeleteIdsIn preDeleteAllBy(final DeleteIdsIn deleteIdsIn, final Object... directives) {
-		LOGGER.debug("Default preDeleteAllBy, deleteIdsIn {}, directives {}", deleteIdsIn, directives);
-		return deleteIdsIn;
+	@NotNull
+	protected PreDeleteByIdFunction<DeleteIdIn> getPreDeleteByIdFunction() {
+		LOGGER.debug("Returning error preDeleteByIdFunction function {}", preDeleteByIdFunction.getName());
+		return preDeleteByIdFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#deleteAllBy(Object, Object...)
-	 * deleteAllBy} method after {@link CommandFacade#deleteByIdsFunction
-	 * deleteAllByIdFunction}, use it to change values.
-	 * 
-	 * @param deleteIdsOut The object's ids you deleted on the persistence mechanism
-	 * @param directives   Objects used to configure the delete operation
-	 * 
-	 * @return A {@code DeleteIdsOut} object
-	 */
-	protected DeleteIdsOut posDeleteAllBy(final DeleteIdsOut deleteIdsOut, final Object... directives) {
-		LOGGER.debug("Default posDeleteAllBy, deleteIdsOut {}, directives {}", deleteIdsOut, directives);
-		return deleteIdsOut;
+	@NotNull
+	protected PosDeleteByIdFunction<DeleteIdOut> getPosDeleteByIdFunction() {
+		LOGGER.debug("Returning error posDeleteByIdFunction function {}", posDeleteByIdFunction.getName());
+		return posDeleteByIdFunction;
 	}
 
-	/**
-	 * Method executed in {@link CommandFacade#deleteAllBy(Object, Object...)
-	 * deleteAllBy} method to handle {@link CommandFacade#deleteByIdsFunction
-	 * deleteAllByIdFunction} errors.
-	 * 
-	 * @param deleteIdsIn The object's ids you tried to delete on the persistence
-	 *                    mechanism
-	 * @param exception   Exception thrown by delete by id operation
-	 * @param directives  Objects used to configure the delete operation
-	 * 
-	 * @return The handled exception
-	 */
-	protected final BaseException errorDeleteAllBy(
-			final BaseException exception,
-			final DeleteIdsIn deleteIdsIn,
-			final Object... directives) {
-		LOGGER.debug("Executing default errorDeleteAllBy, deleteIdsIn {}, exception {}, directives {}",
-				deleteIdsIn, exception, directives);
-		return exception;
+	@NotNull
+	protected ErrorDeleteByIdFunction<DeleteIdIn> getErrorDeleteByIdFunction() {
+		LOGGER.debug("Returning error errorDeleteByIdFunction function {}", errorDeleteByIdFunction.getName());
+		return errorDeleteByIdFunction;
+	}
+
+	@NotNull
+	protected PreDeleteByIdsFunction<DeleteIdsIn> getPreDeleteByIdsFunction() {
+		LOGGER.debug("Returning error preDeleteByIdsFunction function {}", preDeleteByIdsFunction.getName());
+		return preDeleteByIdsFunction;
+	}
+
+	@NotNull
+	protected PosDeleteByIdsFunction<DeleteIdsOut> getPosDeleteByIdsFunction() {
+		LOGGER.debug("Returning error posDeleteByIdsFunction function {}", posDeleteByIdsFunction.getName());
+		return posDeleteByIdsFunction;
+	}
+
+	@NotNull
+	protected ErrorDeleteByIdsFunction<DeleteIdsIn> getErrorDeleteByIdsFunction() {
+		LOGGER.debug("Returning error errorDeleteByIdsFunction function {}", errorDeleteByIdsFunction.getName());
+		return errorDeleteByIdsFunction;
 	}
 }

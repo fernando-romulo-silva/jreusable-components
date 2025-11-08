@@ -92,7 +92,7 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 		return nonNull(saveFunction)
 				? saveFunction
 				: (saveEntityIn, directives) -> {
-					throw new UnsupportedOperationException("null");
+					throw new UnsupportedOperationException("Unimplemented function 'saveFunction'");
 				};
 	}
 }
