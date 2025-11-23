@@ -21,10 +21,10 @@ import java.util.Map.Entry;
 
 import org.reusablecomponents.base.core.application.command.entity.AbstractCommandFacade;
 import org.reusablecomponents.base.core.application.empty.EmptyFacade;
-import org.reusablecomponents.base.core.application.query.entity.pagination.QueryPaginationFacade;
-import org.reusablecomponents.base.core.application.query.entity.paginationspecification.QueryPaginationSpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.paginationspecification.AbstractQueryPaginationSpecificationFacade;
 import org.reusablecomponents.base.core.application.query.entity.simple.AbstractQueryFacade;
-import org.reusablecomponents.base.core.application.query.entity.specification.QuerySpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.specification.AbstractQuerySpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.pagination.AbstractQueryPaginationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
@@ -52,7 +52,9 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		implements InterfaceBaseFacade<Entity, Id>
 		permits EmptyFacade,
 		AbstractCommandFacade, AbstractQueryFacade,
-		QuerySpecificationFacade, QueryPaginationFacade, QueryPaginationSpecificationFacade {
+		AbstractQuerySpecificationFacade,
+		AbstractQueryPaginationFacade,
+		AbstractQueryPaginationSpecificationFacade {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseFacade.class);
 
@@ -177,7 +179,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 			final var baseException = exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz());
 			throw errorFunction.apply(baseException, directives);
-
 		}
 
 		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, null, session, directives);
@@ -315,9 +316,9 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	protected <In1, In2, Out> Out execute(
 			final In1 in1,
 			final In2 in2,
-			final OperationFunction3Args<In1, In2, Object[], Entry<In1, In2>> preFunction,
-			final OperationFunction2Args<Out, Object[], Out> posFunction,
+			final OperationFunction3Args<In1, In2, Object[], In1> preFunction,
 			final OperationFunction3Args<In1, In2, Object[], Out> mainFunction,
+			final OperationFunction2Args<Out, Object[], Out> posFunction,
 			final OperationFunction4Args<BaseException, In1, In2, Object[], BaseException> errorFunction,
 			final Object... directives) {
 		checkNotNull(in1, "Please pass a non-null 'in1'");
@@ -334,12 +335,9 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		LOGGER.debug("Pre executing {} operation with {} '{}', session '{}', and directives '{}'",
 				operationName, inName, in1, session, directives);
 
-		final In1 preIn1;
-		final In2 preIn2;
+		var preIn1 = in1;
 		try {
-			final var preInEntry = preFunction.apply(in1, in2, directives);
-			preIn1 = preInEntry.getKey();
-			preIn2 = preInEntry.getValue();
+			preIn1 = preFunction.apply(preIn1, in2, directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_PRE_OPERATION_LOG, operationName, finalInName, "", session, exceptionClass);
@@ -349,20 +347,17 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		final var finalIn1 = ofNullable(preIn1)
 				.orElseThrow(createNullPointerException(i18nService, preInName));
 
-		final var finalIn2 = ofNullable(preIn2)
-				.orElseThrow(createNullPointerException(i18nService, preInName));
-
 		LOGGER.debug("Executing {} operation with {} '{}', session '{}', and directives '{}'",
 				operationName, finalInName, finalIn1, session, directives);
 
 		final Out out;
 		try {
-			out = mainFunction.apply(finalIn1, finalIn2, directives);
+			out = mainFunction.apply(finalIn1, in2, directives);
 		} catch (final Exception ex) {
 			final var finalException = exceptionAdapterService.convert(
 					ex, i18nService, mainFunction, getEntityClazz(), finalIn1);
 
-			errorFunction.apply(finalException, finalIn1, finalIn2, directives);
+			errorFunction.apply(finalException, finalIn1, in2, directives);
 
 			final var exceptionClass = finalException.getClass().getSimpleName();
 			LOGGER.debug(ERROR_ON_OPERATION_LOG, operationName, finalInName, finalIn1, session, exceptionClass);
@@ -391,15 +386,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		return finalOut;
 	}
 
-	/**
-	 * 
-	 * @param operation
-	 * @param preFunction
-	 * @param posFunction
-	 * @param mainFunction
-	 * @param errorFunction
-	 * @param directives
-	 */
 	private void checkParamsNotNull(
 			final Object preFunction,
 			final Object posFunction,

@@ -1,11 +1,11 @@
 package org.reusablecomponents.base.core.application.query.entity.pagination;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.nonNull;
 
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-import org.reusablecomponents.base.core.application.base.BaseFacadeBuilder;
+import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_all_paged.FindAllPagedFunction;
+import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_one_sorted.FindOneSortedFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import jakarta.validation.constraints.NotNull;
@@ -14,17 +14,17 @@ import jakarta.validation.constraints.NotNull;
  * The <code>EntityQueryPaginationFacade</code> builder's class.
  */
 public class QueryPaginationFacadeBuilder<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort>
-        extends BaseFacadeBuilder {
+        extends AbstractQueryPaginationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> {
 
     /**
      * Function that executes find all paged
      */
-    public BiFunction<Pageable, Object[], MultiplePagedResult> findAllFunction;
+    public FindAllPagedFunction<Pageable, MultiplePagedResult> findAllPagedFunction;
 
     /**
      * Function that executes find one by a specific order
      */
-    public BiFunction<Sort, Object[], OneResult> findOneFunction;
+    public FindOneSortedFunction<Sort, OneResult> findOneSortedFunction;
 
     /**
      * Default constructor.
@@ -33,12 +33,18 @@ public class QueryPaginationFacadeBuilder<Entity extends AbstractEntity<Id>, Id,
      */
     public QueryPaginationFacadeBuilder(
             @NotNull final Consumer<QueryPaginationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort>> function) {
-
         super(function);
 
-        function.accept(this);
+        this.findAllPagedFunction = nonNull(findAllPagedFunction)
+                ? findAllPagedFunction
+                : (pageable, directives) -> {
+                    throw new UnsupportedOperationException("Unimplemented function 'findAllFunction'");
+                };
 
-        checkNotNull(findAllFunction, "Please pass a non-null 'findAllFunction'");
-        checkNotNull(findOneFunction, "Please pass a non-null 'findOneFunction'");
+        this.findOneSortedFunction = nonNull(findOneSortedFunction)
+                ? findOneSortedFunction
+                : (sort, directives) -> {
+                    throw new UnsupportedOperationException("Unimplemented function 'findOneFunction'");
+                };
     }
 }

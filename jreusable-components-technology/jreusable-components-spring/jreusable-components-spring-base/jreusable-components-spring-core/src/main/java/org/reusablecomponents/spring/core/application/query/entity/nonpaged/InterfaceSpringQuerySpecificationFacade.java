@@ -22,7 +22,7 @@ public interface InterfaceSpringQuerySpecificationFacade<Entity extends Abstract
 	@Override
 	@Cacheable
 	@Transactional(readOnly = true, propagation = SUPPORTS)
-	Iterable<Entity> findBySpec(final Specification specification, final Object... directives);
+	Iterable<Entity> findBySpecification(final Specification specification, final Object... directives);
 
 	/**
 	 * {@inheritDoc}
@@ -30,7 +30,7 @@ public interface InterfaceSpringQuerySpecificationFacade<Entity extends Abstract
 	@Override
 	@Cacheable
 	@Transactional(readOnly = true, propagation = SUPPORTS)
-	Optional<Entity> findOneBySpec(final Specification specification, final Object... directives);
+	Optional<Entity> findOneBySpecification(final Specification specification, final Object... directives);
 
 	/**
 	 * {@inheritDoc}
@@ -38,7 +38,7 @@ public interface InterfaceSpringQuerySpecificationFacade<Entity extends Abstract
 	@Override
 	@Cacheable
 	@Transactional(readOnly = true, propagation = SUPPORTS)
-	Boolean existsBySpec(final Specification specification, final Object... directives);
+	Boolean existsBySpecification(final Specification specification, final Object... directives);
 
 	/**
 	 * {@inheritDoc}
@@ -46,5 +46,5 @@ public interface InterfaceSpringQuerySpecificationFacade<Entity extends Abstract
 	@Override
 	@Cacheable
 	@Transactional(readOnly = true, propagation = SUPPORTS)
-	Long countBySpec(final Specification specification, final Object... directives);
+	Long countBySpecification(final Specification specification, final Object... directives);
 }

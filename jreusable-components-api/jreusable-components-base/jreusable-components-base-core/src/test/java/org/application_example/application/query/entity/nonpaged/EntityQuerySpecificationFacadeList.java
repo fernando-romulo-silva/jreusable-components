@@ -38,7 +38,7 @@ public class EntityQuerySpecificationFacadeList<Entity extends AbstractEntity<Id
 						.toList();
 			};
 
-			$.findOneByFunction = (specification, directives) -> {
+			$.findOneBySpecificationFunction = (specification, directives) -> {
 				validate(directives);
 				return repository.stream()
 						.filter(specification)

@@ -1,36 +1,28 @@
 package org.reusablecomponents.base.core.application.query.entity.paginationspecification;
 
-import java.util.AbstractMap.SimpleEntry;
-
-import static org.reusablecomponents.base.core.infra.util.function.operation.QueryOperation.FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE;
-import static org.reusablecomponents.base.core.infra.util.function.operation.QueryOperation.FIND_ENTITY_BY_SPECIFICATION_SORTED;
-
-import java.util.List;
-import java.util.Map.Entry;
-
-import org.apache.commons.lang3.function.TriFunction;
-import org.reusablecomponents.base.core.application.base.BaseFacade;
+import org.reusablecomponents.base.core.application.query.entity.paginationspecification.function.find_by_specification_paged.FindBySpecificationPagedFunction;
+import org.reusablecomponents.base.core.application.query.entity.paginationspecification.function.find_one_by_specification_sorted.FindOneBySpecificationSortedFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
-import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction2Args;
-import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction4Args;
-import org.reusablecomponents.base.core.infra.util.function.compose.ComposeFunction3Args;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Interface responsible for establishing contracts to retrieve objects, common
  * to all projects.
  */
-public non-sealed class QueryPaginationSpecificationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification>
-		extends BaseFacade<Entity, Id>
+public non-sealed class QueryPaginationSpecificationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Specification, Pageable, Sort>
+		extends
+		AbstractQueryPaginationSpecificationFacade<Entity, Id, OneResult, MultiplePagedResult, Specification, Pageable, Sort>
 		implements
-		InterfaceQueryPaginationSpecificationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification> {
+		InterfaceQuerySpecificationPaginationFacade<Entity, Id, OneResult, MultiplePagedResult, Specification, Pageable, Sort> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(QueryPaginationSpecificationFacade.class);
 
-	protected final TriFunction<Pageable, Specification, Object[], MultiplePagedResult> findByPagAndSpecFunction;
+	protected final FindBySpecificationPagedFunction<Specification, Pageable, MultiplePagedResult> findBySpecificationPagedFunction;
 
-	protected final TriFunction<Sort, Specification, Object[], OneResult> findOneByPagAndSpecFunction;
+	protected final FindOneBySpecificationSortedFunction<Specification, Sort, OneResult> findOneBySpecificationSortedFunction;
 
 	/**
 	 * Default constructor
@@ -38,204 +30,69 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 	 * @param builder Object in charge to construct this one
 	 */
 	protected QueryPaginationSpecificationFacade(
-			final QueryPaginationSpecificationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification> builder) {
+			final QueryPaginationSpecificationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Specification, Pageable, Sort> builder) {
 		super(builder);
-		this.findByPagAndSpecFunction = builder.findByPagAndSpecFunction;
-		this.findOneByPagAndSpecFunction = builder.findOneByPagAndSpecFunction;
-	}
-
-	/**
-	 * Method executed in {@link #findBy(Object, Object, Object...) findBySpec}
-	 * method before the {@link #findByPagAndSpecFunction findByPagAndSpecFunction},
-	 * use it to configure, change, etc. the input.
-	 * 
-	 * @param pageable      The query result controll
-	 * @param specification The query result filter
-	 * @param directives    Objects used to configure the find all operation
-	 * 
-	 * @return A {@code Entry<Pageable, Specification>} object
-	 */
-	protected Entry<Pageable, Specification> preFindBy(
-			final Pageable pageable,
-			final Specification specification,
-			final Object... directives) {
-		return new SimpleEntry<>(pageable, specification);
-	}
-
-	/**
-	 * Get functions executed in sequence in the
-	 * {@link #preFindBy(Object, Object...) preFindBy} method
-	 */
-	protected List<ComposeFunction2Args<Specification>> getFindByPreFunctions() {
-		return List.of();
-	}
-
-	/**
-	 * Method executed in {@link #findBy(Object, Object, Object...) findBySpec}
-	 * method after the {@link #findByPagAndSpecFunction findByPagAndSpecFunction},
-	 * use it to configure, change, etc. the result.
-	 * 
-	 * @param multiplePagedResult The query result
-	 * @param directives          Objects used to configure the find all operation
-	 * 
-	 * @return A {@code MultiplePagedResult} object
-	 */
-	protected MultiplePagedResult posFindBy(final MultiplePagedResult multiplePagedResult, final Object... directives) {
-		return multiplePagedResult;
-	}
-
-	/**
-	 * Get functions executed in sequence in the
-	 * {@link #posFindBy(Object, Object...) posFindBy} method
-	 */
-	protected List<ComposeFunction2Args<MultiplePagedResult>> getFindByPosFunctions() {
-		return List.of();
-	}
-
-	/**
-	 * Method used to handle {@link #findBy(Object, Object, Object...)
-	 * findBySpec} errors.
-	 * 
-	 * @param pageable      The object used to find by pageable
-	 * @param specification The object used to find by specification
-	 * @param exception     Exception thrown by findBy operation
-	 * @param directives    Objects used to configure the findBy operation
-	 * 
-	 * @return The handled exception
-	 */
-	protected Exception errorFindBy(
-			final Pageable pageable,
-			final Specification specification,
-			final Exception exception,
-			final Object... directives) {
-		return exception;
-	}
-
-	/**
-	 * Get functions executed in sequence in the
-	 * {@link #errorFindBy(Object, Object, Object...) errorFindBy} method
-	 */
-	protected List<ComposeFunction3Args<Exception, Specification>> getFindByErrorFunctions() {
-		return List.of();
+		this.findBySpecificationPagedFunction = builder.findPagedAndSpecificatedByFunction;
+		this.findOneBySpecificationSortedFunction = builder.findOneSortedSpecificatedByFunction;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public MultiplePagedResult findBy(
-			final Pageable pageable,
+	public MultiplePagedResult findByPaginationPaged(
 			final Specification specification,
+			final Pageable pageable,
 			final Object... directives) {
-		LOGGER.debug("Executing default findBySpec, pageable {}, specification {}, directives {}",
-				pageable, specification, directives);
+		LOGGER.debug("Executing default findBySpec, specification {}, pageable {}, directives {}",
+				specification, pageable, directives);
 
 		final var multiplePagedResult = execute(
-				pageable, specification, FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE,
-				this::preFindBy, this::posFindBy, findByPagAndSpecFunction::apply,
-				this::errorFindBy, directives);
+				specification, pageable,
+				getPreFindBySpecificationPagedFunction(),
+				getFindBySpecificationPagedFunction(),
+				getPosFindBySpecificationPagedFunction(),
+				getErrorFindBySpecificationPagedFunction(),
+				directives);
 
-		LOGGER.debug("Default findBySpec executed, multiplePagedResult {}, directives {}",
-				multiplePagedResult, directives);
+		LOGGER.debug("Default findBySpec executed, multiplePagedResult {}, directives {}", multiplePagedResult,
+				directives);
+
 		return multiplePagedResult;
-	}
-
-	/**
-	 * Method executed in {@link #findOneBy(Object, Object...) findOneBy} method
-	 * before the {@link #findOneByPagAndSpecFunction findOneByPagAndSpecFunction},
-	 * use it to configure, change, etc. the input.
-	 * 
-	 * @param sort          The query result order
-	 * @param specification The query result filter
-	 * @param directives    Objects used to configure the find all operation
-	 * 
-	 * @return A {@code Specification} object
-	 */
-	protected Entry<Sort, Specification> preFindOneBy(
-			final Sort sort,
-			final Specification specification,
-			final Object... directives) {
-		return new SimpleEntry<>(sort, specification);
-	}
-
-	/**
-	 * Method executed in {@link #findOneBy(Object, Object...) findOneBy} method
-	 * after the {@link #findOneByPagAndSpecFunction findOneByPagAndSpecFunction},
-	 * use it to configure, change, etc. the result.
-	 * 
-	 * @param oneResult  The query result
-	 * @param directives Objects used to configure the find all operation
-	 * 
-	 * @return A {@code oneResult} object
-	 */
-	protected OneResult posFindOneBy(final OneResult oneResult, final Object... directives) {
-		LOGGER.debug("Executing default posFindOneBy, oneResult {}, directives {}", oneResult, directives);
-
-		final var finalOneResult = compose(oneResult, getFindOnePosFunctions(), directives);
-
-		LOGGER.debug("Default posFindOneBy executed, finalOneResult {}, directives {}",
-				finalOneResult, directives);
-		return finalOneResult;
-	}
-
-	/**
-	 * Get functions executed in sequence in the
-	 * {@link #posFindOneBy(Object, Object...) posFindOneBy} method
-	 */
-	protected List<ComposeFunction2Args<OneResult>> getFindOnePosFunctions() {
-		return List.of();
-	}
-
-	/**
-	 * Method executed in {@link #findOneBy(Object, Object...) findOneBy} method to
-	 * handle {@link #findOneByPagAndSpecFunction findOneByPagAndSpecFunction}
-	 * errors.
-	 * 
-	 * @param sort          The query result order
-	 * @param specification The query result filter
-	 * @param exception     Exception thrown by find specification operation
-	 * @param directives    Objects used to configure the findAll operation
-	 * 
-	 * @return The handled exception
-	 */
-	protected Exception errorFindOneBy(
-			final Sort sort,
-			final Specification specification,
-			final Exception exception,
-			final Object... directives) {
-		return exception;
-	}
-
-	/**
-	 * Get functions executed in sequence in the
-	 * {@link #errorFindOneBy(Object, Object, Object, Object...) errorFindOneBy}
-	 * method
-	 */
-	protected List<ComposeFunction4Args<Exception, Sort, Specification>> getFindOneErrorFunctions() {
-		return List.of();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public OneResult findOneBy(
-			final Sort sort,
+	public OneResult findOneByPaginationSorted(
 			final Specification specification,
+			final Sort sort,
 			final Object... directives) {
 		LOGGER.debug("Executing default findOneBy, sort {}, specification {}, directives {}",
 				sort, specification, directives);
 
 		final var oneResult = execute(
-				sort, specification,
-				FIND_ENTITY_BY_SPECIFICATION_SORTED,
-				this::preFindOneBy,
-				this::posFindOneBy,
-				findOneByPagAndSpecFunction,
-				this::errorFindOneBy, directives);
+				specification, sort,
+				getPreFindOneBySpecificationSortedFunction(),
+				getFindOneBySpecificationSortedFunction(),
+				getPosFindOneBySpecificationSortedFunction(),
+				getErrorFindOneBySpecificationSortedFunction(), directives);
 
 		LOGGER.debug("Default findOneBy executed, oneResult {}, directives {}",
 				oneResult, directives);
 		return oneResult;
+	}
+
+	@NotNull
+	protected FindBySpecificationPagedFunction<Specification, Pageable, MultiplePagedResult> getFindBySpecificationPagedFunction() {
+		LOGGER.debug("Returning findByPagAndSpecFunction function {}", findBySpecificationPagedFunction.getName());
+		return findBySpecificationPagedFunction;
+	}
+
+	@NotNull
+	protected FindOneBySpecificationSortedFunction<Specification, Sort, OneResult> getFindOneBySpecificationSortedFunction() {
+		LOGGER.debug("Returning findOneByPagAndSpecFunction function {}", findOneBySpecificationSortedFunction);
+		return findOneBySpecificationSortedFunction;
 	}
 }

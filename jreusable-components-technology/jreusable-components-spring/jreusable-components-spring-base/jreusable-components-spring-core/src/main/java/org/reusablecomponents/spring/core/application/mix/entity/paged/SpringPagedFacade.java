@@ -14,7 +14,7 @@ public class SpringPagedFacade<Entity extends AbstractEntity<Id>, Id, Specificat
 
         protected final InterfaceSpringQueryPaginationFacade<Entity, Id> entityQueryPaginationFacade;
 
-        protected final InterfaceSpringQueryPaginationSpecificationFacade<Entity, Id, Specification> entityQueryPaginationSpecificationFacad;
+        protected final InterfaceSpringQueryPaginationSpecificationFacade<Entity, Id, Specification> entityQueryPaginationSpecificationFacade;
 
         /**
          * @param entityCommandFacade
@@ -23,11 +23,11 @@ public class SpringPagedFacade<Entity extends AbstractEntity<Id>, Id, Specificat
         protected SpringPagedFacade(
                         final InterfaceSpringCommandFacade<Entity, Id> entityCommandFacade,
                         final InterfaceSpringQueryPaginationFacade<Entity, Id> entityQueryPaginationFacade,
-                        final InterfaceSpringQueryPaginationSpecificationFacade<Entity, Id, Specification> entityQueryPaginationSpecificationFacad) {
+                        final InterfaceSpringQueryPaginationSpecificationFacade<Entity, Id, Specification> entityQueryPaginationSpecificationFacade) {
 
                 this.entityCommandFacade = entityCommandFacade;
                 this.entityQueryPaginationFacade = entityQueryPaginationFacade;
-                this.entityQueryPaginationSpecificationFacad = entityQueryPaginationSpecificationFacad;
+                this.entityQueryPaginationSpecificationFacade = entityQueryPaginationSpecificationFacade;
         }
 
         /**
@@ -51,6 +51,6 @@ public class SpringPagedFacade<Entity extends AbstractEntity<Id>, Id, Specificat
          */
         @Override
         public InterfaceSpringQueryPaginationSpecificationFacade<Entity, Id, Specification> getEntityQueryPaginationSpecificationFacade() {
-                return entityQueryPaginationSpecificationFacad;
+                return entityQueryPaginationSpecificationFacade;
         }
 }

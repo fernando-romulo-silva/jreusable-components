@@ -2,7 +2,7 @@ package org.reusablecomponents.base.core.application.mix.entity;
 
 import org.reusablecomponents.base.core.application.command.entity.InterfaceCommandFacade;
 import org.reusablecomponents.base.core.application.query.entity.pagination.InterfaceQueryPaginationFacade;
-import org.reusablecomponents.base.core.application.query.entity.paginationspecification.InterfaceQueryPaginationSpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.paginationspecification.InterfaceQuerySpecificationPaginationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 public interface InterfacePagedFacade<Entity extends AbstractEntity<Id>, Id, // basic
@@ -24,9 +24,10 @@ public interface InterfacePagedFacade<Entity extends AbstractEntity<Id>, Id, // 
         OneResult, // one result type
         MultiplePagedResult, // multiple result type
         // Pagination
+        Specification, // specification
         Pageable, // pageable type
-        Sort, // sort type
-        Specification>
+        Sort> // sort type
+
         // command
         extends InterfaceCommandFacade<Entity, Id, // default
                 // save
@@ -48,11 +49,11 @@ public interface InterfacePagedFacade<Entity extends AbstractEntity<Id>, Id, // 
                 Pageable, // pageable type
                 Sort>, // sort type
 
-        InterfaceQueryPaginationSpecificationFacade<Entity, Id, // basic
+        InterfaceQuerySpecificationPaginationFacade<Entity, Id, // basic
                 OneResult, // oneResult
                 MultiplePagedResult, // multiple paged
-                Pageable, Sort, // pagination
-                Specification> { // specificatio
+                Specification, // specification
+                Pageable, Sort> { // pagination
 
     /**
      * {@inheritDoc}
@@ -122,33 +123,34 @@ public interface InterfacePagedFacade<Entity extends AbstractEntity<Id>, Id, // 
      * {@inheritDoc}
      */
     @Override
-    default MultiplePagedResult findAll(final Pageable pageable, final Object... directives) {
-        return getEntityQueryPaginationFacade().findAll(pageable, directives);
+    default MultiplePagedResult findAllPaged(final Pageable pageable, final Object... directives) {
+        return getEntityQueryPaginationFacade().findAllPaged(pageable, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default OneResult findOne(final Sort sort, final Object... directives) {
-        return getEntityQueryPaginationFacade().findOne(sort, directives);
+    default OneResult findOneSorted(final Sort sort, final Object... directives) {
+        return getEntityQueryPaginationFacade().findOneSorted(sort, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default MultiplePagedResult findBy(final Pageable pageable, final Specification specification,
+    default MultiplePagedResult findByPaginationPaged(final Specification specification, final Pageable pageable,
             final Object... directives) {
-        return getEntityQueryPaginationSpecificationFacade().findBy(pageable, specification, directives);
+        return getEntityQueryPaginationSpecificationFacade().findByPaginationPaged(specification, pageable, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default OneResult findOneBy(final Sort sort, final Specification specification, final Object... directives) {
-        return getEntityQueryPaginationSpecificationFacade().findOneBy(sort, specification, directives);
+    default OneResult findOneByPaginationSorted(final Specification specification, final Sort sort,
+            final Object... directives) {
+        return getEntityQueryPaginationSpecificationFacade().findOneByPaginationSorted(specification, sort, directives);
     }
 
     /**
@@ -171,6 +173,6 @@ public interface InterfacePagedFacade<Entity extends AbstractEntity<Id>, Id, // 
 
     InterfaceQueryPaginationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> getEntityQueryPaginationFacade();
 
-    InterfaceQueryPaginationSpecificationFacade<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification> getEntityQueryPaginationSpecificationFacade();
+    InterfaceQuerySpecificationPaginationFacade<Entity, Id, OneResult, MultiplePagedResult, Specification, Pageable, Sort> getEntityQueryPaginationSpecificationFacade();
 
 }

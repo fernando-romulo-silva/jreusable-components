@@ -21,9 +21,9 @@ public class SpringQueryPaginationSpecificationFacade<Entity extends AbstractEnt
 				Optional<Entity>, // one result type
 				Page<Entity>, // multiple result type
 				// Pagination
+				Specification, // query spec
 				Pageable, // pageable type
-				Sort, // sort type
-				Specification> // query spec
+				Sort> // sort type
 		//
 		implements InterfaceSpringQueryPaginationSpecificationFacade<Entity, Id, Specification> {
 
@@ -36,12 +36,11 @@ public class SpringQueryPaginationSpecificationFacade<Entity extends AbstractEnt
 			final InterfaceI18nService i18Service) {
 		super(new QueryPaginationSpecificationFacadeBuilder<>($ -> {
 
-			$.findByPagAndSpecFunction = (pageable, specification, directives) -> repository.findBy(
-					specification, pageable);
+			$.findPagedAndSpecificatedByFunction = (specification, pageable, directives) -> repository
+					.findBy(specification, pageable);
 
-			$.findOneByPagAndSpecFunction = (sort, specification, directives) -> repository.findOneBy(
-					specification,
-					sort);
+			$.findOneSortedSpecificatedByFunction = (specification, sort, directives) -> repository
+					.findOneBy(specification, sort);
 
 			// services
 			$.i18nService = i18Service;

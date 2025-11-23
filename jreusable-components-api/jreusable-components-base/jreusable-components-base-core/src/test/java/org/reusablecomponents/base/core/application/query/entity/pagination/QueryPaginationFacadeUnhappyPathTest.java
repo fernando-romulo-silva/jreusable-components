@@ -92,7 +92,7 @@ class QueryPaginationFacadeUnhappyPathTest {
         final Comparator<Department> sort = null;
 
         // when
-        assertThatThrownBy(() -> defaultQueryFacade.findOne(sort))
+        assertThatThrownBy(() -> defaultQueryFacade.findOneSorted(sort))
                 // then
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("Please pass a non-null '%s'", "in");
@@ -108,7 +108,7 @@ class QueryPaginationFacadeUnhappyPathTest {
         final var sort = (Comparator<Department>) Comparator.comparing(Department::getName).reversed();
 
         // when
-        assertThatThrownBy(() -> defaultQueryFacade.findOne(sort, directives))
+        assertThatThrownBy(() -> defaultQueryFacade.findOneSorted(sort, directives))
                 // then
                 .isInstanceOf(UnexpectedException.class)
                 .hasMessageContaining("Unexpecte error happened");
@@ -123,7 +123,7 @@ class QueryPaginationFacadeUnhappyPathTest {
         final PageList<Department> pageable = null;
 
         // when
-        assertThatThrownBy(() -> defaultQueryFacade.findAll(pageable))
+        assertThatThrownBy(() -> defaultQueryFacade.findAllPaged(pageable))
                 // then
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("Please pass a non-null '%s'", "in");
@@ -139,7 +139,7 @@ class QueryPaginationFacadeUnhappyPathTest {
         final var pageable = new PageList<>(5, 0, defaultData);
 
         // when
-        assertThatThrownBy(() -> defaultQueryFacade.findAll(pageable, directives))
+        assertThatThrownBy(() -> defaultQueryFacade.findAllPaged(pageable, directives))
                 // then
                 .isInstanceOf(UnexpectedException.class)
                 .hasMessageContaining("Unexpecte error happened");

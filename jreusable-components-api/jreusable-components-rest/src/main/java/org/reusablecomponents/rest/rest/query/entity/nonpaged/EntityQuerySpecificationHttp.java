@@ -56,7 +56,7 @@ public class EntityQuerySpecificationHttp<Entity extends AbstractEntity<Id>, Id,
 
 		LOGGER.debug("Getting entities by '{}', directives '{}'", specification, directives);
 
-		final var findByResult = entityQuerySpecificationFacade.findBySpec(specification, directives);
+		final var findByResult = entityQuerySpecificationFacade.findBySpecification(specification, directives);
 
 		final var finalResult = createResponseGetMultipleFunction.apply(findByResult);
 
@@ -74,7 +74,7 @@ public class EntityQuerySpecificationHttp<Entity extends AbstractEntity<Id>, Id,
 
 		LOGGER.debug("Check if there are any entities by '{}'", specification);
 
-		final var existsResult = entityQuerySpecificationFacade.existsBySpec(specification);
+		final var existsResult = entityQuerySpecificationFacade.existsBySpecification(specification);
 
 		final var finalResult = createResponseHeadFunction.apply(existsResult);
 

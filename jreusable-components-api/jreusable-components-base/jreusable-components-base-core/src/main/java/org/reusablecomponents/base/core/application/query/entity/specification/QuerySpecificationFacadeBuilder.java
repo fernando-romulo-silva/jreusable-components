@@ -1,38 +1,32 @@
 package org.reusablecomponents.base.core.application.query.entity.specification;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.nonNull;
 
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
-import org.reusablecomponents.base.core.application.base.BaseFacadeBuilder;
+import org.reusablecomponents.base.core.application.query.entity.specification.function.count_by_spec.CountBySpecificationFunction;
+import org.reusablecomponents.base.core.application.query.entity.specification.function.exists_by_spec.ExistsBySpecificationFunction;
+import org.reusablecomponents.base.core.application.query.entity.specification.function.find_by_spec.FindBySpecificationFunction;
+import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.FindOneBySpecFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
+
+import jakarta.validation.constraints.NotNull;
 
 /**
  * The <code>EntityQuerySpecificationFacade</code> builder's class.
  */
 public class QuerySpecificationFacadeBuilder<Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>
-        extends BaseFacadeBuilder {
+        extends
+        AbstractQuerySpecificationFacadeBuilder<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> {
 
-    /**
-     * Function that executes find by specification algorithm
-     */
-    public BiFunction<Specification, Object[], MultipleResult> findBySpecificationFunction;
+    public FindBySpecificationFunction<Specification, MultipleResult> findBySpecificationFunction;
 
-    /**
-     * Function that executes find One by algorithm
-     */
-    public BiFunction<Specification, Object[], OneResult> findOneByFunction;
+    public FindOneBySpecFunction<Specification, OneResult> findOneBySpecificationFunction;
 
-    /**
-     * Function that executes exists by algorithm
-     */
-    public BiFunction<Specification, Object[], ExistsResult> existsBySpecificationFunction;
+    public ExistsBySpecificationFunction<Specification, ExistsResult> existsBySpecificationFunction;
 
-    /**
-     * Function that executes count by specification algorithm
-     */
-    public BiFunction<Specification, Object[], CountResult> countBySpecificationFunction;
+    public CountBySpecificationFunction<Specification, CountResult> countBySpecificationFunction;
 
     /**
      * Default constructor
@@ -40,15 +34,31 @@ public class QuerySpecificationFacadeBuilder<Entity extends AbstractEntity<Id>, 
      * @param builder Object in charge to construct this one
      */
     public QuerySpecificationFacadeBuilder(
-            final Consumer<QuerySpecificationFacadeBuilder<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>> function) {
-
+            @NotNull final Consumer<QuerySpecificationFacadeBuilder<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>> function) {
         super(function);
 
-        function.accept(this);
+        this.findBySpecificationFunction = nonNull(findBySpecificationFunction)
+                ? findBySpecificationFunction
+                : (specification, directives) -> {
+                    throw new UnsupportedOperationException("Unimplemented function 'findBySpecificationFunction'");
+                };
 
-        checkNotNull(findBySpecificationFunction, "Please pass a non-null 'findBySpecificationFunction'");
-        checkNotNull(findOneByFunction, "Please pass a non-null 'findOneByFunction'");
-        checkNotNull(existsBySpecificationFunction, "Please pass a non-null 'existsBySpecificationFunction'");
-        checkNotNull(countBySpecificationFunction, "Please pass a non-null 'countBySpecificationFunction'");
+        this.findOneBySpecificationFunction = nonNull(findOneBySpecificationFunction)
+                ? findOneBySpecificationFunction
+                : (specification, directives) -> {
+                    throw new UnsupportedOperationException("Unimplemented function 'findOneBySpecificationFunction'");
+                };
+
+        this.existsBySpecificationFunction = nonNull(existsBySpecificationFunction)
+                ? existsBySpecificationFunction
+                : (specification, directives) -> {
+                    throw new UnsupportedOperationException("Unimplemented function 'existsBySpecificationFunction'");
+                };
+
+        this.countBySpecificationFunction = nonNull(countBySpecificationFunction)
+                ? countBySpecificationFunction
+                : (specification, directives) -> {
+                    throw new UnsupportedOperationException("Unimplemented function 'countBySpecificationFunction'");
+                };
     }
 }

@@ -28,9 +28,8 @@ public interface InterfaceSpringPagedFacade<Entity extends AbstractEntity<Id>, I
 				// results
 				Optional<Entity>, // one result type
 				Page<Entity>, // multiple result type
+				Specification, // specification
 				// Pagination
 				Pageable, // pageable type
-				Sort, // sort type
-				Specification> {
-
+				Sort> { // sort type
 }

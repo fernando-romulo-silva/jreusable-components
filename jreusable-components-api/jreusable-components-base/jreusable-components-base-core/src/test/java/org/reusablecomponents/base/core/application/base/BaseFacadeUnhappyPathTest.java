@@ -146,7 +146,8 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 	void invalidExecuteTest02(
 			final Department in1,
 			final Manager in2,
-			final OperationFunction 			final TriFunction<Department, Manager, Object[], Entry<Department, Manager>> preFunction,
+			final OperationFunction 			
+			final TriFunction<Department, Manager, Object[], Entry<Department, Manager>> preFunction,
 			final BiFunction<Department, Object[], Department> posFunction,
 			final TriFunction<Department, Manager, Object[], Department> mainFunction,
 			final OperationFunction4Args<Department, Manager, Exception, Object[], Exception> errorFunction,
@@ -163,7 +164,6 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 
 	// given
 	Stream<Arguments> createInvalidExecuteData03() {
-		final OperationFunction operation = CommandOperation.SAVE_ENTITY;
 		final Consumer<Object[]> preFunction = System.out::println;
 		final BiFunction<Department, Object[], Department> posFunction = (department, directives) -> department;
 		final Function<Object[], Department> mainFunction = directives -> null;
@@ -382,8 +382,8 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		assertThatThrownBy(
 				// when
 				() -> facade.execute(
-						department01, manager01, preFunctionTwoInputs, posFunctionTwoInputs,
-						mainFunctionTwoInputsError, errorFunctionTwoInputs))
+						department01, manager01, preFunctionTwoInputs, mainFunctionTwoInputsError,
+						posFunctionTwoInputs, errorFunctionTwoInputs))
 				// then
 				.isInstanceOf(BaseException.class)
 				.hasRootCauseInstanceOf(IllegalArgumentException.class)
@@ -406,8 +406,9 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 		assertThatThrownBy(
 				// when
 				() -> facade.execute(
-						department01, manager01, preFunctionTwoInputs, posFunctionTwoInputsError,
-						(departmentIn, managerIn, directives) -> departmentDto, errorFunctionTwoInputs))
+						department01, manager01, preFunctionTwoInputs,
+						(departmentIn, managerIn, directives) -> departmentDto, posFunctionTwoInputsError,
+						errorFunctionTwoInputs))
 				// then
 				.isInstanceOf(BaseException.class)
 				.hasRootCauseInstanceOf(IllegalArgumentException.class)

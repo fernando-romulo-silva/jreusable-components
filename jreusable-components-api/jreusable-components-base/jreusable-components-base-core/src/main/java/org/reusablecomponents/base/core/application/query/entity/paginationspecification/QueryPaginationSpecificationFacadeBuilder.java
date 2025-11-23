@@ -1,11 +1,12 @@
 package org.reusablecomponents.base.core.application.query.entity.paginationspecification;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.nonNull;
 
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.function.TriFunction;
-import org.reusablecomponents.base.core.application.base.BaseFacadeBuilder;
+import org.reusablecomponents.base.core.application.query.entity.paginationspecification.function.find_by_specification_paged.FindBySpecificationPagedFunction;
+import org.reusablecomponents.base.core.application.query.entity.paginationspecification.function.find_one_by_specification_sorted.FindOneBySpecificationSortedFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import jakarta.validation.constraints.NotNull;
@@ -14,18 +15,18 @@ import jakarta.validation.constraints.NotNull;
  * The <code>EntityQueryPaginationSpecificationFacade</code> builder's
  * class.
  */
-public class QueryPaginationSpecificationFacadeBuilder<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification>
-		extends BaseFacadeBuilder {
-
+public class QueryPaginationSpecificationFacadeBuilder<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Specification, Pageable, Sort>
+		extends
+		AbstractQueryPaginationSpecificationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Specification, Pageable, Sort> {
 	/**
 	 * Function that executes find By Specificationid algorithm
 	 */
-	public TriFunction<Pageable, Specification, Object[], MultiplePagedResult> findByPagAndSpecFunction;
+	public FindBySpecificationPagedFunction<Specification, Pageable, MultiplePagedResult> findPagedAndSpecificatedByFunction;
 
 	/**
 	 * Function that executes find One By Specificationid and Sort algorithm
 	 */
-	public TriFunction<Sort, Specification, Object[], OneResult> findOneByPagAndSpecFunction;
+	public FindOneBySpecificationSortedFunction<Specification, Sort, OneResult> findOneSortedSpecificatedByFunction;
 
 	/**
 	 * Default constructor.
@@ -33,14 +34,21 @@ public class QueryPaginationSpecificationFacadeBuilder<Entity extends AbstractEn
 	 * @param function Consumer function
 	 */
 	public QueryPaginationSpecificationFacadeBuilder(
-			@NotNull final Consumer<QueryPaginationSpecificationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort, Specification>> function) {
-
+			@NotNull final Consumer<QueryPaginationSpecificationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Specification, Pageable, Sort>> function) {
 		super(function);
 
-		function.accept(this);
+		this.findPagedAndSpecificatedByFunction = nonNull(findPagedAndSpecificatedByFunction)
+				? findPagedAndSpecificatedByFunction
+				: (specification, pageable, directives) -> {
+					throw new UnsupportedOperationException(
+							"Unimplemented function 'findPagedAndSpecificatedByFunction'");
+				};
 
-		checkNotNull(findByPagAndSpecFunction, "Please pass a non-null 'findBySpecificationFunction'");
-		checkNotNull(findOneByPagAndSpecFunction, "Please pass a non-null 'findOneByFunctionWithOrder'");
+		this.findOneSortedSpecificatedByFunction = nonNull(findOneSortedSpecificatedByFunction)
+				? findOneSortedSpecificatedByFunction
+				: (specification, sort, directives) -> {
+					throw new UnsupportedOperationException(
+							"Unimplemented function 'findOneSortedSpecificatedByFunction'");
+				};
 	}
-
 }

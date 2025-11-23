@@ -17,7 +17,6 @@ import org.reusablecomponents.base.core.application.query.entity.simple.function
 import org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id.PosFindByIdFunction;
 import org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id.PreFindByIdFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
-import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -255,5 +254,4 @@ public abstract sealed class AbstractQueryFacade< // generics
         LOGGER.debug("Returning error existsById function {}", errorExistsByIdFunction.getName());
         return errorExistsByIdFunction;
     }
-
 }

@@ -13,7 +13,7 @@ import org.apache.commons.lang3.function.TriFunction;
  * @param <In2> the type of the second argument to the function
  * @param <In3> the type of the third argument to the function
  * @param <In4> the type of the fourth argument to the function
- * @param <R>   the type of the result of the function
+ * @param <Out> the type of the result of the function
  *
  * @see TriFunction
  */

@@ -25,27 +25,27 @@ public interface InterfaceJakartaQuerySpecificationFacade<Entity extends Abstrac
 	 */
 	@Override
 	@Transactional(value = SUPPORTS)
-	Stream<Entity> findBySpec(final Specification specification, final Object... directives);
+	Stream<Entity> findBySpecification(final Specification specification, final Object... directives);
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	@Transactional(value = SUPPORTS)
-	Optional<Entity> findOneBySpec(final Specification specification, final Object... directives);
+	Optional<Entity> findOneBySpecification(final Specification specification, final Object... directives);
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	@Transactional(value = SUPPORTS)
-	Boolean existsBySpec(final Specification specification, final Object... directives);
+	Boolean existsBySpecification(final Specification specification, final Object... directives);
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	@Transactional(value = SUPPORTS)
-	Long countBySpec(final Specification specification, final Object... directives);
+	Long countBySpecification(final Specification specification, final Object... directives);
 
 }

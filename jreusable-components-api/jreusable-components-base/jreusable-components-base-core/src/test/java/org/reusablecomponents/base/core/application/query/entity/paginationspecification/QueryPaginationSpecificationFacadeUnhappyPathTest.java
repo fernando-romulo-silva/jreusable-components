@@ -121,7 +121,7 @@ class QueryPaginationSpecificationFacadeUnhappyPathTest {
 			final String parameter) {
 
 		// when
-		assertThatThrownBy(() -> defaultQueryFacade.findOneBy(sort, specification))
+		assertThatThrownBy(() -> defaultQueryFacade.findOneByPaginationSorted(specification, sort))
 				// then
 				.isInstanceOf(NullPointerException.class)
 				.hasMessageContaining("Please pass a non-null '%s'", parameter);
@@ -172,7 +172,7 @@ class QueryPaginationSpecificationFacadeUnhappyPathTest {
 			final String parameter) {
 
 		// when
-		assertThatThrownBy(() -> defaultQueryFacade.findBy(pageable, specification))
+		assertThatThrownBy(() -> defaultQueryFacade.findByPaginationPaged(specification, pageable))
 				// then
 				.isInstanceOf(NullPointerException.class)
 				.hasMessageContaining("Please pass a non-null '%s'", parameter);

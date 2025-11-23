@@ -32,8 +32,8 @@ public interface InterfaceSpringFacade<Entity extends AbstractEntity<Id>, Id, Sp
                 Boolean, // boolean result
                 Page<Entity>, // multiple result type
                 // Pagination
+                Specification, // specification
                 Pageable, // pageable type
-                Sort, // sort type
-                Specification> {
+                Sort> { // sort type
 
 }

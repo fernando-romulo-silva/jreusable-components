@@ -79,7 +79,7 @@ class QueryPaginationSpecificationFacadeHappyPathTest {
         final Predicate<Department> spec = department -> containsIgnoreCase(department.getName(), "Default");
 
         // when
-        final var result = defaultQueryFacade.findOneBy(sort, spec);
+        final var result = defaultQueryFacade.findOneByPaginationSorted(spec, sort);
 
         // then
         assertThat(defaultData.getLast()).isEqualTo(result);
@@ -98,7 +98,7 @@ class QueryPaginationSpecificationFacadeHappyPathTest {
         final var departmentOusidePage = defaultData.get(5);
 
         // when
-        final var result = defaultQueryFacade.findBy(pageable, spec01);
+        final var result = defaultQueryFacade.findByPaginationPaged(spec01, pageable);
 
         // then
         assertThat(result)
@@ -106,6 +106,6 @@ class QueryPaginationSpecificationFacadeHappyPathTest {
                 .returnToIterable()
                 .contains(departmentInsidePage)
                 .doesNotContain(departmentOusidePage)
-                .matches(e -> defaultQueryFacade.findBy(pageable, spec02).isEmpty());
+                .matches(e -> defaultQueryFacade.findByPaginationPaged(spec02, pageable).isEmpty());
     }
 }

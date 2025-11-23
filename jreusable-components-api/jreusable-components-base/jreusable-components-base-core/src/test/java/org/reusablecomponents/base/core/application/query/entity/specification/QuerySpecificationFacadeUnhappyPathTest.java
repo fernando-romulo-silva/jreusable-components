@@ -104,7 +104,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		final Predicate<Department> specNull = null;
 
 		// when
-		assertThatThrownBy(() -> defaultQueryFacade.findOneBySpec(specNull))
+		assertThatThrownBy(() -> defaultQueryFacade.findOneBySpecification(specNull))
 				// then
 				.isInstanceOf(NullPointerException.class)
 				.hasMessageContaining("Please pass a non-null '%s'", "in");
@@ -119,7 +119,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(), "Whatever");
 
 		// when
-		assertThatThrownBy(() -> defaultQueryFacade.findOneBySpec(spec))
+		assertThatThrownBy(() -> defaultQueryFacade.findOneBySpecification(spec))
 				// then
 				.isInstanceOf(ElementNotFoundException.class)
 				.hasMessageContaining("The id 'spec' not found for 'Department' type");
@@ -135,7 +135,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		final var directives = new Object[] { "error" };
 
 		// when
-		assertThatThrownBy(() -> defaultQueryFacade.findOneBySpec(spec, directives))
+		assertThatThrownBy(() -> defaultQueryFacade.findOneBySpecification(spec, directives))
 				// then
 				.isInstanceOf(UnexpectedException.class)
 				.hasMessageContaining("Unexpecte error happened");
@@ -150,7 +150,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		final Predicate<Department> specNull = null;
 
 		// when
-		assertThatThrownBy(() -> defaultQueryFacade.findBySpec(specNull))
+		assertThatThrownBy(() -> defaultQueryFacade.findBySpecification(specNull))
 				// then
 				.isInstanceOf(NullPointerException.class)
 				.hasMessageContaining("Please pass a non-null '%s'", "in");
@@ -167,7 +167,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		final var directives = new Object[] { "error" };
 
 		// when
-		assertThatThrownBy(() -> defaultQueryFacade.findBySpec(spec, directives))
+		assertThatThrownBy(() -> defaultQueryFacade.findBySpecification(spec, directives))
 				// then
 				.isInstanceOf(UnexpectedException.class)
 				.hasMessageContaining("Unexpecte error happened");
@@ -182,7 +182,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		final Predicate<Department> specNull = null;
 
 		// when
-		assertThatThrownBy(() -> defaultQueryFacade.countBySpec(specNull))
+		assertThatThrownBy(() -> defaultQueryFacade.countBySpecification(specNull))
 				// then
 				.isInstanceOf(NullPointerException.class)
 				.hasMessageContaining("Please pass a non-null '%s'", "in");
@@ -199,7 +199,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		final var directives = new Object[] { "error" };
 
 		// when
-		assertThatThrownBy(() -> defaultQueryFacade.countBySpec(spec, directives))
+		assertThatThrownBy(() -> defaultQueryFacade.countBySpecification(spec, directives))
 				// then
 				.isInstanceOf(UnexpectedException.class)
 				.hasMessageContaining("Unexpecte error happened");
@@ -214,7 +214,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		final Predicate<Department> specNull = null;
 
 		// given
-		assertThatThrownBy(() -> defaultQueryFacade.existsBySpec(specNull))
+		assertThatThrownBy(() -> defaultQueryFacade.existsBySpecification(specNull))
 				// then
 				.isInstanceOf(NullPointerException.class)
 				.hasMessageContaining("Please pass a non-null '%s'", "in");
@@ -231,7 +231,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		final var directives = new Object[] { "error" };
 
 		// given
-		assertThatThrownBy(() -> defaultQueryFacade.existsBySpec(spec, directives))
+		assertThatThrownBy(() -> defaultQueryFacade.existsBySpecification(spec, directives))
 				// then
 				.isInstanceOf(UnexpectedException.class)
 				.hasMessageContaining("Unexpecte error happened");

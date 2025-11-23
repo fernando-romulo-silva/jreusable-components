@@ -30,7 +30,7 @@ public class EntityQueryPaginationFacadeList<Entity extends AbstractEntity<Id>, 
     public EntityQueryPaginationFacadeList(final List<Entity> repository) {
         super(new QueryPaginationFacadeBuilder<>($ -> {
 
-            $.findOneFunction = (sort, directives) -> {
+            $.findOneSortedFunction = (sort, directives) -> {
                 validate(directives);
                 return repository
                         .stream()
@@ -39,7 +39,7 @@ public class EntityQueryPaginationFacadeList<Entity extends AbstractEntity<Id>, 
                         .orElseThrow(() -> new IllegalArgumentException("Id not found: " + sort));
             };
 
-            $.findAllFunction = (pageable, directives) -> {
+            $.findAllPagedFunction = (pageable, directives) -> {
                 validate(directives);
                 return pageable.getData();
             };

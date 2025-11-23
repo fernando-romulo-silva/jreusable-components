@@ -35,7 +35,7 @@ public non-sealed interface InterfaceQueryPaginationFacade<Entity extends Abstra
      * 
      * @return Return a {@code MultipleResult} object
      */
-    MultiplePagedResult findAll(
+    MultiplePagedResult findAllPaged(
             @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Pageable pageable,
             final Object... directives);
 
@@ -47,7 +47,7 @@ public non-sealed interface InterfaceQueryPaginationFacade<Entity extends Abstra
      * 
      * @return Return a {@code OneResult} object
      */
-    OneResult findOne(
+    OneResult findOneSorted(
             @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Sort sort,
             final Object... directives);
 }

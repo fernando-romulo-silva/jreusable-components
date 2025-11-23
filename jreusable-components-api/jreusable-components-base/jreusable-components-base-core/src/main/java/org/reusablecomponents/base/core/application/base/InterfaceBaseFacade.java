@@ -2,7 +2,7 @@ package org.reusablecomponents.base.core.application.base;
 
 import org.reusablecomponents.base.core.application.command.entity.InterfaceCommandFacade;
 import org.reusablecomponents.base.core.application.query.entity.pagination.InterfaceQueryPaginationFacade;
-import org.reusablecomponents.base.core.application.query.entity.paginationspecification.InterfaceQueryPaginationSpecificationFacade;
+import org.reusablecomponents.base.core.application.query.entity.paginationspecification.InterfaceQuerySpecificationPaginationFacade;
 import org.reusablecomponents.base.core.application.query.entity.simple.InterfaceQueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.specification.InterfaceQuerySpecificationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
@@ -17,7 +17,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public sealed interface InterfaceBaseFacade<Entity extends AbstractEntity<Id>, Id>
 		permits InterfaceCommandFacade, InterfaceQueryFacade, InterfaceQuerySpecificationFacade,
-		InterfaceQueryPaginationFacade, InterfaceQueryPaginationSpecificationFacade,
+		InterfaceQueryPaginationFacade, InterfaceQuerySpecificationPaginationFacade,
 		BaseFacade {
 
 	/**

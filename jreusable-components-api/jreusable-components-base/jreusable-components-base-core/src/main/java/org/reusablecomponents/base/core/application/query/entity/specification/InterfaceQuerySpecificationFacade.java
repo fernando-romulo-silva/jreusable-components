@@ -48,7 +48,7 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
 	 * 
 	 * @return Return a {@code MultipleResult} object
 	 */
-	MultipleResult findBySpec(
+	MultipleResult findBySpecification(
 			@NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Specification specification,
 			final Object... directives);
 
@@ -68,7 +68,7 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
 	 * 
 	 * @return Return a {@code OneResult} object
 	 */
-	OneResult findOneBySpec(
+	OneResult findOneBySpecification(
 			@NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Specification specification,
 			final Object... directives);
 
@@ -86,7 +86,7 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
 	 * 
 	 * @return Return a {@code ExistsResult} object
 	 */
-	ExistsResult existsBySpec(
+	ExistsResult existsBySpecification(
 			@NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Specification specification,
 			final Object... directives);
 
@@ -104,7 +104,7 @@ public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends Abs
 	 * 
 	 * @return Return a {@code CountResult} object
 	 */
-	CountResult countBySpec(
+	CountResult countBySpecification(
 			@NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Specification specification,
 			final Object... directives);
 }

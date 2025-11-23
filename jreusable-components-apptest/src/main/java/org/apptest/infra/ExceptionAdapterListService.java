@@ -7,8 +7,6 @@ import org.reusablecomponents.base.core.infra.exception.common.ElementConflictEx
 import org.reusablecomponents.base.core.infra.exception.common.ElementInvalidException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementNotFoundException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
-import org.reusablecomponents.base.core.infra.util.function.operation.CommandOperation;
-import org.reusablecomponents.base.core.infra.util.function.operation.QueryOperation;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 
 public class ExceptionAdapterListService implements InterfaceExceptionAdapterService {

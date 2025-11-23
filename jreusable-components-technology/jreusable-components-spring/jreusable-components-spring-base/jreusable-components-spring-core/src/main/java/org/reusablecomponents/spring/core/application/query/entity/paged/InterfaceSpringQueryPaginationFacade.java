@@ -27,12 +27,12 @@ public interface InterfaceSpringQueryPaginationFacade<Entity extends AbstractEnt
    */
   @Override
   @Cacheable
-  Page<Entity> findAll(final Pageable pageable, final Object... directives);
+  Page<Entity> findAllPaged(final Pageable pageable, final Object... directives);
 
   /**
    * {@inheritDoc}
    */
   @Override
   @Cacheable
-  Optional<Entity> findOne(final Sort sort, final Object... directives);
+  Optional<Entity> findOneSorted(final Sort sort, final Object... directives);
 }

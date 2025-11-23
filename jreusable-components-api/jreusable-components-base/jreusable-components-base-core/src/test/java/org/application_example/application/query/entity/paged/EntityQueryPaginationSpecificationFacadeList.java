@@ -14,7 +14,7 @@ import org.reusablecomponents.base.translation.JavaSEI18nService;
 
 public class EntityQueryPaginationSpecificationFacadeList<Entity extends AbstractEntity<Id>, Id>
         extends
-        QueryPaginationSpecificationFacade<Entity, Id, Entity, List<Entity>, PageList<Entity>, Comparator<Entity>, Predicate<Entity>> {
+        QueryPaginationSpecificationFacade<Entity, Id, Entity, List<Entity>, Predicate<Entity>, PageList<Entity>, Comparator<Entity>> {
 
     private static final void validate(final Object... directives) {
 
@@ -32,7 +32,7 @@ public class EntityQueryPaginationSpecificationFacadeList<Entity extends Abstrac
     public EntityQueryPaginationSpecificationFacadeList(final List<Entity> repository) {
         super(new QueryPaginationSpecificationFacadeBuilder<>($ -> {
 
-            $.findByPagAndSpecFunction = (pageable, specification, directives) -> {
+            $.findPagedAndSpecificatedByFunction = (specification, pageable, directives) -> {
                 validate(directives);
                 return pageable.getData()
                         .stream()
@@ -40,7 +40,7 @@ public class EntityQueryPaginationSpecificationFacadeList<Entity extends Abstrac
                         .toList();
             };
 
-            $.findOneByPagAndSpecFunction = (sort, specification, directives) -> {
+            $.findOneSortedSpecificatedByFunction = (specification, sort, directives) -> {
                 validate(directives);
                 return repository
                         .stream()

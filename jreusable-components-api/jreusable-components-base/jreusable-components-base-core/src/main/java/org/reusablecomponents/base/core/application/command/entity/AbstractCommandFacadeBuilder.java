@@ -5,35 +5,35 @@ import static java.util.Objects.nonNull;
 import java.util.function.Consumer;
 
 import org.reusablecomponents.base.core.application.base.BaseFacadeBuilder;
-import org.reusablecomponents.base.core.application.command.function.operation.delete.ErrorDeleteAllFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.delete.ErrorDeleteByIdFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.delete.ErrorDeleteByIdsFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.delete.ErrorDeleteFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.delete.PosDeleteAllFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.delete.PosDeleteByIdFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.delete.PosDeleteByIdsFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.delete.PosDeleteFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.delete.PreDeleteAllFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.delete.PreDeleteByIdFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.delete.PreDeleteByIdsFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.delete.PreDeleteFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.save.ErrorSaveAllFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.save.ErrorSaveFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.save.PosSaveAllFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.save.PosSaveFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.save.PreSaveAllFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.save.PreSaveFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.update.ErrorUpdateAllFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.update.ErrorUpdateFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.update.PosUpdateAllFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.update.PosUpdateFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.update.PreUpdateAllFunction;
-import org.reusablecomponents.base.core.application.command.function.operation.update.PreUpdateFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete.ErrorDeleteAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete.ErrorDeleteByIdFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete.ErrorDeleteByIdsFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete.ErrorDeleteFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete.PosDeleteAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete.PosDeleteByIdFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete.PosDeleteByIdsFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete.PosDeleteFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete.PreDeleteAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete.PreDeleteByIdFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete.PreDeleteByIdsFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete.PreDeleteFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save.ErrorSaveAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save.ErrorSaveFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save.PosSaveAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save.PosSaveFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save.PreSaveAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save.PreSaveFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.update.ErrorUpdateAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.update.ErrorUpdateFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.update.PosUpdateAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.update.PosUpdateFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.update.PreUpdateAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.update.PreUpdateFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, // basic
+abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, // basic
 		// save
 		SaveEntityIn, SaveEntityOut, // save a entity
 		SaveEntitiesIn, SaveEntitiesOut, // save entities
@@ -99,67 +99,64 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 	public ErrorDeleteByIdsFunction<DeleteIdsIn> errorDeleteByIdsFunction;
 
 	protected AbstractCommandFacadeBuilder(
-			final Consumer<? extends AbstractCommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>> function) {
-		LOGGER.debug("Constructing AbstractCommandFacadeBuilder {}", function);
-		super(function);
+			final Consumer<? extends AbstractCommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>> builder) {
+		LOGGER.debug("Constructing AbstractCommandFacadeBuilder {}", builder);
+		super(builder);
 
-		this.preSaveFunction = getPreSaveFunction(preSaveFunction);
-		this.posSaveFunction = getPosSaveFunction(posSaveFunction);
-		this.errorSaveFunction = getErrorSaveFunction(errorSaveFunction);
+		this.preSaveFunction = getPreSaveFunction();
+		this.posSaveFunction = getPosSaveFunction();
+		this.errorSaveFunction = getErrorSaveFunction();
 
-		this.preSaveAllFunction = getPreSaveAllFunction(preSaveAllFunction);
-		this.posSaveAllFunction = getPosSaveAllFunction(posSaveAllFunction);
-		this.errorSaveAllFunction = getErrorSaveAllFunction(errorSaveAllFunction);
+		this.preSaveAllFunction = getPreSaveAllFunction();
+		this.posSaveAllFunction = getPosSaveAllFunction();
+		this.errorSaveAllFunction = getErrorSaveAllFunction();
 
-		this.preUpdateFunction = getPreUpdateFunction(preUpdateFunction);
-		this.posUpdateFunction = getPosUpdateFunction(posUpdateFunction);
-		this.errorUpdateFunction = getErrorUpdateFunction(errorUpdateFunction);
+		this.preUpdateFunction = getPreUpdateFunction();
+		this.posUpdateFunction = getPosUpdateFunction();
+		this.errorUpdateFunction = getErrorUpdateFunction();
 
-		this.preUpdateAllFunction = getPreUpdateAllFunction(preUpdateAllFunction);
-		this.posUpdateAllFunction = getPosUpdateAllFunction(posUpdateAllFunction);
-		this.errorUpdateAllFunction = getErrorUpdateAllFunction(errorUpdateAllFunction);
+		this.preUpdateAllFunction = getPreUpdateAllFunction();
+		this.posUpdateAllFunction = getPosUpdateAllFunction();
+		this.errorUpdateAllFunction = getErrorUpdateAllFunction();
 
-		this.preDeleteFunction = getPreDeleteFunction(preDeleteFunction);
-		this.posDeleteFunction = getPosDeleteFunction(posDeleteFunction);
-		this.errorDeleteFunction = getErrorDeleteFunction(errorDeleteFunction);
+		this.preDeleteFunction = getPreDeleteFunction();
+		this.posDeleteFunction = getPosDeleteFunction();
+		this.errorDeleteFunction = getErrorDeleteFunction();
 
-		this.preDeleteAllFunction = getDeleteAllFunction(preDeleteAllFunction);
-		this.posDeleteAllFunction = getPosDeleteAllFunction(posDeleteAllFunction);
-		this.errorDeleteAllFunction = getErrorDeleteAllFunction(errorDeleteAllFunction);
+		this.preDeleteAllFunction = getPreDeleteAllFunction();
+		this.posDeleteAllFunction = getPosDeleteAllFunction();
+		this.errorDeleteAllFunction = getErrorDeleteAllFunction();
 
-		this.preDeleteByIdFunction = getPreDeleteByIdFunction(preDeleteByIdFunction);
-		this.posDeleteByIdFunction = getPosDeleteByIdFunction(posDeleteByIdFunction);
-		this.errorDeleteByIdFunction = getErrorDeleteByIdFunction(errorDeleteByIdFunction);
+		this.preDeleteByIdFunction = getPreDeleteByIdFunction();
+		this.posDeleteByIdFunction = getPosDeleteByIdFunction();
+		this.errorDeleteByIdFunction = getErrorDeleteByIdFunction();
 
-		this.preDeleteByIdsFunction = getPreDeleteByIdsFunction(preDeleteByIdsFunction);
-		this.posDeleteByIdsFunction = getPosDeleteByIdsFunction(posDeleteByIdsFunction);
-		this.errorDeleteByIdsFunction = getErrorDeleteByIdsFunction(errorDeleteByIdsFunction);
+		this.preDeleteByIdsFunction = getPreDeleteByIdsFunction();
+		this.posDeleteByIdsFunction = getPosDeleteByIdsFunction();
+		this.errorDeleteByIdsFunction = getErrorDeleteByIdsFunction();
 	}
 
-	private PreDeleteFunction<DeleteEntityIn> getPreDeleteFunction(
-			PreDeleteFunction<DeleteEntityIn> newPreDeleteFunction) {
-		return nonNull(newPreDeleteFunction)
-				? newPreDeleteFunction
+	private PreDeleteFunction<DeleteEntityIn> getPreDeleteFunction() {
+		return nonNull(preDeleteFunction)
+				? preDeleteFunction
 				: (deleteEntityIn, directives) -> {
 					LOGGER.debug("Default preDelete, deleteEntityIn {}, directives {}", deleteEntityIn, directives);
 					return deleteEntityIn;
 				};
 	}
 
-	private PosDeleteFunction<DeleteEntityOut> getPosDeleteFunction(
-			final PosDeleteFunction<DeleteEntityOut> newPosDeleteFunction) {
-		return nonNull(newPosDeleteFunction)
-				? newPosDeleteFunction
+	private PosDeleteFunction<DeleteEntityOut> getPosDeleteFunction() {
+		return nonNull(posDeleteFunction)
+				? posDeleteFunction
 				: (deleteEntityOut, directives) -> {
 					LOGGER.debug("Default posDelete, deleteEntityOut {}, directives {}", deleteEntityOut, directives);
 					return deleteEntityOut;
 				};
 	}
 
-	private ErrorDeleteFunction<DeleteEntityIn> getErrorDeleteFunction(
-			final ErrorDeleteFunction<DeleteEntityIn> newErrorDeleteFunction) {
-		return nonNull(newErrorDeleteFunction)
-				? newErrorDeleteFunction
+	private ErrorDeleteFunction<DeleteEntityIn> getErrorDeleteFunction() {
+		return nonNull(errorDeleteFunction)
+				? errorDeleteFunction
 				: (exception, deleteEntityIn, directives) -> {
 					LOGGER.debug("Default errorDelete, deleteEntityIn {}, exception {}, directives {}",
 							deleteEntityIn, exception, directives);
@@ -167,20 +164,18 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PreSaveFunction<SaveEntityIn> getPreSaveFunction(
-			final PreSaveFunction<SaveEntityIn> newPreSaveFunction) {
-		return nonNull(newPreSaveFunction)
-				? newPreSaveFunction
+	private PreSaveFunction<SaveEntityIn> getPreSaveFunction() {
+		return nonNull(preSaveFunction)
+				? preSaveFunction
 				: (saveEntityIn, directives) -> {
 					LOGGER.debug("Default preSave, saveEntityIn {}, directives {}", saveEntityIn, directives);
 					return saveEntityIn;
 				};
 	}
 
-	private PosSaveFunction<SaveEntityOut> getPosSaveFunction(
-			final PosSaveFunction<SaveEntityOut> newPosSaveFunction) {
-		return nonNull(newPosSaveFunction)
-				? newPosSaveFunction
+	private PosSaveFunction<SaveEntityOut> getPosSaveFunction() {
+		return nonNull(posSaveFunction)
+				? posSaveFunction
 				: (saveEntityOut, directives) -> {
 					LOGGER.debug("Default posSave, saveEntityOut {}, directives {}", saveEntityOut,
 							directives);
@@ -188,10 +183,9 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private ErrorSaveFunction<SaveEntityIn> getErrorSaveFunction(
-			final ErrorSaveFunction<SaveEntityIn> newErrorSaveFunction) {
-		return nonNull(newErrorSaveFunction)
-				? newErrorSaveFunction
+	private ErrorSaveFunction<SaveEntityIn> getErrorSaveFunction() {
+		return nonNull(errorSaveFunction)
+				? errorSaveFunction
 				: (exception, saveEntityIn, directives) -> {
 					LOGGER.debug("Default errorSave, saveEntityIn {}, exception {}, directives {}",
 							saveEntityIn, exception, directives);
@@ -199,10 +193,9 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PreSaveAllFunction<SaveEntitiesIn> getPreSaveAllFunction(
-			final PreSaveAllFunction<SaveEntitiesIn> newPreSaveAllFunction) {
-		return nonNull(newPreSaveAllFunction)
-				? newPreSaveAllFunction
+	private PreSaveAllFunction<SaveEntitiesIn> getPreSaveAllFunction() {
+		return nonNull(preSaveAllFunction)
+				? preSaveAllFunction
 				: (saveEntitiesIn, directives) -> {
 					LOGGER.debug("Default preSaveAll, saveEntiesIn {}, directives {}",
 							saveEntitiesIn, directives);
@@ -210,10 +203,9 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PosSaveAllFunction<SaveEntitiesOut> getPosSaveAllFunction(
-			final PosSaveAllFunction<SaveEntitiesOut> newPosSaveAllFunction) {
-		return nonNull(newPosSaveAllFunction)
-				? newPosSaveAllFunction
+	private PosSaveAllFunction<SaveEntitiesOut> getPosSaveAllFunction() {
+		return nonNull(posSaveAllFunction)
+				? posSaveAllFunction
 				: (saveEntitiesOut, directives) -> {
 					LOGGER.debug("Default posSaveAll, saveEntiesOut {}, directives {}",
 							saveEntitiesOut, directives);
@@ -221,10 +213,9 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private ErrorSaveAllFunction<SaveEntitiesIn> getErrorSaveAllFunction(
-			final ErrorSaveAllFunction<SaveEntitiesIn> newErrorSaveAllFunction) {
-		return nonNull(newErrorSaveAllFunction)
-				? newErrorSaveAllFunction
+	private ErrorSaveAllFunction<SaveEntitiesIn> getErrorSaveAllFunction() {
+		return nonNull(errorSaveAllFunction)
+				? errorSaveAllFunction
 				: (exception, saveEntitiesIn, directives) -> {
 					LOGGER.debug("Default errorSaveAll, saveEntitiesIn {}, exception {}, directives {}",
 							saveEntitiesIn, exception, directives);
@@ -232,10 +223,9 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PreUpdateFunction<UpdateEntityIn> getPreUpdateFunction(
-			final PreUpdateFunction<UpdateEntityIn> newPreUpdateFunction) {
-		return nonNull(newPreUpdateFunction)
-				? newPreUpdateFunction
+	private PreUpdateFunction<UpdateEntityIn> getPreUpdateFunction() {
+		return nonNull(preUpdateFunction)
+				? preUpdateFunction
 				: (updateEntityIn, directives) -> {
 					LOGGER.debug("Default preUpdate, updateEntityIn {}, directives {}",
 							updateEntityIn, directives);
@@ -243,10 +233,9 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PosUpdateFunction<UpdateEntityOut> getPosUpdateFunction(
-			final PosUpdateFunction<UpdateEntityOut> newPosUpdateFunction) {
-		return nonNull(newPosUpdateFunction)
-				? newPosUpdateFunction
+	private PosUpdateFunction<UpdateEntityOut> getPosUpdateFunction() {
+		return nonNull(posUpdateFunction)
+				? posUpdateFunction
 				: (updateEntityOut, directives) -> {
 					LOGGER.debug("Executing default preUpdate, updateEntityOut {}, directives {}",
 							updateEntityOut,
@@ -255,10 +244,9 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private ErrorUpdateFunction<UpdateEntityIn> getErrorUpdateFunction(
-			final ErrorUpdateFunction<UpdateEntityIn> newErrorUpdateFunction) {
-		return nonNull(newErrorUpdateFunction)
-				? newErrorUpdateFunction
+	private ErrorUpdateFunction<UpdateEntityIn> getErrorUpdateFunction() {
+		return nonNull(errorUpdateFunction)
+				? errorUpdateFunction
 				: (exception, updateEntityIn, directives) -> {
 					LOGGER.debug("Executing default errorUpdate, updateEntityIn {}, exception {}, directives {}",
 							updateEntityIn, exception, directives);
@@ -266,10 +254,9 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PreUpdateAllFunction<UpdateEntitiesIn> getPreUpdateAllFunction(
-			final PreUpdateAllFunction<UpdateEntitiesIn> newPreUpdateAllFunction) {
-		return nonNull(newPreUpdateAllFunction)
-				? newPreUpdateAllFunction
+	private PreUpdateAllFunction<UpdateEntitiesIn> getPreUpdateAllFunction() {
+		return nonNull(preUpdateAllFunction)
+				? preUpdateAllFunction
 				: (updateEntitiesIn, directives) -> {
 					LOGGER.debug("Default preUpdateAll, updateEntityIn {}, directives {}",
 							updateEntitiesIn, directives);
@@ -277,10 +264,9 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PosUpdateAllFunction<UpdateEntitiesOut> getPosUpdateAllFunction(
-			final PosUpdateAllFunction<UpdateEntitiesOut> newPosUpdateAllFunction) {
-		return nonNull(newPosUpdateAllFunction)
-				? newPosUpdateAllFunction
+	private PosUpdateAllFunction<UpdateEntitiesOut> getPosUpdateAllFunction() {
+		return nonNull(posUpdateAllFunction)
+				? posUpdateAllFunction
 				: (final UpdateEntitiesOut updateEntitiesOut,
 						final Object... directives) -> {
 					LOGGER.debug("Default posUpdateAll, updateEntitiesOut {}, directives {}",
@@ -289,10 +275,9 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private ErrorUpdateAllFunction<UpdateEntitiesIn> getErrorUpdateAllFunction(
-			final ErrorUpdateAllFunction<UpdateEntitiesIn> newErrorUpdateAllFunction) {
-		return nonNull(newErrorUpdateAllFunction)
-				? newErrorUpdateAllFunction
+	private ErrorUpdateAllFunction<UpdateEntitiesIn> getErrorUpdateAllFunction() {
+		return nonNull(errorUpdateAllFunction)
+				? errorUpdateAllFunction
 				: (exception, updateEntitiesIn, directives) -> {
 					LOGGER.debug("Default errorUpdateAll, updateEntitiesIn {}, exception {}, directives {}",
 							updateEntitiesIn, exception, directives);
@@ -300,10 +285,9 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PreDeleteAllFunction<DeleteEntitiesIn> getDeleteAllFunction(
-			final PreDeleteAllFunction<DeleteEntitiesIn> newPreDeleteAllFunction) {
-		return nonNull(newPreDeleteAllFunction)
-				? newPreDeleteAllFunction
+	private PreDeleteAllFunction<DeleteEntitiesIn> getPreDeleteAllFunction() {
+		return nonNull(preDeleteAllFunction)
+				? preDeleteAllFunction
 				: (deleteEntitiesIn, directives) -> {
 					LOGGER.debug("Default preDeleteAll, deleteEntityIn {}, directives {}", deleteEntitiesIn,
 							directives);
@@ -311,8 +295,7 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PosDeleteAllFunction<DeleteEntitiesOut> getPosDeleteAllFunction(
-			final PosDeleteAllFunction<DeleteEntitiesOut> posDeleteAllFunction) {
+	private PosDeleteAllFunction<DeleteEntitiesOut> getPosDeleteAllFunction() {
 		return nonNull(posDeleteAllFunction)
 				? posDeleteAllFunction
 				: (deleteEntitiesOut, directives) -> {
@@ -322,8 +305,7 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private ErrorDeleteAllFunction<DeleteEntitiesIn> getErrorDeleteAllFunction(
-			final ErrorDeleteAllFunction<DeleteEntitiesIn> errorDeleteAllFunction) {
+	private ErrorDeleteAllFunction<DeleteEntitiesIn> getErrorDeleteAllFunction() {
 		return nonNull(errorDeleteAllFunction)
 				? errorDeleteAllFunction
 				: (exception, deleteEntitiesIn, directives) -> {
@@ -333,28 +315,25 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PreDeleteByIdFunction<DeleteIdIn> getPreDeleteByIdFunction(
-			final PreDeleteByIdFunction<DeleteIdIn> newPreDeleteByIdFunction) {
-		return nonNull(newPreDeleteByIdFunction)
-				? newPreDeleteByIdFunction
+	private PreDeleteByIdFunction<DeleteIdIn> getPreDeleteByIdFunction() {
+		return nonNull(preDeleteByIdFunction)
+				? preDeleteByIdFunction
 				: (deleteIdIn, directives) -> {
 					LOGGER.debug("Default preDeleteBy, deleteIdIn {}, directives {}", deleteIdIn, directives);
 					return deleteIdIn;
 				};
 	}
 
-	private PosDeleteByIdFunction<DeleteIdOut> getPosDeleteByIdFunction(
-			final PosDeleteByIdFunction<DeleteIdOut> newPosDeleteByIdFunction) {
-		return nonNull(newPosDeleteByIdFunction)
-				? newPosDeleteByIdFunction
+	private PosDeleteByIdFunction<DeleteIdOut> getPosDeleteByIdFunction() {
+		return nonNull(posDeleteByIdFunction)
+				? posDeleteByIdFunction
 				: (deleteIdOut, directives) -> {
 					LOGGER.debug("Default posDeleteBy, deleteIdOut {}, directives {}", deleteIdOut, directives);
 					return deleteIdOut;
 				};
 	}
 
-	private ErrorDeleteByIdFunction<DeleteIdIn> getErrorDeleteByIdFunction(
-			final ErrorDeleteByIdFunction<DeleteIdIn> errorDeleteByIdFunction) {
+	private ErrorDeleteByIdFunction<DeleteIdIn> getErrorDeleteByIdFunction() {
 		return nonNull(errorDeleteByIdFunction)
 				? errorDeleteByIdFunction
 				: (exception, deleteIdIn, directives) -> {
@@ -364,28 +343,25 @@ public abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PreDeleteByIdsFunction<DeleteIdsIn> getPreDeleteByIdsFunction(
-			final PreDeleteByIdsFunction<DeleteIdsIn> newPreDeleteByIdsFunction) {
-		return nonNull(newPreDeleteByIdsFunction)
-				? newPreDeleteByIdsFunction
+	private PreDeleteByIdsFunction<DeleteIdsIn> getPreDeleteByIdsFunction() {
+		return nonNull(preDeleteByIdsFunction)
+				? preDeleteByIdsFunction
 				: (deleteIdsIn, directives) -> {
 					LOGGER.debug("Default preDeleteAllBy, deleteIdsIn {}, directives {}", deleteIdsIn, directives);
 					return deleteIdsIn;
 				};
 	}
 
-	private PosDeleteByIdsFunction<DeleteIdsOut> getPosDeleteByIdsFunction(
-			final PosDeleteByIdsFunction<DeleteIdsOut> newPosDeleteByIdsFunction) {
-		return nonNull(newPosDeleteByIdsFunction)
-				? newPosDeleteByIdsFunction
+	private PosDeleteByIdsFunction<DeleteIdsOut> getPosDeleteByIdsFunction() {
+		return nonNull(posDeleteByIdsFunction)
+				? posDeleteByIdsFunction
 				: (deleteIdsOut, directives) -> {
 					LOGGER.debug("Default posDeleteAllBy, deleteIdsOut {}, directives {}", deleteIdsOut, directives);
 					return deleteIdsOut;
 				};
 	}
 
-	private ErrorDeleteByIdsFunction<DeleteIdsIn> getErrorDeleteByIdsFunction(
-			final ErrorDeleteByIdsFunction<DeleteIdsIn> errorDeleteByIdsFunction) {
+	private ErrorDeleteByIdsFunction<DeleteIdsIn> getErrorDeleteByIdsFunction() {
 		return nonNull(errorDeleteByIdsFunction)
 				? errorDeleteByIdsFunction
 				: (exception, deleteIdsIn, directives) -> {

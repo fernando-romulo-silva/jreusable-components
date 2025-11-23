@@ -51,8 +51,14 @@ public class BaseFacadeBuilder {
 
         finalFunction.accept(this);
 
-        i18nService = nonNull(i18nService) ? i18nService : new JavaSEI18nService();
-        securityService = nonNull(securityService) ? securityService : new DefaultSecurityService();
+        i18nService = nonNull(i18nService)
+                ? i18nService
+                : new JavaSEI18nService();
+
+        securityService = nonNull(securityService)
+                ? securityService
+                : new DefaultSecurityService();
+
         exceptionAdapterService = nonNull(exceptionAdapterService)
                 ? exceptionAdapterService
                 : new DefaultExceptionAdapterService();

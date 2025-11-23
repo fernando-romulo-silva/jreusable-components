@@ -67,7 +67,7 @@ class QuerySpecificationFacadeHappyPathTest {
         final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(), "Default 01");
 
         // when
-        final var result = defaultQueryFacade.findOneBySpec(spec);
+        final var result = defaultQueryFacade.findOneBySpecification(spec);
 
         // then
         assertThat(department01).isEqualTo(result);
@@ -84,12 +84,12 @@ class QuerySpecificationFacadeHappyPathTest {
         final Predicate<Department> spec02 = department -> equalsIgnoreCase(department.getName(), "Whatever");
 
         // when
-        final var result = defaultQueryFacade.findBySpec(spec01);
+        final var result = defaultQueryFacade.findBySpecification(spec01);
 
         // then
         assertThat(result)
                 .containsAll(defaultData)
-                .matches(e -> defaultQueryFacade.findBySpec(spec02).isEmpty());
+                .matches(e -> defaultQueryFacade.findBySpecification(spec02).isEmpty());
     }
 
     @Test
@@ -100,7 +100,7 @@ class QuerySpecificationFacadeHappyPathTest {
         final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(), "Default 01");
 
         // when
-        final var result = defaultQueryFacade.countBySpec(spec);
+        final var result = defaultQueryFacade.countBySpecification(spec);
 
         // then
         assertThat(result).isEqualTo(NumberUtils.LONG_ONE);
@@ -117,11 +117,11 @@ class QuerySpecificationFacadeHappyPathTest {
         final var existsAll = defaultData.size() > 0;
 
         // when
-        final var result = defaultQueryFacade.existsBySpec(spec01);
+        final var result = defaultQueryFacade.existsBySpecification(spec01);
 
         // then
         assertThat(existsAll)
                 .isEqualTo(result)
-                .matches(e -> defaultQueryFacade.existsBySpec(spec02) != existsAll);
+                .matches(e -> defaultQueryFacade.existsBySpecification(spec02) != existsAll);
     }
 }

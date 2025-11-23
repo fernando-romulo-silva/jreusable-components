@@ -193,32 +193,32 @@ public interface InterfaceNonPagedFacade<Entity extends AbstractEntity<Id>, Id, 
      * {@inheritDoc}
      */
     @Override
-    default MultipleResult findBySpec(final Specification specification, final Object... directives) {
-        return getEntityQuerySpecificationFacade().findBySpec(specification, directives);
+    default MultipleResult findBySpecification(final Specification specification, final Object... directives) {
+        return getEntityQuerySpecificationFacade().findBySpecification(specification, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default OneResult findOneBySpec(final Specification specification, final Object... directives) {
-        return getEntityQuerySpecificationFacade().findOneBySpec(specification, directives);
+    default OneResult findOneBySpecification(final Specification specification, final Object... directives) {
+        return getEntityQuerySpecificationFacade().findOneBySpecification(specification, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default ExistsResult existsBySpec(final Specification specification, final Object... directives) {
-        return getEntityQuerySpecificationFacade().existsBySpec(specification, directives);
+    default ExistsResult existsBySpecification(final Specification specification, final Object... directives) {
+        return getEntityQuerySpecificationFacade().existsBySpecification(specification, directives);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default CountResult countBySpec(final Specification specification, final Object... directives) {
-        return getEntityQuerySpecificationFacade().countBySpec(specification, directives);
+    default CountResult countBySpecification(final Specification specification, final Object... directives) {
+        return getEntityQuerySpecificationFacade().countBySpecification(specification, directives);
     }
 
     /**

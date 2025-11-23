@@ -74,7 +74,7 @@ class QueryPaginationFacadeHappyPathTest {
         final var sort = (Comparator<Department>) Comparator.comparing(Department::getName).reversed();
 
         // when
-        final var result = defaultQueryFacade.findOne(sort);
+        final var result = defaultQueryFacade.findOneSorted(sort);
 
         // then
         assertThat(defaultData.getLast()).isEqualTo(result);
@@ -91,7 +91,7 @@ class QueryPaginationFacadeHappyPathTest {
         final var departmentOusidePage = defaultData.get(5);
 
         // when
-        final var result = defaultQueryFacade.findAll(pageable);
+        final var result = defaultQueryFacade.findAllPaged(pageable);
 
         // then
         assertThat(result)

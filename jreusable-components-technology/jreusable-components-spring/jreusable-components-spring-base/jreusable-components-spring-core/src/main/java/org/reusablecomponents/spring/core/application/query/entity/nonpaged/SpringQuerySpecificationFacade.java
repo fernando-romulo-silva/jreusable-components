@@ -35,7 +35,8 @@ public class SpringQuerySpecificationFacade<Entity extends AbstractEntity<Id>, I
 		super(new QuerySpecificationFacadeBuilder<>($ -> {
 
 			$.findBySpecificationFunction = (specification, directives) -> repository.findBy(specification);
-			$.findOneByFunction = (specification, directives) -> repository.findOneBy(specification);
+			$.findOneBySpecificationFunction = (specification, directives) -> repository
+					.findOneBy(specification);
 			$.existsBySpecificationFunction = (specification, directives) -> repository.findOneBy(specification)
 					.isPresent();
 			$.countBySpecificationFunction = (specification, directives) -> Long
