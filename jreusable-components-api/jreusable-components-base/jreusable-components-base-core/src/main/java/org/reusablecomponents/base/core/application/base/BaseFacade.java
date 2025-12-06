@@ -17,8 +17,6 @@ import static org.reusablecomponents.base.core.application.base.BaseFacadeMessag
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.PRE_LOG;
 import static org.reusablecomponents.base.core.infra.util.function.FunctionCommonUtils.createNullPointerException;
 
-import java.util.Map.Entry;
-
 import org.reusablecomponents.base.core.application.command.entity.AbstractCommandFacade;
 import org.reusablecomponents.base.core.application.empty.EmptyFacade;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.AbstractQueryPaginationSpecificationFacade;

@@ -1,4 +1,4 @@
-package org.reusablecomponents.base.core.application.command.entity.function.save;
+package org.reusablecomponents.base.core.application.command.entity.function.save_all;
 
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction3Args;

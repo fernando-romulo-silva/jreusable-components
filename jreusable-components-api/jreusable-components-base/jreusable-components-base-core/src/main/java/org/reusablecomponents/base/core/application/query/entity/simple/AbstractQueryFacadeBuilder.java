@@ -68,31 +68,30 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         LOGGER.debug("Constructing AbstractQueryFacadeBuilder");
         super(function);
 
-        this.preFindByIdFunction = getPreFindByIdFunction(preFindByIdFunction);
-        this.posFindByIdFunction = getPosFindByIdFunction(posFindByIdFunction);
-        this.errorFindByIdFunction = getErrorFindByIdFunction(errorFindByIdFunction);
+        this.preFindByIdFunction = getPreFindByIdFunction();
+        this.posFindByIdFunction = getPosFindByIdFunction();
+        this.errorFindByIdFunction = getErrorFindByIdFunction();
 
-        this.preFindAllFunction = getPreFindAllFunction(preFindAllFunction);
-        this.posFindAllFunction = getPosFindAllFunction(posFindAllFunction);
-        this.errorFindAllFunction = getErrorFindAllFunction(errorFindAllFunction);
+        this.preFindAllFunction = getPreFindAllFunction();
+        this.posFindAllFunction = getPosFindAllFunction();
+        this.errorFindAllFunction = getErrorFindAllFunction();
 
-        this.preCountAllFunction = getPreCountAllFunction(preCountAllFunction);
-        this.posCountAllFunction = getPosCountAllFunction(posCountAllFunction);
-        this.errorCountAllFunction = getErrorCountAllFunction(errorCountAllFunction);
+        this.preCountAllFunction = getPreCountAllFunction();
+        this.posCountAllFunction = getPosCountAllFunction();
+        this.errorCountAllFunction = getErrorCountAllFunction();
 
-        this.preExistsAllFunction = getPreExistsAllFunction(preExistsAllFunction);
-        this.posExistsAllFunction = getPosExistsAllFunction(posExistsAllFunction);
-        this.errorExistsAllFunction = getErrorExistsAllFunction(errorExistsAllFunction);
+        this.preExistsAllFunction = getPreExistsAllFunction();
+        this.posExistsAllFunction = getPosExistsAllFunction();
+        this.errorExistsAllFunction = getErrorExistsAllFunction();
 
-        this.preExistsByIdFunction = getPreExistsByIdFunction(preExistsByIdFunction);
-        this.posExistsByIdFunction = getPosExistsByIdFunction(posExistsByIdFunction);
-        this.errorExistsByIdFunction = getErrorExistsByIdFunction(errorExistsByIdFunction);
+        this.preExistsByIdFunction = getPreExistsByIdFunction();
+        this.posExistsByIdFunction = getPosExistsByIdFunction();
+        this.errorExistsByIdFunction = getErrorExistsByIdFunction();
 
         LOGGER.debug("AbstractQueryFacadeBuilder constructed");
     }
 
-    private PreExistsByIdFunction<QueryIdIn> getPreExistsByIdFunction(
-            final PreExistsByIdFunction<QueryIdIn> preExistsByIdFunction) {
+    private PreExistsByIdFunction<QueryIdIn> getPreExistsByIdFunction() {
         return nonNull(preExistsByIdFunction)
                 ? preExistsByIdFunction
                 : (queryIdIn, directives) -> {
@@ -101,8 +100,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private ErrorExistsByIdFunction<QueryIdIn> getErrorExistsByIdFunction(
-            final ErrorExistsByIdFunction<QueryIdIn> errorExistsByIdFunction) {
+    private ErrorExistsByIdFunction<QueryIdIn> getErrorExistsByIdFunction() {
         return nonNull(errorExistsByIdFunction)
                 ? errorExistsByIdFunction
                 : (exception, queryIdIn, directives) -> {
@@ -112,8 +110,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PosExistsByIdFunction<ExistsResult> getPosExistsByIdFunction(
-            final PosExistsByIdFunction<ExistsResult> posExistsByIdFunction) {
+    private PosExistsByIdFunction<ExistsResult> getPosExistsByIdFunction() {
         return nonNull(posExistsByIdFunction)
                 ? posExistsByIdFunction
                 : (existsResult, directives) -> {
@@ -122,7 +119,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PreFindAllFunction getPreFindAllFunction(final PreFindAllFunction preFindAllFunction) {
+    private PreFindAllFunction getPreFindAllFunction() {
         return nonNull(preFindAllFunction)
                 ? preFindAllFunction
                 : directives -> {
@@ -137,8 +134,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PosFindAllFunction<MultipleResult> getPosFindAllFunction(
-            PosFindAllFunction<MultipleResult> posFindAllFunction) {
+    private PosFindAllFunction<MultipleResult> getPosFindAllFunction() {
         return nonNull(posFindAllFunction)
                 ? posFindAllFunction
                 : (multipleResult, directives) -> {
@@ -148,7 +144,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
 
     }
 
-    private ErrorFindAllFunction getErrorFindAllFunction(final ErrorFindAllFunction errorFindAllFunction) {
+    private ErrorFindAllFunction getErrorFindAllFunction() {
         return nonNull(errorFindAllFunction)
                 ? errorFindAllFunction
                 : (exception, directives) -> {
@@ -157,8 +153,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PreFindByIdFunction<QueryIdIn> getPreFindByIdFunction(
-            final PreFindByIdFunction<QueryIdIn> preFindByIdFunction) {
+    private PreFindByIdFunction<QueryIdIn> getPreFindByIdFunction() {
         return nonNull(preFindByIdFunction)
                 ? preFindByIdFunction
                 : (queryIdIn, directives) -> {
@@ -167,8 +162,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PosFindByIdFunction<OneResult> getPosFindByIdFunction(
-            final PosFindByIdFunction<OneResult> posFindByIdFunction) {
+    private PosFindByIdFunction<OneResult> getPosFindByIdFunction() {
         return nonNull(posFindByIdFunction)
                 ? posFindByIdFunction
                 : (oneResult, directives) -> {
@@ -177,8 +171,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private ErrorFindByIdFunction<QueryIdIn> getErrorFindByIdFunction(
-            final ErrorFindByIdFunction<QueryIdIn> errorFindByIdFunction) {
+    private ErrorFindByIdFunction<QueryIdIn> getErrorFindByIdFunction() {
         return nonNull(errorFindByIdFunction)
                 ? errorFindByIdFunction
                 : (exception, queryIdIn, directives) -> {
@@ -188,7 +181,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PreCountAllFunction getPreCountAllFunction(final PreCountAllFunction preCountAllFunction) {
+    private PreCountAllFunction getPreCountAllFunction() {
         return nonNull(preCountAllFunction)
                 ? preCountAllFunction
                 : (final Object... directives) -> {
@@ -197,8 +190,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PosCountAllFunction<CountResult> getPosCountAllFunction(
-            final PosCountAllFunction<CountResult> posCountAllFunction) {
+    private PosCountAllFunction<CountResult> getPosCountAllFunction() {
         return nonNull(posCountAllFunction)
                 ? posCountAllFunction
                 : (final CountResult countResult, final Object... directives) -> {
@@ -207,7 +199,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private ErrorCountAllFunction getErrorCountAllFunction(final ErrorCountAllFunction errorCountAllFunction) {
+    private ErrorCountAllFunction getErrorCountAllFunction() {
         return nonNull(errorCountAllFunction)
                 ? errorCountAllFunction
                 : (exception, directives) -> {
@@ -216,7 +208,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PreExistsAllFunction getPreExistsAllFunction(final PreExistsAllFunction preExistsAllFunction) {
+    private PreExistsAllFunction getPreExistsAllFunction() {
         return nonNull(preExistsAllFunction)
                 ? preExistsAllFunction
                 : directives -> {
@@ -225,8 +217,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PosExistsAllFunction<ExistsResult> getPosExistsAllFunction(
-            final PosExistsAllFunction<ExistsResult> posExistsAllFunction) {
+    private PosExistsAllFunction<ExistsResult> getPosExistsAllFunction() {
         return nonNull(posExistsAllFunction)
                 ? posExistsAllFunction
                 : (existsResult, directives) -> {
@@ -236,7 +227,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
 
     }
 
-    private ErrorExistsAllFunction getErrorExistsAllFunction(final ErrorExistsAllFunction errorExistsAllFunction) {
+    private ErrorExistsAllFunction getErrorExistsAllFunction() {
         return nonNull(errorExistsAllFunction)
                 ? errorExistsAllFunction
                 : (exception, directives) -> {

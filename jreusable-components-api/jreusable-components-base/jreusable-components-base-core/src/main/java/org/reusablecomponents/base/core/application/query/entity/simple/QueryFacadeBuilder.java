@@ -60,56 +60,52 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 		LOGGER.debug("Constructing QueryFacadeBuilder");
 		super(function);
 
-		this.existsByIdFunction = getExistsByIdFunction(existsByIdFunction);
-		this.findByIdFunction = getFindByIdFunction(findByIdFunction);
-		this.findAllFunction = getFindAllFunction(findAllFunction);
-		this.countAllFunction = getCountAllFunction(countAllFunction);
-		this.existsAllFunction = getExistsAllFunction(existsAllFunction);
+		this.existsByIdFunction = getExistsByIdFunction();
+		this.findByIdFunction = getFindByIdFunction();
+		this.findAllFunction = getFindAllFunction();
+		this.countAllFunction = getCountAllFunction();
+		this.existsAllFunction = getExistsAllFunction();
 
 		LOGGER.debug("CommandFacadeBuilder constructed commands, functions {}",
 				List.of(existsByIdFunction, findByIdFunction, findAllFunction, countAllFunction,
 						existsAllFunction));
 	}
 
-	private ExistsAllFunction<ExistsResult> getExistsAllFunction(
-			final ExistsAllFunction<ExistsResult> newExistsAllFunction) {
-		return nonNull(newExistsAllFunction)
-				? newExistsAllFunction
+	private ExistsAllFunction<ExistsResult> getExistsAllFunction() {
+		return nonNull(existsAllFunction)
+				? existsAllFunction
 				: directives -> {
 					throw new UnsupportedOperationException("Unimplemented function 'existsAllFunction'");
 				};
 	}
 
-	private CountAllFunction<CountResult> getCountAllFunction(final CountAllFunction<CountResult> newCountAllFunction) {
-		return nonNull(newCountAllFunction)
-				? newCountAllFunction
+	private CountAllFunction<CountResult> getCountAllFunction() {
+		return nonNull(countAllFunction)
+				? countAllFunction
 				: directives -> {
 					throw new UnsupportedOperationException("Unimplemented function 'countAllFunction'");
 				};
 	}
 
-	private FindAllFunction<MultipleResult> getFindAllFunction(
-			final FindAllFunction<MultipleResult> newFindAllFunction) {
-		return nonNull(newFindAllFunction)
-				? newFindAllFunction
+	private FindAllFunction<MultipleResult> getFindAllFunction() {
+		return nonNull(findAllFunction)
+				? findAllFunction
 				: directives -> {
 					throw new UnsupportedOperationException("Unimplemented function 'findAllFunction'");
 				};
 	}
 
-	private ExistsByIdFunction<QueryIdIn, ExistsResult> getExistsByIdFunction(
-			final ExistsByIdFunction<QueryIdIn, ExistsResult> newExistsByIdFunction) {
-		return nonNull(newExistsByIdFunction)
-				? newExistsByIdFunction
+	private ExistsByIdFunction<QueryIdIn, ExistsResult> getExistsByIdFunction() {
+		return nonNull(existsByIdFunction)
+				? existsByIdFunction
 				: (queryIdIn, directives) -> {
 					throw new UnsupportedOperationException("Unimplemented function 'existsByIdFunction'");
 				};
 	}
 
-	private FindByIdFunction<QueryIdIn, OneResult> getFindByIdFunction(
-			final FindByIdFunction<QueryIdIn, OneResult> newFindByIdFunction) {
-		return nonNull(newFindByIdFunction)
-				? newFindByIdFunction
+	private FindByIdFunction<QueryIdIn, OneResult> getFindByIdFunction() {
+		return nonNull(findByIdFunction)
+				? findByIdFunction
 				: (queryIdIn, directives) -> {
 					throw new UnsupportedOperationException("Unimplemented function 'findByIdFunction'");
 				};

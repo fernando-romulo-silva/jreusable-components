@@ -38,13 +38,13 @@ public class QueryPaginationFacadeBuilder<Entity extends AbstractEntity<Id>, Id,
         this.findAllPagedFunction = nonNull(findAllPagedFunction)
                 ? findAllPagedFunction
                 : (pageable, directives) -> {
-                    throw new UnsupportedOperationException("Unimplemented function 'findAllFunction'");
+                    throw new UnsupportedOperationException("Unimplemented function 'findAllPagedFunction'");
                 };
 
         this.findOneSortedFunction = nonNull(findOneSortedFunction)
                 ? findOneSortedFunction
                 : (sort, directives) -> {
-                    throw new UnsupportedOperationException("Unimplemented function 'findOneFunction'");
+                    throw new UnsupportedOperationException("Unimplemented function 'findOneSortedFunction'");
                 };
     }
 }

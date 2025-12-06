@@ -4,6 +4,6 @@ import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction4Args;
 
 @FunctionalInterface
-public interface ErrorFindOneBySpecificationSortedFunction<Specification, Sort>
+public non-sealed interface ErrorFindOneBySpecificationSortedFunction<Specification, Sort>
         extends OperationFunction4Args<BaseException, Specification, Sort, Object[], BaseException> {
 }

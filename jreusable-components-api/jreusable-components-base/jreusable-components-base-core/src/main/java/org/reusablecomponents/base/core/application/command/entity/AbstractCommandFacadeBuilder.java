@@ -5,30 +5,30 @@ import static java.util.Objects.nonNull;
 import java.util.function.Consumer;
 
 import org.reusablecomponents.base.core.application.base.BaseFacadeBuilder;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.ErrorDeleteAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.ErrorDeleteByIdFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.ErrorDeleteByIdsFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.delete.ErrorDeleteFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.PosDeleteAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.PosDeleteByIdFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.PosDeleteByIdsFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.delete.PosDeleteFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.PreDeleteAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.PreDeleteByIdFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.PreDeleteByIdsFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.delete.PreDeleteFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.save.ErrorSaveAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_all.ErrorDeleteAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_all.PosDeleteAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_all.PreDeleteAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id.ErrorDeleteByIdFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id.PosDeleteByIdFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id.PreDeleteByIdFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id_all.ErrorDeleteByIdsFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id_all.PosDeleteByIdsFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id_all.PreDeleteByIdsFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.save.ErrorSaveFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.save.PosSaveAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.save.PosSaveFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.save.PreSaveAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.save.PreSaveFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update.ErrorUpdateAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save_all.ErrorSaveAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save_all.PosSaveAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save_all.PreSaveAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update.ErrorUpdateFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update.PosUpdateAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update.PosUpdateFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update.PreUpdateAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update.PreUpdateFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.update_all.ErrorUpdateAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.update_all.PosUpdateAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.update_all.PreUpdateAllFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,7 +140,8 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(preDeleteFunction)
 				? preDeleteFunction
 				: (deleteEntityIn, directives) -> {
-					LOGGER.debug("Default preDelete, deleteEntityIn {}, directives {}", deleteEntityIn, directives);
+					LOGGER.debug("Default preDeleteFunction, deleteEntityIn {}, directives {}",
+							deleteEntityIn, directives);
 					return deleteEntityIn;
 				};
 	}
@@ -149,7 +150,8 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(posDeleteFunction)
 				? posDeleteFunction
 				: (deleteEntityOut, directives) -> {
-					LOGGER.debug("Default posDelete, deleteEntityOut {}, directives {}", deleteEntityOut, directives);
+					LOGGER.debug("Default posDeleteFunction, deleteEntityOut {}, directives {}",
+							deleteEntityOut, directives);
 					return deleteEntityOut;
 				};
 	}
@@ -158,7 +160,7 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(errorDeleteFunction)
 				? errorDeleteFunction
 				: (exception, deleteEntityIn, directives) -> {
-					LOGGER.debug("Default errorDelete, deleteEntityIn {}, exception {}, directives {}",
+					LOGGER.debug("Default errorDeleteFunction, exception {}, deleteEntityIn {}, directives {}",
 							deleteEntityIn, exception, directives);
 					return exception;
 				};
@@ -168,7 +170,7 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(preSaveFunction)
 				? preSaveFunction
 				: (saveEntityIn, directives) -> {
-					LOGGER.debug("Default preSave, saveEntityIn {}, directives {}", saveEntityIn, directives);
+					LOGGER.debug("Default preSaveFunction, saveEntityIn {}, directives {}", saveEntityIn, directives);
 					return saveEntityIn;
 				};
 	}
@@ -177,8 +179,8 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(posSaveFunction)
 				? posSaveFunction
 				: (saveEntityOut, directives) -> {
-					LOGGER.debug("Default posSave, saveEntityOut {}, directives {}", saveEntityOut,
-							directives);
+					LOGGER.debug("Default posSaveFunction, saveEntityOut {}, directives {}",
+							saveEntityOut, directives);
 					return saveEntityOut;
 				};
 	}
@@ -187,7 +189,7 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(errorSaveFunction)
 				? errorSaveFunction
 				: (exception, saveEntityIn, directives) -> {
-					LOGGER.debug("Default errorSave, saveEntityIn {}, exception {}, directives {}",
+					LOGGER.debug("Default errorSaveFunction, saveEntityIn {}, exception {}, directives {}",
 							saveEntityIn, exception, directives);
 					return exception;
 				};
@@ -197,7 +199,7 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(preSaveAllFunction)
 				? preSaveAllFunction
 				: (saveEntitiesIn, directives) -> {
-					LOGGER.debug("Default preSaveAll, saveEntiesIn {}, directives {}",
+					LOGGER.debug("Default preSaveAllFunction, saveEntiesIn {}, directives {}",
 							saveEntitiesIn, directives);
 					return saveEntitiesIn;
 				};
@@ -207,7 +209,7 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(posSaveAllFunction)
 				? posSaveAllFunction
 				: (saveEntitiesOut, directives) -> {
-					LOGGER.debug("Default posSaveAll, saveEntiesOut {}, directives {}",
+					LOGGER.debug("Default posSaveAllFunction, saveEntiesOut {}, directives {}",
 							saveEntitiesOut, directives);
 					return saveEntitiesOut;
 				};
@@ -217,8 +219,8 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(errorSaveAllFunction)
 				? errorSaveAllFunction
 				: (exception, saveEntitiesIn, directives) -> {
-					LOGGER.debug("Default errorSaveAll, saveEntitiesIn {}, exception {}, directives {}",
-							saveEntitiesIn, exception, directives);
+					LOGGER.debug("Default errorSaveAllFunction, exception {}, saveEntitiesIn {}, directives {}",
+							exception, saveEntitiesIn, directives);
 					return exception;
 				};
 	}
@@ -227,7 +229,7 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(preUpdateFunction)
 				? preUpdateFunction
 				: (updateEntityIn, directives) -> {
-					LOGGER.debug("Default preUpdate, updateEntityIn {}, directives {}",
+					LOGGER.debug("Default preUpdateFunction, updateEntityIn {}, directives {}",
 							updateEntityIn, directives);
 					return updateEntityIn;
 				};
@@ -237,9 +239,8 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(posUpdateFunction)
 				? posUpdateFunction
 				: (updateEntityOut, directives) -> {
-					LOGGER.debug("Executing default preUpdate, updateEntityOut {}, directives {}",
-							updateEntityOut,
-							directives);
+					LOGGER.debug("Default posUpdateFunction, updateEntityOut {}, directives {}",
+							updateEntityOut, directives);
 					return updateEntityOut;
 				};
 	}
@@ -248,8 +249,8 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(errorUpdateFunction)
 				? errorUpdateFunction
 				: (exception, updateEntityIn, directives) -> {
-					LOGGER.debug("Executing default errorUpdate, updateEntityIn {}, exception {}, directives {}",
-							updateEntityIn, exception, directives);
+					LOGGER.debug("Default errorUpdate, exception {}, updateEntityIn {}, directives {}",
+							exception, updateEntityIn, directives);
 					return exception;
 				};
 	}
@@ -258,7 +259,7 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(preUpdateAllFunction)
 				? preUpdateAllFunction
 				: (updateEntitiesIn, directives) -> {
-					LOGGER.debug("Default preUpdateAll, updateEntityIn {}, directives {}",
+					LOGGER.debug("Default preUpdateAllFunction, updateEntityIn {}, directives {}",
 							updateEntitiesIn, directives);
 					return updateEntitiesIn;
 				};
@@ -269,7 +270,7 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 				? posUpdateAllFunction
 				: (final UpdateEntitiesOut updateEntitiesOut,
 						final Object... directives) -> {
-					LOGGER.debug("Default posUpdateAll, updateEntitiesOut {}, directives {}",
+					LOGGER.debug("Default posUpdateAllFunction, updateEntitiesOut {}, directives {}",
 							updateEntitiesOut, directives);
 					return updateEntitiesOut;
 				};
@@ -279,7 +280,7 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(errorUpdateAllFunction)
 				? errorUpdateAllFunction
 				: (exception, updateEntitiesIn, directives) -> {
-					LOGGER.debug("Default errorUpdateAll, updateEntitiesIn {}, exception {}, directives {}",
+					LOGGER.debug("Default errorUpdateAllFunction, updateEntitiesIn {}, exception {}, directives {}",
 							updateEntitiesIn, exception, directives);
 					return exception;
 				};
@@ -289,7 +290,7 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(preDeleteAllFunction)
 				? preDeleteAllFunction
 				: (deleteEntitiesIn, directives) -> {
-					LOGGER.debug("Default preDeleteAll, deleteEntityIn {}, directives {}", deleteEntitiesIn,
+					LOGGER.debug("Default preDeleteAllFunction, deleteEntityIn {}, directives {}", deleteEntitiesIn,
 							directives);
 					return deleteEntitiesIn;
 				};
@@ -299,7 +300,7 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(posDeleteAllFunction)
 				? posDeleteAllFunction
 				: (deleteEntitiesOut, directives) -> {
-					LOGGER.debug("Executing default posDeleteAll, deleteEntitiesOut {}, directives {}",
+					LOGGER.debug("Executing default posDeleteAllFunction, deleteEntitiesOut {}, directives {}",
 							deleteEntitiesOut, directives);
 					return deleteEntitiesOut;
 				};
@@ -309,8 +310,9 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(errorDeleteAllFunction)
 				? errorDeleteAllFunction
 				: (exception, deleteEntitiesIn, directives) -> {
-					LOGGER.debug("Executing default errorDeleteAll, deleteEntitiesIn {}, exception {}, directives {}",
-							deleteEntitiesIn, exception, directives);
+					LOGGER.debug(
+							"Executing default errorDeleteAllFunction, exception {}, deleteEntitiesIn {}, directives {}",
+							exception, deleteEntitiesIn, directives);
 					return exception;
 				};
 	}
@@ -319,7 +321,7 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(preDeleteByIdFunction)
 				? preDeleteByIdFunction
 				: (deleteIdIn, directives) -> {
-					LOGGER.debug("Default preDeleteBy, deleteIdIn {}, directives {}", deleteIdIn, directives);
+					LOGGER.debug("Default preDeleteByIdFunction, deleteIdIn {}, directives {}", deleteIdIn, directives);
 					return deleteIdIn;
 				};
 	}
@@ -328,7 +330,8 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(posDeleteByIdFunction)
 				? posDeleteByIdFunction
 				: (deleteIdOut, directives) -> {
-					LOGGER.debug("Default posDeleteBy, deleteIdOut {}, directives {}", deleteIdOut, directives);
+					LOGGER.debug("Default posDeleteByIdFunction, deleteIdOut {}, directives {}",
+							deleteIdOut, directives);
 					return deleteIdOut;
 				};
 	}
@@ -337,8 +340,8 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(errorDeleteByIdFunction)
 				? errorDeleteByIdFunction
 				: (exception, deleteIdIn, directives) -> {
-					LOGGER.debug("Default errorDeleteBy, deleteIdIn {}, exception {}, directives {}",
-							deleteIdIn, exception, directives);
+					LOGGER.debug("Default errorDeleteByIdFunction, exception {}, deleteIdIn {}, directives {}",
+							exception, deleteIdIn, directives);
 					return exception;
 				};
 	}
@@ -347,7 +350,8 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(preDeleteByIdsFunction)
 				? preDeleteByIdsFunction
 				: (deleteIdsIn, directives) -> {
-					LOGGER.debug("Default preDeleteAllBy, deleteIdsIn {}, directives {}", deleteIdsIn, directives);
+					LOGGER.debug("Default preDeleteByIdsFunction, deleteIdsIn {}, directives {}",
+							deleteIdsIn, directives);
 					return deleteIdsIn;
 				};
 	}
@@ -356,7 +360,8 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(posDeleteByIdsFunction)
 				? posDeleteByIdsFunction
 				: (deleteIdsOut, directives) -> {
-					LOGGER.debug("Default posDeleteAllBy, deleteIdsOut {}, directives {}", deleteIdsOut, directives);
+					LOGGER.debug("Default posDeleteByIdsFunction, deleteIdsOut {}, directives {}",
+							deleteIdsOut, directives);
 					return deleteIdsOut;
 				};
 	}
@@ -365,7 +370,8 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		return nonNull(errorDeleteByIdsFunction)
 				? errorDeleteByIdsFunction
 				: (exception, deleteIdsIn, directives) -> {
-					LOGGER.debug("Executing default errorDeleteAllBy, deleteIdsIn {}, exception {}, directives {}",
+					LOGGER.debug(
+							"Executing default errorDeleteByIdsFunction, deleteIdsIn {}, exception {}, directives {}",
 							deleteIdsIn, exception, directives);
 					return exception;
 				};

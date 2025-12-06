@@ -4,7 +4,6 @@ import static java.util.Objects.nonNull;
 
 import java.util.function.Consumer;
 
-import org.apache.commons.lang3.function.TriFunction;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.function.find_by_specification_paged.FindBySpecificationPagedFunction;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.function.find_one_by_specification_sorted.FindOneBySpecificationSortedFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;

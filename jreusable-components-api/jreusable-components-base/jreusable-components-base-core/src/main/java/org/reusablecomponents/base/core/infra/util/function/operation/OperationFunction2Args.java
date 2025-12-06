@@ -2,30 +2,30 @@ package org.reusablecomponents.base.core.infra.util.function.operation;
 
 import java.util.function.BiFunction;
 
-import org.reusablecomponents.base.core.application.command.entity.function.delete.DeleteAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.DeleteByIdFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.DeleteByIdsFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.delete.DeleteFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.PosDeleteAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.PosDeleteByIdFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.PosDeleteByIdsFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.delete.PosDeleteFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.PreDeleteAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.PreDeleteByIdFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.PreDeleteByIdsFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.delete.PreDeleteFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.save.PosSaveAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_all.DeleteAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_all.PosDeleteAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_all.PreDeleteAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id.DeleteByIdFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id.PosDeleteByIdFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id.PreDeleteByIdFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id_all.DeleteByIdsFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id_all.PosDeleteByIdsFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id_all.PreDeleteByIdsFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.save.PosSaveFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.save.PreSaveAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.save.PreSaveFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.save.SaveAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.save.SaveFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update.PosUpdateAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save_all.PosSaveAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save_all.PreSaveAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save_all.SaveAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update.PosUpdateFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update.PreUpdateAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update.PreUpdateFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update.UpdateAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update.UpdateFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.update_all.PosUpdateAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.update_all.PreUpdateAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.update_all.UpdateAllFunction;
 import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_all_paged.FindAllPagedFunction;
 import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_all_paged.PosFindAllPagedFunction;
 import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_all_paged.PreFindAllPagedFunction;
@@ -58,9 +58,11 @@ import org.reusablecomponents.base.core.application.query.entity.specification.f
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.FindOneBySpecFunction;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.PosFindOneBySpecificationFunction;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.PreFindOneBySpecificationFunction;
+import org.reusablecomponents.base.core.infra.util.function.operation.custom.CustomOperation2Args;
 
 public sealed interface OperationFunction2Args<In1, In2, Out> extends BiFunction<In1, In2, Out>, OperationFunction
-		permits PreSaveFunction, SaveFunction, PosSaveFunction,
+		permits CustomOperation2Args,
+		PreSaveFunction, SaveFunction, PosSaveFunction,
 		PreSaveAllFunction, SaveAllFunction, PosSaveAllFunction,
 		PreUpdateFunction, UpdateFunction, PosUpdateFunction,
 		PreUpdateAllFunction, UpdateAllFunction, PosUpdateAllFunction,

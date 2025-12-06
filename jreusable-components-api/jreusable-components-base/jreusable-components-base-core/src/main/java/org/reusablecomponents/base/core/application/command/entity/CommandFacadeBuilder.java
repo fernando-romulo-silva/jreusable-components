@@ -5,14 +5,14 @@ import static java.util.Objects.nonNull;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.reusablecomponents.base.core.application.command.entity.function.delete.DeleteAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.DeleteByIdFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.DeleteByIdsFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.delete.DeleteFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.save.SaveAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_all.DeleteAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id.DeleteByIdFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id_all.DeleteByIdsFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.save.SaveFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update.UpdateAllFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save_all.SaveAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update.UpdateFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.update_all.UpdateAllFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,14 +66,14 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 		LOGGER.debug("Constructing CommandFacadeBuilder function {} ", function);
 		super(function);
 
-		this.saveFunction = getPreSaveFunction(saveFunction);
-		this.saveAllFunction = getSaveAllFunction(saveAllFunction);
-		this.updateFunction = getUpdateFunction(updateFunction);
-		this.updateAllFunction = getUpdateAllFunction(updateAllFunction);
-		this.deleteFunction = getDeleteFunction(deleteFunction);
-		this.deleteAllFunction = getDeleteAllFunction(deleteAllFunction);
-		this.deleteByIdFunction = getDeleteByIdFunction(deleteByIdFunction);
-		this.deleteByIdsFunction = getDeleteByIdsFunction(deleteByIdsFunction);
+		this.saveFunction = getPreSaveFunction();
+		this.saveAllFunction = getSaveAllFunction();
+		this.updateFunction = getUpdateFunction();
+		this.updateAllFunction = getUpdateAllFunction();
+		this.deleteFunction = getDeleteFunction();
+		this.deleteAllFunction = getDeleteAllFunction();
+		this.deleteByIdFunction = getDeleteByIdFunction();
+		this.deleteByIdsFunction = getDeleteByIdsFunction();
 
 		LOGGER.debug("CommandFacadeBuilder constructed commands, functions {}",
 				List.of(saveFunction, saveAllFunction,
@@ -82,73 +82,65 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 						deleteByIdFunction, deleteByIdsFunction));
 	}
 
-	private SaveFunction<SaveEntityIn, SaveEntityOut> getPreSaveFunction(
-			final SaveFunction<SaveEntityIn, SaveEntityOut> newSaveFunction) {
-		return nonNull(newSaveFunction)
-				? newSaveFunction
+	private SaveFunction<SaveEntityIn, SaveEntityOut> getPreSaveFunction() {
+		return nonNull(saveFunction)
+				? saveFunction
 				: (saveEntityIn, directives) -> {
 					throw new UnsupportedOperationException("Unimplemented function 'saveFunction'");
 				};
 	}
 
-	private SaveAllFunction<SaveEntitiesIn, SaveEntitiesOut> getSaveAllFunction(
-			final SaveAllFunction<SaveEntitiesIn, SaveEntitiesOut> newSaveAllFunction) {
-		return nonNull(newSaveAllFunction)
-				? newSaveAllFunction
+	private SaveAllFunction<SaveEntitiesIn, SaveEntitiesOut> getSaveAllFunction() {
+		return nonNull(saveAllFunction)
+				? saveAllFunction
 				: (saveEntitiesIn, directives) -> {
 					throw new UnsupportedOperationException("Unimplemented function 'saveAllFunction'");
 				};
 	}
 
-	private UpdateFunction<UpdateEntityIn, UpdateEntityOut> getUpdateFunction(
-			final UpdateFunction<UpdateEntityIn, UpdateEntityOut> newUpdateFunction) {
-		return nonNull(newUpdateFunction)
-				? newUpdateFunction
+	private UpdateFunction<UpdateEntityIn, UpdateEntityOut> getUpdateFunction() {
+		return nonNull(updateFunction)
+				? updateFunction
 				: (updateEntityIn, directives) -> {
 					throw new UnsupportedOperationException("Unimplemented function 'updateFunction'");
 				};
 	}
 
-	private UpdateAllFunction<UpdateEntitiesIn, UpdateEntitiesOut> getUpdateAllFunction(
-			final UpdateAllFunction<UpdateEntitiesIn, UpdateEntitiesOut> newUpdateAllFunction) {
-		return nonNull(newUpdateAllFunction)
-				? newUpdateAllFunction
+	private UpdateAllFunction<UpdateEntitiesIn, UpdateEntitiesOut> getUpdateAllFunction() {
+		return nonNull(updateAllFunction)
+				? updateAllFunction
 				: (updateEntitiesIn, directives) -> {
 					throw new UnsupportedOperationException("Unimplemented function 'updateAllFunction'");
 				};
 	}
 
-	private DeleteFunction<DeleteEntityIn, DeleteEntityOut> getDeleteFunction(
-			DeleteFunction<DeleteEntityIn, DeleteEntityOut> newDeleteFunction) {
-		return nonNull(newDeleteFunction)
-				? newDeleteFunction
+	private DeleteFunction<DeleteEntityIn, DeleteEntityOut> getDeleteFunction() {
+		return nonNull(deleteFunction)
+				? deleteFunction
 				: (deleteEntityIn, directives) -> {
 					throw new UnsupportedOperationException("Unimplemented function 'deleteFunction'");
 				};
 	}
 
-	private DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut> getDeleteAllFunction(
-			DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut> newDeleteAllFunction) {
-		return nonNull(newDeleteAllFunction)
-				? newDeleteAllFunction
+	private DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut> getDeleteAllFunction() {
+		return nonNull(deleteAllFunction)
+				? deleteAllFunction
 				: (deleteEntitiesIn, directives) -> {
 					throw new UnsupportedOperationException("Unimplemented function 'deleteAllFunction'");
 				};
 	}
 
-	private DeleteByIdFunction<DeleteIdIn, DeleteIdOut> getDeleteByIdFunction(
-			final DeleteByIdFunction<DeleteIdIn, DeleteIdOut> newDeleteByIdFunction) {
-		return nonNull(newDeleteByIdFunction)
-				? newDeleteByIdFunction
+	private DeleteByIdFunction<DeleteIdIn, DeleteIdOut> getDeleteByIdFunction() {
+		return nonNull(deleteByIdFunction)
+				? deleteByIdFunction
 				: (deleteIdIn, directives) -> {
 					throw new UnsupportedOperationException("Unimplemented function 'deleteByIdFunction'");
 				};
 	}
 
-	private DeleteByIdsFunction<DeleteIdsIn, DeleteIdsOut> getDeleteByIdsFunction(
-			DeleteByIdsFunction<DeleteIdsIn, DeleteIdsOut> newDeleteByIdsFunction) {
-		return nonNull(newDeleteByIdsFunction)
-				? newDeleteByIdsFunction
+	private DeleteByIdsFunction<DeleteIdsIn, DeleteIdsOut> getDeleteByIdsFunction() {
+		return nonNull(deleteByIdsFunction)
+				? deleteByIdsFunction
 				: (deleteIdIn, directives) -> {
 					throw new UnsupportedOperationException("Unimplemented function 'deleteByIdsFunction'");
 				};

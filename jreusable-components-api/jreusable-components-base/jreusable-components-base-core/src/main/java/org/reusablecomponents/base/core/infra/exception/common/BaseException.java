@@ -1,7 +1,6 @@
 package org.reusablecomponents.base.core.infra.exception.common;
 
-import static org.apache.commons.lang3.StringUtils.endsWith;
-import static org.apache.commons.lang3.StringUtils.startsWith;
+import static org.apache.commons.lang3.Strings.CS;
 
 import java.util.Objects;
 
@@ -94,7 +93,7 @@ public class BaseException extends RuntimeException {
         }
 
         // StringUtils.containsNone(msg, '{', '}')
-        if (!(startsWith(code, "{") && endsWith(code, "}")) || Objects.isNull(i18nService)) {
+        if (!(CS.startsWith(code, "{") && CS.endsWith(code, "}")) || Objects.isNull(i18nService)) {
             return code;
         }
 

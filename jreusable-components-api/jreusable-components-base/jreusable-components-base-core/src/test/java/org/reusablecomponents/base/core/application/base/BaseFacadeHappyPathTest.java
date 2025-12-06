@@ -23,13 +23,13 @@ import org.reusablecomponents.base.security.InterfaceSecurityService;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
+@SuppressWarnings("null")
 class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 
 	@Test
 	@Order(1)
 	@DisplayName("Test the constructor values")
 	void constructorValuesTest() {
-
 		// given
 		final var myExceptionTranslatorService = exceptionTranslatorService;
 
@@ -53,7 +53,6 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 	@Order(2)
 	@DisplayName("Test the get values")
 	void checkValuesTest() {
-
 		assertThat(facade)
 				// when
 				.extracting(TestEntiyBaseFacade::getEntityClazz)

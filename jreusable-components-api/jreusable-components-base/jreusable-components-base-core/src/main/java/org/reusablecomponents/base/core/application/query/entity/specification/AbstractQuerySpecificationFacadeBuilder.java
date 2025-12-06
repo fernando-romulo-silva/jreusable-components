@@ -56,165 +56,146 @@ abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends AbstractEn
             @NotNull final Consumer<? extends AbstractQuerySpecificationFacadeBuilder<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>> function) {
         super(function);
 
-        this.preFindBySpecificationFunction = getPreFindBySpecificationFunction(preFindBySpecificationFunction);
-        this.posFindBySpecificationFunction = getPosFindBySpecificationFunction(posFindBySpecificationFunction);
-        this.errorFindBySpecificationFunction = getErrorFindBySpecificationFunction(
-                errorFindBySpecificationFunction);
+        this.preFindBySpecificationFunction = getPreFindBySpecificationFunction();
+        this.posFindBySpecificationFunction = getPosFindBySpecificationFunction();
+        this.errorFindBySpecificationFunction = getErrorFindBySpecificationFunction();
 
-        this.preFindOneBySpecificationFunction = getPreFindOneBySpecificationFunction(
-                preFindOneBySpecificationFunction);
-        this.posFindOneBySpecificationFunction = getPosFindOneBySpecificationFunction(
-                posFindOneBySpecificationFunction);
-        this.errorFindOneBySpecificationFunction = getErrorFindOneBySpecificationFunction(
-                errorFindOneBySpecificationFunction);
+        this.preFindOneBySpecificationFunction = getPreFindOneBySpecificationFunction();
+        this.posFindOneBySpecificationFunction = getPosFindOneBySpecificationFunction();
+        this.errorFindOneBySpecificationFunction = getErrorFindOneBySpecificationFunction();
 
-        this.preCountBySpecificationFunction = getPreCountBySpecificationFunction(
-                preCountBySpecificationFunction);
-        this.posCountBySpecificationFunction = getPosCountBySpecificationFunction(
-                posCountBySpecificationFunction);
-        this.errorCountBySpecificationFunction = getErrorCountBySpecificationFunction(
-                errorCountBySpecificationFunction);
+        this.preCountBySpecificationFunction = getPreCountBySpecificationFunction();
+        this.posCountBySpecificationFunction = getPosCountBySpecificationFunction();
+        this.errorCountBySpecificationFunction = getErrorCountBySpecificationFunction();
 
-        this.preExistsBySpecificationFunction = getPreExistsBySpecificationFunction(
-                preExistsBySpecificationFunction);
-        this.posExistsBySpecificationFunction = getPosExistsBySpecificationFunction(
-                posExistsBySpecificationFunction);
-        this.errorExistsBySpecificationFunction = getErrorExistsBySpecificationFunction(
-                errorExistsBySpecificationFunction);
+        this.preExistsBySpecificationFunction = getPreExistsBySpecificationFunction();
+        this.posExistsBySpecificationFunction = getPosExistsBySpecificationFunction();
+        this.errorExistsBySpecificationFunction = getErrorExistsBySpecificationFunction();
     }
 
-    private PreFindBySpecificationFunction<Specification> getPreFindBySpecificationFunction(
-            final PreFindBySpecificationFunction<Specification> newFunction) {
-        return nonNull(newFunction)
-                ? newFunction
+    private PreFindBySpecificationFunction<Specification> getPreFindBySpecificationFunction() {
+        return nonNull(preFindBySpecificationFunction)
+                ? preFindBySpecificationFunction
                 : (specification, directives) -> {
-                    LOGGER.debug("Default preFindBySpecFunction executed, specification {}, directives {}",
+                    LOGGER.debug("Default preFindBySpecificationFunction executed, specification {}, directives {}",
                             specification, directives);
                     return specification;
                 };
     }
 
-    private PosFindBySpecificationFunction<MultipleResult> getPosFindBySpecificationFunction(
-            final PosFindBySpecificationFunction<MultipleResult> newFunction) {
-        return nonNull(newFunction)
-                ? newFunction
+    private PosFindBySpecificationFunction<MultipleResult> getPosFindBySpecificationFunction() {
+        return nonNull(posFindBySpecificationFunction)
+                ? posFindBySpecificationFunction
                 : (multipleResult, directives) -> {
-                    LOGGER.debug("Default posFindBySpecFunction executed, finalMultipleResult {}, directives {}",
+                    LOGGER.debug(
+                            "Default posFindBySpecificationFunction executed, multipleResult {}, directives {}",
                             multipleResult, directives);
                     return multipleResult;
                 };
     }
 
-    private ErrorFindBySpecificationFunction<Specification> getErrorFindBySpecificationFunction(
-            ErrorFindBySpecificationFunction<Specification> newFunction) {
-        return nonNull(newFunction)
-                ? newFunction
+    private ErrorFindBySpecificationFunction<Specification> getErrorFindBySpecificationFunction() {
+        return nonNull(errorFindBySpecificationFunction)
+                ? errorFindBySpecificationFunction
                 : (exception, specification, directives) -> {
                     LOGGER.debug(
-                            "Default errorFindBySpecFunction executed, specification {}, finalException {}, directives {} ",
+                            "Default errorFindBySpecificationFunction executed, specification {}, exception {}, directives {} ",
                             specification, exception, directives);
                     return exception;
                 };
     }
 
-    private PreFindOneBySpecificationFunction<Specification> getPreFindOneBySpecificationFunction(
-            final PreFindOneBySpecificationFunction<Specification> newFunction) {
-        return nonNull(newFunction)
-                ? newFunction
+    private PreFindOneBySpecificationFunction<Specification> getPreFindOneBySpecificationFunction() {
+        return nonNull(preFindOneBySpecificationFunction)
+                ? preFindOneBySpecificationFunction
                 : (specification, directives) -> {
-                    LOGGER.debug("Default preFindOneBySpec executed, finalSpecification {}, directives {}",
+                    LOGGER.debug(
+                            "Default preFindOneBySpecificationFunction executed, specification {}, directives {}",
                             specification, directives);
                     return specification;
                 };
     }
 
-    private PosFindOneBySpecificationFunction<OneResult> getPosFindOneBySpecificationFunction(
-            final PosFindOneBySpecificationFunction<OneResult> newFunction) {
-        return nonNull(newFunction)
-                ? newFunction
+    private PosFindOneBySpecificationFunction<OneResult> getPosFindOneBySpecificationFunction() {
+        return nonNull(posFindOneBySpecificationFunction)
+                ? posFindOneBySpecificationFunction
                 : (oneResult, directives) -> {
-                    LOGGER.debug("Default posFindOneBySpec executed, finalOneResult {}, directives {}",
+                    LOGGER.debug("Default posFindOneBySpecificationFunction executed, oneResult {}, directives {}",
                             oneResult, directives);
                     return oneResult;
                 };
     }
 
-    private ErrorFindOneBySpecificationFunction<Specification> getErrorFindOneBySpecificationFunction(
-            final ErrorFindOneBySpecificationFunction<Specification> newFunction) {
-        return nonNull(newFunction)
-                ? newFunction
+    private ErrorFindOneBySpecificationFunction<Specification> getErrorFindOneBySpecificationFunction() {
+        return nonNull(errorFindOneBySpecificationFunction)
+                ? errorFindOneBySpecificationFunction
                 : (exception, specification, directives) -> {
-                    LOGGER.debug("Executing default errorFindOneBySpec, specification {}, exception {}, directives {}",
-                            specification, exception, directives);
+                    LOGGER.debug(
+                            "Executing default errorFindOneBySpecificationFunction, exception {}, exception {}, directives {}",
+                            exception, specification, directives);
                     return exception;
                 };
     }
 
-    private PreCountBySpecificationFunction<Specification> getPreCountBySpecificationFunction(
-            final PreCountBySpecificationFunction<Specification> newFunction) {
-        return nonNull(newFunction)
-                ? newFunction
+    private PreCountBySpecificationFunction<Specification> getPreCountBySpecificationFunction() {
+        return nonNull(preCountBySpecificationFunction)
+                ? preCountBySpecificationFunction
                 : (specification, directives) -> {
-                    LOGGER.debug("Default preCountBySpecFunction executed, specification {}, directives {}",
+                    LOGGER.debug("Default preCountBySpecificationFunction executed, specification {}, directives {}",
                             specification, directives);
                     return specification;
                 };
     }
 
-    private PosCountBySpecificationFunction<CountResult> getPosCountBySpecificationFunction(
-            final PosCountBySpecificationFunction<CountResult> newFunction) {
-        return nonNull(newFunction)
-                ? newFunction
+    private PosCountBySpecificationFunction<CountResult> getPosCountBySpecificationFunction() {
+        return nonNull(posCountBySpecificationFunction)
+                ? posCountBySpecificationFunction
                 : (countResult, directives) -> {
-                    LOGGER.debug("Default posCountBySpecFunction executed, countResult {}, directives {}",
+                    LOGGER.debug("Default posCountBySpecificationFunction executed, countResult {}, directives {}",
                             countResult, directives);
                     return countResult;
                 };
     }
 
-    private ErrorCountBySpecificationFunction<Specification> getErrorCountBySpecificationFunction(
-            final ErrorCountBySpecificationFunction<Specification> newSpecFunction) {
-        return nonNull(newSpecFunction)
-                ? newSpecFunction
+    private ErrorCountBySpecificationFunction<Specification> getErrorCountBySpecificationFunction() {
+        return nonNull(errorCountBySpecificationFunction)
+                ? errorCountBySpecificationFunction
                 : (exception, specification, directives) -> {
                     LOGGER.debug(
-                            "Default errorCountBySpecFunction executed, specification {}, finalException {}, directives {} ",
-                            specification, exception, directives);
+                            "Default errorCountBySpecificationFunction executed, exception {}, specification {}, directives {} ",
+                            exception, specification, directives);
                     return exception;
                 };
     }
 
-    private ErrorExistsBySpecificationFunction<Specification> getErrorExistsBySpecificationFunction(
-            final ErrorExistsBySpecificationFunction<Specification> newFunction) {
-        return nonNull(newFunction)
-                ? newFunction
-                : (exception, specification, directives) -> {
-                    LOGGER.debug(
-                            "Default errorExistsBySpecFunction executed, specification {}, exception {}, directives {}",
-                            specification, exception, directives);
-                    return exception;
+    private PreExistsBySpecificationFunction<Specification> getPreExistsBySpecificationFunction() {
+        return nonNull(preExistsBySpecificationFunction)
+                ? preExistsBySpecificationFunction
+                : (specification, directives) -> {
+                    LOGGER.debug("Default preExistsBySpecificationFunction executed, specification {}, directives {}",
+                            specification, directives);
+                    return specification;
                 };
     }
 
-    private PosExistsBySpecificationFunction<ExistsResult> getPosExistsBySpecificationFunction(
-            final PosExistsBySpecificationFunction<ExistsResult> newFunction) {
-        return nonNull(newFunction)
-                ? newFunction
+    private PosExistsBySpecificationFunction<ExistsResult> getPosExistsBySpecificationFunction() {
+        return nonNull(posExistsBySpecificationFunction)
+                ? posExistsBySpecificationFunction
                 : (existsResult, directives) -> {
-                    LOGGER.debug("Default posExistsBy executed, existsResult {}, directives {}",
+                    LOGGER.debug("Default posExistsBySpecificationFunction executed, existsResult {}, directives {}",
                             existsResult, directives);
                     return existsResult;
                 };
     }
 
-    private PreExistsBySpecificationFunction<Specification> getPreExistsBySpecificationFunction(
-            final PreExistsBySpecificationFunction<Specification> newFunction) {
-        return nonNull(newFunction)
-                ? newFunction
-                : (specification, directives) -> {
-                    LOGGER.debug("Default preExistsBySpecFunction executed, specification {}, directives {}",
-                            specification, directives);
-                    return specification;
+    private ErrorExistsBySpecificationFunction<Specification> getErrorExistsBySpecificationFunction() {
+        return nonNull(errorExistsBySpecificationFunction)
+                ? errorExistsBySpecificationFunction
+                : (exception, specification, directives) -> {
+                    LOGGER.debug(
+                            "Default errorExistsBySpecificationFunction executed, exception {}, specification {}, directives {}",
+                            exception, specification, directives);
+                    return exception;
                 };
     }
 }

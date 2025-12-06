@@ -3,6 +3,9 @@ package org.reusablecomponents.base.core.infra.util.function.operation;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.function.TriFunction;
+import org.reusablecomponents.base.core.application.query.entity.paginationspecification.function.find_by_specification_paged.ErrorFindBySpecificationPagedFunction;
+import org.reusablecomponents.base.core.application.query.entity.paginationspecification.function.find_one_by_specification_sorted.ErrorFindOneBySpecificationSortedFunction;
+import org.reusablecomponents.base.core.infra.util.function.operation.custom.CustomOperation4Args;
 
 /**
  * Represents a function that accepts four arguments and produces a result.
@@ -17,8 +20,9 @@ import org.apache.commons.lang3.function.TriFunction;
  *
  * @see TriFunction
  */
-@FunctionalInterface
-public non-sealed interface OperationFunction4Args<In1, In2, In3, In4, Out> extends OperationFunction {
+public sealed interface OperationFunction4Args<In1, In2, In3, In4, Out> extends OperationFunction
+        permits CustomOperation4Args,
+        ErrorFindOneBySpecificationSortedFunction, ErrorFindBySpecificationPagedFunction {
 
     /**
      * Applies this function to the given arguments.

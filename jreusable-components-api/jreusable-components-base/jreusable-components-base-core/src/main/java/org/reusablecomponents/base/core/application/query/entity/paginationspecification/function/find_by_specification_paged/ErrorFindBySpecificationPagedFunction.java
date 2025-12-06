@@ -7,6 +7,6 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 * 
 */
 @FunctionalInterface
-public interface ErrorFindBySpecificationPagedFunction<Specification, Pageable>
+public non-sealed interface ErrorFindBySpecificationPagedFunction<Specification, Pageable>
         extends OperationFunction4Args<BaseException, Specification, Pageable, Object[], BaseException> {
 }

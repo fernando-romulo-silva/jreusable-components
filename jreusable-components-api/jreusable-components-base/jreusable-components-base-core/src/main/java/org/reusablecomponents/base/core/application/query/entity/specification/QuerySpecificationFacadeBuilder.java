@@ -1,6 +1,5 @@
 package org.reusablecomponents.base.core.application.query.entity.specification;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Objects.nonNull;
 
 import java.util.function.Consumer;
