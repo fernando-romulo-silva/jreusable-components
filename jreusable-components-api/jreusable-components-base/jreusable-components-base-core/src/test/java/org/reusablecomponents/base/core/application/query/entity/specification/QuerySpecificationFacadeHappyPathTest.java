@@ -1,7 +1,6 @@
 package org.reusablecomponents.base.core.application.query.entity.specification;
 
-import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+import static org.apache.commons.lang3.Strings.CI;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
@@ -64,7 +63,7 @@ class QuerySpecificationFacadeHappyPathTest {
     @DisplayName("Find one by specification test")
     void findOneBySpecTest() {
         // given
-        final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(), "Default 01");
+        final Predicate<Department> spec = department -> CI.contains(department.getName(), "Default 01");
 
         // when
         final var result = defaultQueryFacade.findOneBySpecification(spec);
@@ -80,8 +79,8 @@ class QuerySpecificationFacadeHappyPathTest {
     @DisplayName("Find by specification test")
     void findBySpecTest() {
         // given
-        final Predicate<Department> spec01 = department -> containsIgnoreCase(department.getName(), "Default");
-        final Predicate<Department> spec02 = department -> equalsIgnoreCase(department.getName(), "Whatever");
+        final Predicate<Department> spec01 = department -> CI.contains(department.getName(), "Default");
+        final Predicate<Department> spec02 = department -> CI.contains(department.getName(), "Whatever");
 
         // when
         final var result = defaultQueryFacade.findBySpecification(spec01);
@@ -97,7 +96,7 @@ class QuerySpecificationFacadeHappyPathTest {
     @DisplayName("Count by specification test")
     void countAllTest() {
         // given
-        final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(), "Default 01");
+        final Predicate<Department> spec = department -> CI.equals(department.getName(), "Default 01");
 
         // when
         final var result = defaultQueryFacade.countBySpecification(spec);
@@ -111,8 +110,8 @@ class QuerySpecificationFacadeHappyPathTest {
     @DisplayName("Exists all test")
     void existsAllTest() {
         // given
-        final Predicate<Department> spec01 = department -> equalsIgnoreCase(department.getName(), "Default 01");
-        final Predicate<Department> spec02 = department -> equalsIgnoreCase(department.getName(), "Whatever");
+        final Predicate<Department> spec01 = department -> CI.equals(department.getName(), "Default 01");
+        final Predicate<Department> spec02 = department -> CI.equals(department.getName(), "Whatever");
 
         final var existsAll = defaultData.size() > 0;
 

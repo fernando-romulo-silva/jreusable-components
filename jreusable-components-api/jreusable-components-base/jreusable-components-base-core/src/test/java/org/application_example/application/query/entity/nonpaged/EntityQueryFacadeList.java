@@ -11,6 +11,7 @@ import org.reusablecomponents.base.core.application.query.entity.simple.QueryFac
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
 
+@SuppressWarnings("null")
 public class EntityQueryFacadeList<Entity extends AbstractEntity<Id>, Id>
         extends QueryFacade<Entity, Id, Id, Entity, List<Entity>, Long, Boolean> {
 

@@ -3,19 +3,16 @@ package org.reusablecomponents.base.core.application.base;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
-import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.ERROR_ON_OPERATION_LOG;
-import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.ERROR_ON_POS_OPERATION_LOG;
-import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.ERROR_ON_PRE_OPERATION_LOG;
-import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.FINAL_LOG;
+
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_DIRECTIVES_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_ERROR_FUNCTION_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_MAIN_FUNCTION_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_POS_FUNCTION_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_PRE_FUNCTION_MSG;
-import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.OPERATION_EXECUTED_LOG;
-import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.POS_OPERATION_LOG;
-import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.PRE_LOG;
+
 import static org.reusablecomponents.base.core.infra.util.function.FunctionCommonUtils.createNullPointerException;
+
+import java.util.Objects;
 
 import org.reusablecomponents.base.core.application.command.entity.AbstractCommandFacade;
 import org.reusablecomponents.base.core.application.empty.EmptyFacade;
@@ -146,54 +143,75 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			final Object... directives) {
 		checkParamsNotNull(preFunction, posFunction, mainFunction, errorFunction, directives);
 
+		final var preFunctionName = preFunction.getName();
+		final var mainFunctionName = mainFunction.getName();
+		final var posFunctionName = posFunction.getName();
+		final var errorFunctionName = errorFunction.getName();
 		final var session = securityService.getSession();
-		final var operationName = mainFunction.getName();
 
-		final var outName = mainFunction.getName();
-		final var preOutName = PRE_LOG.concat(outName);
-		final var finalOutName = FINAL_LOG.concat(outName);
-
-		LOGGER.debug("Pre executing {} operation session '{}', and directives '{}'",
-				operationName, session, directives);
+		LOGGER.debug(
+				"Start the execute with session '{}', pre-function '{}', main-function '{}', pos-function '{}', error-function '{}', and directives '{}'",
+				session, preFunctionName, mainFunctionName, posFunctionName, errorFunctionName, directives);
 
 		final Object[] finalDirectives;
 		try {
+			LOGGER.debug("Executing {} pre-function with session '{}', and directives '{}'",
+					preFunctionName, session, directives);
 			finalDirectives = preFunction.apply(directives);
+			LOGGER.debug("{} pre-function executed with session '{}', and directives '{}', and finalDirectives '{}'",
+					preFunctionName, session, directives, finalDirectives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
-			LOGGER.debug(ERROR_ON_PRE_OPERATION_LOG, operationName, session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz());
-		}
+			final var convertedException = exceptionAdapterService.convert(
+					ex, i18nService, preFunction, getEntityClazz());
 
-		LOGGER.debug("Executing {} operation session '{}', and directives '{}'",
-				operationName, session, directives);
+			LOGGER.debug("Error on {} pre-function with session '{}', exception '{}', converted exception '{}'",
+					preFunctionName, session, exceptionClass, convertedException.getClass().getSimpleName());
+			throw convertedException;
+		}
 
 		final Out out;
 		try {
+			LOGGER.debug("Executing {} main-function with session '{}', and directives '{}'",
+					mainFunctionName, session, finalDirectives);
 			out = mainFunction.apply(finalDirectives);
+			LOGGER.debug("{} main-function executed with session '{}', directives '{}', and out '{}'",
+					mainFunctionName, session, finalDirectives, out);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
-			LOGGER.debug("Error on {} operation, session '{}', error '{}'", operationName, session, exceptionClass);
+			final var convertedException = exceptionAdapterService.convert(
+					ex, i18nService, mainFunction, getEntityClazz(), finalDirectives);
 
-			final var baseException = exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz());
-			throw errorFunction.apply(baseException, directives);
+			LOGGER.debug("Error on {} main-function with session '{}', exception '{}', converted exception '{}'",
+					mainFunctionName, session, exceptionClass);
+			throw errorFunction.apply(convertedException, directives);
 		}
 
-		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, null, session, directives);
-
-		final Out posOut;
+		final Out finalOut;
 		try {
-			posOut = posFunction.apply(out, directives);
+			LOGGER.debug("Executing {} pos-function with session '{}', and directives '{}', out '{}'",
+					posFunctionName, session, finalDirectives, out);
+			finalOut = posFunction.apply(out, finalDirectives);
+			LOGGER.debug("{} pos-function executed with session '{}', directives '{}', and finalOut '{}'",
+					posFunctionName, session, finalDirectives, finalOut);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
-			LOGGER.debug(ERROR_ON_POS_OPERATION_LOG, operationName, finalOutName, session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz());
+			final var convertedException = exceptionAdapterService.convert(
+					ex, i18nService, posFunction, getEntityClazz(), out);
+
+			LOGGER.debug(
+					"Error on {} pos-function with session '{}', out '{}', exception '{}', and converted exception '{}'",
+					posFunctionName, session, out, exceptionClass, convertedException.getClass().getSimpleName());
+			throw convertedException;
 		}
 
-		final var finalOut = ofNullable(posOut)
-				.orElseThrow(createNullPointerException(i18nService, preOutName));
+		if (Objects.isNull(finalOut)) {
+			createNullPointerException(i18nService, "finalOut (from posOutFunction)");
+		}
 
-		LOGGER.debug(POS_OPERATION_LOG, operationName, finalOutName, finalOut, session, directives);
+		LOGGER.debug(
+				"Execute finalized with session '{}', out '{}', pre-function '{}', main-function '{}', pos-function '{}', error-function, and directives '{}'",
+				session, finalOut, preFunctionName, mainFunctionName, posFunctionName, errorFunctionName, directives);
 		return finalOut;
 	}
 
@@ -228,63 +246,74 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		checkNotNull(in, "Please pass a non-null 'in'");
 		checkParamsNotNull(preFunction, posFunction, mainFunction, errorFunction, directives);
 
+		final var preFunctionName = preFunction.getName();
+		final var mainFunctionName = mainFunction.getName();
+		final var posFunctionName = posFunction.getName();
+		final var errorFunctionName = errorFunction.getName();
 		final var session = securityService.getSession();
-		final var operationName = mainFunction.getName();
 
-		final var inName = in.getClass().getSimpleName().concat("In");
-		final var preInName = PRE_LOG.concat(inName);
-		final var finalInName = FINAL_LOG.concat(inName);
+		LOGGER.debug(
+				"Start the execute with session '{}', in '{}', pre-function '{}', main-function '{}', pos-function '{}', error-function '{}', and directives '{}'",
+				session, in, preFunctionName, mainFunctionName, posFunctionName, errorFunctionName, directives);
 
-		LOGGER.debug("Pre executing {} operation with {} '{}', session '{}', and directives '{}'",
-				operationName, inName, in, session, directives);
-
-		final In preIn;
+		final In finalIn;
 		try {
-			preIn = preFunction.apply(in, directives);
+			LOGGER.debug("Executing {} pre-function with session '{}', in '{}', and directives '{}'",
+					preFunctionName, session, in, directives);
+			finalIn = preFunction.apply(in, directives);
+			LOGGER.debug("{} pre-function executed with session '{}', finalIn '{}', and directives '{}'",
+					preFunctionName, session, finalIn, directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
-			LOGGER.debug(ERROR_ON_PRE_OPERATION_LOG, operationName, finalInName, in, session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz(), in);
+			final var convertedException = exceptionAdapterService.convert(
+					ex, i18nService, mainFunction, getEntityClazz(), in);
+			LOGGER.debug(
+					"Error on {} pre-function with session '{}', in '{}', exception '{}', converted exception '{}'",
+					preFunctionName, session, in, exceptionClass, convertedException.getClass().getSimpleName());
+			throw convertedException;
 		}
-
-		final var finalIn = ofNullable(preIn)
-				.orElseThrow(createNullPointerException(i18nService, preInName));
-
-		LOGGER.debug("Executing {} operation with {} '{}', session '{}', and directives '{}'",
-				operationName, finalInName, finalIn, session, directives);
 
 		final Out out;
 		try {
+			LOGGER.debug("Executing {} main-function with session '{}', finalIn '{}', and directives '{}'",
+					mainFunctionName, session, in, directives);
 			out = mainFunction.apply(finalIn, directives);
+			LOGGER.debug("{} main-function executed with session '{}', finalIn '{}', out '{}', and directives '{}'",
+					mainFunctionName, session, finalIn, directives, out);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
-			LOGGER.debug(ERROR_ON_OPERATION_LOG, operationName, finalInName, finalIn, session, exceptionClass);
-
-			final var baseException = exceptionAdapterService.convert(
+			final var convertedException = exceptionAdapterService.convert(
 					ex, i18nService, mainFunction, getEntityClazz(), finalIn);
-
-			throw errorFunction.apply(baseException, finalIn, directives);
+			LOGGER.debug(
+					"Error on {} main-function with session '{}', finalIn '{}', exception '{}', converted exception '{}'",
+					mainFunctionName, session, finalIn, exceptionClass, convertedException.getClass().getSimpleName());
+			throw errorFunction.apply(convertedException, finalIn, directives);
 		}
 
-		final var outName = out.getClass().getSimpleName().concat("Out");
-		final var preOutName = PRE_LOG.concat(outName);
-		final var finalOutName = FINAL_LOG.concat(outName);
-
-		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, out, session, directives);
-
-		final Out posOut;
+		final Out finalOut;
 		try {
-			posOut = posFunction.apply(out, directives);
+			LOGGER.debug("Executing {} pos-function with session '{}', out '{}', and directives '{}'",
+					posFunctionName, session, out, directives);
+			finalOut = posFunction.apply(out, directives);
+			LOGGER.debug("{} pos-function executed with session '{}', finalOut '{}', and directives '{}'",
+					posFunctionName, session, finalOut, directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
-			LOGGER.debug(ERROR_ON_POS_OPERATION_LOG, operationName, finalOutName, out, session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz(), in);
+			final var convertedException = exceptionAdapterService.convert(
+					ex, i18nService, mainFunction, getEntityClazz(), finalIn, out);
+			LOGGER.debug(
+					"Error on {} pos-function with session '{}', in '{}', exception '{}', converted exception '{}'",
+					posFunctionName, session, out, exceptionClass, convertedException.getClass().getSimpleName());
+			throw convertedException;
 		}
 
-		final var finalOut = ofNullable(posOut)
-				.orElseThrow(createNullPointerException(i18nService, preOutName));
+		if (Objects.isNull(finalOut)) {
+			createNullPointerException(i18nService, "finalOut (from posOutFunction)");
+		}
 
-		LOGGER.debug(POS_OPERATION_LOG, operationName, finalOutName, finalOut, session, directives);
+		LOGGER.debug(
+				"Execute finalized with session '{}', in '{}', out '{}', preFunction '{}', mainFunction '{}', posFunction '{}', errorFunction '{}', and directives '{}'",
+				session, in, out, preFunctionName, mainFunctionName, posFunctionName, errorFunctionName, directives);
 		return finalOut;
 	}
 
@@ -323,64 +352,71 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		checkNotNull(in2, "Please pass a non-null 'in2'");
 		checkParamsNotNull(preFunction, posFunction, mainFunction, errorFunction, directives);
 
+		final var preFunctionName = preFunction.getName();
+		final var mainFunctionName = mainFunction.getName();
+		final var posFunctionName = posFunction.getName();
+		final var errorFunctionName = errorFunction.getName();
 		final var session = securityService.getSession();
-		final var operationName = mainFunction.getName();
 
-		final var inName = in1.getClass().getSimpleName().concat("In");
-		final var preInName = PRE_LOG.concat(inName);
-		final var finalInName = FINAL_LOG.concat(inName);
+		LOGGER.debug(
+				"Start the execute with session '{}', in1 '{}', in2 '{}', pre-function '{}', main-function '{}', pos-function '{}', error-function '{}', and directives '{}'",
+				session, in1, in2, preFunctionName, mainFunctionName, posFunctionName, errorFunctionName, directives);
 
-		LOGGER.debug("Pre executing {} operation with {} '{}', session '{}', and directives '{}'",
-				operationName, inName, in1, session, directives);
-
-		var preIn1 = in1;
+		final In1 finalIn1;
 		try {
-			preIn1 = preFunction.apply(preIn1, in2, directives);
+			LOGGER.debug("Executing {} pre-function with session '{}', in1 '{}', in2 '{}', and directives '{}'",
+					preFunctionName, session, in1, in2, directives);
+			finalIn1 = preFunction.apply(in1, in2, directives);
+			LOGGER.debug("{} pre-function executed with session '{}', finalIn1 '{}', in2 '{}', and directives '{}'",
+					preFunctionName, session, finalIn1, in2, directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
-			LOGGER.debug(ERROR_ON_PRE_OPERATION_LOG, operationName, finalInName, "", session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz(), in1, in2);
+			final var convertedException = exceptionAdapterService.convert(
+					ex, i18nService, mainFunction, getEntityClazz(), in1, in2);
+			LOGGER.debug(
+					"Error on {} pre-function with session '{}', in1 '{}', in2 '{}', exception '{}', converted exception '{}'",
+					preFunctionName, session, in1, in2, exceptionClass, convertedException.getClass().getSimpleName());
+			throw convertedException;
 		}
-
-		final var finalIn1 = ofNullable(preIn1)
-				.orElseThrow(createNullPointerException(i18nService, preInName));
-
-		LOGGER.debug("Executing {} operation with {} '{}', session '{}', and directives '{}'",
-				operationName, finalInName, finalIn1, session, directives);
 
 		final Out out;
 		try {
+			LOGGER.debug("Executing {} main-function with session '{}', finalIn1 '{}', in2 '{}', and directives '{}'",
+					mainFunctionName, session, in1, in2, directives);
 			out = mainFunction.apply(finalIn1, in2, directives);
 		} catch (final Exception ex) {
-			final var finalException = exceptionAdapterService.convert(
-					ex, i18nService, mainFunction, getEntityClazz(), finalIn1);
-
-			errorFunction.apply(finalException, finalIn1, in2, directives);
-
-			final var exceptionClass = finalException.getClass().getSimpleName();
-			LOGGER.debug(ERROR_ON_OPERATION_LOG, operationName, finalInName, finalIn1, session, exceptionClass);
-			throw finalException;
+			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
+			final var convertedException = exceptionAdapterService.convert(
+					ex, i18nService, mainFunction, getEntityClazz(), finalIn1, in2);
+			LOGGER.debug(
+					"Error on {} main-function with session '{}', finalIn1 '{}', in2 '{}', exception '{}', converted exception '{}'",
+					mainFunctionName, session, finalIn1, exceptionClass, convertedException.getClass().getSimpleName());
+			throw errorFunction.apply(convertedException, finalIn1, in2, directives);
 		}
 
-		final var outName = out.getClass().getSimpleName().concat("Out");
-		final var preOutName = PRE_LOG.concat(outName);
-		final var finalOutName = FINAL_LOG.concat(outName);
-
-		LOGGER.debug(OPERATION_EXECUTED_LOG, operationName, outName, out, session, directives);
-
-		final Out posOut;
+		final Out finalOut;
 		try {
-			posOut = posFunction.apply(out, directives);
+			LOGGER.debug("Executing {} pos-function with session '{}', out '{}', and directives '{}'",
+					posFunctionName, session, out, directives);
+			finalOut = posFunction.apply(out, directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
-			LOGGER.debug(ERROR_ON_POS_OPERATION_LOG, operationName, finalOutName, out, session, exceptionClass);
-			throw exceptionAdapterService.convert(ex, i18nService, mainFunction, getEntityClazz());
+			final var convertedException = exceptionAdapterService.convert(
+					ex, i18nService, mainFunction, getEntityClazz(), finalIn1, in2, out);
+			LOGGER.debug(
+					"Error on {} pos-function with session '{}', in '{}', exception '{}', converted exception '{}'",
+					posFunctionName, session, out, exceptionClass, convertedException.getClass().getSimpleName());
+			throw convertedException;
 		}
 
-		final var finalOut = ofNullable(posOut)
-				.orElseThrow(createNullPointerException(i18nService, preOutName));
+		if (Objects.isNull(finalOut)) {
+			createNullPointerException(i18nService, "finalOut (from posOutFunction)");
+		}
 
-		LOGGER.debug(POS_OPERATION_LOG, operationName, finalOutName, finalOut, session, directives);
+		LOGGER.debug(
+				"Execute finalized with session '{}', finalIn1 '{}', in2 '{}', out '{}', preFunction '{}', mainFunction '{}', posFunction '{}', errorFunction '{}', and directives '{}'",
+				session, finalIn1, in2, out, preFunctionName, mainFunctionName,
+				posFunctionName, errorFunctionName, directives);
 		return finalOut;
 	}
 

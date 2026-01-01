@@ -20,16 +20,6 @@ public class BaseFacadeMessage {
 
     public static final String OPERATION_EXECUTED_LOG = "{} operation executed, with {} '{}', session '{}', and directives '{}'";
 
-    public static final String FINAL_LOG = "final";
-
-    public static final String PRE_LOG = "pre";
-
-    public static final String ERROR_ON_OPERATION_LOG = "Error on {} operation with {} '{}', session '{}', error '{}'";
-
-    public static final String ERROR_ON_PRE_OPERATION_LOG = "Error on pre {} operation with {} '{}', session '{}', error '{}'";
-
-    public static final String ERROR_ON_POS_OPERATION_LOG = "Error on pos {} operation with {} '{}', session '{}', error '{}'";
-
     private BaseFacadeMessage() {
         throw new IllegalStateException("You cannot instanciate this class");
     }

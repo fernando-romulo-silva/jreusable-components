@@ -20,6 +20,7 @@ public interface InterfaceExceptionAdapterService {
      * @param directives  Params to help to convert
      * @return A new exception, a <code>BaseApplicationException</code> descendent.
      */
+    @NotNull
     BaseException convert(
             @NotNull final Exception ex,
             @NotNull final InterfaceI18nService i18nService,

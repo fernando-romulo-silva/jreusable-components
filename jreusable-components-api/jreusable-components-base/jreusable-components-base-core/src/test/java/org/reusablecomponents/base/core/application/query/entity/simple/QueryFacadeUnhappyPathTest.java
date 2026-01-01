@@ -40,6 +40,7 @@ import jakarta.validation.executable.ExecutableValidator;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
+@SuppressWarnings("null")
 class QueryFacadeUnhappyPathTest {
 
 	static final ResourceBundleMessageInterpolator INTERPOLATOR = new ResourceBundleMessageInterpolator(
@@ -142,9 +143,7 @@ class QueryFacadeUnhappyPathTest {
 		final var queryIdIn = "3434j3";
 
 		// when
-		assertThatThrownBy(() -> {
-			defaultQueryFacade.findById(queryIdIn, directives);
-		})
+		assertThatThrownBy(() -> defaultQueryFacade.findById(queryIdIn, directives))
 				// then
 				.isInstanceOf(UnexpectedException.class)
 				.hasMessageContaining("Unexpecte error happened");

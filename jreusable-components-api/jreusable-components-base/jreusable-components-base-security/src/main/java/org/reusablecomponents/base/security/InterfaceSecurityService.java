@@ -69,5 +69,4 @@ public interface InterfaceSecurityService {
     default String getDescriptor() {
         return "NODESCRIPTOR";
     }
-
 }

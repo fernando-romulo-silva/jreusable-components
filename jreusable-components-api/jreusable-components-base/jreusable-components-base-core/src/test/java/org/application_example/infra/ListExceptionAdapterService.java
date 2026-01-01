@@ -2,10 +2,17 @@ package org.application_example.infra;
 
 import org.reusablecomponents.base.core.application.command.entity.function.delete.DeleteFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.delete_all.DeleteAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.save.SaveFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id.DeleteByIdFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id_all.DeleteByIdsFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save.*;
 import org.reusablecomponents.base.core.application.command.entity.function.save_all.SaveAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update.UpdateFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.UpdateAllFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.QueryFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.count_all.CountAllFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_all.ExistsAllFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_by_id.ExistsByIdFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.find_all.FindAllFunction;
 import org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id.FindByIdFunction;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
@@ -27,12 +34,10 @@ public class ListExceptionAdapterService implements InterfaceExceptionAdapterSer
             final InterfaceI18nService i18nService,
             final Object... directives) {
 
-        if (directives.length == 3
+        if (directives.length >= 3
                 && directives[0] instanceof OperationFunction operationFunction
                 && directives[1] instanceof Class clazz
                 && directives[2] instanceof Object object) {
-
-            // (ex, i18nService, *SAVE_ENTITY, getEntityClazz(), saveEntityIn)
 
             return switch (operationFunction) {
                 case SaveFunction _ ->
@@ -48,7 +53,15 @@ public class ListExceptionAdapterService implements InterfaceExceptionAdapterSer
                 case DeleteFunction _ ->
                     deleteEntityAndDeleteEntitiesExceptionHandler(ex, i18nService, object);
                 case DeleteAllFunction _ ->
+                    deleteEntityAndDeleteEntitiesExceptionHandler(ex, i18nService, object);
+
+                case DeleteByIdFunction _ ->
                     deleteByIdAndDeleteByIdsExceptionHandler(ex, clazz, i18nService, object);
+                case DeleteByIdsFunction _ ->
+                    deleteByIdAndDeleteByIdsExceptionHandler(ex, clazz, i18nService, object);
+
+                case QueryFunction _ ->
+                    queryExceptionHandler(ex, clazz, i18nService, directives[2]);
 
                 default -> throw new IllegalArgumentException("Unexpected value: " + operationFunction);
             };
@@ -58,7 +71,8 @@ public class ListExceptionAdapterService implements InterfaceExceptionAdapterSer
                 && directives[1] instanceof Class clazz) {
 
             return switch (operationFunction) {
-                case FindByIdFunction _ -> queryExceptionHandler(ex, clazz, i18nService, directives[2]);
+                case QueryFunction _ ->
+                    queryExceptionHandler(ex, clazz, i18nService, directives[2]);
 
                 // case FIND_ENTITY_BY_SPECIFICATION ->
                 // new ElementNotFoundException(i18nService, ex, directives[2]);

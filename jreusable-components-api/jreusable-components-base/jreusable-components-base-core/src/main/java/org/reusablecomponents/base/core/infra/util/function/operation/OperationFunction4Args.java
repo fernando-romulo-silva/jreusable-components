@@ -5,6 +5,7 @@ import java.util.function.Function;
 import org.apache.commons.lang3.function.TriFunction;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.function.find_by_specification_paged.ErrorFindBySpecificationPagedFunction;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.function.find_one_by_specification_sorted.ErrorFindOneBySpecificationSortedFunction;
+import org.reusablecomponents.base.core.infra.util.function.QuadFunction;
 import org.reusablecomponents.base.core.infra.util.function.operation.custom.CustomOperation4Args;
 
 /**
@@ -20,16 +21,9 @@ import org.reusablecomponents.base.core.infra.util.function.operation.custom.Cus
  *
  * @see TriFunction
  */
-public sealed interface OperationFunction4Args<In1, In2, In3, In4, Out> extends OperationFunction
+public sealed interface OperationFunction4Args<In1, In2, In3, In4, Out>
+        extends QuadFunction<In1, In2, In3, In4, Out>, OperationFunction
         permits CustomOperation4Args,
         ErrorFindOneBySpecificationSortedFunction, ErrorFindBySpecificationPagedFunction {
 
-    /**
-     * Applies this function to the given arguments.
-     *
-     * @param t the first function argument
-     * @param u the second function argument
-     * @return the function result
-     */
-    Out apply(In1 in1, In2 in2, In3 in3, In4 in4);
 }

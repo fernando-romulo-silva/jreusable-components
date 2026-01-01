@@ -38,6 +38,7 @@ import jakarta.validation.executable.ExecutableValidator;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
+@SuppressWarnings("null")
 class QueryPaginationFacadeUnhappyPathTest {
 
     static final ResourceBundleMessageInterpolator INTERPOLATOR = new ResourceBundleMessageInterpolator(

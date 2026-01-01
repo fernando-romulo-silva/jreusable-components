@@ -71,11 +71,11 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 			// update --------------------------------
 			$.updateFunction = (entity, directives) -> {
 
-				final var index = repository.indexOf(entity);
-
 				if (Objects.isNull(entity.getId())) {
 					throw new IllegalStateException("Entity with invalid id: " + entity);
 				}
+
+				final var index = repository.indexOf(entity);
 
 				if (index < 0) {
 					throw new IllegalArgumentException("Entity not found: " + entity);
