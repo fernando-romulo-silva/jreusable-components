@@ -1,8 +1,9 @@
 package org.reusablecomponents.base.core.application.query.entity.pagination.function.find_one_sorted;
 
+import org.reusablecomponents.base.core.application.query.QueryFunction;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction2Args;
 
 @FunctionalInterface
 public non-sealed interface PosFindOneSortedFunction<OnePagedResult>
-		extends OperationFunction2Args<OnePagedResult, Object[], OnePagedResult> {
+		extends QueryFunction, OperationFunction2Args<OnePagedResult, Object[], OnePagedResult> {
 }

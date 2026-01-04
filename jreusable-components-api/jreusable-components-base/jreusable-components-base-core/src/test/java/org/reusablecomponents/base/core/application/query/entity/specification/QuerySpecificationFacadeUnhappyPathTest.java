@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.Strings;
 import org.application_example.application.query.entity.nonpaged.DeparmentQuerySpecificationFacade;
 import org.application_example.domain.Department;
 import org.application_example.domain.Manager;
@@ -48,6 +49,7 @@ import jakarta.validation.executable.ExecutableValidator;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
+@SuppressWarnings("null")
 class QuerySpecificationFacadeUnhappyPathTest {
 
 	static final ResourceBundleMessageInterpolator INTERPOLATOR = new ResourceBundleMessageInterpolator(
@@ -116,7 +118,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 	void findOneBySpecWithSpecNotFoundTest() {
 
 		// given
-		final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(), "Whatever");
+		final Predicate<Department> spec = department -> Strings.CS.equals(department.getName(), "Whatever");
 
 		// when
 		assertThatThrownBy(() -> defaultQueryFacade.findOneBySpecification(spec))
@@ -131,7 +133,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 	void findOneBySpecWithUnexpectedErrorTest() {
 
 		// given
-		final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(), "Default 01");
+		final Predicate<Department> spec = department -> Strings.CS.equals(department.getName(), "Default 01");
 		final var directives = new Object[] { "error" };
 
 		// when
@@ -162,8 +164,8 @@ class QuerySpecificationFacadeUnhappyPathTest {
 	void findBySpecWithUnexpectedErrorTest() {
 
 		// given
-		final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(),
-				"Department 01");
+		final Predicate<Department> spec = department -> Strings.CS.equals(
+				department.getName(), "Department 01");
 		final var directives = new Object[] { "error" };
 
 		// when
@@ -194,8 +196,8 @@ class QuerySpecificationFacadeUnhappyPathTest {
 	void countBySpecWithUnexpectedErrorTest() {
 
 		// given
-		final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(),
-				"Department 01");
+		final Predicate<Department> spec = department -> Strings.CS.equals(
+				department.getName(), "Department 01");
 		final var directives = new Object[] { "error" };
 
 		// when
@@ -226,8 +228,8 @@ class QuerySpecificationFacadeUnhappyPathTest {
 	void existsBySpecWithUnexpectedErrorTest() {
 
 		// given
-		final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(),
-				"Department 01");
+		final Predicate<Department> spec = department -> Strings.CS.equals(department
+				.getName(), "Department 01");
 		final var directives = new Object[] { "error" };
 
 		// given
@@ -239,10 +241,10 @@ class QuerySpecificationFacadeUnhappyPathTest {
 
 	Stream<Arguments> methodWithNullSpecBeanValidationData() {
 		return Stream.of(
-				Arguments.of("findOneBySpec"),
-				Arguments.of("existsBySpec"),
-				Arguments.of("findBySpec"),
-				Arguments.of("countBySpec"));
+				Arguments.of("findOneBySpecification"),
+				Arguments.of("existsBySpecification"),
+				Arguments.of("findBySpecification"),
+				Arguments.of("countBySpecification"));
 	}
 
 	@Order(10)

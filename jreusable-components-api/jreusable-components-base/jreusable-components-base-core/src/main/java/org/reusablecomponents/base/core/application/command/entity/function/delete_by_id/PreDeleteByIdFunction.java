@@ -1,5 +1,6 @@
 package org.reusablecomponents.base.core.application.command.entity.function.delete_by_id;
 
+import org.reusablecomponents.base.core.application.command.CommandFunction;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction2Args;
 
 /**
@@ -7,5 +8,5 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 */
 @FunctionalInterface
 public non-sealed interface PreDeleteByIdFunction<DeleteIdIn>
-                extends OperationFunction2Args<DeleteIdIn, Object[], DeleteIdIn> {
+        extends CommandFunction, OperationFunction2Args<DeleteIdIn, Object[], DeleteIdIn> {
 }

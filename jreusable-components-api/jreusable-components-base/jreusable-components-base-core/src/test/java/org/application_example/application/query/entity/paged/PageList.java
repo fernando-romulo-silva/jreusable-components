@@ -1,8 +1,10 @@
 package org.application_example.application.query.entity.paged;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 public class PageList<T> {
 
@@ -21,7 +23,7 @@ public class PageList<T> {
         this.index = index;
         this.fullData = fullData;
         this.pages = ListUtils.partition(fullData, size);
-        this.data = pages.get(index);
+        this.data = ObjectUtils.isNotEmpty(pages) ? pages.get(index) : new ArrayList<>();
     }
 
     public PageList<T> next() {

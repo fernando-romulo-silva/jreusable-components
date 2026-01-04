@@ -1,5 +1,6 @@
 package org.reusablecomponents.base.core.application.command.entity.function.delete;
 
+import org.reusablecomponents.base.core.application.command.CommandFunction;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction2Args;
 
 /**
@@ -7,5 +8,5 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 */
 @FunctionalInterface
 public non-sealed interface PosDeleteFunction<DeleteEntityOut>
-        extends OperationFunction2Args<DeleteEntityOut, Object[], DeleteEntityOut> {
+        extends CommandFunction, OperationFunction2Args<DeleteEntityOut, Object[], DeleteEntityOut> {
 }

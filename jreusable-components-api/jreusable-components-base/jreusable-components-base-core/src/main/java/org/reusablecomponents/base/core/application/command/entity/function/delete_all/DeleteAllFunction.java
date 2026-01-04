@@ -1,5 +1,6 @@
 package org.reusablecomponents.base.core.application.command.entity.function.delete_all;
 
+import org.reusablecomponents.base.core.application.command.CommandFunction;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction2Args;
 
 /*
@@ -7,5 +8,5 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 */
 @FunctionalInterface
 public non-sealed interface DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut>
-                extends OperationFunction2Args<DeleteEntitiesIn, Object[], DeleteEntitiesOut> {
+        extends CommandFunction, OperationFunction2Args<DeleteEntitiesIn, Object[], DeleteEntitiesOut> {
 }

@@ -1,6 +1,5 @@
 package org.reusablecomponents.base.core.application.query.entity.paginationspecification;
 
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.leftPad;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -14,6 +13,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.Strings;
 import org.application_example.application.query.entity.paged.DeparmentQueryPaginationSpecificationFacade;
 import org.application_example.application.query.entity.paged.PageList;
 import org.application_example.domain.Department;
@@ -46,6 +46,7 @@ import jakarta.validation.executable.ExecutableValidator;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
+@SuppressWarnings("null")
 class QueryPaginationSpecificationFacadeUnhappyPathTest {
 
 	static final ResourceBundleMessageInterpolator INTERPOLATOR = new ResourceBundleMessageInterpolator(
@@ -106,18 +107,20 @@ class QueryPaginationSpecificationFacadeUnhappyPathTest {
 	// given
 	Stream<Arguments> findOneByWithNullParamsData() {
 		final var sort = (Comparator<Department>) Comparator.comparing(Department::getName).reversed();
-		final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(), "Default 01");
+		final Predicate<Department> spec = department -> Strings.CI.equals(department.getName(), "Default 01");
 
 		return Stream.of(
-				Arguments.of(sort, null, "in2"),
-				Arguments.of(null, spec, "in1"));
+				Arguments.of(sort, null, "in1"),
+				Arguments.of(null, spec, "in2"));
 	}
 
 	@Order(1)
 	@ParameterizedTest(name = "Pos {index} : sort ''{0}'', specification ''{1}''")
 	@MethodSource("findOneByWithNullParamsData")
 	@DisplayName("Find one sorted with null sort")
-	void findOneByWithNullParamsTest(final Comparator<Department> sort, final Predicate<Department> specification,
+	void findOneByWithNullParamsTest(
+			final Comparator<Department> sort,
+			final Predicate<Department> specification,
 			final String parameter) {
 
 		// when
@@ -136,7 +139,7 @@ class QueryPaginationSpecificationFacadeUnhappyPathTest {
 			final Predicate<Department> specification) throws NoSuchMethodException, SecurityException {
 
 		final var method = defaultQueryFacade.getClass()
-				.getMethod("findOneBy", Object.class, Object.class, Object[].class);
+				.getMethod("findOneByPaginationSorted", Object.class, Object.class, Object[].class);
 
 		final var violations = EXECUTABLE_VALIDATOR
 				.validateParameters(defaultQueryFacade, method,
@@ -146,8 +149,8 @@ class QueryPaginationSpecificationFacadeUnhappyPathTest {
 				.hasSize(1)
 				.extracting(t -> t.getPropertyPath().toString(), ConstraintViolation::getMessage)
 				.containsAnyOf(
-						tuple("findOneBy.arg0", "The object cannot be null"),
-						tuple("findOneBy.arg1", "The object cannot be null"));
+						tuple("findOneByPaginationSorted.arg0", "The object cannot be null"),
+						tuple("findOneByPaginationSorted.arg1", "The object cannot be null"));
 	}
 
 	// =====================================================================================================================
@@ -155,11 +158,11 @@ class QueryPaginationSpecificationFacadeUnhappyPathTest {
 	// given
 	Stream<Arguments> findByWithNullParamsData() {
 		final var pageable = new PageList<Department>(5, 0, defaultData);
-		final Predicate<Department> spec = department -> equalsIgnoreCase(department.getName(), "Default 01");
+		final Predicate<Department> spec = department -> Strings.CS.equals(department.getName(), "Default 01");
 
 		return Stream.of(
-				Arguments.of(pageable, null, "in2"),
-				Arguments.of(null, spec, "in1"));
+				Arguments.of(pageable, null, "in1"),
+				Arguments.of(null, spec, "in2"));
 	}
 
 	@Order(3)
@@ -187,7 +190,7 @@ class QueryPaginationSpecificationFacadeUnhappyPathTest {
 			final Predicate<Department> specification) throws NoSuchMethodException, SecurityException {
 
 		final var method = defaultQueryFacade.getClass()
-				.getMethod("findBy", Object.class, Object.class, Object[].class);
+				.getMethod("findByPaginationPaged", Object.class, Object.class, Object[].class);
 
 		final var violations = EXECUTABLE_VALIDATOR
 				.validateParameters(defaultQueryFacade, method,
@@ -197,7 +200,7 @@ class QueryPaginationSpecificationFacadeUnhappyPathTest {
 				.hasSize(1)
 				.extracting(t -> t.getPropertyPath().toString(), ConstraintViolation::getMessage)
 				.containsAnyOf(
-						tuple("findBy.arg0", "The object cannot be null"),
-						tuple("findBy.arg1", "The object cannot be null"));
+						tuple("findByPaginationPaged.arg0", "The object cannot be null"),
+						tuple("findByPaginationPaged.arg1", "The object cannot be null"));
 	}
 }

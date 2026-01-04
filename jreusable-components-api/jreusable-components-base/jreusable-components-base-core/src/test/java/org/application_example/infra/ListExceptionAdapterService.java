@@ -1,22 +1,11 @@
 package org.application_example.infra;
 
-import org.reusablecomponents.base.core.application.command.entity.function.delete.DeleteFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete_all.DeleteAllFunction;
+import org.reusablecomponents.base.core.application.command.CommandFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id.DeleteByIdFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id_all.DeleteByIdsFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.save.*;
-import org.reusablecomponents.base.core.application.command.entity.function.save_all.SaveAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update.UpdateFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update_all.UpdateAllFunction;
-import org.reusablecomponents.base.core.application.query.entity.simple.QueryFunction;
-import org.reusablecomponents.base.core.application.query.entity.simple.function.count_all.CountAllFunction;
-import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_all.ExistsAllFunction;
-import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_by_id.ExistsByIdFunction;
-import org.reusablecomponents.base.core.application.query.entity.simple.function.find_all.FindAllFunction;
-import org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id.FindByIdFunction;
+import org.reusablecomponents.base.core.application.query.QueryFunction;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
-import org.reusablecomponents.base.core.infra.exception.common.ElementAlreadyExistsException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementConflictException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementInvalidException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementNotFoundException;
@@ -40,26 +29,12 @@ public class ListExceptionAdapterService implements InterfaceExceptionAdapterSer
                 && directives[2] instanceof Object object) {
 
             return switch (operationFunction) {
-                case SaveFunction _ ->
-                    saveEntityAndSaveEntitiesExceptionHandler(ex, i18nService, object);
-                case SaveAllFunction _ ->
-                    saveEntityAndSaveEntitiesExceptionHandler(ex, i18nService, object);
-
-                case UpdateFunction _ ->
-                    updateEntityAndUpdateEntitiesExceptionHandler(ex, i18nService, object);
-                case UpdateAllFunction _ ->
-                    updateEntityAndUpdateEntitiesExceptionHandler(ex, i18nService, object);
-
-                case DeleteFunction _ ->
-                    deleteEntityAndDeleteEntitiesExceptionHandler(ex, i18nService, object);
-                case DeleteAllFunction _ ->
-                    deleteEntityAndDeleteEntitiesExceptionHandler(ex, i18nService, object);
-
                 case DeleteByIdFunction _ ->
-                    deleteByIdAndDeleteByIdsExceptionHandler(ex, clazz, i18nService, object);
+                    deleteByIdAndDeleteByIdsExceptionHandler(ex, i18nService, object, clazz);
                 case DeleteByIdsFunction _ ->
-                    deleteByIdAndDeleteByIdsExceptionHandler(ex, clazz, i18nService, object);
-
+                    deleteByIdAndDeleteByIdsExceptionHandler(ex, i18nService, object, clazz);
+                case CommandFunction _ ->
+                    commandExceptionHandler(ex, i18nService, object);
                 case QueryFunction _ ->
                     queryExceptionHandler(ex, clazz, i18nService, directives[2]);
 
@@ -74,22 +49,6 @@ public class ListExceptionAdapterService implements InterfaceExceptionAdapterSer
                 case QueryFunction _ ->
                     queryExceptionHandler(ex, clazz, i18nService, directives[2]);
 
-                // case FIND_ENTITY_BY_SPECIFICATION ->
-                // new ElementNotFoundException(i18nService, ex, directives[2]);
-
-                // case FIND_ALL_ENTITIES,
-                // FIND_ENTITIES_BY_SPECIFICATION,
-                // FIND_ALL_ENTITIES_PAGEABLE,
-                // FIND_ENTITIES_BY_SPECIFICATION_PAGEABLE,
-                // FIND_ENTITY_SORTED,
-                // FIND_ENTITY_BY_SPECIFICATION_SORTED,
-                // EXISTS_BY_ID,
-                // EXISTS_ALL,
-                // EXISTS_BY_SPECIFICATION,
-                // COUNT_ALL,
-                // COUNT_BY_SPECIFICATION ->
-                // queryExceptionHandler(ex, i18nService);
-
                 default -> throw new IllegalArgumentException("Unexpected value: " + operationFunction);
             };
 
@@ -98,59 +57,27 @@ public class ListExceptionAdapterService implements InterfaceExceptionAdapterSer
         throw new UnsupportedOperationException("Unimplemented method 'convert'");
     }
 
-    private BaseException saveEntityAndSaveEntitiesExceptionHandler(
-            final Exception ex,
-            final InterfaceI18nService i18nService,
-            final Object object) {
-
-        return switch (ex) {
-
-            case IllegalArgumentException _ -> new ElementAlreadyExistsException(i18nService, ex, object);
-            case IllegalStateException _ -> new ElementInvalidException(i18nService, ex, object);
-
-            default -> throw new IllegalArgumentException("Unexpected exception", ex);
-        };
-    }
-
-    private BaseException updateEntityAndUpdateEntitiesExceptionHandler(
-            final Exception ex,
-            final InterfaceI18nService i18nService,
-            final Object object) {
-
-        return switch (ex) {
-
-            case IllegalArgumentException _ -> new ElementNotFoundException(i18nService, ex, object);
-            case IllegalStateException _ -> new ElementInvalidException(i18nService, ex, object);
-
-            default -> throw new IllegalArgumentException("Unexpected exception", ex);
-        };
-    }
-
-    private BaseException deleteEntityAndDeleteEntitiesExceptionHandler(
-            final Exception ex,
-            final InterfaceI18nService i18nService,
-            final Object object) {
-
-        return switch (ex) {
-            case IllegalArgumentException _ -> new ElementNotFoundException(i18nService, ex, object);
-            case IllegalStateException _ -> new ElementInvalidException(i18nService, ex, object);
-            case ArrayStoreException _ -> new ElementConflictException(i18nService, ex, object);
-
-            default -> throw new IllegalArgumentException("Unexpected exception", ex);
-        };
-    }
-
     private BaseException deleteByIdAndDeleteByIdsExceptionHandler(
             final Exception ex,
-            final Class<?> clazz,
             final InterfaceI18nService i18nService,
-            final Object object) {
-
+            final Object object,
+            final Class<?> clazz) {
         return switch (ex) {
             case IllegalArgumentException _ -> new ElementWithIdNotFoundException(clazz, i18nService, ex, object);
             case IllegalStateException _ -> new ElementInvalidException(i18nService, ex, object);
             case ArrayStoreException _ -> new ElementConflictException(i18nService, ex, object);
+            default -> throw new IllegalArgumentException("Unexpected exception", ex);
+        };
+    }
 
+    private BaseException commandExceptionHandler(
+            final Exception ex,
+            final InterfaceI18nService i18nService,
+            final Object object) {
+        return switch (ex) {
+            case IllegalArgumentException _ -> new ElementNotFoundException(i18nService, ex, object);
+            case IllegalStateException _ -> new ElementInvalidException(i18nService, ex, object);
+            case ArrayStoreException _ -> new ElementConflictException(i18nService, ex, object);
             default -> throw new IllegalArgumentException("Unexpected exception", ex);
         };
     }
@@ -160,26 +87,11 @@ public class ListExceptionAdapterService implements InterfaceExceptionAdapterSer
             final Class<?> clazz,
             final InterfaceI18nService i18nService,
             final Object object) {
-
         return switch (ex) {
             case IllegalArgumentException _ ->
                 new ElementWithIdNotFoundException(clazz, i18nService, ex, object);
-
             case IllegalStateException _ -> new UnexpectedException(i18nService, ex);
-
             default -> throw new IllegalArgumentException("Unexpected exception", ex);
         };
     }
-
-    private BaseException queryExceptionHandler(
-            final Exception ex,
-            final InterfaceI18nService i18nService) {
-
-        return switch (ex) {
-            case IllegalStateException _ -> new UnexpectedException(i18nService, ex);
-
-            default -> throw new IllegalArgumentException("Unexpected exception", ex);
-        };
-    }
-
 }

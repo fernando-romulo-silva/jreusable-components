@@ -1,7 +1,5 @@
 package org.reusablecomponents.base.core.application.query.entity.paginationspecification;
 
-import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.leftPad;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
@@ -11,6 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.apache.commons.lang3.Strings;
 import org.application_example.application.query.entity.paged.DeparmentQueryPaginationSpecificationFacade;
 import org.application_example.application.query.entity.paged.PageList;
 import org.application_example.domain.Department;
@@ -76,7 +75,7 @@ class QueryPaginationSpecificationFacadeHappyPathTest {
     void findOneSortedTest() {
         // given
         final var sort = (Comparator<Department>) Comparator.comparing(Department::getName).reversed();
-        final Predicate<Department> spec = department -> containsIgnoreCase(department.getName(), "Default");
+        final Predicate<Department> spec = department -> Strings.CI.contains(department.getName(), "Default");
 
         // when
         final var result = defaultQueryFacade.findOneByPaginationSorted(spec, sort);
@@ -92,8 +91,8 @@ class QueryPaginationSpecificationFacadeHappyPathTest {
     void findAllPageableTest() {
         // given
         final var pageable = new PageList<>(5, 0, defaultData);
-        final Predicate<Department> spec01 = department -> containsIgnoreCase(department.getName(), "Default");
-        final Predicate<Department> spec02 = department -> equalsIgnoreCase(department.getName(), "Whatever");
+        final Predicate<Department> spec01 = department -> Strings.CI.contains(department.getName(), "Default");
+        final Predicate<Department> spec02 = department -> Strings.CI.equals(department.getName(), "Whatever");
         final var departmentInsidePage = defaultData.get(2);
         final var departmentOusidePage = defaultData.get(5);
 
