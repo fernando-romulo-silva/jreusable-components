@@ -2,6 +2,8 @@ package org.reusablecomponents.base.core.application.query.entity.specification;
 
 import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.NULL_POINTER_EXCEPTION_MSG;
 
+import java.util.Optional;
+
 import org.reusablecomponents.base.core.application.base.InterfaceBaseFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;

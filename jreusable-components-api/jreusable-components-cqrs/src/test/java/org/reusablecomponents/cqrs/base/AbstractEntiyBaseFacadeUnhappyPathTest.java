@@ -23,6 +23,7 @@ import org.reusablecomponents.base.core.application.empty.EmptyFacade;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
+@SuppressWarnings("null")
 class AbstractEntiyBaseFacadeUnhappyPathTest {
 
 	@Test

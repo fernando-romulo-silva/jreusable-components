@@ -34,6 +34,7 @@ import org.reusablecomponents.base.core.infra.util.function.operation.custom.Cus
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
+@SuppressWarnings("null")
 class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 
 	private final String msg = "Please pass a non-null '%s'";
@@ -366,8 +367,6 @@ class BaseFacadeUnhappyPathTest extends AbstractBaseFacadeTest {
 	@DisplayName("Test execute two inputs")
 	void executeDoubleInputOperationMainFunctionErrorTest() {
 		// given
-		final String errorMsg = "main function error, two inputs";
-
 		assertThatThrownBy(
 				// when
 				() -> facade.execute(

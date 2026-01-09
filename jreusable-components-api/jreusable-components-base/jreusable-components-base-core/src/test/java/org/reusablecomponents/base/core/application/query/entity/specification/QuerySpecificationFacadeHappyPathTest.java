@@ -29,6 +29,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
+@SuppressWarnings("null")
 class QuerySpecificationFacadeHappyPathTest {
 
     final List<Department> defaultData = new ArrayList<>();

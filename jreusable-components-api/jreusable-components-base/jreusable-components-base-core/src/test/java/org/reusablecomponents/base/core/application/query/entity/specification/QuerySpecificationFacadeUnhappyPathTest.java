@@ -1,6 +1,5 @@
 package org.reusablecomponents.base.core.application.query.entity.specification;
 
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
@@ -33,9 +32,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reusablecomponents.base.core.infra.exception.common.ElementNotFoundException;
-import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
-import org.reusablecomponents.base.core.infra.exception.common.InvalidSpecificationException;
+import org.reusablecomponents.base.core.infra.exception.common.NoResultFoundException;
 import org.reusablecomponents.base.core.infra.exception.common.UnexpectedException;
 
 import jakarta.validation.ConstraintViolation;
@@ -118,13 +115,13 @@ class QuerySpecificationFacadeUnhappyPathTest {
 	void findOneBySpecWithSpecNotFoundTest() {
 
 		// given
-		final Predicate<Department> spec = department -> Strings.CS.equals(department.getName(), "Whatever");
+		final Predicate<Department> spec = department -> Strings.CI.equals(department.getName(), "Whatever");
 
 		// when
 		assertThatThrownBy(() -> defaultQueryFacade.findOneBySpecification(spec))
 				// then
-				.isInstanceOf(ElementNotFoundException.class)
-				.hasMessageContaining("The id 'spec' not found for 'Department' type");
+				.isInstanceOf(NoResultFoundException.class)
+				.hasMessageContaining("No result found");
 	}
 
 	@Test

@@ -46,6 +46,7 @@ import jakarta.validation.ConstraintViolationException;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
+@SuppressWarnings("null")
 class AbstractEntiyUnhappyPathTest extends AbstractValidatorTest {
 
 	Stream<Arguments> checkEntityWithoutBuilderNoExceptionData() {

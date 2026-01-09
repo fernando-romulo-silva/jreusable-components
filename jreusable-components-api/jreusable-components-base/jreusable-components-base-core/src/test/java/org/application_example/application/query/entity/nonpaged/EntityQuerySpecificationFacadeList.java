@@ -28,7 +28,6 @@ public class EntityQuerySpecificationFacadeList<Entity extends AbstractEntity<Id
 	private final List<Entity> repository;
 
 	public EntityQuerySpecificationFacadeList(final List<Entity> repository) {
-
 		super(new QuerySpecificationFacadeBuilder<>($ -> {
 
 			$.findBySpecificationFunction = (specification, directives) -> {
@@ -43,8 +42,7 @@ public class EntityQuerySpecificationFacadeList<Entity extends AbstractEntity<Id
 				return repository.stream()
 						.filter(specification)
 						.findFirst()
-						.orElseThrow(() -> new IllegalArgumentException(
-								"Id not found: " + specification));
+						.orElseThrow(() -> new IllegalArgumentException("Id not found: " + specification));
 			};
 
 			$.existsBySpecificationFunction = (specification, directives) -> {

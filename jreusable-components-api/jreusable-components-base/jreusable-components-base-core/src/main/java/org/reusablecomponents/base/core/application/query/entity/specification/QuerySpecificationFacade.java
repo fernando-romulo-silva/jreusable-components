@@ -67,13 +67,14 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	public MultipleResult findBySpecification(
 			final Specification specification,
 			final Object... directives) {
-		LOGGER.debug("Executing default findBySpec, specification {}, directives {}", specification, directives);
+		LOGGER.debug("Executing default findBySpecification, specification {}, directives {}",
+				specification, directives);
 
 		final var multipleResult = execute(
 				specification, getPreFindBySpecificationFunction(), getFindBySpecificationFunction(),
 				getPosFindBySpecificationFunction(), getErrorFindBySpecificationFunction(), directives);
 
-		LOGGER.debug("Default findBySpec executed, multipleResult {}, directives {}",
+		LOGGER.debug("Default findBySpecification executed, multipleResult {}, directives {}",
 				multipleResult, directives);
 		return multipleResult;
 	}
@@ -85,13 +86,14 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	public OneResult findOneBySpecification(
 			final Specification specification,
 			final Object... directives) {
-		LOGGER.debug("Executing default findOneBySpec, specification {}, directives {}", specification, directives);
+		LOGGER.debug("Executing default findOneBySpecification, specification {}, directives {}",
+				specification, directives);
 
 		final var oneResult = execute(
 				specification, getPreFindOneBySpecificationFunction(), getFindOneBySpecFunction(),
 				getPosFindOneBySpecificationFunction(), getErrorFindOneBySpecificationFunction(), directives);
 
-		LOGGER.debug("Default findOneBySpec executed, oneResult {}, directives {}",
+		LOGGER.debug("Default findOneBySpecification executed, oneResult {}, directives {}",
 				oneResult, directives);
 		return oneResult;
 	}

@@ -96,8 +96,7 @@ public class EntityCommandEvent< // generics
 			final SaveEntityOut saveEntityOut,
 			final Object... directives) {
 		publishCommandEvent(
-				saveEntityIn, saveEntityOut, SAVE_ENTITY,
-				this::convertSaveEntityInToPublishDataIn,
+				saveEntityIn, saveEntityOut, this::convertSaveEntityInToPublishDataIn,
 				this::convertSaveEntityOutToPublishDataOut, directives);
 	}
 
@@ -114,8 +113,7 @@ public class EntityCommandEvent< // generics
 			final Exception exception,
 			final Object... directives) {
 		publishCommandEvent(
-				saveEntityIn, exception, SAVE_ENTITY,
-				this::convertSaveEntityInToPublishDataIn,
+				saveEntityIn, exception, this::convertSaveEntityInToPublishDataIn,
 				this::convertExceptionToPublishDataOut, directives);
 	}
 
