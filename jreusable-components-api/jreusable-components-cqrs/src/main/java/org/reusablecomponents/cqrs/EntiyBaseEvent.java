@@ -1,18 +1,12 @@
-package org.reusablecomponents.cqrs.base;
+package org.reusablecomponents.cqrs;
 
-import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
-import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
 import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.NULL_POINTER_EXCEPTION_MSG;
-import static org.reusablecomponents.messaging.MessagingConst.JSON_LAYOUT;
-import static org.reusablecomponents.messaging.event.DefaultEventStatus.FAILURE;
-import static org.reusablecomponents.messaging.event.DefaultEventStatus.SUCCESS;
 
-import java.util.Optional;
 import java.util.function.Function;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction;
@@ -53,7 +47,6 @@ public class EntiyBaseEvent {
 	 */
 	protected EntiyBaseEvent(final EntiyBaseEventBuilder builder) {
 		super();
-
 		this.publisherService = builder.publisherService;
 		this.i18nService = builder.i18nService;
 		this.securityService = builder.securityService;
@@ -90,11 +83,11 @@ public class EntiyBaseEvent {
 			final String origin,
 			final InterfaceEventStatus status,
 			final OperationFunction operation) {
-
 		LOGGER.debug("Creating event with '{}' operation", operation);
 
-		ofNullable(operation)
-				.orElseThrow(createNullPointerException(i18nService, "operation"));
+		if (ObjectUtils.isEmpty(operation)) {
+			throw new NullPointerException(i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "operation"));
+		}
 
 		final var user = securityService.getUserName();
 		final var realm = securityService.getUserRealm();
@@ -115,7 +108,6 @@ public class EntiyBaseEvent {
 		}).build();
 
 		LOGGER.debug("Event '{}' created with operation '{}'", event.getId(), operation);
-
 		return event;
 	}
 
@@ -125,23 +117,17 @@ public class EntiyBaseEvent {
 	 * @param event The object the caller wants publish
 	 */
 	protected void publishEvent(final Event event) {
-
-		final var finalEvent = Optional.of(event)
-				.orElseThrow(
-						() -> new NullPointerException(i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "event")));
-
-		LOGGER.debug("Publishing event '{}'", finalEvent.getId());
-
-		final var eventToPublish = prepareEventToPublisher(event);
-
-		try {
-			publisherService.publish(eventToPublish);
-		} catch (final Exception ex) {
-			LOGGER.error(ExceptionUtils.getRootCauseMessage(ex), ex);
-			return;
+		if (ObjectUtils.isEmpty(event)) {
+			throw new NullPointerException(i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "event"));
 		}
 
-		LOGGER.debug("Published event '{}'", finalEvent.getId());
+		LOGGER.debug("Publishing event '{}'", event.getId());
+		try {
+			publisherService.publish(event);
+			LOGGER.debug("Published event '{}'", event.getId());
+		} catch (final Exception ex) {
+			LOGGER.error("Event {} not published due to {}", event.getId(), ExceptionUtils.getRootCauseMessage(ex));
+		}
 	}
 
 	/**
@@ -160,95 +146,19 @@ public class EntiyBaseEvent {
 			final String origin,
 			final InterfaceEventStatus status,
 			final OperationFunction operation) {
-
 		LOGGER.debug("Publishing event with operation '{}'", operation);
 
-		final var finalOperation = Optional.of(operation)
-				.orElseThrow(
-						() -> new NullPointerException(i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "operation")));
-
-		final var event = createEvent(dataIn, dataOut, origin, status, finalOperation);
-
-		final var eventToPublish = prepareEventToPublisher(event);
-
-		try {
-			publisherService.publish(eventToPublish);
-		} catch (final Exception ex) {
-			LOGGER.error(ExceptionUtils.getRootCauseMessage(ex), ex);
-			return;
+		if (ObjectUtils.isEmpty(operation)) {
+			throw new NullPointerException(i18nService.translate(NULL_POINTER_EXCEPTION_MSG, "operation"));
 		}
 
-		LOGGER.debug("Send event '{}' to publish with operation '{}'", event.getId(), operation);
-	}
-
-	/**
-	 * Convert an event to string, the default format is JSON.
-	 * You can override this method to produce string in another format.
-	 * 
-	 * @param event Object <code>Event</code>
-	 * 
-	 * @return A formatted string
-	 */
-	protected String prepareEventToPublisher(final Event event) {
-
-		var msg = StringUtils.deleteWhitespace(JSON_LAYOUT);
-
-		// -----------------------------------------
-		final var id = event.getId();
-		final var status = event.getStatus();
-		final var origin = event.getOrigin();
-
-		msg = StringUtils.replaceEach(msg,
-				new String[] { "${id}", "${status}", "${origin}" },
-				new String[] { id, status.toString(), origin });
-
-		// ------------------------------------------
-		final var what = event.getWhat();
-		final var dataIn = what.dataIn();
-		final var dataOut = what.dataOut();
-
-		msg = StringUtils.replaceEach(msg,
-				new String[] { "${dataIn}", "${dataOut}" },
-				new String[] { dataIn, dataOut });
-
-		// ------------------------------------------
-		final var when = event.getWhen();
-		final var dateTime = ISO_DATE_TIME.format(when.dateTime());
-		final var zoneId = when.zoneId().toString();
-
-		msg = StringUtils.replaceEach(msg,
-				new String[] { "${dateTime}", "${zoneId}" },
-				new String[] { dateTime, zoneId });
-
-		// ------------------------------------------
-		final var where = event.getWhere();
-		final var application = where.application();
-		final var machine = where.machine();
-
-		msg = StringUtils.replaceEach(msg,
-				new String[] { "${application}", "${machine}" },
-				new String[] { application, machine });
-
-		// ------------------------------------------
-		final var who = event.getWho();
-		final var login = who.login();
-		final var session = who.session();
-		final var realm = who.realm();
-
-		msg = StringUtils.replaceEach(msg,
-				new String[] { "${login}", "${session}", "${realm}" },
-				new String[] { login, session, realm });
-
-		// ------------------------------------------
-		final var why = event.getWhy();
-		final var reason = why.reason();
-		final var description = why.description();
-
-		msg = StringUtils.replaceEach(msg,
-				new String[] { "${reason}", "${description}" },
-				new String[] { reason, description });
-
-		return msg;
+		final var event = createEvent(dataIn, dataOut, origin, status, operation);
+		try {
+			publisherService.publish(event);
+			LOGGER.debug("Send event '{}' to publish with operation '{}'", event.getId(), operation);
+		} catch (final Exception ex) {
+			LOGGER.error("Event not published due to {}", ExceptionUtils.getRootCauseMessage(ex));
+		}
 	}
 
 	/**
@@ -256,7 +166,7 @@ public class EntiyBaseEvent {
 	 * @param <In>
 	 * @param <Out>
 	 * @param in
-	 * @param entityOut
+	 * @param out
 	 * @param operation
 	 * @param inToMsgFunction
 	 * @param outToMsgFunction
@@ -264,8 +174,9 @@ public class EntiyBaseEvent {
 	 */
 	protected <In, Out> void publishCommandEvent(
 			final In in,
-			final Out entityOut,
+			final Out out,
 			final OperationFunction operation,
+			final InterfaceEventStatus status,
 			final Function<In, String> inToMsgFunction,
 			final Function<Out, String> outToMsgFunction,
 			final Object... directives) {
@@ -273,18 +184,18 @@ public class EntiyBaseEvent {
 		if (!isPublishEvents(directives)) {
 			LOGGER.debug(
 					"Publishing {} event was avoided, in '{}', out '{}', and directives '{}'",
-					operation.getName(), in, entityOut, directives);
+					operation.getName(), in, out, directives);
 			return;
 		}
 
 		LOGGER.debug("Publishing {} event, in '{}', out '{}', and directives '{}'",
-				operation.getName(), in, entityOut, directives);
+				operation.getName(), in, out, directives);
 
 		try {
 			final var dataIn = inToMsgFunction.apply(in);
-			final var dataOut = outToMsgFunction.apply(entityOut);
+			final var dataOut = outToMsgFunction.apply(out);
 
-			publishEvent(dataIn, dataOut, EMPTY, SUCCESS, operation);
+			publishEvent(dataIn, dataOut, EMPTY, status, operation);
 
 			LOGGER.debug("The {} event was published, dataIn '{}' and dataOut '{}'",
 					operation.getName(), dataIn, dataOut);
@@ -295,53 +206,33 @@ public class EntiyBaseEvent {
 	}
 
 	/**
-	 * 
-	 * @param <In>
-	 * @param in
-	 * @param exception
-	 * @param operation
-	 * @param inToMsgFunction
-	 * @param exceptionToMsgFunction
-	 * @param directives
+	 * publishCommandEvent(
+	 * saveEntityIn,
+	 * saveEntityOut,
+	 * SaveOperation,
+	 * object -> Objects.toString(object),
+	 * object -> Objects.toString(object),
+	 * directives
+	 * );
 	 */
-	protected <In> void publishCommandEvent(
-			final In in,
-			final Exception exception,
-			final OperationFunction operation,
-			final Function<In, String> inToMsgFunction,
-			final Function<Exception, String> exceptionToMsgFunction,
-			final Object... directives) {
-
-		final var exceptionString = getRootCause(exception)
-				.getClass()
-				.getSimpleName();
-
-		if (!isPublishEvents(directives)) {
-			LOGGER.debug(
-					"Publishing {} event error was avoided, in '{}', error '{}', and directives '{}'",
-					operation.getName(), in, exceptionString, directives);
-			return;
-		}
-
-		LOGGER.debug("Publishing {} event error, in '{}', error '{}', and directives '{}'",
-				operation.getName(), in, exceptionString, directives);
-
-		try {
-			final var dataIn = inToMsgFunction.apply(in);
-			final var dataOut = exceptionToMsgFunction.apply(exception);
-
-			publishEvent(dataIn, dataOut, EMPTY, FAILURE, operation);
-
-			LOGGER.debug("The {} event error was published, dataIn '{}' and dataOut '{}'",
-					operation.getName(), dataIn, dataOut);
-
-		} catch (final Exception ex) {
-			LOGGER.error("The {} event error was not published".formatted(operation.getName()), getRootCause(ex));
-		}
-	}
 
 	@NotNull
 	public final InterfaceEventPublisherSerice<?> getPublisherService() {
 		return publisherService;
+	}
+
+	@NotNull
+	public InterfaceExceptionAdapterService getExceptionAdapterService() {
+		return exceptionAdapterService;
+	}
+
+	@NotNull
+	public InterfaceSecurityService getSecurityService() {
+		return securityService;
+	}
+
+	@NotNull
+	public InterfaceI18nService getI18nService() {
+		return i18nService;
 	}
 }

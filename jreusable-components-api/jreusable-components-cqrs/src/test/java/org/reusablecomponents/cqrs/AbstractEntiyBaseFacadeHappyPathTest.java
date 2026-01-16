@@ -1,4 +1,4 @@
-package org.reusablecomponents.cqrs.base;
+package org.reusablecomponents.cqrs;
 
 import static java.lang.System.out;
 import static java.text.MessageFormat.format;

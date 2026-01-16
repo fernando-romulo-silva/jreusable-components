@@ -18,51 +18,54 @@ import org.slf4j.LoggerFactory;
  */
 public class BaseFacadeBuilder {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseFacadeBuilder.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BaseFacadeBuilder.class);
 
-    /**
-     * Security service, in case of null, the <code>DefaultSecurityService</code>
-     * will be used.
-     */
-    public InterfaceSecurityService securityService;
+	/**
+	 * Security service, in case of null, the <code>DefaultSecurityService</code>
+	 * will be used.
+	 */
+	public InterfaceSecurityService securityService;
 
-    /**
-     * Language translator service, in case of null, the
-     * <code>JavaSEI18nService</code> will be used.
-     */
-    public InterfaceI18nService i18nService;
+	/**
+	 * Language translator service, in case of null, the
+	 * <code>JavaSEI18nService</code> will be used.
+	 */
+	public InterfaceI18nService i18nService;
 
-    /**
-     * Exception adapter service, in case of null, the
-     * <code>DefaultExceptionAdapterService</code> will be used.
-     */
-    public InterfaceExceptionAdapterService exceptionAdapterService;
+	/**
+	 * Exception adapter service, in case of null, the
+	 * <code>DefaultExceptionAdapterService</code> will be used.
+	 */
+	public InterfaceExceptionAdapterService exceptionAdapterService;
 
-    /**
-     * Default constructor
-     * 
-     * @param function Consumer function
-     */
-    public BaseFacadeBuilder(final Consumer<? extends BaseFacadeBuilder> function) {
-        LOGGER.debug("Constructing BaseFacadeBuilder");
+	/**
+	 * Default constructor
+	 * 
+	 * @param function Consumer function
+	 */
+	public BaseFacadeBuilder(final Consumer<? extends BaseFacadeBuilder> function) {
+		LOGGER.debug("Constructing BaseFacadeBuilder");
 
-        @SuppressWarnings("unchecked")
-        final var finalFunction = (Consumer<BaseFacadeBuilder>) function;
+		@SuppressWarnings("unchecked")
+		final var finalFunction = (Consumer<BaseFacadeBuilder>) function;
 
-        finalFunction.accept(this);
+		finalFunction.accept(this);
 
-        i18nService = nonNull(i18nService)
-                ? i18nService
-                : new JavaSEI18nService();
+		i18nService = nonNull(i18nService)
+				? i18nService
+				: new JavaSEI18nService();
 
-        securityService = nonNull(securityService)
-                ? securityService
-                : new DefaultSecurityService();
+		securityService = nonNull(securityService)
+				? securityService
+				: new DefaultSecurityService();
 
-        exceptionAdapterService = nonNull(exceptionAdapterService)
-                ? exceptionAdapterService
-                : new DefaultExceptionAdapterService();
+		exceptionAdapterService = nonNull(exceptionAdapterService)
+				? exceptionAdapterService
+				: new DefaultExceptionAdapterService();
 
-        LOGGER.debug("BaseFacadeBuilder constructed");
-    }
+		LOGGER.debug("BaseFacadeBuilder constructed: securityService {}, i18nService {}, exceptionAdapterService {}",
+				securityService.getClass().getSimpleName(),
+				i18nService.getClass().getSimpleName(),
+				exceptionAdapterService.getClass().getSimpleName());
+	}
 }

@@ -44,8 +44,6 @@ public class Event {
 	@NotNull
 	private final Why why;
 
-	// ---------------------------------------------
-
 	private Event(final Builder builder) {
 		this.id = UUID.randomUUID().toString();
 		this.origin = builder.origin;

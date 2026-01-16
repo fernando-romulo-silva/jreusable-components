@@ -1,4 +1,4 @@
-package org.reusablecomponents.cqrs.base;
+package org.reusablecomponents;
 
 import static java.text.MessageFormat.format;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

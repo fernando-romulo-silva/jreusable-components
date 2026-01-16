@@ -8,49 +8,49 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SpringPagedFacade<Entity extends AbstractEntity<Id>, Id, Specification>
-                implements InterfaceSpringPagedFacade<Entity, Id, Specification> {
+        implements InterfaceSpringPagedFacade<Entity, Id, Specification> {
 
-        protected final InterfaceSpringCommandFacade<Entity, Id> entityCommandFacade;
+    protected final InterfaceSpringCommandFacade<Entity, Id> entityCommandFacade;
 
-        protected final InterfaceSpringQueryPaginationFacade<Entity, Id> entityQueryPaginationFacade;
+    protected final InterfaceSpringQueryPaginationFacade<Entity, Id> entityQueryPaginationFacade;
 
-        protected final InterfaceSpringQueryPaginationSpecificationFacade<Entity, Id, Specification> entityQueryPaginationSpecificationFacade;
+    protected final InterfaceSpringQueryPaginationSpecificationFacade<Entity, Id, Specification> entityQueryPaginationSpecificationFacade;
 
-        /**
-         * @param entityCommandFacade
-         * @param entityQueryFacade
-         */
-        protected SpringPagedFacade(
-                        final InterfaceSpringCommandFacade<Entity, Id> entityCommandFacade,
-                        final InterfaceSpringQueryPaginationFacade<Entity, Id> entityQueryPaginationFacade,
-                        final InterfaceSpringQueryPaginationSpecificationFacade<Entity, Id, Specification> entityQueryPaginationSpecificationFacade) {
+    /**
+     * @param entityCommandFacade
+     * @param entityQueryFacade
+     */
+    protected SpringPagedFacade(
+            final InterfaceSpringCommandFacade<Entity, Id> entityCommandFacade,
+            final InterfaceSpringQueryPaginationFacade<Entity, Id> entityQueryPaginationFacade,
+            final InterfaceSpringQueryPaginationSpecificationFacade<Entity, Id, Specification> entityQueryPaginationSpecificationFacade) {
 
-                this.entityCommandFacade = entityCommandFacade;
-                this.entityQueryPaginationFacade = entityQueryPaginationFacade;
-                this.entityQueryPaginationSpecificationFacade = entityQueryPaginationSpecificationFacade;
-        }
+        this.entityCommandFacade = entityCommandFacade;
+        this.entityQueryPaginationFacade = entityQueryPaginationFacade;
+        this.entityQueryPaginationSpecificationFacade = entityQueryPaginationSpecificationFacade;
+    }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public InterfaceSpringCommandFacade<Entity, Id> getEntityCommandFacade() {
-                return entityCommandFacade;
-        }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public InterfaceSpringCommandFacade<Entity, Id> getEntityCommandFacade() {
+        return entityCommandFacade;
+    }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public InterfaceSpringQueryPaginationFacade<Entity, Id> getEntityQueryPaginationFacade() {
-                return entityQueryPaginationFacade;
-        }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public InterfaceSpringQueryPaginationFacade<Entity, Id> getEntityQueryPaginationFacade() {
+        return entityQueryPaginationFacade;
+    }
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public InterfaceSpringQueryPaginationSpecificationFacade<Entity, Id, Specification> getEntityQueryPaginationSpecificationFacade() {
-                return entityQueryPaginationSpecificationFacade;
-        }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public InterfaceSpringQueryPaginationSpecificationFacade<Entity, Id, Specification> getEntityQueryPaginationSpecificationFacade() {
+        return entityQueryPaginationSpecificationFacade;
+    }
 }

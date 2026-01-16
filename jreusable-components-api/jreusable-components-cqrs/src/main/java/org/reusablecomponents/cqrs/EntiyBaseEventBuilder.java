@@ -1,4 +1,4 @@
-package org.reusablecomponents.cqrs.base;
+package org.reusablecomponents.cqrs;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
