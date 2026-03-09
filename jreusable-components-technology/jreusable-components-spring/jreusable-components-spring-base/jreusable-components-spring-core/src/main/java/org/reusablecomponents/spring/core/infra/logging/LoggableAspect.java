@@ -174,12 +174,12 @@ public class LoggableAspect {
 		final var finalMsg = StringEscapeUtils.escapeJava(message);
 
 		switch (level) { // NOPMD - SwitchStmtsShouldHaveDefault: Actually we have a 'default'
-			case TRACE -> logger.trace(finalMsg);
-			case DEBUG -> logger.debug(finalMsg);
-			case INFO -> logger.info(finalMsg);
-			case WARN -> logger.warn(finalMsg);
-			case ERROR, FATAL -> logger.error(finalMsg);
-			default -> logger.debug(finalMsg);
+			case TRACE -> logger.atTrace().log(finalMsg);
+			case DEBUG -> logger.atDebug().log(finalMsg);
+			case INFO -> logger.atInfo().log(finalMsg);
+			case WARN -> logger.atWarn().log(finalMsg);
+			case ERROR, FATAL -> logger.atError().log(finalMsg);
+			default -> logger.atDebug().log(finalMsg);
 		}
 	}
 

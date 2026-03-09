@@ -48,14 +48,14 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	@Override
 	@SafeVarargs
 	public final MultiplePagedResult findAllPaged(final Pageable pageable, final Object... directives) {
-		LOGGER.debug("Executing default findAll, pageable {}, directives {}", pageable, directives);
+		LOGGER.atDebug().log("Executing default findAll, pageable {}, directives {}", pageable, directives);
 
 		final var multipleResult = execute(
 				pageable, getPreFindAllPagedFunction(),
 				getFindAllPagedFunction(), getPosFindAllPagedFunction(),
 				getErrorFindAllPagedFunction(), directives);
 
-		LOGGER.debug("Default findAll executed, multipleResult {}, directives {}", multipleResult, directives);
+		LOGGER.atDebug().log("Default findAll executed, multipleResult {}, directives {}", multipleResult, directives);
 		return multipleResult;
 	}
 
@@ -64,26 +64,26 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	 */
 	@Override
 	public OneResult findOneSorted(final Sort sort, final Object... directives) {
-		LOGGER.debug("Executing default findOne, pageable {}, directives {}", sort, directives);
+		LOGGER.atDebug().log("Executing default findOne, pageable {}, directives {}", sort, directives);
 
 		final var oneResult = execute(
 				sort, getPreFindOneSortedFunction(),
 				getFindOneSortedFunction(), getPosFindOneSortedFunction(),
 				getErrorFindOneSortedFunction(), directives);
 
-		LOGGER.debug("Default findOne executed, oneResult {}, directives {}", oneResult, directives);
+		LOGGER.atDebug().log("Default findOne executed, oneResult {}, directives {}", oneResult, directives);
 		return oneResult;
 	}
 
 	@NotNull
 	public FindAllPagedFunction<Pageable, MultiplePagedResult> getFindAllPagedFunction() {
-		LOGGER.debug("Returning findAllFunction function {}", findAllPagedFunction.getName());
+		LOGGER.atDebug().log("Returning findAllFunction function {}", findAllPagedFunction.getName());
 		return findAllPagedFunction;
 	}
 
 	@NotNull
 	public FindOneSortedFunction<Sort, OneResult> getFindOneSortedFunction() {
-		LOGGER.debug("Returning findOneFunction function {}", findOneSortedFunction.getName());
+		LOGGER.atDebug().log("Returning findOneFunction function {}", findOneSortedFunction.getName());
 		return findOneSortedFunction;
 	}
 }

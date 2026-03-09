@@ -156,6 +156,8 @@ public non-sealed class CommandFacade< // generics
 		this.deleteAllFunction = builder.deleteAllFunction;
 		this.deleteByIdFunction = builder.deleteByIdFunction;
 		this.deleteByIdsFunction = builder.deleteByIdsFunction;
+
+		LOGGER.atDebug().log("Command Facade created {}", this);
 	}
 
 	/**
@@ -163,7 +165,7 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public SaveEntityOut save(final SaveEntityIn saveEntityIn, final Object... directives) {
-		LOGGER.debug("Executing default save, saveEntityIn {}, directives {}", saveEntityIn, directives);
+		LOGGER.atDebug().log("Executing default save, saveEntityIn {}, directives {}", saveEntityIn, directives);
 
 		checkNotNull(saveEntityIn, NON_NULL_ENTITY_MSG, getEntityClazz().getSimpleName());
 
@@ -171,13 +173,13 @@ public non-sealed class CommandFacade< // generics
 				saveEntityIn, getPreSaveFunction(), getSaveFunction(),
 				getPosSaveFunction(), getErrorSaveFunction(), directives);
 
-		LOGGER.debug("Default save executed, saveEntityOut {}, directives {}", saveEntityOut, directives);
+		LOGGER.atDebug().log("Default save executed, saveEntityOut {}, directives {}", saveEntityOut, directives);
 		return saveEntityOut;
 	}
 
 	@NotNull
 	protected SaveFunction<SaveEntityIn, SaveEntityOut> getSaveFunction() {
-		LOGGER.debug("Returning save function {}", saveFunction.getName());
+		LOGGER.atDebug().log("Returning save function {}", saveFunction.getName());
 		return saveFunction;
 	}
 
@@ -186,7 +188,7 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public SaveEntitiesOut saveAll(final SaveEntitiesIn saveEntitiesIn, final Object... directives) {
-		LOGGER.debug("Executing default saveAll, saveEntitiesIn {}, directives {}", saveEntitiesIn, directives);
+		LOGGER.atDebug().log("Executing default saveAll, saveEntitiesIn {}, directives {}", saveEntitiesIn, directives);
 
 		checkNotNull(saveEntitiesIn, NON_NULL_GROUP_OF_ENTITIES_MSG, getEntityClazz().getSimpleName());
 
@@ -194,13 +196,14 @@ public non-sealed class CommandFacade< // generics
 				saveEntitiesIn, getPreSaveAllFunction(), getSaveAllFunction(),
 				getPosSaveAllFunction(), getErrorSaveAllFunction(), directives);
 
-		LOGGER.debug("Default saveAll executed, saveEntitiesOut {}, directives {}", saveEntitiesOut, directives);
+		LOGGER.atDebug().log("Default saveAll executed, saveEntitiesOut {}, directives {}", saveEntitiesOut,
+				directives);
 		return saveEntitiesOut;
 	}
 
 	@NotNull
 	protected SaveAllFunction<SaveEntitiesIn, SaveEntitiesOut> getSaveAllFunction() {
-		LOGGER.debug("Returning save all function {}", saveAllFunction.getName());
+		LOGGER.atDebug().log("Returning save all function {}", saveAllFunction.getName());
 		return saveAllFunction;
 	}
 
@@ -209,7 +212,7 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public UpdateEntityOut update(final UpdateEntityIn updateEntityIn, final Object... directives) {
-		LOGGER.debug("Executing default update, updateEntityIn {}, directives {} ", updateEntityIn, directives);
+		LOGGER.atDebug().log("Executing default update, updateEntityIn {}, directives {} ", updateEntityIn, directives);
 
 		checkNotNull(updateEntityIn, NON_NULL_ENTITY_MSG, getEntityClazz().getSimpleName());
 
@@ -217,31 +220,32 @@ public non-sealed class CommandFacade< // generics
 				updateEntityIn, getPreUpdateFunction(), getUpdateFunction(),
 				getPosUpdateFunction(), getErrorUpdateFunction(), directives);
 
-		LOGGER.debug("Default update executed, updateEntityOut {}, directives {} ", updateEntityOut, directives);
+		LOGGER.atDebug().log("Default update executed, updateEntityOut {}, directives {} ", updateEntityOut,
+				directives);
 		return updateEntityOut;
 	}
 
 	@NotNull
 	protected PreUpdateFunction<UpdateEntityIn> getPreUpdateFunction() {
-		LOGGER.debug("Returning pre update function {}", preUpdateFunction.getName());
+		LOGGER.atDebug().log("Returning pre update function {}", preUpdateFunction.getName());
 		return preUpdateFunction;
 	}
 
 	@NotNull
 	protected UpdateFunction<UpdateEntityIn, UpdateEntityOut> getUpdateFunction() {
-		LOGGER.debug("Returning update function {}", updateFunction.getName());
+		LOGGER.atDebug().log("Returning update function {}", updateFunction.getName());
 		return updateFunction;
 	}
 
 	@NotNull
 	protected PosUpdateFunction<UpdateEntityOut> getPosUpdateFunction() {
-		LOGGER.debug("Returning pos update function {}", posUpdateFunction.getName());
+		LOGGER.atDebug().log("Returning pos update function {}", posUpdateFunction.getName());
 		return posUpdateFunction;
 	}
 
 	@NotNull
 	protected ErrorUpdateFunction<UpdateEntityIn> getErrorUpdateFunction() {
-		LOGGER.debug("Returning error update function {}", errorUpdateFunction.getName());
+		LOGGER.atDebug().log("Returning error update function {}", errorUpdateFunction.getName());
 		return errorUpdateFunction;
 	}
 
@@ -250,7 +254,8 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public UpdateEntitiesOut updateAll(final UpdateEntitiesIn updateEntitiesIn, final Object... directives) {
-		LOGGER.debug("Executing default updateAll, updateEntityIn {}, directives {} ", updateEntitiesIn, directives);
+		LOGGER.atDebug().log("Executing default updateAll, updateEntityIn {}, directives {} ", updateEntitiesIn,
+				directives);
 
 		checkNotNull(updateEntitiesIn, NON_NULL_GROUP_OF_ENTITIES_MSG, getEntityClazz().getSimpleName());
 
@@ -258,31 +263,32 @@ public non-sealed class CommandFacade< // generics
 				updateEntitiesIn, getPreUpdateAllFunction(), getUpdateAllFunction(),
 				getPosUpdateAllFunction(), getErrorUpdateAllFunction(), directives);
 
-		LOGGER.debug("Default updateAll executed, updateEntitiesOut {}, directives {} ", updateEntitiesOut, directives);
+		LOGGER.atDebug().log("Default updateAll executed, updateEntitiesOut {}, directives {} ", updateEntitiesOut,
+				directives);
 		return updateEntitiesOut;
 	}
 
 	@NotNull
 	protected PreUpdateAllFunction<UpdateEntitiesIn> getPreUpdateAllFunction() {
-		LOGGER.debug("Returning pre update all function {}", preUpdateAllFunction.getName());
+		LOGGER.atDebug().log("Returning pre update all function {}", preUpdateAllFunction.getName());
 		return preUpdateAllFunction;
 	}
 
 	@NotNull
 	protected UpdateAllFunction<UpdateEntitiesIn, UpdateEntitiesOut> getUpdateAllFunction() {
-		LOGGER.debug("Returning update all function {}", updateAllFunction.getName());
+		LOGGER.atDebug().log("Returning update all function {}", updateAllFunction.getName());
 		return updateAllFunction;
 	}
 
 	@NotNull
 	protected PosUpdateAllFunction<UpdateEntitiesOut> getPosUpdateAllFunction() {
-		LOGGER.debug("Returning pos update all function {}", posUpdateAllFunction.getName());
+		LOGGER.atDebug().log("Returning pos update all function {}", posUpdateAllFunction.getName());
 		return posUpdateAllFunction;
 	}
 
 	@NotNull
 	protected ErrorUpdateAllFunction<UpdateEntitiesIn> getErrorUpdateAllFunction() {
-		LOGGER.debug("Returning error update all function {}", errorUpdateAllFunction.getName());
+		LOGGER.atDebug().log("Returning error update all function {}", errorUpdateAllFunction.getName());
 		return errorUpdateAllFunction;
 	}
 
@@ -291,7 +297,7 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public DeleteEntityOut delete(final DeleteEntityIn deleteEntityIn, final Object... directives) {
-		LOGGER.debug("Executing default delete, deleteEntityIn {}, directives {}", deleteEntityIn, directives);
+		LOGGER.atDebug().log("Executing default delete, deleteEntityIn {}, directives {}", deleteEntityIn, directives);
 
 		checkNotNull(deleteEntityIn, NON_NULL_ENTITY_MSG, getEntityClazz().getSimpleName());
 
@@ -299,31 +305,31 @@ public non-sealed class CommandFacade< // generics
 				deleteEntityIn, getPreDeleteFunction(), getDeleteFunction(),
 				getPosDeleteFunction(), getErrorDeleteFunction(), directives);
 
-		LOGGER.debug("Default delete executed, deleteEntityOut {}, directives {}", deleteEntityOut, directives);
+		LOGGER.atDebug().log("Default delete executed, deleteEntityOut {}, directives {}", deleteEntityOut, directives);
 		return deleteEntityOut;
 	}
 
 	@NotNull
 	protected PreDeleteFunction<DeleteEntityIn> getPreDeleteFunction() {
-		LOGGER.debug("Returning pre delete function {}", preDeleteFunction.getName());
+		LOGGER.atDebug().log("Returning pre delete function {}", preDeleteFunction.getName());
 		return preDeleteFunction;
 	}
 
 	@NotNull
 	protected DeleteFunction<DeleteEntityIn, DeleteEntityOut> getDeleteFunction() {
-		LOGGER.debug("Returning delete function {}", deleteFunction.getName());
+		LOGGER.atDebug().log("Returning delete function {}", deleteFunction.getName());
 		return deleteFunction;
 	}
 
 	@NotNull
 	protected PosDeleteFunction<DeleteEntityOut> getPosDeleteFunction() {
-		LOGGER.debug("Returning pos delete function {}", posDeleteFunction.getName());
+		LOGGER.atDebug().log("Returning pos delete function {}", posDeleteFunction.getName());
 		return posDeleteFunction;
 	}
 
 	@NotNull
 	protected ErrorDeleteFunction<DeleteEntityIn> getErrorDeleteFunction() {
-		LOGGER.debug("Returning error delete function {}", errorDeleteFunction.getName());
+		LOGGER.atDebug().log("Returning error delete function {}", errorDeleteFunction.getName());
 		return errorDeleteFunction;
 	}
 
@@ -332,7 +338,8 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public DeleteEntitiesOut deleteAll(final DeleteEntitiesIn deleteEntitiesIn, final Object... directives) {
-		LOGGER.debug("Executing default deleteAll, deleteEntitiesIn {}, directives {} ", deleteEntitiesIn, directives);
+		LOGGER.atDebug().log("Executing default deleteAll, deleteEntitiesIn {}, directives {} ", deleteEntitiesIn,
+				directives);
 
 		checkNotNull(deleteEntitiesIn, NON_NULL_GROUP_OF_ENTITIES_MSG, getEntityClazz().getSimpleName());
 
@@ -340,31 +347,32 @@ public non-sealed class CommandFacade< // generics
 				deleteEntitiesIn, getPreDeleteAllFunction(), getDeleteAllFunction(),
 				getPosDeleteAllFunction(), getErrorDeleteAllFunction(), directives);
 
-		LOGGER.debug("Default deleteAll executed, deleteEntitiesOut {}, directives {} ", deleteEntitiesOut, directives);
+		LOGGER.atDebug().log("Default deleteAll executed, deleteEntitiesOut {}, directives {} ", deleteEntitiesOut,
+				directives);
 		return deleteEntitiesOut;
 	}
 
 	@NotNull
 	protected PreDeleteAllFunction<DeleteEntitiesIn> getPreDeleteAllFunction() {
-		LOGGER.debug("Returning pre delete all function {}", preDeleteAllFunction.getName());
+		LOGGER.atDebug().log("Returning pre delete all function {}", preDeleteAllFunction.getName());
 		return preDeleteAllFunction;
 	}
 
 	@NotNull
 	protected DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut> getDeleteAllFunction() {
-		LOGGER.debug("Returning delete all function {}", deleteAllFunction.getName());
+		LOGGER.atDebug().log("Returning delete all function {}", deleteAllFunction.getName());
 		return deleteAllFunction;
 	}
 
 	@NotNull
 	protected PosDeleteAllFunction<DeleteEntitiesOut> getPosDeleteAllFunction() {
-		LOGGER.debug("Returning pos delete all function {}", posDeleteAllFunction.getName());
+		LOGGER.atDebug().log("Returning pos delete all function {}", posDeleteAllFunction.getName());
 		return posDeleteAllFunction;
 	}
 
 	@NotNull
 	protected ErrorDeleteAllFunction<DeleteEntitiesIn> getErrorDeleteAllFunction() {
-		LOGGER.debug("Returning error delete all function {}", errorDeleteAllFunction.getName());
+		LOGGER.atDebug().log("Returning error delete all function {}", errorDeleteAllFunction.getName());
 		return errorDeleteAllFunction;
 	}
 
@@ -373,7 +381,7 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public DeleteIdOut deleteBy(final DeleteIdIn deleteIdIn, final Object... directives) {
-		LOGGER.debug("Executing default deleteBy, deleteIdIn {}, directives {} ", deleteIdIn, directives);
+		LOGGER.atDebug().log("Executing default deleteBy, deleteIdIn {}, directives {} ", deleteIdIn, directives);
 
 		checkNotNull(deleteIdIn, NON_NULL_ID_MSG, getEntityClazz().getSimpleName());
 
@@ -381,31 +389,31 @@ public non-sealed class CommandFacade< // generics
 				deleteIdIn, getPreDeleteByIdFunction(), getDeleteByIdFunction(),
 				getPosDeleteByIdFunction(), getErrorDeleteByIdFunction(), directives);
 
-		LOGGER.debug("Default deleteBy executed, deleteIdOut {}, directives {} ", deleteIdOut, directives);
+		LOGGER.atDebug().log("Default deleteBy executed, deleteIdOut {}, directives {} ", deleteIdOut, directives);
 		return deleteIdOut;
 	}
 
 	@NotNull
 	protected PreDeleteByIdFunction<DeleteIdIn> getPreDeleteByIdFunction() {
-		LOGGER.debug("Returning pre delete by id function {}", preDeleteByIdFunction.getName());
+		LOGGER.atDebug().log("Returning pre delete by id function {}", preDeleteByIdFunction.getName());
 		return preDeleteByIdFunction;
 	}
 
 	@NotNull
 	protected DeleteByIdFunction<DeleteIdIn, DeleteIdOut> getDeleteByIdFunction() {
-		LOGGER.debug("Returning delete by id function {}", deleteByIdFunction.getName());
+		LOGGER.atDebug().log("Returning delete by id function {}", deleteByIdFunction.getName());
 		return deleteByIdFunction;
 	}
 
 	@NotNull
 	protected PosDeleteByIdFunction<DeleteIdOut> getPosDeleteByIdFunction() {
-		LOGGER.debug("Returning pos delete by id function {}", posDeleteByIdFunction.getName());
+		LOGGER.atDebug().log("Returning pos delete by id function {}", posDeleteByIdFunction.getName());
 		return posDeleteByIdFunction;
 	}
 
 	@NotNull
 	protected ErrorDeleteByIdFunction<DeleteIdIn> getErrorDeleteByIdFunction() {
-		LOGGER.debug("Returning error delete by id function {}", errorDeleteByIdFunction.getName());
+		LOGGER.atDebug().log("Returning error delete by id function {}", errorDeleteByIdFunction.getName());
 		return errorDeleteByIdFunction;
 	}
 
@@ -414,7 +422,7 @@ public non-sealed class CommandFacade< // generics
 	 */
 	@Override
 	public DeleteIdsOut deleteAllBy(final DeleteIdsIn deleteIdsIn, final Object... directives) {
-		LOGGER.debug("Executing default deleteAllBy, deleteIdsIn {}, directives {} ", deleteIdsIn, directives);
+		LOGGER.atDebug().log("Executing default deleteAllBy, deleteIdsIn {}, directives {} ", deleteIdsIn, directives);
 
 		checkNotNull(deleteIdsIn, NON_NULL_GROUP_OF_IDS_MSG, getEntityClazz().getSimpleName());
 
@@ -422,31 +430,31 @@ public non-sealed class CommandFacade< // generics
 				deleteIdsIn, getPreDeleteByIdsFunction(), getDeleteByIdsFunction(),
 				getPosDeleteByIdsFunction(), getErrorDeleteByIdsFunction(), directives);
 
-		LOGGER.debug("Default deleteAllBy executed, deleteIdsOut {}, directives {} ", deleteIdsOut, directives);
+		LOGGER.atDebug().log("Default deleteAllBy executed, deleteIdsOut {}, directives {} ", deleteIdsOut, directives);
 		return deleteIdsOut;
 	}
 
 	@NotNull
 	protected PreDeleteByIdsFunction<DeleteIdsIn> getPreDeleteByIdsFunction() {
-		LOGGER.debug("Returning pre delete by ids function {}", preDeleteByIdsFunction.getName());
+		LOGGER.atDebug().log("Returning pre delete by ids function {}", preDeleteByIdsFunction.getName());
 		return preDeleteByIdsFunction;
 	}
 
 	@NotNull
 	protected DeleteByIdsFunction<DeleteIdsIn, DeleteIdsOut> getDeleteByIdsFunction() {
-		LOGGER.debug("Returning delete by ids function {}", deleteByIdsFunction.getName());
+		LOGGER.atDebug().log("Returning delete by ids function {}", deleteByIdsFunction.getName());
 		return deleteByIdsFunction;
 	}
 
 	@NotNull
 	protected PosDeleteByIdsFunction<DeleteIdsOut> getPosDeleteByIdsFunction() {
-		LOGGER.debug("Returning pos delete by ids function {}", posDeleteByIdsFunction.getName());
+		LOGGER.atDebug().log("Returning pos delete by ids function {}", posDeleteByIdsFunction.getName());
 		return posDeleteByIdsFunction;
 	}
 
 	@NotNull
 	protected ErrorDeleteByIdsFunction<DeleteIdsIn> getErrorDeleteByIdsFunction() {
-		LOGGER.debug("Returning error delete by ids function {}", errorDeleteByIdsFunction.getName());
+		LOGGER.atDebug().log("Returning error delete by ids function {}", errorDeleteByIdsFunction.getName());
 		return errorDeleteByIdsFunction;
 	}
 }

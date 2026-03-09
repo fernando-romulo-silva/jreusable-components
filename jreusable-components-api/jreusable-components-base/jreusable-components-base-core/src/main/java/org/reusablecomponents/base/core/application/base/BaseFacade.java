@@ -12,6 +12,7 @@ import static org.reusablecomponents.base.core.application.base.BaseFacadeMessag
 
 import static org.reusablecomponents.base.core.infra.util.function.FunctionCommonUtils.createNullPointerException;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.reusablecomponents.base.core.application.command.entity.AbstractCommandFacade;
@@ -27,6 +28,7 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction2Args;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction3Args;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction4Args;
+import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunctionArgs;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.slf4j.Logger;
@@ -72,7 +74,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 */
 	protected BaseFacade(@NotNull final BaseFacadeBuilder builder) {
 		super();
-		LOGGER.debug("Constructing BaseFacade with builder {}", builder);
+		LOGGER.atDebug().log("Constructing BaseFacade with builder {}", builder);
 		final var finalBuilder = ofNullable(builder)
 				.orElseThrow(createNullPointerException("builder"));
 
@@ -83,7 +85,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		this.securityService = finalBuilder.securityService;
 		this.exceptionAdapterService = finalBuilder.exceptionAdapterService;
 
-		LOGGER.debug("BaseFacade constructed");
+		LOGGER.atDebug().log("BaseFacade constructed");
 	}
 
 	/**
@@ -97,7 +99,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			private static final long serialVersionUID = 1L;
 		};
 		final var rawType = (Class<Entity>) entityTypeToken.getRawType();
-		LOGGER.debug("Class Entity '{}'", rawType);
+		LOGGER.atDebug().log("Class Entity '{}'", rawType);
 		return rawType;
 	}
 
@@ -112,7 +114,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			private static final long serialVersionUID = 1L;
 		};
 		final var rawType = (Class<Id>) entityTypeToken.getRawType();
-		LOGGER.debug("Class Id '{}'", rawType);
+		LOGGER.atDebug().log("Class Id '{}'", rawType);
 		return rawType;
 	}
 
@@ -149,57 +151,59 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		final var errorFunctionName = errorFunction.getName();
 		final var session = securityService.getSession();
 
-		LOGGER.debug(
+		LOGGER.atDebug().log(
 				"Start the execute with session '{}', pre-function '{}', main-function '{}', pos-function '{}', error-function '{}', and directives '{}'",
 				session, preFunctionName, mainFunctionName, posFunctionName, errorFunctionName, directives);
 
 		final Object[] finalDirectives;
 		try {
-			LOGGER.debug("Executing {} pre-function with session '{}', and directives '{}'",
+			LOGGER.atDebug().log("Executing {} pre-function with session '{}', and directives '{}'",
 					preFunctionName, session, directives);
 			finalDirectives = preFunction.apply(directives);
-			LOGGER.debug("{} pre-function executed with session '{}', and directives '{}', and finalDirectives '{}'",
+			LOGGER.atDebug().log(
+					"{} pre-function executed with session '{}', and directives '{}', and finalDirectives '{}'",
 					preFunctionName, session, directives, finalDirectives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			final var convertedException = exceptionAdapterService.convert(
 					ex, i18nService, preFunction, getEntityClazz());
 
-			LOGGER.debug("Error on {} pre-function with session '{}', exception '{}', converted exception '{}'",
+			LOGGER.atDebug().log("Error on {} pre-function with session '{}', exception '{}', converted exception '{}'",
 					preFunctionName, session, exceptionClass, convertedException.getClass().getSimpleName());
 			throw convertedException;
 		}
 
 		final Out out;
 		try {
-			LOGGER.debug("Executing {} main-function with session '{}', and directives '{}'",
+			LOGGER.atDebug().log("Executing {} main-function with session '{}', and directives '{}'",
 					mainFunctionName, session, finalDirectives);
 			out = mainFunction.apply(finalDirectives);
-			LOGGER.debug("{} main-function executed with session '{}', directives '{}', and out '{}'",
+			LOGGER.atDebug().log("{} main-function executed with session '{}', directives '{}', and out '{}'",
 					mainFunctionName, session, finalDirectives, out);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			final var convertedException = exceptionAdapterService.convert(
 					ex, i18nService, mainFunction, getEntityClazz(), finalDirectives);
 
-			LOGGER.debug("Error on {} main-function with session '{}', exception '{}', converted exception '{}'",
+			LOGGER.atDebug().log(
+					"Error on {} main-function with session '{}', exception '{}', converted exception '{}'",
 					mainFunctionName, session, exceptionClass);
 			throw errorFunction.apply(convertedException, directives);
 		}
 
 		final Out finalOut;
 		try {
-			LOGGER.debug("Executing {} pos-function with session '{}', and directives '{}', out '{}'",
+			LOGGER.atDebug().log("Executing {} pos-function with session '{}', and directives '{}', out '{}'",
 					posFunctionName, session, finalDirectives, out);
 			finalOut = posFunction.apply(out, finalDirectives);
-			LOGGER.debug("{} pos-function executed with session '{}', directives '{}', and finalOut '{}'",
+			LOGGER.atDebug().log("{} pos-function executed with session '{}', directives '{}', and finalOut '{}'",
 					posFunctionName, session, finalDirectives, finalOut);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			final var convertedException = exceptionAdapterService.convert(
 					ex, i18nService, posFunction, getEntityClazz(), out);
 
-			LOGGER.debug(
+			LOGGER.atDebug().log(
 					"Error on {} pos-function with session '{}', out '{}', exception '{}', and converted exception '{}'",
 					posFunctionName, session, out, exceptionClass, convertedException.getClass().getSimpleName());
 			throw convertedException;
@@ -209,7 +213,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			createNullPointerException(i18nService, "finalOut (from posOutFunction)");
 		}
 
-		LOGGER.debug(
+		LOGGER.atDebug().log(
 				"Execute finalized with session '{}', out '{}', pre-function '{}', main-function '{}', pos-function '{}', error-function, and directives '{}'",
 				session, finalOut, preFunctionName, mainFunctionName, posFunctionName, errorFunctionName, directives);
 		return finalOut;
@@ -252,22 +256,22 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		final var errorFunctionName = errorFunction.getName();
 		final var session = securityService.getSession();
 
-		LOGGER.debug(
+		LOGGER.atDebug().log(
 				"Start the execute with session '{}', in '{}', pre-function '{}', main-function '{}', pos-function '{}', error-function '{}', and directives '{}'",
 				session, in, preFunctionName, mainFunctionName, posFunctionName, errorFunctionName, directives);
 
 		final In finalIn;
 		try {
-			LOGGER.debug("Executing {} pre-function with session '{}', in '{}', and directives '{}'",
+			LOGGER.atDebug().log("Executing {} pre-function with session '{}', in '{}', and directives '{}'",
 					preFunctionName, session, in, directives);
 			finalIn = preFunction.apply(in, directives);
-			LOGGER.debug("{} pre-function executed with session '{}', finalIn '{}', and directives '{}'",
+			LOGGER.atDebug().log("{} pre-function executed with session '{}', finalIn '{}', and directives '{}'",
 					preFunctionName, session, finalIn, directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			final var convertedException = exceptionAdapterService.convert(
 					ex, i18nService, mainFunction, getEntityClazz(), in);
-			LOGGER.debug(
+			LOGGER.atDebug().log(
 					"Error on {} pre-function with session '{}', in '{}', exception '{}', converted exception '{}'",
 					preFunctionName, session, in, exceptionClass, convertedException.getClass().getSimpleName());
 			throw convertedException;
@@ -275,16 +279,17 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 		final Out out;
 		try {
-			LOGGER.debug("Executing {} main-function with session '{}', finalIn '{}', and directives '{}'",
+			LOGGER.atDebug().log("Executing {} main-function with session '{}', finalIn '{}', and directives '{}'",
 					mainFunctionName, session, in, directives);
 			out = mainFunction.apply(finalIn, directives);
-			LOGGER.debug("{} main-function executed with session '{}', finalIn '{}', out '{}', and directives '{}'",
+			LOGGER.atDebug().log(
+					"{} main-function executed with session '{}', finalIn '{}', out '{}', and directives '{}'",
 					mainFunctionName, session, finalIn, directives, out);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			final var convertedException = exceptionAdapterService.convert(
 					ex, i18nService, mainFunction, getEntityClazz(), finalIn);
-			LOGGER.debug(
+			LOGGER.atDebug().log(
 					"Error on {} main-function with session '{}', finalIn '{}', exception '{}', converted exception '{}'",
 					mainFunctionName, session, finalIn, exceptionClass, convertedException.getClass().getSimpleName());
 			throw errorFunction.apply(convertedException, finalIn, directives);
@@ -292,16 +297,16 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 		final Out finalOut;
 		try {
-			LOGGER.debug("Executing {} pos-function with session '{}', out '{}', and directives '{}'",
+			LOGGER.atDebug().log("Executing {} pos-function with session '{}', out '{}', and directives '{}'",
 					posFunctionName, session, out, directives);
 			finalOut = posFunction.apply(out, directives);
-			LOGGER.debug("{} pos-function executed with session '{}', finalOut '{}', and directives '{}'",
+			LOGGER.atDebug().log("{} pos-function executed with session '{}', finalOut '{}', and directives '{}'",
 					posFunctionName, session, finalOut, directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			final var convertedException = exceptionAdapterService.convert(
 					ex, i18nService, mainFunction, getEntityClazz(), finalIn, out);
-			LOGGER.debug(
+			LOGGER.atDebug().log(
 					"Error on {} pos-function with session '{}', in '{}', exception '{}', converted exception '{}'",
 					posFunctionName, session, out, exceptionClass, convertedException.getClass().getSimpleName());
 			throw convertedException;
@@ -311,7 +316,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			createNullPointerException(i18nService, "finalOut (from posOutFunction)");
 		}
 
-		LOGGER.debug(
+		LOGGER.atDebug().log(
 				"Execute finalized with session '{}', in '{}', out '{}', preFunction '{}', mainFunction '{}', posFunction '{}', errorFunction '{}', and directives '{}'",
 				session, in, out, preFunctionName, mainFunctionName, posFunctionName, errorFunctionName, directives);
 		return finalOut;
@@ -358,22 +363,23 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		final var errorFunctionName = errorFunction.getName();
 		final var session = securityService.getSession();
 
-		LOGGER.debug(
+		LOGGER.atDebug().log(
 				"Start the execute with session '{}', in1 '{}', in2 '{}', pre-function '{}', main-function '{}', pos-function '{}', error-function '{}', and directives '{}'",
 				session, in1, in2, preFunctionName, mainFunctionName, posFunctionName, errorFunctionName, directives);
 
 		final In1 finalIn1;
 		try {
-			LOGGER.debug("Executing {} pre-function with session '{}', in1 '{}', in2 '{}', and directives '{}'",
+			LOGGER.atDebug().log("Executing {} pre-function with session '{}', in1 '{}', in2 '{}', and directives '{}'",
 					preFunctionName, session, in1, in2, directives);
 			finalIn1 = preFunction.apply(in1, in2, directives);
-			LOGGER.debug("{} pre-function executed with session '{}', finalIn1 '{}', in2 '{}', and directives '{}'",
+			LOGGER.atDebug().log(
+					"{} pre-function executed with session '{}', finalIn1 '{}', in2 '{}', and directives '{}'",
 					preFunctionName, session, finalIn1, in2, directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			final var convertedException = exceptionAdapterService.convert(
 					ex, i18nService, mainFunction, getEntityClazz(), in1, in2);
-			LOGGER.debug(
+			LOGGER.atDebug().log(
 					"Error on {} pre-function with session '{}', in1 '{}', in2 '{}', exception '{}', converted exception '{}'",
 					preFunctionName, session, in1, in2, exceptionClass, convertedException.getClass().getSimpleName());
 			throw convertedException;
@@ -381,14 +387,15 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 		final Out out;
 		try {
-			LOGGER.debug("Executing {} main-function with session '{}', finalIn1 '{}', in2 '{}', and directives '{}'",
+			LOGGER.atDebug().log(
+					"Executing {} main-function with session '{}', finalIn1 '{}', in2 '{}', and directives '{}'",
 					mainFunctionName, session, in1, in2, directives);
 			out = mainFunction.apply(finalIn1, in2, directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			final var convertedException = exceptionAdapterService.convert(
 					ex, i18nService, mainFunction, getEntityClazz(), finalIn1, in2);
-			LOGGER.debug(
+			LOGGER.atDebug().log(
 					"Error on {} main-function with session '{}', finalIn1 '{}', in2 '{}', exception '{}', converted exception '{}'",
 					mainFunctionName, session, finalIn1, exceptionClass, convertedException.getClass().getSimpleName());
 			throw errorFunction.apply(convertedException, finalIn1, in2, directives);
@@ -396,14 +403,14 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 		final Out finalOut;
 		try {
-			LOGGER.debug("Executing {} pos-function with session '{}', out '{}', and directives '{}'",
+			LOGGER.atDebug().log("Executing {} pos-function with session '{}', out '{}', and directives '{}'",
 					posFunctionName, session, out, directives);
 			finalOut = posFunction.apply(out, directives);
 		} catch (final Exception ex) {
 			final var exceptionClass = getRootCause(ex).getClass().getSimpleName();
 			final var convertedException = exceptionAdapterService.convert(
 					ex, i18nService, mainFunction, getEntityClazz(), finalIn1, in2, out);
-			LOGGER.debug(
+			LOGGER.atDebug().log(
 					"Error on {} pos-function with session '{}', in '{}', exception '{}', converted exception '{}'",
 					posFunctionName, session, out, exceptionClass, convertedException.getClass().getSimpleName());
 			throw convertedException;
@@ -413,11 +420,20 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 			createNullPointerException(i18nService, "finalOut (from posOutFunction)");
 		}
 
-		LOGGER.debug(
+		LOGGER.atDebug().log(
 				"Execute finalized with session '{}', finalIn1 '{}', in2 '{}', out '{}', preFunction '{}', mainFunction '{}', posFunction '{}', errorFunction '{}', and directives '{}'",
 				session, finalIn1, in2, out, preFunctionName, mainFunctionName,
 				posFunctionName, errorFunctionName, directives);
 		return finalOut;
+	}
+
+	protected List<Object> execute(
+			final Object[] inputs,
+			final OperationFunctionArgs preFunction,
+			final OperationFunctionArgs mainFunction,
+			final OperationFunctionArgs posFunction,
+			final Object... directives) {
+		return List.of();
 	}
 
 	private void checkParamsNotNull(

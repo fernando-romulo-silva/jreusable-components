@@ -3,6 +3,7 @@ package org.reusablecomponents.base.core.application.base;
 import static java.text.MessageFormat.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import org.application_example.application.TestEntiyBaseFacade;
 import org.application_example.domain.Department;
@@ -34,7 +35,8 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 		final var myExceptionTranslatorService = exceptionTranslatorService;
 
 		// when
-		final var facade = new TestEntiyBaseFacade(i18nService, interfaceSecurityService, myExceptionTranslatorService);
+		final var facade = assertDoesNotThrow(
+				() -> new TestEntiyBaseFacade(i18nService, interfaceSecurityService, myExceptionTranslatorService));
 
 		// then
 		assertThat(facade)
@@ -81,7 +83,8 @@ class BaseFacadeHappyPathTest extends AbstractBaseFacadeTest {
 			}
 		};
 
-		final var facade = new TestEntiyBaseFacade(i18nService, myDummySecurityService, exceptionTranslatorService);
+		final var facade = assertDoesNotThrow(
+				() -> new TestEntiyBaseFacade(i18nService, myDummySecurityService, exceptionTranslatorService));
 
 		assertThat(facade)
 				// when

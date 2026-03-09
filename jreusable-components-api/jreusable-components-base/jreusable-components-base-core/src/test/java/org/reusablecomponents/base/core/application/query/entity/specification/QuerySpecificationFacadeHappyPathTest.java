@@ -2,6 +2,7 @@ package org.reusablecomponents.base.core.application.query.entity.specification;
 
 import static org.apache.commons.lang3.Strings.CI;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ class QuerySpecificationFacadeHappyPathTest {
         final Predicate<Department> spec = department -> CI.contains(department.getName(), "Default 01");
 
         // when
-        final var result = defaultQueryFacade.findOneBySpecification(spec);
+        final var result = assertDoesNotThrow(() -> defaultQueryFacade.findOneBySpecification(spec));
 
         // then
         assertThat(department01).isEqualTo(result);
@@ -84,7 +85,7 @@ class QuerySpecificationFacadeHappyPathTest {
         final Predicate<Department> spec02 = department -> CI.contains(department.getName(), "Whatever");
 
         // when
-        final var result = defaultQueryFacade.findBySpecification(spec01);
+        final var result = assertDoesNotThrow(() -> defaultQueryFacade.findBySpecification(spec01));
 
         // then
         assertThat(result)
@@ -100,7 +101,7 @@ class QuerySpecificationFacadeHappyPathTest {
         final Predicate<Department> spec = department -> CI.equals(department.getName(), "Default 01");
 
         // when
-        final var result = defaultQueryFacade.countBySpecification(spec);
+        final var result = assertDoesNotThrow(() -> defaultQueryFacade.countBySpecification(spec));
 
         // then
         assertThat(result).isEqualTo(NumberUtils.LONG_ONE);
@@ -117,7 +118,7 @@ class QuerySpecificationFacadeHappyPathTest {
         final var existsAll = defaultData.size() > 0;
 
         // when
-        final var result = defaultQueryFacade.existsBySpecification(spec01);
+        final var result = assertDoesNotThrow(() -> defaultQueryFacade.existsBySpecification(spec01));
 
         // then
         assertThat(existsAll)

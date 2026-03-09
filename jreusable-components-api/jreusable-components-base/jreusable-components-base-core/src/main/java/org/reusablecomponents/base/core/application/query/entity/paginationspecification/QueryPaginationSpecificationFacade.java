@@ -44,7 +44,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 			final Specification specification,
 			final Pageable pageable,
 			final Object... directives) {
-		LOGGER.debug("Executing default findByPaginationPaged, specification {}, pageable {}, directives {}",
+		LOGGER.atDebug().log("Executing default findByPaginationPaged, specification {}, pageable {}, directives {}",
 				specification, pageable, directives);
 
 		final var multiplePagedResult = execute(
@@ -55,7 +55,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 				getErrorFindBySpecificationPagedFunction(),
 				directives);
 
-		LOGGER.debug("Default findByPaginationPaged executed, multiplePagedResult {}, directives {}",
+		LOGGER.atDebug().log("Default findByPaginationPaged executed, multiplePagedResult {}, directives {}",
 				multiplePagedResult, directives);
 
 		return multiplePagedResult;
@@ -69,7 +69,7 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 			final Specification specification,
 			final Sort sort,
 			final Object... directives) {
-		LOGGER.debug("Executing default findOneByPaginationSorted, sort {}, specification {}, directives {}",
+		LOGGER.atDebug().log("Executing default findOneByPaginationSorted, sort {}, specification {}, directives {}",
 				sort, specification, directives);
 
 		final var oneResult = execute(
@@ -79,21 +79,21 @@ public non-sealed class QueryPaginationSpecificationFacade<Entity extends Abstra
 				getPosFindOneBySpecificationSortedFunction(),
 				getErrorFindOneBySpecificationSortedFunction(), directives);
 
-		LOGGER.debug("Default findOneByPaginationSorted executed, oneResult {}, directives {}",
+		LOGGER.atDebug().log("Default findOneByPaginationSorted executed, oneResult {}, directives {}",
 				oneResult, directives);
 		return oneResult;
 	}
 
 	@NotNull
 	protected FindBySpecificationPagedFunction<Specification, Pageable, MultiplePagedResult> getFindBySpecificationPagedFunction() {
-		LOGGER.debug("Returning findBySpecificationPagedFunction function {}",
+		LOGGER.atDebug().log("Returning findBySpecificationPagedFunction function {}",
 				findBySpecificationPagedFunction.getName());
 		return findBySpecificationPagedFunction;
 	}
 
 	@NotNull
 	protected FindOneBySpecificationSortedFunction<Specification, Sort, OneResult> getFindOneBySpecificationSortedFunction() {
-		LOGGER.debug("Returning findOneBySpecificationSortedFunction function {}",
+		LOGGER.atDebug().log("Returning findOneBySpecificationSortedFunction function {}",
 				findOneBySpecificationSortedFunction.getName());
 		return findOneBySpecificationSortedFunction;
 	}

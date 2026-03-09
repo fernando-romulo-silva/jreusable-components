@@ -90,37 +90,37 @@ public sealed abstract class AbstractQueryPaginationFacade<Entity extends Abstra
 
     @NotNull
     public PreFindAllPagedFunction<Pageable> getPreFindAllPagedFunction() {
-        LOGGER.debug("Returning preFindAllPagedFunction function {}", preFindAllPagedFunction.getName());
+        LOGGER.atDebug().log("Returning preFindAllPagedFunction function {}", preFindAllPagedFunction.getName());
         return preFindAllPagedFunction;
     }
 
     @NotNull
     public PosFindAllPagedFunction<MultiplePagedResult> getPosFindAllPagedFunction() {
-        LOGGER.debug("Returning posFindAllPagedFunction function {}", posFindAllPagedFunction.getName());
+        LOGGER.atDebug().log("Returning posFindAllPagedFunction function {}", posFindAllPagedFunction.getName());
         return posFindAllPagedFunction;
     }
 
     @NotNull
     public ErrorFindAllPagedFunction<BaseException, Pageable> getErrorFindAllPagedFunction() {
-        LOGGER.debug("Returning errorFindAllPagedFunction function {}", errorFindAllPagedFunction.getName());
+        LOGGER.atDebug().log("Returning errorFindAllPagedFunction function {}", errorFindAllPagedFunction.getName());
         return errorFindAllPagedFunction;
     }
 
     @NotNull
     public PreFindOneSortedFunction<Sort> getPreFindOneSortedFunction() {
-        LOGGER.debug("Returning preFindOneSortedFunction function {}", preFindOneSortedFunction.getName());
+        LOGGER.atDebug().log("Returning preFindOneSortedFunction function {}", preFindOneSortedFunction.getName());
         return preFindOneSortedFunction;
     }
 
     @NotNull
     public PosFindOneSortedFunction<OneResult> getPosFindOneSortedFunction() {
-        LOGGER.debug("Returning posFindOneSortedFunction function {}", posFindOneSortedFunction.getName());
+        LOGGER.atDebug().log("Returning posFindOneSortedFunction function {}", posFindOneSortedFunction.getName());
         return posFindOneSortedFunction;
     }
 
     @NotNull
     public ErrorFindOneSortedFunction<BaseException, Sort> getErrorFindOneSortedFunction() {
-        LOGGER.debug("Returning errorFindOneSortedFunction function {}", errorFindOneSortedFunction.getName());
+        LOGGER.atDebug().log("Returning errorFindOneSortedFunction function {}", errorFindOneSortedFunction.getName());
         return errorFindOneSortedFunction;
     }
 }

@@ -65,7 +65,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
 
     protected AbstractQueryFacadeBuilder(
             Consumer<? extends AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>> function) {
-        LOGGER.debug("Constructing AbstractQueryFacadeBuilder");
+        LOGGER.atDebug().log("Constructing AbstractQueryFacadeBuilder");
         super(function);
 
         this.preFindByIdFunction = getPreFindByIdFunction();
@@ -88,14 +88,14 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         this.posExistsByIdFunction = getPosExistsByIdFunction();
         this.errorExistsByIdFunction = getErrorExistsByIdFunction();
 
-        LOGGER.debug("AbstractQueryFacadeBuilder constructed");
+        LOGGER.atDebug().log("AbstractQueryFacadeBuilder constructed");
     }
 
     private PreExistsByIdFunction<QueryIdIn> getPreExistsByIdFunction() {
         return nonNull(preExistsByIdFunction)
                 ? preExistsByIdFunction
                 : (queryIdIn, directives) -> {
-                    LOGGER.debug("Default preExistsById, queryIdIn {}, directives {} ", queryIdIn, directives);
+                    LOGGER.atDebug().log("Default preExistsById, queryIdIn {}, directives {} ", queryIdIn, directives);
                     return queryIdIn;
                 };
     }
@@ -104,7 +104,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         return nonNull(errorExistsByIdFunction)
                 ? errorExistsByIdFunction
                 : (exception, queryIdIn, directives) -> {
-                    LOGGER.debug("Default errorExistsById, queryIdIn {}, exception {}, directives {}",
+                    LOGGER.atDebug().log("Default errorExistsById, queryIdIn {}, exception {}, directives {}",
                             queryIdIn, exception, directives);
                     return exception;
                 };
@@ -114,7 +114,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         return nonNull(posExistsByIdFunction)
                 ? posExistsByIdFunction
                 : (existsResult, directives) -> {
-                    LOGGER.debug("Default posExistsById, existsResult {}, directives {} ", existsResult, directives);
+                    LOGGER.atDebug().log("Default posExistsById, existsResult {}, directives {} ", existsResult,
+                            directives);
                     return existsResult;
                 };
     }
@@ -129,7 +130,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                     // .flatMap(Arrays::stream)
                     // .collect(Collectors.toList());
                     // .anyMatch("full"::equalsIgnoreCase);
-                    LOGGER.debug("Default preFindAll, directives {}", directives);
+                    LOGGER.atDebug().log("Default preFindAll, directives {}", directives);
                     return directives;
                 };
     }
@@ -138,7 +139,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         return nonNull(posFindAllFunction)
                 ? posFindAllFunction
                 : (multipleResult, directives) -> {
-                    LOGGER.debug("Default posFindAll, multipleResult {}, directives {}", multipleResult, directives);
+                    LOGGER.atDebug().log("Default posFindAll, multipleResult {}, directives {}", multipleResult,
+                            directives);
                     return multipleResult;
                 };
 
@@ -148,7 +150,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         return nonNull(errorFindAllFunction)
                 ? errorFindAllFunction
                 : (exception, directives) -> {
-                    LOGGER.debug("Executing default errorFindAll, exception {}, directives {}", exception, directives);
+                    LOGGER.atDebug().log("Executing default errorFindAll, exception {}, directives {}", exception,
+                            directives);
                     return exception;
                 };
     }
@@ -157,7 +160,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         return nonNull(preFindByIdFunction)
                 ? preFindByIdFunction
                 : (queryIdIn, directives) -> {
-                    LOGGER.debug("Default preFindBy, queryIdIn {}, directives {}", queryIdIn, directives);
+                    LOGGER.atDebug().log("Default preFindBy, queryIdIn {}, directives {}", queryIdIn, directives);
                     return queryIdIn;
                 };
     }
@@ -166,7 +169,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         return nonNull(posFindByIdFunction)
                 ? posFindByIdFunction
                 : (oneResult, directives) -> {
-                    LOGGER.debug("Default posFindBy, oneResult {}, directives {}", oneResult, directives);
+                    LOGGER.atDebug().log("Default posFindBy, oneResult {}, directives {}", oneResult, directives);
                     return oneResult;
                 };
     }
@@ -175,7 +178,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         return nonNull(errorFindByIdFunction)
                 ? errorFindByIdFunction
                 : (exception, queryIdIn, directives) -> {
-                    LOGGER.debug("Default errorFindById, queryIdIn {}, exception {}, directives {}",
+                    LOGGER.atDebug().log("Default errorFindById, queryIdIn {}, exception {}, directives {}",
                             queryIdIn, exception, directives);
                     return exception;
                 };
@@ -185,7 +188,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         return nonNull(preCountAllFunction)
                 ? preCountAllFunction
                 : (final Object... directives) -> {
-                    LOGGER.debug("Default preCountAll, directives {}", directives);
+                    LOGGER.atDebug().log("Default preCountAll, directives {}", directives);
                     return directives;
                 };
     }
@@ -194,7 +197,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         return nonNull(posCountAllFunction)
                 ? posCountAllFunction
                 : (final CountResult countResult, final Object... directives) -> {
-                    LOGGER.debug("Default posCountAll, countResult {}, directives {} ", countResult, directives);
+                    LOGGER.atDebug().log("Default posCountAll, countResult {}, directives {} ", countResult,
+                            directives);
                     return countResult;
                 };
     }
@@ -203,7 +207,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         return nonNull(errorCountAllFunction)
                 ? errorCountAllFunction
                 : (exception, directives) -> {
-                    LOGGER.debug("Default errorCountAll, exception {}, directives {}", exception, directives);
+                    LOGGER.atDebug().log("Default errorCountAll, exception {}, directives {}", exception, directives);
                     return exception;
                 };
     }
@@ -212,7 +216,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         return nonNull(preExistsAllFunction)
                 ? preExistsAllFunction
                 : directives -> {
-                    LOGGER.debug("Default preExistsAll, directives {}", directives);
+                    LOGGER.atDebug().log("Default preExistsAll, directives {}", directives);
                     return directives;
                 };
     }
@@ -221,7 +225,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         return nonNull(posExistsAllFunction)
                 ? posExistsAllFunction
                 : (existsResult, directives) -> {
-                    LOGGER.debug("Default posExistsAll, countResult {}, directives {} ", existsResult, directives);
+                    LOGGER.atDebug().log("Default posExistsAll, countResult {}, directives {} ", existsResult,
+                            directives);
                     return existsResult;
                 };
 
@@ -231,7 +236,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         return nonNull(errorExistsAllFunction)
                 ? errorExistsAllFunction
                 : (exception, directives) -> {
-                    LOGGER.debug("Default errorExistsAll, exception {}, directives {}", exception, directives);
+                    LOGGER.atDebug().log("Default errorExistsAll, exception {}, directives {}", exception, directives);
                     return exception;
                 };
     }

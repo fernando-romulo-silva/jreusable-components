@@ -57,7 +57,7 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	 */
 	public QueryFacadeBuilder(
 			final Consumer<QueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>> function) {
-		LOGGER.debug("Constructing QueryFacadeBuilder");
+		LOGGER.atDebug().log("Constructing QueryFacadeBuilder");
 		super(function);
 
 		this.existsByIdFunction = getExistsByIdFunction();
@@ -66,7 +66,7 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 		this.countAllFunction = getCountAllFunction();
 		this.existsAllFunction = getExistsAllFunction();
 
-		LOGGER.debug("CommandFacadeBuilder constructed commands, functions {}",
+		LOGGER.atDebug().log("CommandFacadeBuilder constructed commands, functions {}",
 				List.of(existsByIdFunction, findByIdFunction, findAllFunction, countAllFunction,
 						existsAllFunction));
 	}

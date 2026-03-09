@@ -25,18 +25,18 @@ open module org.reusablecomponent.cqrs {
     // -- domain classes
     // exports org.reusablecomponents.base.core.domain;
 
-    // // -- command facades
+    // -- command facades
     // exports org.reusablecomponents.base.core.application.command.entity;
 
-    // // -- queries facades
+    // -- queries facades
     // exports org.reusablecomponents.base.core.application.query.entity.paged;
     // exports org.reusablecomponents.base.core.application.query.entity.nonpaged;
 
-    // // -- full facades
+    // -- full facades
     // exports org.reusablecomponents.base.core.application.mix.entity.paged;
     // exports org.reusablecomponents.base.core.application.mix.entity.nonpaged;
 
-    // // -- exception
+    // -- exception
     // exports org.reusablecomponents.base.core.infra.exception;
     // exports org.reusablecomponents.base.core.infra.exception.common;
 

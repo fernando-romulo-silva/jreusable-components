@@ -28,6 +28,7 @@ open module org.reusablecomponent.base.core {
 
     // -- command facades
     exports org.reusablecomponents.base.core.application.command.entity;
+    exports org.reusablecomponents.base.core.application.command.entity.function.save;
 
     // -- queries facades
     exports org.reusablecomponents.base.core.application.query.entity.simple;
@@ -47,4 +48,6 @@ open module org.reusablecomponent.base.core {
     exports org.reusablecomponents.base.core.infra.util;
     exports org.reusablecomponents.base.core.infra.util.function;
     exports org.reusablecomponents.base.core.infra.util.function.operation;
+
+    exports org.reusablecomponents.base.core.infra.util.function.operation.custom;
 }

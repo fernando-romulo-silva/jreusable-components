@@ -55,13 +55,13 @@ public class EntityQueryHttpController<Entity extends AbstractEntity<Id>, Id, //
 
 		final var directives = request.getParameterMap();
 
-		LOGGER.debug("Getting all entities, directives '{}'", directives);
+		LOGGER.atDebug().log("Getting all entities, directives '{}'", directives);
 
 		final var result = entityQueryFacade.findAll(directives);
 
 		final var finalResult = createResponseGetMultipleFunction.apply(result);
 
-		LOGGER.debug("Got all entities, directives '{}'", directives);
+		LOGGER.atDebug().log("Got all entities, directives '{}'", directives);
 
 		return finalResult;
 	}
@@ -71,13 +71,13 @@ public class EntityQueryHttpController<Entity extends AbstractEntity<Id>, Id, //
 	 */
 	public HttpResponseVoid headAll(final HttpServletRequest request, final HttpServletResponse response) {
 
-		LOGGER.debug("Check if there are any entities");
+		LOGGER.atDebug().log("Check if there are any entities");
 
 		final var result = entityQueryFacade.existsAll();
 
 		final var finalResult = createResponseHeadFunction.apply(result);
 
-		LOGGER.debug("Checked if there are any entities, result '{}'", finalResult);
+		LOGGER.atDebug().log("Checked if there are any entities, result '{}'", finalResult);
 
 		return finalResult;
 	}

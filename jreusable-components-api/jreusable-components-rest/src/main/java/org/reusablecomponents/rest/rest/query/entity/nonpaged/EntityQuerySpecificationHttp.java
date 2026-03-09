@@ -54,13 +54,13 @@ public class EntityQuerySpecificationHttp<Entity extends AbstractEntity<Id>, Id,
 
 		final var directives = request.getParameterMap();
 
-		LOGGER.debug("Getting entities by '{}', directives '{}'", specification, directives);
+		LOGGER.atDebug().log("Getting entities by '{}', directives '{}'", specification, directives);
 
 		final var findByResult = entityQuerySpecificationFacade.findBySpecification(specification, directives);
 
 		final var finalResult = createResponseGetMultipleFunction.apply(findByResult);
 
-		LOGGER.debug("Got entities by '{}', directives '{}'", specification, directives);
+		LOGGER.atDebug().log("Got entities by '{}', directives '{}'", specification, directives);
 
 		return finalResult;
 	}
@@ -72,13 +72,13 @@ public class EntityQuerySpecificationHttp<Entity extends AbstractEntity<Id>, Id,
 	public HttpResponseVoid headBy(final Specification specification, final HttpServletRequest request,
 			final HttpServletResponse response) {
 
-		LOGGER.debug("Check if there are any entities by '{}'", specification);
+		LOGGER.atDebug().log("Check if there are any entities by '{}'", specification);
 
 		final var existsResult = entityQuerySpecificationFacade.existsBySpecification(specification);
 
 		final var finalResult = createResponseHeadFunction.apply(existsResult);
 
-		LOGGER.debug("Checked if there are any entities by '{}', result '{}'", specification, finalResult);
+		LOGGER.atDebug().log("Checked if there are any entities by '{}', result '{}'", specification, finalResult);
 
 		return finalResult;
 	}

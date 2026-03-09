@@ -156,11 +156,11 @@ public class PerformanceMonitorInterceptor implements MethodInterceptor {
 
 		switch (logLevel) {
 			case TRACE -> LOGGER.trace(finalMsg, params);
-			case DEBUG -> LOGGER.debug(finalMsg, params);
+			case DEBUG -> LOGGER.atDebug().log(finalMsg, params);
 			case INFO -> LOGGER.info(finalMsg, params);
 			case WARN -> LOGGER.warn(finalMsg, params);
 			case ERROR, FATAL -> LOGGER.error(finalMsg, params);
-			default -> LOGGER.debug(finalMsg, params);
+			default -> LOGGER.atDebug().log(finalMsg, params);
 		}
 	}
 

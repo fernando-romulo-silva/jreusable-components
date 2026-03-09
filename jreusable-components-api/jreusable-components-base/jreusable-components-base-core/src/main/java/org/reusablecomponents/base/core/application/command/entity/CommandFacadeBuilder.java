@@ -63,7 +63,7 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 
 	public CommandFacadeBuilder(
 			final Consumer<CommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>> function) {
-		LOGGER.debug("Constructing CommandFacadeBuilder function {} ", function);
+		LOGGER.atDebug().log("Constructing CommandFacadeBuilder function {} ", function);
 		super(function);
 
 		this.saveFunction = getPreSaveFunction();
@@ -75,7 +75,7 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 		this.deleteByIdFunction = getDeleteByIdFunction();
 		this.deleteByIdsFunction = getDeleteByIdsFunction();
 
-		LOGGER.debug("CommandFacadeBuilder constructed commands, functions {}",
+		LOGGER.atDebug().log("CommandFacadeBuilder constructed commands, functions {}",
 				List.of(saveFunction, saveAllFunction,
 						updateFunction, updateAllFunction,
 						deleteFunction, deleteAllFunction,

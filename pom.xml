@@ -29,7 +29,7 @@
 	<properties>
 		<junit-platform.version>5.11.2</junit-platform.version>
 		<mockito-platform.version>5.18.0</mockito-platform.version>
-		<equalsverifier.version>4.0.2</equalsverifier.version>
+		<equalsverifier.version>4.4.1</equalsverifier.version>
 		<to-string-verifier.version>1.4.8</to-string-verifier.version>
 		<assertj-core.version>3.26.3</assertj-core.version>
 

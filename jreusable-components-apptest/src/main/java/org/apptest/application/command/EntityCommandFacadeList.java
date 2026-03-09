@@ -7,7 +7,6 @@ import java.util.Objects;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apptest.infra.ExceptionAdapterListService;
 import org.reusablecomponents.base.core.application.command.entity.CommandFacade;
 import org.reusablecomponents.base.core.application.command.entity.CommandFacadeBuilder;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
@@ -184,7 +183,7 @@ public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
 
 			// others --------------------------------
 			$.securityService = securityService;
-			$.exceptionAdapterService = new ExceptionAdapterListService();
+			$.exceptionAdapterService = null;
 			$.i18nService = i18nService;
 		}));
 

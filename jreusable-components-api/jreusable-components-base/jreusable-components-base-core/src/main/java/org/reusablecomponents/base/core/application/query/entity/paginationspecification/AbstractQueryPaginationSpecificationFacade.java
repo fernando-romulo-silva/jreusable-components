@@ -95,42 +95,42 @@ public sealed abstract class AbstractQueryPaginationSpecificationFacade<Entity e
 
     @NotNull
     protected PreFindBySpecificationPagedFunction<Specification, Pageable> getPreFindBySpecificationPagedFunction() {
-        LOGGER.debug("Returning preFindBySpecificationPagedFunction function {}",
+        LOGGER.atDebug().log("Returning preFindBySpecificationPagedFunction function {}",
                 preFindBySpecificationPagedFunction.getName());
         return preFindBySpecificationPagedFunction;
     }
 
     @NotNull
     protected PosFindBySpecificationPagedFunction<MultiplePagedResult> getPosFindBySpecificationPagedFunction() {
-        LOGGER.debug("Returning posFindBySpecificationPagedFunction function {}",
+        LOGGER.atDebug().log("Returning posFindBySpecificationPagedFunction function {}",
                 posFindBySpecificationPagedFunction.getName());
         return posFindBySpecificationPagedFunction;
     }
 
     @NotNull
     protected ErrorFindBySpecificationPagedFunction<Specification, Pageable> getErrorFindBySpecificationPagedFunction() {
-        LOGGER.debug("Returning errorFindBySpecificationPagedFunction function {}",
+        LOGGER.atDebug().log("Returning errorFindBySpecificationPagedFunction function {}",
                 errorFindBySpecificationPagedFunction.getName());
         return errorFindBySpecificationPagedFunction;
     }
 
     @NotNull
     protected PreFindOneBySpecificationSortedFunction<Specification, Sort> getPreFindOneBySpecificationSortedFunction() {
-        LOGGER.debug("Returning preFindOneBySpecificationSortedFunction function {}",
+        LOGGER.atDebug().log("Returning preFindOneBySpecificationSortedFunction function {}",
                 preFindOneBySpecificationSortedFunction.getName());
         return preFindOneBySpecificationSortedFunction;
     }
 
     @NotNull
     protected PosFindOneBySpecificationSortedFunction<OneResult> getPosFindOneBySpecificationSortedFunction() {
-        LOGGER.debug("Returning posFindOneBySpecificationSortedFunction function {}",
+        LOGGER.atDebug().log("Returning posFindOneBySpecificationSortedFunction function {}",
                 posFindOneBySpecificationSortedFunction.getName());
         return posFindOneBySpecificationSortedFunction;
     }
 
     @NotNull
     protected ErrorFindOneBySpecificationSortedFunction<Specification, Sort> getErrorFindOneBySpecificationSortedFunction() {
-        LOGGER.debug("Returning errorFindOneBySpecificationSortedFunction function {}",
+        LOGGER.atDebug().log("Returning errorFindOneBySpecificationSortedFunction function {}",
                 errorFindOneBySpecificationSortedFunction.getName());
         return errorFindOneBySpecificationSortedFunction;
     }

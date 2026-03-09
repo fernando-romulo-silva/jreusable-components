@@ -37,7 +37,7 @@ class EventSubscriber implements Subscriber<String> {
      */
     @Override
     public void onNext(final String event) {
-        LOGGER.info("event #{}", event);
+        LOGGER.atDebug().log("event #{}", event);
         eventConsumer.consume(event);
         subscription.request(1);
     }
@@ -56,6 +56,6 @@ class EventSubscriber implements Subscriber<String> {
      */
     @Override
     public void onComplete() {
-        LOGGER.info("event has ended");
+        LOGGER.atDebug().log("event has ended");
     }
 }

@@ -1,6 +1,7 @@
 package org.reusablecomponents.base.core.application.command.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ class CommandFacadeHappyPathTest {
 		final var department = new Department("00001", "Development 01", "Technology", company);
 
 		// when
-		final var result = departmentFacade.save(department);
+		final var result = assertDoesNotThrow(() -> departmentFacade.save(department));
 
 		// then
 		assertThat(department).isEqualTo(result);
@@ -87,7 +88,7 @@ class CommandFacadeHappyPathTest {
 				new Department("00002", "Development 02", "HR", company));
 
 		// when
-		final var result = departmentFacade.saveAll(departments);
+		final var result = assertDoesNotThrow(() -> departmentFacade.saveAll(departments));
 
 		// then
 		assertThat(data).hasSize(2);
@@ -108,7 +109,7 @@ class CommandFacadeHappyPathTest {
 
 		// when
 		department01.update(newName, newSector);
-		final var result = defaultFacade.update(department01);
+		final var result = assertDoesNotThrow(() -> defaultFacade.update(department01));
 
 		// then
 		assertThat(defaultData)
@@ -137,7 +138,7 @@ class CommandFacadeHappyPathTest {
 		department01.update(newName01, newSector01);
 		department02.update(newName02, newSector02);
 
-		final var result = defaultFacade.updateAll(List.of(department01, department02));
+		final var result = assertDoesNotThrow(() -> defaultFacade.updateAll(List.of(department01, department02)));
 
 		// then
 		assertThat(defaultData)
@@ -160,7 +161,7 @@ class CommandFacadeHappyPathTest {
 		department01.removeManager();
 
 		// when
-		defaultFacade.delete(department01);
+		assertDoesNotThrow(() -> defaultFacade.delete(department01));
 
 		// then
 		assertThat(defaultData)
@@ -181,7 +182,7 @@ class CommandFacadeHappyPathTest {
 		department02.removeManager();
 
 		// when
-		defaultFacade.deleteAll(List.of(department01, department02));
+		assertDoesNotThrow(() -> defaultFacade.deleteAll(List.of(department01, department02)));
 
 		// then
 		assertThat(defaultData)
@@ -200,7 +201,7 @@ class CommandFacadeHappyPathTest {
 		department01.removeManager();
 
 		// when
-		defaultFacade.deleteBy(department01.getId());
+		assertDoesNotThrow(() -> defaultFacade.deleteBy(department01.getId()));
 
 		// then
 		assertThat(defaultData)
@@ -221,7 +222,7 @@ class CommandFacadeHappyPathTest {
 		department02.removeManager();
 
 		// when
-		defaultFacade.deleteAllBy(List.of(department01.getId(), department02.getId()));
+		assertDoesNotThrow(() -> defaultFacade.deleteAllBy(List.of(department01.getId(), department02.getId())));
 
 		// then
 		assertThat(defaultData)

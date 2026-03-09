@@ -92,7 +92,7 @@ public non-sealed class QueryFacade< // generics
 			private static final long serialVersionUID = 1L;
 		};
 		final var rawType = (Class<QueryIdIn>) entityTypeToken.getRawType();
-		LOGGER.debug("Class QueryIdIn '{}'", rawType);
+		LOGGER.atDebug().log("Class QueryIdIn '{}'", rawType);
 		return rawType;
 	}
 
@@ -101,19 +101,19 @@ public non-sealed class QueryFacade< // generics
 	 */
 	@Override
 	public MultipleResult findAll(final Object... directives) {
-		LOGGER.debug("Executing default findAll, directives {}", directives);
+		LOGGER.atDebug().log("Executing default findAll, directives {}", directives);
 
 		final var multipleResult = execute(
 				getPreFindAllFunction(), getFindAllFunction(),
 				getPosFindAllFunction(), getErrorFindAllFunction(), directives);
 
-		LOGGER.debug("Default findAll, multipleResult {}, directives {}", directives, multipleResult);
+		LOGGER.atDebug().log("Default findAll, multipleResult {}, directives {}", directives, multipleResult);
 		return multipleResult;
 	}
 
 	@NotNull
 	protected FindAllFunction<MultipleResult> getFindAllFunction() {
-		LOGGER.debug("Returning findAll function {}", findAllFunction.getName());
+		LOGGER.atDebug().log("Returning findAll function {}", findAllFunction.getName());
 		return findAllFunction;
 	}
 
@@ -122,20 +122,20 @@ public non-sealed class QueryFacade< // generics
 	 */
 	@Override
 	public OneResult findById(final QueryIdIn queryIdIn, final Object... directives) {
-		LOGGER.debug("Executing default findById, queryIdIn {}, directives {}", queryIdIn, directives);
+		LOGGER.atDebug().log("Executing default findById, queryIdIn {}, directives {}", queryIdIn, directives);
 
 		checkNotNull(queryIdIn, NON_NULL_ID_MSG, getEntityClazz().getSimpleName());
 
 		final var oneResult = execute(queryIdIn, getPreFindByIdFunction(),
 				getFindByIdFunction(), getPosFindByIdFunction(), getErrorFindByIdFunction(), directives);
 
-		LOGGER.debug("Default findById executed, oneResult {}, directives {}", oneResult, directives);
+		LOGGER.atDebug().log("Default findById executed, oneResult {}, directives {}", oneResult, directives);
 		return oneResult;
 	}
 
 	@NotNull
 	protected FindByIdFunction<QueryIdIn, OneResult> getFindByIdFunction() {
-		LOGGER.debug("Returning findById function {}", findByIdFunction.getName());
+		LOGGER.atDebug().log("Returning findById function {}", findByIdFunction.getName());
 		return findByIdFunction;
 	}
 
@@ -144,19 +144,19 @@ public non-sealed class QueryFacade< // generics
 	 */
 	@Override
 	public CountResult countAll(final Object... directives) {
-		LOGGER.debug("Executing default countAll, directives {}", directives);
+		LOGGER.atDebug().log("Executing default countAll, directives {}", directives);
 
 		final var countResult = execute(
 				getPreCountAllFunction(), getCountAllFunction(),
 				getPosCountAllFunction(), getErrorCountAllFunction(), directives);
 
-		LOGGER.debug("Default countAll executed, countResult {}, directives {}", countResult, directives);
+		LOGGER.atDebug().log("Default countAll executed, countResult {}, directives {}", countResult, directives);
 		return countResult;
 	}
 
 	@NotNull
 	protected CountAllFunction<CountResult> getCountAllFunction() {
-		LOGGER.debug("Returning countAll function {}", countAllFunction.getName());
+		LOGGER.atDebug().log("Returning countAll function {}", countAllFunction.getName());
 		return countAllFunction;
 	}
 
@@ -165,19 +165,19 @@ public non-sealed class QueryFacade< // generics
 	 */
 	@Override
 	public ExistsResult existsAll(final Object... directives) {
-		LOGGER.debug("Executing default existsAll, directives {}", directives);
+		LOGGER.atDebug().log("Executing default existsAll, directives {}", directives);
 
 		final var existsResult = execute(
 				getPreExistsAllFunction(), getExistsAllFunction(),
 				getPosExistsAllFunction(), getErrorExistsAllFunction(), directives);
 
-		LOGGER.debug("Default existsAll executed, existsResult {}, directives {}", existsResult, directives);
+		LOGGER.atDebug().log("Default existsAll executed, existsResult {}, directives {}", existsResult, directives);
 		return existsResult;
 	}
 
 	@NotNull
 	protected ExistsAllFunction<ExistsResult> getExistsAllFunction() {
-		LOGGER.debug("Returning existsAll function {}", existsAllFunction.getName());
+		LOGGER.atDebug().log("Returning existsAll function {}", existsAllFunction.getName());
 		return existsAllFunction;
 	}
 
@@ -186,7 +186,7 @@ public non-sealed class QueryFacade< // generics
 	 */
 	@Override
 	public ExistsResult existsById(final QueryIdIn queryIdIn, final Object... directives) {
-		LOGGER.debug("Executing default existsById, queryIdIn {}, directives {} ", queryIdIn, directives);
+		LOGGER.atDebug().log("Executing default existsById, queryIdIn {}, directives {} ", queryIdIn, directives);
 
 		checkNotNull(queryIdIn, NON_NULL_ID_MSG, getEntityClazz().getSimpleName());
 
@@ -195,13 +195,13 @@ public non-sealed class QueryFacade< // generics
 				getExistsByIdFunction(), getPosExistsByIdFunction(),
 				getErrorExistsByIdFunction(), directives);
 
-		LOGGER.debug("Default existsById executed, existsResult {}, directives {} ", existsResult, directives);
+		LOGGER.atDebug().log("Default existsById executed, existsResult {}, directives {} ", existsResult, directives);
 		return existsResult;
 	}
 
 	@NotNull
 	protected ExistsByIdFunction<QueryIdIn, ExistsResult> getExistsByIdFunction() {
-		LOGGER.debug("Returning existsAll function {}", existsByIdFunction.getName());
+		LOGGER.atDebug().log("Returning existsAll function {}", existsByIdFunction.getName());
 		return existsByIdFunction;
 	}
 

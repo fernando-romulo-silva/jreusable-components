@@ -30,16 +30,16 @@ public abstract class AbstractConsumerHandler implements InterfaceConsumerServic
 
     public void consume(final String message) {
 
-        LOGGER.debug("Sending messaging: {}", message);
+        LOGGER.atDebug().log("Sending messaging: {}", message);
 
         try {
             consumerService.consume(message);
         } catch (final Exception ex) {
-            LOGGER.debug(format("Handle the exception on message: {}", message), getRootCause(ex));
+            LOGGER.atDebug().log(format("Handle the exception on message: {}", message), getRootCause(ex));
             handleException(ex);
         }
 
-        LOGGER.debug("Message sent: {}", message);
+        LOGGER.atDebug().log("Message sent: {}", message);
     }
 
     private void handleException(final Exception ex) {

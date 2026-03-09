@@ -67,14 +67,14 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	public MultipleResult findBySpecification(
 			final Specification specification,
 			final Object... directives) {
-		LOGGER.debug("Executing default findBySpecification, specification {}, directives {}",
+		LOGGER.atDebug().log("Executing default findBySpecification, specification {}, directives {}",
 				specification, directives);
 
 		final var multipleResult = execute(
 				specification, getPreFindBySpecificationFunction(), getFindBySpecificationFunction(),
 				getPosFindBySpecificationFunction(), getErrorFindBySpecificationFunction(), directives);
 
-		LOGGER.debug("Default findBySpecification executed, multipleResult {}, directives {}",
+		LOGGER.atDebug().log("Default findBySpecification executed, multipleResult {}, directives {}",
 				multipleResult, directives);
 		return multipleResult;
 	}
@@ -86,14 +86,14 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	public OneResult findOneBySpecification(
 			final Specification specification,
 			final Object... directives) {
-		LOGGER.debug("Executing default findOneBySpecification, specification {}, directives {}",
+		LOGGER.atDebug().log("Executing default findOneBySpecification, specification {}, directives {}",
 				specification, directives);
 
 		final var oneResult = execute(
 				specification, getPreFindOneBySpecificationFunction(), getFindOneBySpecFunction(),
 				getPosFindOneBySpecificationFunction(), getErrorFindOneBySpecificationFunction(), directives);
 
-		LOGGER.debug("Default findOneBySpecification executed, oneResult {}, directives {}",
+		LOGGER.atDebug().log("Default findOneBySpecification executed, oneResult {}, directives {}",
 				oneResult, directives);
 		return oneResult;
 	}
@@ -103,13 +103,14 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 */
 	@Override
 	public final ExistsResult existsBySpecification(final Specification specification, final Object... directives) {
-		LOGGER.debug("Executing default existsBySpec, specification {}, directives {}", specification, directives);
+		LOGGER.atDebug().log("Executing default existsBySpec, specification {}, directives {}", specification,
+				directives);
 
 		final var existsResult = execute(
 				specification, getPreExistsBySpecificationFunction(), getExistsBySpecFunction(),
 				getPosExistsBySpecificationFunction(), getErrorExistsBySpecificationFunction(), directives);
 
-		LOGGER.debug("Default existsBySpec executed, existsResult {}, directives {}",
+		LOGGER.atDebug().log("Default existsBySpec executed, existsResult {}, directives {}",
 				existsResult, directives);
 		return existsResult;
 	}
@@ -119,37 +120,38 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	 */
 	@Override
 	public final CountResult countBySpecification(final Specification specification, final Object... directives) {
-		LOGGER.debug("Executing default countBySpec, specification {}, directives {}", specification, directives);
+		LOGGER.atDebug().log("Executing default countBySpec, specification {}, directives {}", specification,
+				directives);
 
 		final var countResult = execute(
 				specification, getPreCountBySpecificationFunction(), getCountBySpecFunction(),
 				getPosCountBySpecificationFunction(), getErrorCountBySpecificationFunction(), directives);
 
-		LOGGER.debug("Default countBySpec executed, countResult {}, directives {}", countResult, directives);
+		LOGGER.atDebug().log("Default countBySpec executed, countResult {}, directives {}", countResult, directives);
 		return countResult;
 	}
 
 	@NotNull
 	public FindBySpecificationFunction<Specification, MultipleResult> getFindBySpecificationFunction() {
-		LOGGER.debug("Returning findBySpecFunction function {}", findBySpecificationFunction.getName());
+		LOGGER.atDebug().log("Returning findBySpecFunction function {}", findBySpecificationFunction.getName());
 		return findBySpecificationFunction;
 	}
 
 	@NotNull
 	public FindOneBySpecFunction<Specification, OneResult> getFindOneBySpecFunction() {
-		LOGGER.debug("Returning findOneBySpecFunction function {}", findOneBySpecFunction.getName());
+		LOGGER.atDebug().log("Returning findOneBySpecFunction function {}", findOneBySpecFunction.getName());
 		return findOneBySpecFunction;
 	}
 
 	@NotNull
 	public ExistsBySpecificationFunction<Specification, ExistsResult> getExistsBySpecFunction() {
-		LOGGER.debug("Returning existsBySpecFunction function {}", existsBySpecFunction.getName());
+		LOGGER.atDebug().log("Returning existsBySpecFunction function {}", existsBySpecFunction.getName());
 		return existsBySpecFunction;
 	}
 
 	@NotNull
 	public CountBySpecificationFunction<Specification, CountResult> getCountBySpecFunction() {
-		LOGGER.debug("Returning countBySpecFunction function {}", countBySpecFunction.getName());
+		LOGGER.atDebug().log("Returning countBySpecFunction function {}", countBySpecFunction.getName());
 		return countBySpecFunction;
 	}
 }

@@ -32,7 +32,7 @@ abstract class AbstractBaseFacadeTest {
 
 	// --------------
 
-	protected final Consumer<Object[]> preFunctionNoInput = System.out::println;
+	protected final Consumer<Object[]> preFunctionNoInput = IO::println;
 
 	// ---------------
 	protected final CustomOperation1Args<Object[], Department> oneInputFunction01 = directives -> department01;

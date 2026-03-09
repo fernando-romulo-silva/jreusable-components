@@ -37,13 +37,13 @@ public class EntityQueryBaseHttpController<QueryIdIn, ExistsResult, OneResult, H
     public HttpResponseOne get(final QueryIdIn queryIdIn, final HttpServletRequest request,
             final HttpServletResponse response) {
 
-        LOGGER.debug("Geting entity by '{}'", queryIdIn);
+        LOGGER.atDebug().log("Geting entity by '{}'", queryIdIn);
 
         final var findByResult = entityQueryFacade.findById(queryIdIn);
 
         final var finalResult = createResponseGetOneFunction.apply(findByResult);
 
-        LOGGER.debug("Got entity by '{}', result '{}'", queryIdIn, finalResult);
+        LOGGER.atDebug().log("Got entity by '{}', result '{}'", queryIdIn, finalResult);
 
         return finalResult;
     }
@@ -55,13 +55,13 @@ public class EntityQueryBaseHttpController<QueryIdIn, ExistsResult, OneResult, H
     public HttpResponseVoid head(final QueryIdIn queryIdIn, final HttpServletRequest request,
             final HttpServletResponse response) {
 
-        LOGGER.debug("Check entity by '{}'", queryIdIn);
+        LOGGER.atDebug().log("Check entity by '{}'", queryIdIn);
 
         final var existsByResult = entityQueryFacade.existsById(queryIdIn);
 
         final var finalResult = createResponseHeadFunction.apply(existsByResult);
 
-        LOGGER.debug("Checked entity by '{}', result '{}'", queryIdIn, finalResult);
+        LOGGER.atDebug().log("Checked entity by '{}', result '{}'", queryIdIn, finalResult);
 
         return finalResult;
     }

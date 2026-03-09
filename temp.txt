@@ -1,5 +1,5 @@
 		if (!function.isActice()) {
-			LOGGER.debug("Function {} disabled, it won't execute", functionName);
+			LOGGER.atDebug().log("Function {} disabled, it won't execute", functionName);
 			skippedFunctions.add(functionName);
 			continue;
 		}

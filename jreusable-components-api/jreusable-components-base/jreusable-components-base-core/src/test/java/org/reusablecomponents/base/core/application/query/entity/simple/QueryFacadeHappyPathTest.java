@@ -1,6 +1,7 @@
 package org.reusablecomponents.base.core.application.query.entity.simple;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ class QueryFacadeHappyPathTest {
         final var id = "x1";
 
         // when
-        final var result = defaultQueryFacade.findById(id);
+        final var result = assertDoesNotThrow(() -> defaultQueryFacade.findById(id));
 
         // then
         assertThat(department01).isEqualTo(result);
@@ -80,7 +81,7 @@ class QueryFacadeHappyPathTest {
         final var currentData = defaultData;
 
         // when
-        final var result = defaultQueryFacade.findAll();
+        final var result = assertDoesNotThrow(() -> defaultQueryFacade.findAll());
 
         // then
         assertThat(currentData).containsAll(result);
@@ -94,7 +95,7 @@ class QueryFacadeHappyPathTest {
         final var currentSize = defaultData.size();
 
         // when
-        final var result = defaultQueryFacade.countAll().intValue();
+        final var result = assertDoesNotThrow(() -> defaultQueryFacade.countAll().intValue());
 
         // then
         assertThat(currentSize).isEqualTo(result);
@@ -108,7 +109,7 @@ class QueryFacadeHappyPathTest {
         final var existsAll = defaultData.size() > 0;
 
         // when
-        final var result = defaultQueryFacade.existsAll();
+        final var result = assertDoesNotThrow(() -> defaultQueryFacade.existsAll());
 
         // then
         assertThat(existsAll)
@@ -127,7 +128,7 @@ class QueryFacadeHappyPathTest {
         final var id = "x1";
 
         // when
-        final var result = defaultQueryFacade.existsById(id);
+        final var result = assertDoesNotThrow(() -> defaultQueryFacade.existsById(id));
 
         // then
         assertThat(result)

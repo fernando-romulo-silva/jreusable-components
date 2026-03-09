@@ -1,18 +1,18 @@
 package org.reusablecomponents.util;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
-import static java.util.Optional.ofNullable;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
-import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.NULL_POINTER_EXCEPTION_MSG;
-import static org.reusablecomponents.messaging.MessagingConst.JSON_LAYOUT;
-import static org.reusablecomponents.base.core.infra.util.function.FunctionCommonUtils.createNullPointerException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.reusablecomponents.messaging.event.Event;
 
+/**
+ * Utility class for event operations
+ */
 public final class EventUtils {
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private EventUtils() {
 		throw new UnsupportedOperationException("You can't instanciate this class, it is utility class");
 	}
@@ -25,7 +25,7 @@ public final class EventUtils {
 	 * 
 	 * @return A formatted string
 	 */
-	public static String prepareEventToPublisher(final Event event, final String layout) {
+	public static String converterEventToString(final Event event, final String layout) {
 
 		var msg = StringUtils.deleteWhitespace(layout);
 
@@ -60,10 +60,12 @@ public final class EventUtils {
 		final var where = event.getWhere();
 		final var application = where.application();
 		final var machine = where.machine();
+		final var build = where.build();
+		final var version = where.version();
 
 		msg = StringUtils.replaceEach(msg,
-				new String[] { "${application}", "${machine}" },
-				new String[] { application, machine });
+				new String[] { "${application}", "${machine}", "${build}", "${version}" },
+				new String[] { application, machine, build, version });
 
 		// ------------------------------------------
 		final var who = event.getWho();

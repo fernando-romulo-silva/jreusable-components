@@ -31,7 +31,7 @@ public final class JavaReactPublisherSerice implements InterfaceEventPublisherSe
     @Override
     public Future<Integer> publish(final Event event) {
         try (eventPublisher) {
-            final var eventToPublish = EventUtils.prepareEventToPublisher(event, JSON_LAYOUT);
+            final var eventToPublish = EventUtils.converterEventToString(event, JSON_LAYOUT);
             return EXECUTOR.submit(() -> eventPublisher.submit(eventToPublish));
         } catch (final Exception ex) {
             throw new IllegalStateException(ex);

@@ -11,6 +11,7 @@ package org.reusablecomponents.base.security;
  * <li>Machine name</li>
  * <li>Application</li>
  * <li>Version</li>
+ * <li>Build</li>
  * <li>Descriptor</li>
  * </ul>
  * 
@@ -62,11 +63,20 @@ public interface InterfaceSecurityService {
     }
 
     /**
-     * Return the application version.
+     * Return the application build.
+     * 
+     * @return An String object
+     */
+    default String getBuild() {
+        return "NO_BUILD";
+    }
+
+    /**
+     * Return the application descriptor.
      * 
      * @return An String object
      */
     default String getDescriptor() {
-        return "NODESCRIPTOR";
+        return "NO_DESCRIPTOR";
     }
 }

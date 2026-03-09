@@ -44,7 +44,7 @@ public class DefaultSecurityService implements InterfaceSecurityService {
      */
     @Override
     public String getSession() {
-        return "NOSESSION";
+        return "NO_SESSION";
     }
 
     /**
@@ -52,6 +52,6 @@ public class DefaultSecurityService implements InterfaceSecurityService {
      */
     @Override
     public String getApplication() {
-        return "NOAPPLICATION";
+        return "NO_APPLICATION";
     }
 }

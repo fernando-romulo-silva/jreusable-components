@@ -9,7 +9,7 @@ public class MessagingConst {
   public static final String JSON_LAYOUT = """
       {
          "id": "${id}",
-         "origin: "${origin},
+         "origin": "${origin}",
          "status" : "${status}",
          "what": {
             "dataIn" : "${dataIn}",
@@ -21,9 +21,10 @@ public class MessagingConst {
          },
          "where": {
             "machine" : "${machine}",
-            "build" : "{$build},
             "application" : "${application}",
-            "version" : "${version}
+            "build" : "${build}",
+            "version" : "${version}",
+            "descriptor" : "${descriptor}"
          },
          "who": {
             "login" : "${login}",
@@ -52,9 +53,10 @@ public class MessagingConst {
           </when>
           <where>
               <machine>${machine}</machine>
-              <build>${build}</build>
               <application>${application}</application>
               <version>${version}</version>
+              <build>${build}</build>
+              <descriptor>${descriptor}</descriptor>
           </where>
           <who>
               <login>${login}</login>
@@ -81,8 +83,9 @@ public class MessagingConst {
       where:
         machine: "${machine}"
         application: "${application}"
+        version: "${version}"
         build: "${build}"
-        version: "${version}
+        descriptor: "${descriptor}"
       who:
         login: "${login}"
         session: "${session}"

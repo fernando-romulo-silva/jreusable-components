@@ -262,145 +262,146 @@ public abstract sealed class AbstractCommandFacade< // generics
 
 	@NotNull
 	protected PreSaveFunction<SaveEntityIn> getPreSaveFunction() {
-		LOGGER.debug("Returning preSaveFunction function {}", preSaveFunction.getName());
+		LOGGER.atDebug().log("Returning preSaveFunction function {}", preSaveFunction.getName());
 		return preSaveFunction;
 	}
 
 	@NotNull
 	protected PosSaveFunction<SaveEntityOut> getPosSaveFunction() {
-		LOGGER.debug("Returning posSaveFunction function {}", posSaveFunction.getName());
+		LOGGER.atDebug().log("Returning posSaveFunction function {}", posSaveFunction.getName());
 		return posSaveFunction;
 	}
 
 	@NotNull
 	protected ErrorSaveFunction<SaveEntityIn> getErrorSaveFunction() {
-		LOGGER.debug("Returning errorSaveFunction function {}", errorSaveFunction.getName());
+		LOGGER.atDebug().log("Returning errorSaveFunction function {}", errorSaveFunction.getName());
 		return errorSaveFunction;
 	}
 
 	@NotNull
 	protected PreSaveAllFunction<SaveEntitiesIn> getPreSaveAllFunction() {
-		LOGGER.debug("Returning preSaveAllFunction function {}", preSaveAllFunction.getName());
+		LOGGER.atDebug().log("Returning preSaveAllFunction function {}", preSaveAllFunction.getName());
 		return preSaveAllFunction;
 	}
 
 	@NotNull
 	protected PosSaveAllFunction<SaveEntitiesOut> getPosSaveAllFunction() {
-		LOGGER.debug("Returning posSaveAllFunction function {}", posSaveAllFunction.getName());
+		LOGGER.atDebug().log("Returning posSaveAllFunction function {}", posSaveAllFunction.getName());
 		return posSaveAllFunction;
 	}
 
 	@NotNull
 	protected ErrorSaveAllFunction<SaveEntitiesIn> getErrorSaveAllFunction() {
-		LOGGER.debug("Returning eerrorSaveAllFunction function {}", errorSaveAllFunction.getName());
+		LOGGER.atDebug().log("Returning eerrorSaveAllFunction function {}", errorSaveAllFunction.getName());
 		return errorSaveAllFunction;
 	}
 
 	@NotNull
 	protected PreUpdateFunction<UpdateEntityIn> getPreUpdateFunction() {
-		LOGGER.debug("Returning error preUpdateFunction function {}", preUpdateFunction.getName());
+		LOGGER.atDebug().log("Returning error preUpdateFunction function {}", preUpdateFunction.getName());
 		return preUpdateFunction;
 	}
 
 	@NotNull
 	protected PosUpdateFunction<UpdateEntityOut> getPosUpdateFunction() {
-		LOGGER.debug("Returning error posUpdateFunction function {}", posUpdateFunction.getName());
+		LOGGER.atDebug().log("Returning error posUpdateFunction function {}", posUpdateFunction.getName());
 		return posUpdateFunction;
 	}
 
 	@NotNull
 	protected ErrorUpdateFunction<UpdateEntityIn> getErrorUpdateFunction() {
-		LOGGER.debug("Returning error errorUpdateFunction function {}", errorUpdateFunction.getName());
+		LOGGER.atDebug().log("Returning error errorUpdateFunction function {}", errorUpdateFunction.getName());
 		return errorUpdateFunction;
 	}
 
 	@NotNull
 	protected PreUpdateAllFunction<UpdateEntitiesIn> getPreUpdateAllFunction() {
-		LOGGER.debug("Returning error preUpdateAllFunction function {}", preUpdateAllFunction.getName());
+		LOGGER.atDebug().log("Returning error preUpdateAllFunction function {}", preUpdateAllFunction.getName());
 		return preUpdateAllFunction;
 	}
 
 	@NotNull
 	protected PosUpdateAllFunction<UpdateEntitiesOut> getPosUpdateAllFunction() {
-		LOGGER.debug("Returning error posUpdateAllFunction function {}", posUpdateAllFunction.getName());
+		LOGGER.atDebug().log("Returning error posUpdateAllFunction function {}", posUpdateAllFunction.getName());
 		return posUpdateAllFunction;
 	}
 
 	@NotNull
 	protected ErrorUpdateAllFunction<UpdateEntitiesIn> getErrorUpdateAllFunction() {
-		LOGGER.debug("Returning error errorUpdateAllFunction function {}", errorUpdateAllFunction.getName());
+		LOGGER.atDebug().log("Returning error errorUpdateAllFunction function {}", errorUpdateAllFunction.getName());
 		return errorUpdateAllFunction;
 	}
 
 	@NotNull
 	protected PreDeleteFunction<DeleteEntityIn> getPreDeleteFunction() {
-		LOGGER.debug("Returning error preDeleteFunction function {}", preDeleteFunction.getName());
+		LOGGER.atDebug().log("Returning error preDeleteFunction function {}", preDeleteFunction.getName());
 		return preDeleteFunction;
 	}
 
 	@NotNull
 	protected PosDeleteFunction<DeleteEntityOut> getPosDeleteFunction() {
-		LOGGER.debug("Returning error posDeleteFunction function {}", posDeleteFunction.getName());
+		LOGGER.atDebug().log("Returning error posDeleteFunction function {}", posDeleteFunction.getName());
 		return posDeleteFunction;
 	}
 
 	@NotNull
 	protected ErrorDeleteFunction<DeleteEntityIn> getErrorDeleteFunction() {
-		LOGGER.debug("Returning error errorDeleteFunction function {}", errorDeleteFunction.getName());
+		LOGGER.atDebug().log("Returning error errorDeleteFunction function {}", errorDeleteFunction.getName());
 		return errorDeleteFunction;
 	}
 
 	@NotNull
 	protected PreDeleteAllFunction<DeleteEntitiesIn> getPreDeleteAllFunction() {
-		LOGGER.debug("Returning error preDeleteAllFunction function {}", preDeleteAllFunction.getName());
+		LOGGER.atDebug().log("Returning error preDeleteAllFunction function {}", preDeleteAllFunction.getName());
 		return preDeleteAllFunction;
 	}
 
 	@NotNull
 	protected PosDeleteAllFunction<DeleteEntitiesOut> getPosDeleteAllFunction() {
-		LOGGER.debug("Returning error posDeleteAllFunction function {}", posDeleteAllFunction.getName());
+		LOGGER.atDebug().log("Returning error posDeleteAllFunction function {}", posDeleteAllFunction.getName());
 		return posDeleteAllFunction;
 	}
 
 	@NotNull
 	protected ErrorDeleteAllFunction<DeleteEntitiesIn> getErrorDeleteAllFunction() {
-		LOGGER.debug("Returning error errorDeleteAllFunction function {}", errorDeleteAllFunction.getName());
+		LOGGER.atDebug().log("Returning error errorDeleteAllFunction function {}", errorDeleteAllFunction.getName());
 		return errorDeleteAllFunction;
 	}
 
 	@NotNull
 	protected PreDeleteByIdFunction<DeleteIdIn> getPreDeleteByIdFunction() {
-		LOGGER.debug("Returning error preDeleteByIdFunction function {}", preDeleteByIdFunction.getName());
+		LOGGER.atDebug().log("Returning error preDeleteByIdFunction function {}", preDeleteByIdFunction.getName());
 		return preDeleteByIdFunction;
 	}
 
 	@NotNull
 	protected PosDeleteByIdFunction<DeleteIdOut> getPosDeleteByIdFunction() {
-		LOGGER.debug("Returning error posDeleteByIdFunction function {}", posDeleteByIdFunction.getName());
+		LOGGER.atDebug().log("Returning error posDeleteByIdFunction function {}", posDeleteByIdFunction.getName());
 		return posDeleteByIdFunction;
 	}
 
 	@NotNull
 	protected ErrorDeleteByIdFunction<DeleteIdIn> getErrorDeleteByIdFunction() {
-		LOGGER.debug("Returning error errorDeleteByIdFunction function {}", errorDeleteByIdFunction.getName());
+		LOGGER.atDebug().log("Returning error errorDeleteByIdFunction function {}", errorDeleteByIdFunction.getName());
 		return errorDeleteByIdFunction;
 	}
 
 	@NotNull
 	protected PreDeleteByIdsFunction<DeleteIdsIn> getPreDeleteByIdsFunction() {
-		LOGGER.debug("Returning error preDeleteByIdsFunction function {}", preDeleteByIdsFunction.getName());
+		LOGGER.atDebug().log("Returning error preDeleteByIdsFunction function {}", preDeleteByIdsFunction.getName());
 		return preDeleteByIdsFunction;
 	}
 
 	@NotNull
 	protected PosDeleteByIdsFunction<DeleteIdsOut> getPosDeleteByIdsFunction() {
-		LOGGER.debug("Returning error posDeleteByIdsFunction function {}", posDeleteByIdsFunction.getName());
+		LOGGER.atDebug().log("Returning error posDeleteByIdsFunction function {}", posDeleteByIdsFunction.getName());
 		return posDeleteByIdsFunction;
 	}
 
 	@NotNull
 	protected ErrorDeleteByIdsFunction<DeleteIdsIn> getErrorDeleteByIdsFunction() {
-		LOGGER.debug("Returning error errorDeleteByIdsFunction function {}", errorDeleteByIdsFunction.getName());
+		LOGGER.atDebug().log("Returning error errorDeleteByIdsFunction function {}",
+				errorDeleteByIdsFunction.getName());
 		return errorDeleteByIdsFunction;
 	}
 }

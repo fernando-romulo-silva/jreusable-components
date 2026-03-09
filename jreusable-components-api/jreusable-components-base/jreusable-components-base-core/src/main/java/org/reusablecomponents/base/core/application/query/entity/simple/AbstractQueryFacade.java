@@ -139,7 +139,7 @@ public abstract sealed class AbstractQueryFacade< // generics
 
     protected AbstractQueryFacade(
             @NotNull final AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> builder) {
-        LOGGER.debug("Constructing AbstractQueryFacade");
+        LOGGER.atDebug().log("Constructing AbstractQueryFacade");
         super(builder);
 
         this.preFindByIdFunction = builder.preFindByIdFunction;
@@ -162,96 +162,96 @@ public abstract sealed class AbstractQueryFacade< // generics
         this.posExistsByIdFunction = builder.posExistsByIdFunction;
         this.errorExistsByIdFunction = builder.errorExistsByIdFunction;
 
-        LOGGER.debug("AbstractQueryFacade constructed");
+        LOGGER.atDebug().log("AbstractQueryFacade constructed");
     }
 
     @NotNull
     protected PreFindByIdFunction<QueryIdIn> getPreFindByIdFunction() {
-        LOGGER.debug("Returning pre findById function {}", preFindByIdFunction.getName());
+        LOGGER.atDebug().log("Returning pre findById function {}", preFindByIdFunction.getName());
         return preFindByIdFunction;
     }
 
     @NotNull
     protected PosFindByIdFunction<OneResult> getPosFindByIdFunction() {
-        LOGGER.debug("Returning pos findById function {}", posFindByIdFunction.getName());
+        LOGGER.atDebug().log("Returning pos findById function {}", posFindByIdFunction.getName());
         return posFindByIdFunction;
     }
 
     @NotNull
     protected ErrorFindByIdFunction<QueryIdIn> getErrorFindByIdFunction() {
-        LOGGER.debug("Returning error findById function {}", errorFindByIdFunction.getName());
+        LOGGER.atDebug().log("Returning error findById function {}", errorFindByIdFunction.getName());
         return errorFindByIdFunction;
     }
 
     @NotNull
     protected PreFindAllFunction getPreFindAllFunction() {
-        LOGGER.debug("Returning pre findAll function {}", preFindAllFunction.getName());
+        LOGGER.atDebug().log("Returning pre findAll function {}", preFindAllFunction.getName());
         return preFindAllFunction;
     }
 
     @NotNull
     protected PosFindAllFunction<MultipleResult> getPosFindAllFunction() {
-        LOGGER.debug("Returning pos findAll function {}", posFindAllFunction.getName());
+        LOGGER.atDebug().log("Returning pos findAll function {}", posFindAllFunction.getName());
         return posFindAllFunction;
     }
 
     @NotNull
     protected ErrorFindAllFunction getErrorFindAllFunction() {
-        LOGGER.debug("Returning error findById function {}", errorFindAllFunction.getName());
+        LOGGER.atDebug().log("Returning error findById function {}", errorFindAllFunction.getName());
         return errorFindAllFunction;
     }
 
     @NotNull
     protected PreCountAllFunction getPreCountAllFunction() {
-        LOGGER.debug("Returning pre countAll function {}", preCountAllFunction.getName());
+        LOGGER.atDebug().log("Returning pre countAll function {}", preCountAllFunction.getName());
         return preCountAllFunction;
     }
 
     @NotNull
     protected PosCountAllFunction<CountResult> getPosCountAllFunction() {
-        LOGGER.debug("Returning pos countAll function {}", posCountAllFunction.getName());
+        LOGGER.atDebug().log("Returning pos countAll function {}", posCountAllFunction.getName());
         return posCountAllFunction;
     }
 
     @NotNull
     protected ErrorCountAllFunction getErrorCountAllFunction() {
-        LOGGER.debug("Returning error countAll function {}", errorCountAllFunction.getName());
+        LOGGER.atDebug().log("Returning error countAll function {}", errorCountAllFunction.getName());
         return errorCountAllFunction;
     }
 
     @NotNull
     protected PreExistsAllFunction getPreExistsAllFunction() {
-        LOGGER.debug("Returning pre existsAll function {}", preExistsAllFunction.getName());
+        LOGGER.atDebug().log("Returning pre existsAll function {}", preExistsAllFunction.getName());
         return preExistsAllFunction;
     }
 
     @NotNull
     protected PosExistsAllFunction<ExistsResult> getPosExistsAllFunction() {
-        LOGGER.debug("Returning pos existsAll function {}", posExistsAllFunction.getName());
+        LOGGER.atDebug().log("Returning pos existsAll function {}", posExistsAllFunction.getName());
         return posExistsAllFunction;
     }
 
     @NotNull
     protected ErrorExistsAllFunction getErrorExistsAllFunction() {
-        LOGGER.debug("Returning error existsAll function {}", errorExistsAllFunction.getName());
+        LOGGER.atDebug().log("Returning error existsAll function {}", errorExistsAllFunction.getName());
         return errorExistsAllFunction;
     }
 
     @NotNull
     protected PreExistsByIdFunction<QueryIdIn> getPreExistsByIdFunction() {
-        LOGGER.debug("Returning pre existsById function {}", preExistsByIdFunction.getName());
+        LOGGER.atDebug().log("Returning pre existsById function {}", preExistsByIdFunction.getName());
         return preExistsByIdFunction;
     }
 
     @NotNull
     protected PosExistsByIdFunction<ExistsResult> getPosExistsByIdFunction() {
-        LOGGER.debug("Returning pos existsById function {}", posExistsByIdFunction.getName());
+        LOGGER.atDebug().log("Returning pos existsById function {}", posExistsByIdFunction.getName());
         return posExistsByIdFunction;
     }
 
     @NotNull
     protected ErrorExistsByIdFunction<QueryIdIn> getErrorExistsByIdFunction() {
-        LOGGER.debug("Returning error existsById function {}", errorExistsByIdFunction.getName());
+        LOGGER.atDebug().log("Returning error existsById function {}", errorExistsByIdFunction.getName());
         return errorExistsByIdFunction;
     }
 }

@@ -56,7 +56,7 @@ public abstract class AbstractQueryPaginationSpecificationFacadeBuilder<Entity e
 		return nonNull(preFindOneBySpecificationSortedFunction)
 				? preFindOneBySpecificationSortedFunction
 				: (specification, sort, directives) -> {
-					LOGGER.debug(
+					LOGGER.atDebug().log(
 							"Default preFindOneBySpecificationSortedFunction, specification {}, sort {}, directives {}",
 							specification, sort, directives);
 					return specification;
@@ -67,7 +67,7 @@ public abstract class AbstractQueryPaginationSpecificationFacadeBuilder<Entity e
 		return nonNull(posFindOneBySpecificationSortedFunction)
 				? posFindOneBySpecificationSortedFunction
 				: (oneResult, directives) -> {
-					LOGGER.debug(
+					LOGGER.atDebug().log(
 							"Default preFindOneBySpecificationSortedFunction, oneResult {}, directives {}",
 							oneResult, directives);
 					return oneResult;
@@ -78,7 +78,7 @@ public abstract class AbstractQueryPaginationSpecificationFacadeBuilder<Entity e
 		return nonNull(errorFindOneBySpecificationSortedFunction)
 				? errorFindOneBySpecificationSortedFunction
 				: (exception, specification, sort, directives) -> {
-					LOGGER.debug(
+					LOGGER.atDebug().log(
 							"Default errorFindOneBySpecificationSortedFunction, exception {}, specification {}, sort {}, directives {}",
 							exception, specification, sort, directives);
 					return exception;
@@ -89,7 +89,7 @@ public abstract class AbstractQueryPaginationSpecificationFacadeBuilder<Entity e
 		return nonNull(preFindBySpecificationPagedFunction)
 				? preFindBySpecificationPagedFunction
 				: (specification, pageable, directives) -> {
-					LOGGER.debug(
+					LOGGER.atDebug().log(
 							"Default preFindBySpecificationPagedFunction, specification {}, pageable {}, directives {}",
 							specification, pageable, directives);
 					return specification;
@@ -100,7 +100,7 @@ public abstract class AbstractQueryPaginationSpecificationFacadeBuilder<Entity e
 		return nonNull(posFindBySpecificationPagedFunction)
 				? posFindBySpecificationPagedFunction
 				: (multiplePagedResult, directives) -> {
-					LOGGER.debug(
+					LOGGER.atDebug().log(
 							"Default posFindBySpecificationPagedFunction, multiplePagedResult {}, directives {}",
 							multiplePagedResult, directives);
 					return multiplePagedResult;
@@ -111,7 +111,7 @@ public abstract class AbstractQueryPaginationSpecificationFacadeBuilder<Entity e
 		return nonNull(errorFindBySpecificationPagedFunction)
 				? errorFindBySpecificationPagedFunction
 				: (exception, specification, pageable, directives) -> {
-					LOGGER.debug(
+					LOGGER.atDebug().log(
 							"Default errorFindBySpecificationPagedFunction, exception {}, multiplePagedResult {}, pageable {}, directives {}",
 							exception, specification, pageable, directives);
 					return exception;

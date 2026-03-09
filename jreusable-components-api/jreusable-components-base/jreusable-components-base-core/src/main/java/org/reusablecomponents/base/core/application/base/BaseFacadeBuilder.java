@@ -44,7 +44,7 @@ public class BaseFacadeBuilder {
 	 * @param function Consumer function
 	 */
 	public BaseFacadeBuilder(final Consumer<? extends BaseFacadeBuilder> function) {
-		LOGGER.debug("Constructing BaseFacadeBuilder");
+		LOGGER.atDebug().log("Constructing BaseFacadeBuilder");
 
 		@SuppressWarnings("unchecked")
 		final var finalFunction = (Consumer<BaseFacadeBuilder>) function;
@@ -63,7 +63,8 @@ public class BaseFacadeBuilder {
 				? exceptionAdapterService
 				: new DefaultExceptionAdapterService();
 
-		LOGGER.debug("BaseFacadeBuilder constructed: securityService {}, i18nService {}, exceptionAdapterService {}",
+		LOGGER.atDebug().log(
+				"BaseFacadeBuilder constructed: securityService {}, i18nService {}, exceptionAdapterService {}",
 				securityService.getClass().getSimpleName(),
 				i18nService.getClass().getSimpleName(),
 				exceptionAdapterService.getClass().getSimpleName());

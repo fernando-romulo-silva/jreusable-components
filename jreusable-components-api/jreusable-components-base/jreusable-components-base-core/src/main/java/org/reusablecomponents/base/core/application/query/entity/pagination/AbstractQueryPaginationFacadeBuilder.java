@@ -55,7 +55,8 @@ public class AbstractQueryPaginationFacadeBuilder<Entity extends AbstractEntity<
         return nonNull(preFindAllPagedFunction)
                 ? preFindAllPagedFunction
                 : (pageable, directives) -> {
-                    LOGGER.debug("Executing default preFindAll, pageable {}, directives {}", pageable, directives);
+                    LOGGER.atDebug().log("Executing default preFindAll, pageable {}, directives {}", pageable,
+                            directives);
                     return pageable;
                 };
     }
@@ -64,7 +65,7 @@ public class AbstractQueryPaginationFacadeBuilder<Entity extends AbstractEntity<
         return nonNull(posFindAllPagedFunction)
                 ? posFindAllPagedFunction
                 : (multiplePagedResult, directives) -> {
-                    LOGGER.debug("Executing default posFindAll, multiplePagedResult {}, directives {}",
+                    LOGGER.atDebug().log("Executing default posFindAll, multiplePagedResult {}, directives {}",
                             multiplePagedResult, directives);
                     return multiplePagedResult;
                 };
@@ -74,7 +75,7 @@ public class AbstractQueryPaginationFacadeBuilder<Entity extends AbstractEntity<
         return nonNull(errorFindAllPagedFunction)
                 ? errorFindAllPagedFunction
                 : (exception, pageable, directives) -> {
-                    LOGGER.debug("Executing default errorFindAll, pageable {}, exception {}, directives {} ",
+                    LOGGER.atDebug().log("Executing default errorFindAll, pageable {}, exception {}, directives {} ",
                             pageable, exception, directives);
                     return exception;
                 };
@@ -84,7 +85,7 @@ public class AbstractQueryPaginationFacadeBuilder<Entity extends AbstractEntity<
         return nonNull(preFindOneSortedFunction)
                 ? preFindOneSortedFunction
                 : (sort, directives) -> {
-                    LOGGER.debug("Executing default preFindOne, sort {}, directives {}", sort, directives);
+                    LOGGER.atDebug().log("Executing default preFindOne, sort {}, directives {}", sort, directives);
                     return sort;
                 };
     }
@@ -93,7 +94,8 @@ public class AbstractQueryPaginationFacadeBuilder<Entity extends AbstractEntity<
         return nonNull(posFindOneSortedFunction)
                 ? posFindOneSortedFunction
                 : (oneResult, directives) -> {
-                    LOGGER.debug("Executing default oneResult, multiplePagedResult {}, directives {}", oneResult,
+                    LOGGER.atDebug().log("Executing default oneResult, multiplePagedResult {}, directives {}",
+                            oneResult,
                             directives);
                     return oneResult;
                 };
@@ -103,7 +105,7 @@ public class AbstractQueryPaginationFacadeBuilder<Entity extends AbstractEntity<
         return nonNull(errorFindOneSortedFunction)
                 ? errorFindOneSortedFunction
                 : (exception, sort, directives) -> {
-                    LOGGER.debug("Executing default errorFindOne, pageable {}, exception {}, directives {} ",
+                    LOGGER.atDebug().log("Executing default errorFindOne, pageable {}, exception {}, directives {} ",
                             sort, exception, directives);
                     return exception;
                 };

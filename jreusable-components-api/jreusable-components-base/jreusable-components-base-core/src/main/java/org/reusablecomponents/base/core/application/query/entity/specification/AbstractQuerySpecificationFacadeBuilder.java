@@ -77,7 +77,8 @@ abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends AbstractEn
         return nonNull(preFindBySpecificationFunction)
                 ? preFindBySpecificationFunction
                 : (specification, directives) -> {
-                    LOGGER.debug("Default preFindBySpecificationFunction executed, specification {}, directives {}",
+                    LOGGER.atDebug().log(
+                            "Default preFindBySpecificationFunction executed, specification {}, directives {}",
                             specification, directives);
                     return specification;
                 };
@@ -87,7 +88,7 @@ abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends AbstractEn
         return nonNull(posFindBySpecificationFunction)
                 ? posFindBySpecificationFunction
                 : (multipleResult, directives) -> {
-                    LOGGER.debug(
+                    LOGGER.atDebug().log(
                             "Default posFindBySpecificationFunction executed, multipleResult {}, directives {}",
                             multipleResult, directives);
                     return multipleResult;
@@ -98,7 +99,7 @@ abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends AbstractEn
         return nonNull(errorFindBySpecificationFunction)
                 ? errorFindBySpecificationFunction
                 : (exception, specification, directives) -> {
-                    LOGGER.debug(
+                    LOGGER.atDebug().log(
                             "Default errorFindBySpecificationFunction executed, specification {}, exception {}, directives {} ",
                             specification, exception, directives);
                     return exception;
@@ -109,7 +110,7 @@ abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends AbstractEn
         return nonNull(preFindOneBySpecificationFunction)
                 ? preFindOneBySpecificationFunction
                 : (specification, directives) -> {
-                    LOGGER.debug(
+                    LOGGER.atDebug().log(
                             "Default preFindOneBySpecificationFunction executed, specification {}, directives {}",
                             specification, directives);
                     return specification;
@@ -120,7 +121,8 @@ abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends AbstractEn
         return nonNull(posFindOneBySpecificationFunction)
                 ? posFindOneBySpecificationFunction
                 : (oneResult, directives) -> {
-                    LOGGER.debug("Default posFindOneBySpecificationFunction executed, oneResult {}, directives {}",
+                    LOGGER.atDebug().log(
+                            "Default posFindOneBySpecificationFunction executed, oneResult {}, directives {}",
                             oneResult, directives);
                     return oneResult;
                 };
@@ -130,7 +132,7 @@ abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends AbstractEn
         return nonNull(errorFindOneBySpecificationFunction)
                 ? errorFindOneBySpecificationFunction
                 : (exception, specification, directives) -> {
-                    LOGGER.debug(
+                    LOGGER.atDebug().log(
                             "Executing default errorFindOneBySpecificationFunction, exception {}, exception {}, directives {}",
                             exception, specification, directives);
                     return exception;
@@ -141,7 +143,8 @@ abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends AbstractEn
         return nonNull(preCountBySpecificationFunction)
                 ? preCountBySpecificationFunction
                 : (specification, directives) -> {
-                    LOGGER.debug("Default preCountBySpecificationFunction executed, specification {}, directives {}",
+                    LOGGER.atDebug().log(
+                            "Default preCountBySpecificationFunction executed, specification {}, directives {}",
                             specification, directives);
                     return specification;
                 };
@@ -151,7 +154,8 @@ abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends AbstractEn
         return nonNull(posCountBySpecificationFunction)
                 ? posCountBySpecificationFunction
                 : (countResult, directives) -> {
-                    LOGGER.debug("Default posCountBySpecificationFunction executed, countResult {}, directives {}",
+                    LOGGER.atDebug().log(
+                            "Default posCountBySpecificationFunction executed, countResult {}, directives {}",
                             countResult, directives);
                     return countResult;
                 };
@@ -161,7 +165,7 @@ abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends AbstractEn
         return nonNull(errorCountBySpecificationFunction)
                 ? errorCountBySpecificationFunction
                 : (exception, specification, directives) -> {
-                    LOGGER.debug(
+                    LOGGER.atDebug().log(
                             "Default errorCountBySpecificationFunction executed, exception {}, specification {}, directives {} ",
                             exception, specification, directives);
                     return exception;
@@ -172,7 +176,8 @@ abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends AbstractEn
         return nonNull(preExistsBySpecificationFunction)
                 ? preExistsBySpecificationFunction
                 : (specification, directives) -> {
-                    LOGGER.debug("Default preExistsBySpecificationFunction executed, specification {}, directives {}",
+                    LOGGER.atDebug().log(
+                            "Default preExistsBySpecificationFunction executed, specification {}, directives {}",
                             specification, directives);
                     return specification;
                 };
@@ -182,7 +187,8 @@ abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends AbstractEn
         return nonNull(posExistsBySpecificationFunction)
                 ? posExistsBySpecificationFunction
                 : (existsResult, directives) -> {
-                    LOGGER.debug("Default posExistsBySpecificationFunction executed, existsResult {}, directives {}",
+                    LOGGER.atDebug().log(
+                            "Default posExistsBySpecificationFunction executed, existsResult {}, directives {}",
                             existsResult, directives);
                     return existsResult;
                 };
@@ -192,7 +198,7 @@ abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends AbstractEn
         return nonNull(errorExistsBySpecificationFunction)
                 ? errorExistsBySpecificationFunction
                 : (exception, specification, directives) -> {
-                    LOGGER.debug(
+                    LOGGER.atDebug().log(
                             "Default errorExistsBySpecificationFunction executed, exception {}, specification {}, directives {}",
                             exception, specification, directives);
                     return exception;

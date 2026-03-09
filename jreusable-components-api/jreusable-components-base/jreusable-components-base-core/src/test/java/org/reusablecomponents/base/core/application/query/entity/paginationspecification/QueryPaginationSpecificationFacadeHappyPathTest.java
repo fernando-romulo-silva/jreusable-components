@@ -2,6 +2,7 @@ package org.reusablecomponents.base.core.application.query.entity.paginationspec
 
 import static org.apache.commons.lang3.StringUtils.leftPad;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ class QueryPaginationSpecificationFacadeHappyPathTest {
         final Predicate<Department> spec = department -> Strings.CI.contains(department.getName(), "Default");
 
         // when
-        final var result = defaultQueryFacade.findOneByPaginationSorted(spec, sort);
+        final var result = assertDoesNotThrow(() -> defaultQueryFacade.findOneByPaginationSorted(spec, sort));
 
         // then
         assertThat(defaultData.getLast()).isEqualTo(result);

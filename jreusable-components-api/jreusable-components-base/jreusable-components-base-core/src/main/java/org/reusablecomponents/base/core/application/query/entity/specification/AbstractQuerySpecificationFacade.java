@@ -139,7 +139,7 @@ public abstract sealed class AbstractQuerySpecificationFacade<Entity extends Abs
 
     protected AbstractQuerySpecificationFacade(
             @NotNull final AbstractQuerySpecificationFacadeBuilder<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> builder) {
-        LOGGER.debug("Constructing AbstractQuerySpecificationFacade {}", builder);
+        LOGGER.atDebug().log("Constructing AbstractQuerySpecificationFacade {}", builder);
 
         super(builder);
 
@@ -162,73 +162,81 @@ public abstract sealed class AbstractQuerySpecificationFacade<Entity extends Abs
 
     @NotNull
     public PreFindBySpecificationFunction<Specification> getPreFindBySpecificationFunction() {
-        LOGGER.debug("Returning preFindBySpecFunction function {}", preFindBySpecificationFunction.getName());
+        LOGGER.atDebug().log("Returning preFindBySpecFunction function {}", preFindBySpecificationFunction.getName());
         return preFindBySpecificationFunction;
     }
 
     @NotNull
     public PosFindBySpecificationFunction<MultipleResult> getPosFindBySpecificationFunction() {
-        LOGGER.debug("Returning posFindBySpecFunction function {}", posFindBySpecificationFunction.getName());
+        LOGGER.atDebug().log("Returning posFindBySpecFunction function {}", posFindBySpecificationFunction.getName());
         return posFindBySpecificationFunction;
     }
 
     @NotNull
     public ErrorFindBySpecificationFunction<Specification> getErrorFindBySpecificationFunction() {
-        LOGGER.debug("Returning errorFindBySpecFunction function {}", errorFindBySpecificationFunction.getName());
+        LOGGER.atDebug().log("Returning errorFindBySpecFunction function {}",
+                errorFindBySpecificationFunction.getName());
         return errorFindBySpecificationFunction;
     }
 
     @NotNull
     public PreFindOneBySpecificationFunction<Specification> getPreFindOneBySpecificationFunction() {
-        LOGGER.debug("Returning preFindOneBySpecFunction function {}", preFindOneBySpecificationFunction.getName());
+        LOGGER.atDebug().log("Returning preFindOneBySpecFunction function {}",
+                preFindOneBySpecificationFunction.getName());
         return preFindOneBySpecificationFunction;
     }
 
     @NotNull
     public PosFindOneBySpecificationFunction<OneResult> getPosFindOneBySpecificationFunction() {
-        LOGGER.debug("Returning posFindOneBySpecFunction function {}", posFindOneBySpecificationFunction.getName());
+        LOGGER.atDebug().log("Returning posFindOneBySpecFunction function {}",
+                posFindOneBySpecificationFunction.getName());
         return posFindOneBySpecificationFunction;
     }
 
     @NotNull
     public ErrorFindOneBySpecificationFunction<Specification> getErrorFindOneBySpecificationFunction() {
-        LOGGER.debug("Returning errorFindOneBySpecFunction function {}", errorFindOneBySpecificationFunction.getName());
+        LOGGER.atDebug().log("Returning errorFindOneBySpecFunction function {}",
+                errorFindOneBySpecificationFunction.getName());
         return errorFindOneBySpecificationFunction;
     }
 
     @NotNull
     public PreCountBySpecificationFunction<Specification> getPreCountBySpecificationFunction() {
-        LOGGER.debug("Returning preCountBySpecFunction function {}", preCountBySpecificationFunction.getName());
+        LOGGER.atDebug().log("Returning preCountBySpecFunction function {}", preCountBySpecificationFunction.getName());
         return preCountBySpecificationFunction;
     }
 
     @NotNull
     public PosCountBySpecificationFunction<CountResult> getPosCountBySpecificationFunction() {
-        LOGGER.debug("Returning posCountBySpecFunction function {}", posCountBySpecificationFunction.getName());
+        LOGGER.atDebug().log("Returning posCountBySpecFunction function {}", posCountBySpecificationFunction.getName());
         return posCountBySpecificationFunction;
     }
 
     @NotNull
     public ErrorCountBySpecificationFunction<Specification> getErrorCountBySpecificationFunction() {
-        LOGGER.debug("Returning errorCountBySpecFunction function {}", errorCountBySpecificationFunction.getName());
+        LOGGER.atDebug().log("Returning errorCountBySpecFunction function {}",
+                errorCountBySpecificationFunction.getName());
         return errorCountBySpecificationFunction;
     }
 
     @NotNull
     public PreExistsBySpecificationFunction<Specification> getPreExistsBySpecificationFunction() {
-        LOGGER.debug("Returning preExistsBySpecFunction function {}", preExistsBySpecificationFunction.getName());
+        LOGGER.atDebug().log("Returning preExistsBySpecFunction function {}",
+                preExistsBySpecificationFunction.getName());
         return preExistsBySpecificationFunction;
     }
 
     @NotNull
     public PosExistsBySpecificationFunction<ExistsResult> getPosExistsBySpecificationFunction() {
-        LOGGER.debug("Returning posExistsBySpecFunction function {}", posExistsBySpecificationFunction.getName());
+        LOGGER.atDebug().log("Returning posExistsBySpecFunction function {}",
+                posExistsBySpecificationFunction.getName());
         return posExistsBySpecificationFunction;
     }
 
     @NotNull
     public ErrorExistsBySpecificationFunction<Specification> getErrorExistsBySpecificationFunction() {
-        LOGGER.debug("Returning errorExistsBySpecFunction function {}", errorExistsBySpecificationFunction.getName());
+        LOGGER.atDebug().log("Returning errorExistsBySpecFunction function {}",
+                errorExistsBySpecificationFunction.getName());
         return errorExistsBySpecificationFunction;
     }
 }
