@@ -16,7 +16,8 @@ public interface InterfaceEntity<Id, Entity extends InterfaceEntity<Id, Entity>>
 
     Optional<LocalDateTime> getUpdatedDate();
 
-    Optional<String> getCreatedReason();
+    @NotNull
+    String getCreatedReason();
 
     Optional<String> getUpdatedReason();
 

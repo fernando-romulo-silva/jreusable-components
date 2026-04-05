@@ -2,6 +2,9 @@ package org.application_example.infra;
 
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 
+/**
+ * Dummy implementation of the security service for testing purposes.
+ */
 public class DummySecurityService implements InterfaceSecurityService {
 
     /**

@@ -14,6 +14,16 @@ import jakarta.validation.constraints.NotNull;
  * 
  * @param <Entity> The facade entity type
  * @param <Id>     The facade entity id type
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0
+ * 
+ * @see InterfaceCommandFacade
+ * @see InterfaceQueryFacade
+ * @see InterfaceQuerySpecificationFacade
+ * @see InterfaceQueryPaginationFacade
+ * @see InterfaceQuerySpecificationPaginationFacade
+ * @see BaseFacade
  */
 public sealed interface InterfaceBaseFacade<Entity extends AbstractEntity<Id>, Id>
 		permits InterfaceCommandFacade, InterfaceQueryFacade, InterfaceQuerySpecificationFacade,

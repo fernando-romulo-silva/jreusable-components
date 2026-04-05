@@ -1,11 +1,11 @@
 package org.application_example.domain;
 
-import static org.reusablecomponents.base.core.infra.util.AbstractValidatorTest.VALIDATOR;
-
 import java.util.Optional;
 
+import org.application_example.infra.Utils;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 
+import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -31,7 +31,12 @@ public class Project extends AbstractEntity<Long> {
         this.name = name;
         this.department = department;
 
-        validade(VALIDATOR);
+        validate();
+    }
+
+    @Override
+    protected Optional<Validator> getValidator() {
+        return Optional.of(Utils.VALIDATOR);
     }
 
     public boolean isPublishable() {

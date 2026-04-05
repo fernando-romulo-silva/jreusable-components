@@ -39,11 +39,16 @@ import com.google.common.reflect.TypeToken;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * The <code>InterfaceEntityBaseFacade</code> common implementation using
- * event-driven architecture.
+ * The <code>InterfaceEntityBaseFacade</code> common implementation to all
+ * facades that manage entities.
  * 
  * @param <Entity> The facade entity type
  * @param <Id>     The facade entity id type
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0
+ * 
+ * @see InterfaceBaseFacade
  */
 public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		implements InterfaceBaseFacade<Entity, Id>
@@ -55,26 +60,41 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BaseFacade.class);
 
+	/**
+	 * The security service used by the facade to get the session and other security
+	 * related operations.
+	 */
 	protected final InterfaceSecurityService securityService;
 
+	/**
+	 * The internationalization service used by the facade to translate messages.
+	 */
 	protected final InterfaceI18nService i18nService;
 
+	/**
+	 * The exception adapter service used by the facade to translate from
+	 * persistence exceptions to application exceptions.
+	 */
 	protected final InterfaceExceptionAdapterService exceptionAdapterService;
 
+	/**
+	 * The class type of the entity managed by the facade.
+	 */
 	protected final Class<Entity> entityClazz;
 
+	/**
+	 * The class type of the entity id managed by the facade.
+	 */
 	protected final Class<Id> idClazz;
 
-	protected final StackWalker walker = StackWalker.getInstance();
-
 	/**
-	 * Default constructor
+	 * Default constructor, used by the builder to construct this class.
 	 * 
-	 * @param builder Object attribute constructor.
+	 * @param builder Object attribute constructor, can't be null
 	 */
 	protected BaseFacade(@NotNull final BaseFacadeBuilder builder) {
-		super();
 		LOGGER.atDebug().log("Constructing BaseFacade with builder {}", builder);
+		super();
 		final var finalBuilder = ofNullable(builder)
 				.orElseThrow(createNullPointerException("builder"));
 
@@ -89,9 +109,9 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	}
 
 	/**
-	 * Capture the generic class type
+	 * Capture the generic class type.
 	 * 
-	 * @return A <code>Class<Entity></code> object
+	 * @return A <code>Class&lt;Entity&gt;</code> object
 	 */
 	@SuppressWarnings("unchecked")
 	protected final Class<Entity> retrieveEntityClazz() {
@@ -104,9 +124,9 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	}
 
 	/**
-	 * Capture the generic class type
+	 * Capture the generic id type.
 	 * 
-	 * @return A <code>Class<Entity></code> object
+	 * @return A <code>Class&lt;Id&gt;</code> object
 	 */
 	@SuppressWarnings("unchecked")
 	protected final Class<Id> retrieveIdClazz() {
@@ -119,9 +139,13 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	}
 
 	/**
-	 * Execute operations like save, delete, saveAll, etc.
-	 * An operation is built of a main function, pre-function, pos-function, and
-	 * error-function.
+	 * Execute operations with no input and but with output, like findAll,
+	 * existsAll, etc.
+	 * 
+	 * An operation is built of a main function (main purpose), pre-function
+	 * (executed before the main function), pos-function (executed after the main
+	 * function), and error-function (executed if the main function throws an
+	 * exception).
 	 * 
 	 * @param <Out>         The output type
 	 * 
@@ -220,9 +244,12 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	}
 
 	/**
-	 * Execute operations like save, delete, saveAll, etc.
-	 * An operation is built of a main function, pre-function, pos-function, and
-	 * error-function.
+	 * Execute operations with one input, like save, delete, saveAll, etc.
+	 * 
+	 * An operation is built of a main function (main purpose), pre-function
+	 * (executed before the main function), pos-function (executed after the main
+	 * function), and error-function (executed if the main function throws an
+	 * exception).
 	 * 
 	 * @param <In>          The input type
 	 * @param <Out>         The output type
@@ -323,9 +350,12 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	}
 
 	/**
-	 * Execute operations like save, delete, saveAll, etc.
-	 * An operation is built of a main function, pre-function, pos-function, and
-	 * error-function.
+	 * Execute operations with two inputs, like findOneByPaginationSorted, etc.
+	 * 
+	 * An operation is built of a main function (main purpose), pre-function
+	 * (executed before the main function), pos-function (executed after the main
+	 * function), and error-function (executed if the main function throws an
+	 * exception).
 	 * 
 	 * @param <In1>         The first input type
 	 * @param <In2>         The second input type
@@ -427,15 +457,6 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		return finalOut;
 	}
 
-	protected List<Object> execute(
-			final Object[] inputs,
-			final OperationFunctionArgs preFunction,
-			final OperationFunctionArgs mainFunction,
-			final OperationFunctionArgs posFunction,
-			final Object... directives) {
-		return List.of();
-	}
-
 	private void checkParamsNotNull(
 			final Object preFunction,
 			final Object posFunction,
@@ -476,7 +497,7 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	}
 
 	@NotNull
-	public final InterfaceExceptionAdapterService getExceptionTranslatorService() {
+	public final InterfaceExceptionAdapterService getExceptionAdapterService() {
 		return exceptionAdapterService;
 	}
 }

@@ -17,6 +17,40 @@ import jakarta.validation.constraints.NotNull;
 
 /**
  * The default <code>InterfaceEntityQueryFacade</code>'s implementation.
+ * This class is non-sealed, so it can be extended by the user to create custom
+ * facades.
+ * <p>
+ * This class provides default implementations for the basic query operations:
+ * find by id, find all, count all, exists all and exists by id.
+ * <p>
+ * The user can override the default implementations by providing custom
+ * functions in the constructor or by overriding the protected methods that
+ * return the functions.
+ * <p>
+ * The user can also override the pre and post functions to add custom behavior
+ * before and after the execution of the main functions.
+ * 
+ * @param <Entity>         The entity type
+ * @param <Id>             The entity id type
+ * @param <QueryIdIn>      The input id type for the find by id and exists by id
+ *                         operations
+ * @param <OneResult>      The result type for the find by id operation
+ * @param <MultipleResult> The result type for the find all operation
+ * @param <CountResult>    The result type for the count all operation
+ * @param <ExistsResult>   The result type for the exists all and exists by id
+ *                         operations
+ * @author Fernando Romulo da Silva
+ * @since 1.0
+ * 
+ * @see InterfaceQueryFacade
+ * @see AbstractQueryFacade
+ * 
+ * @see QueryFacadeBuilder
+ * @see FindByIdFunction
+ * @see FindAllFunction
+ * @see CountAllFunction
+ * @see ExistsAllFunction
+ * @see ExistsByIdFunction
  */
 public non-sealed class QueryFacade< // generics
 		// default
@@ -32,6 +66,9 @@ public non-sealed class QueryFacade< // generics
 
 	private static final String NON_NULL_ID_MSG = "Please pass a non-null %s id";
 
+	/**
+	 * Logger instance for this class.
+	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(QueryFacade.class);
 
 	/**
@@ -71,7 +108,7 @@ public non-sealed class QueryFacade< // generics
 	protected final Class<QueryIdIn> queryIdInClazz;
 
 	/**
-	 * Default constructor
+	 * Default constructor, used by the builder to construct this class.
 	 * 
 	 * @param builder Object in charge to construct this one
 	 */

@@ -2,12 +2,14 @@ package org.reusablecomponents.base.core.application.command.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.groups.Tuple.tuple;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.application_example.application.command.DepartmentCommandFacade;
@@ -42,13 +44,13 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import jakarta.validation.executable.ExecutableValidator;
 
-@Tag("unit")
-@DisplayName("Test the EntityCommandFacade entity test, unhappy path :( ")
+@Tag("application")
+@DisplayName("Test the EntityCommandFacade entity test")
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @SuppressWarnings("null")
-class CommandFacadeUnhappyPathTest {
+class CommandFacadeTest {
 
 	static final ResourceBundleMessageInterpolator INTERPOLATOR = new ResourceBundleMessageInterpolator(
 			new AggregateResourceBundleLocator(Arrays.asList("ValidationMessages")));
@@ -71,26 +73,206 @@ class CommandFacadeUnhappyPathTest {
 	Department department02;
 
 	Manager manager;
+	Manager company;
 
 	@BeforeAll
 	void setUpAll() {
-		manager = new Manager("x2", "Business Happy");
+		// This method is used to initialize any resources or configurations needed for
+		// the tests.
+	}
+
+	@AfterAll
+	void tearDown() {
+		VALIDATOR_FACTORY.close();
 	}
 
 	@BeforeEach
 	void setUp() {
 		defaultData.clear();
 
-		department01 = new Department("x1", "Default 01", "Peopple", manager);
-		department02 = new Department("x2", "Default 02", "Resource", manager);
+		company = new Manager("x2", "Business Happy");
+
+		department01 = new Department("x1", "Default 01", "Peopple", company);
+		department02 = new Department("x2", "Default 02", "Resource", company);
 
 		defaultData.addAll(List.of(department01, department02));
+
+		manager = new Manager("x2", "Business Happy");
 	}
 
-	@AfterAll
-	void tearDown() {
-		// No requirements yet
-		VALIDATOR_FACTORY.close();
+	@Test
+	@Order(1)
+	@DisplayName("Given an entity when save then entity is saved")
+	void givenEntity_whenSave_thenEntityIsSaved() {
+		// given
+		final var data = new ArrayList<Department>();
+
+		final var departmentFacade = new DepartmentCommandFacade(data);
+		final var department = new Department("00001", "Development 01", "Technology", company);
+
+		// when
+		final var result = assertDoesNotThrow(() -> departmentFacade.save(department));
+
+		// then
+		assertThat(result).isEqualTo(department);
+		assertThat(data).contains(department);
+		assertThat(result).extracting("operation").isEqualTo(0);
+	}
+
+	@Test
+	@Order(2)
+	@DisplayName("Given a collection of entities when save all then entities are saved")
+	void givenEntities_whenSaveAll_thenEntitiesAreSaved() {
+		// given
+		final var data = new ArrayList<Department>();
+
+		final var departmentFacade = new DepartmentCommandFacade(data);
+
+		final var departments = List.of(
+				new Department("00001", "Development 01", "Technology", company),
+				new Department("00002", "Development 02", "HR", company));
+
+		// when
+		final var result = assertDoesNotThrow(() -> departmentFacade.saveAll(departments));
+
+		// then
+		assertThat(data).hasSize(2);
+		assertThat(data).hasSameElementsAs(result);
+	}
+
+	@Test
+	@Order(3)
+	@DisplayName("Given an entity when update then entity is updated")
+	void givenEntity_whenUpdate_thenEntityIsUpdated() {
+		// given
+		final var newName = "new Name";
+		final var newSector = "new sector";
+
+		assertThat(defaultData)
+				.noneMatch(dep -> Objects.equals(dep.getName(), newName))
+				.noneMatch(dep -> Objects.equals(dep.getSector(), newSector));
+
+		// when
+		department01.update(newName, newSector);
+		final var result = assertDoesNotThrow(() -> defaultFacade.update(department01));
+
+		// then
+		assertThat(defaultData)
+				.contains(result)
+				.anyMatch(dep -> Objects.equals(dep.getName(), newName) && Objects.equals(dep.getSector(), newSector));
+	}
+
+	@Test
+	@Order(4)
+	@DisplayName("Given a collection of entities when update all then entities are updated")
+	void givenEntities_whenUpdateAll_thenEntitiesAreUpdated() {
+		// given
+		final var newName01 = "new Name 01";
+		final var newSector01 = "new sector 01";
+
+		final var newName02 = "new Name 02";
+		final var newSector02 = "new sector 02";
+
+		assertThat(defaultData)
+				.noneMatch(dep -> Objects.equals(dep.getName(), newName01))
+				.noneMatch(dep -> Objects.equals(dep.getSector(), newSector01))
+				.noneMatch(dep -> Objects.equals(dep.getName(), newName02))
+				.noneMatch(dep -> Objects.equals(dep.getSector(), newSector02));
+
+		// when
+		department01.update(newName01, newSector01);
+		department02.update(newName02, newSector02);
+
+		final var result = assertDoesNotThrow(() -> defaultFacade.updateAll(List.of(department01, department02)));
+
+		// then
+		assertThat(defaultData)
+				.containsAll(result)
+				.anyMatch(
+						dep -> Objects.equals(dep.getName(), newName01)
+								&& Objects.equals(dep.getSector(), newSector01))
+				.anyMatch(dep -> Objects.equals(dep.getName(), newName02)
+						&& Objects.equals(dep.getSector(), newSector02));
+	}
+
+	@Test
+	@Order(5)
+	@DisplayName("Given an entity when delete then entity is deleted")
+	void givenEntity_whenDelete_thenEntityIsDeleted() {
+		// given
+		assertThat(defaultData)
+				.contains(department01);
+
+		department01.removeManager();
+
+		// when
+		assertDoesNotThrow(() -> defaultFacade.delete(department01));
+
+		// then
+		assertThat(defaultData)
+				.hasSize(1)
+				.contains(department02)
+				.doesNotContain(department01);
+	}
+
+	@Test
+	@Order(6)
+	@DisplayName("Given a collection of entities when delete all then entities are deleted")
+	void givenEntities_whenDeleteAll_thenEntitiesAreDeleted() {
+		// given
+		assertThat(defaultData)
+				.contains(department01, department02);
+
+		department01.removeManager();
+		department02.removeManager();
+
+		// when
+		assertDoesNotThrow(() -> defaultFacade.deleteAll(List.of(department01, department02)));
+
+		// then
+		assertThat(defaultData)
+				.doesNotContain(department01, department02)
+				.isEmpty();
+	}
+
+	@Test
+	@Order(5)
+	@DisplayName("Given an entity when delete by id then entity is deleted")
+	void givenEntity_whenDeleteById_thenEntityIsDeleted() {
+		// given
+		assertThat(defaultData)
+				.contains(department01);
+
+		department01.removeManager();
+
+		// when
+		assertDoesNotThrow(() -> defaultFacade.deleteBy(department01.getId()));
+
+		// then
+		assertThat(defaultData)
+				.hasSize(1)
+				.contains(department02)
+				.doesNotContain(department01);
+	}
+
+	@Test
+	@Order(6)
+	@DisplayName("Given a collection of entities when delete all by ids then entities are deleted")
+	void givenEntities_whenDeleteAllByIds_thenEntitiesAreDeleted() {
+		// given
+		assertThat(defaultData)
+				.contains(department01, department02);
+
+		department01.removeManager();
+		department02.removeManager();
+
+		// when
+		assertDoesNotThrow(() -> defaultFacade.deleteAllBy(List.of(department01.getId(), department02.getId())));
+
+		// then
+		assertThat(defaultData)
+				.doesNotContain(department01, department02)
+				.isEmpty();
 	}
 
 	// given
@@ -113,11 +295,11 @@ class CommandFacadeUnhappyPathTest {
 						"The object '%s", new Object[] {}, elementAlreadyExistsParams));
 	}
 
-	@Order(1)
+	@Order(7)
 	@ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
 	@MethodSource("createInvalidSaveData")
-	@DisplayName("Try to save an entity test")
-	void invalidSaveTest(
+	@DisplayName("Given an entity with invalid data when save then throw exception")
+	void givenEntityWithInvalidData_whenSave_thenThrowException(
 			final Department department,
 			final Class<?> exceptionClass,
 			final String exceptionMessage,
@@ -155,11 +337,11 @@ class CommandFacadeUnhappyPathTest {
 						"The object '[%s", elementAlreadyExistsParams));
 	}
 
-	@Order(2)
+	@Order(8)
 	@ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
 	@MethodSource("createInvalidSaveAllData")
-	@DisplayName("Try to save invalid entities test")
-	void invalidSaveAllTest(
+	@DisplayName("Given a collection of entities with invalid data when save all then throw exception")
+	void givenEntitiesWithInvalidData_whenSaveAll_thenThrowException(
 			final List<Department> departments,
 			final Class<?> exceptionClass,
 			final String exceptionMessage,
@@ -174,8 +356,8 @@ class CommandFacadeUnhappyPathTest {
 	}
 
 	@Test
-	@Order(2)
-	@DisplayName("Test save entity beans validation")
+	@Order(9)
+	@DisplayName("Given an entity with errors when save then throw exception")
 	void saveEntityWithErrorsBeanValidationTest() throws NoSuchMethodException, SecurityException {
 
 		final var method = defaultFacade.getClass()
@@ -210,11 +392,11 @@ class CommandFacadeUnhappyPathTest {
 						"The object '%s", elementNotExistsParams));
 	}
 
-	@Order(3)
+	@Order(10)
 	@ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
 	@MethodSource("createInvalidUpdateData")
-	@DisplayName("Try to update an invalid entity test")
-	void invalidUpdateTest(
+	@DisplayName("Given an entity with invalid data when update then throw exception")
+	void givenEntityWithInvalidData_whenUpdate_thenThrowException(
 			final Department department,
 			final Class<?> exceptionClass,
 			final String exceptionMessage,
@@ -251,11 +433,11 @@ class CommandFacadeUnhappyPathTest {
 						"The object '[%s", elementAlreadyExistsParams));
 	}
 
-	@Order(4)
+	@Order(11)
 	@ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
 	@MethodSource("createInvalidUpdateAllData")
-	@DisplayName("Try to update invalid entities test")
-	void invalidUpdateAllTest(
+	@DisplayName("Given a collection of entities with invalid data when update all then throw exception")
+	void givenEntitiesWithInvalidData_whenUpdateAll_thenThrowException(
 			final List<Department> departments,
 			final Class<?> exceptionClass,
 			final String exceptionMessage,
@@ -295,11 +477,11 @@ class CommandFacadeUnhappyPathTest {
 						"The object '%s", elementNotExistsParams));
 	}
 
-	@Order(5)
+	@Order(12)
 	@ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
 	@MethodSource("createInvalidDeleteData")
-	@DisplayName("Try to delete entity test")
-	void invalidDeleteTest(
+	@DisplayName("Given an entity with invalid data when delete then throw exception")
+	void givenEntityWithInvalidData_whenDelete_thenThrowException(
 			final Department department,
 			final Class<?> exceptionClass,
 			final String exceptionMessage,
@@ -349,11 +531,11 @@ class CommandFacadeUnhappyPathTest {
 						"The object '[%s", elementNotExistsParams));
 	}
 
-	@Order(6)
+	@Order(13)
 	@ParameterizedTest(name = "Pos {index} : department ''{0}'', exception ''{1}''")
 	@MethodSource("createInvalidDeleteAllData")
-	@DisplayName("Try to delete all entities test")
-	void invalidDeleteAllTest(
+	@DisplayName("Given a collection of entities with invalid data when delete all then throw exception")
+	void givenEntitiesWithInvalidData_whenDeleteAll_thenThrowException(
 			final List<Department> departments,
 			final Class<?> exceptionClass,
 			final String exceptionMessage,
@@ -394,11 +576,11 @@ class CommandFacadeUnhappyPathTest {
 						"The object '%s' has conflict(s)", elementHasConflictParams));
 	}
 
-	@Order(7)
+	@Order(14)
 	@ParameterizedTest(name = "Pos {index} : id department ''{0}'', exception ''{1}''")
 	@MethodSource("createInvalidDeleteByIdData")
-	@DisplayName("Try to delete entity by id test")
-	void invalidDeleteByIdTest(
+	@DisplayName("Given an entity with invalid data when delete by id then throw exception")
+	void givenEntityWithInvalidData_whenDeleteById_thenThrowException(
 			final String departmentId,
 			final Class<?> exceptionClass,
 			final String exceptionMessage,
@@ -452,11 +634,11 @@ class CommandFacadeUnhappyPathTest {
 						elementHasConflictParams));
 	}
 
-	@Order(8)
+	@Order(15)
 	@ParameterizedTest(name = "Pos {index} : id department ''{0}'', exception ''{1}''")
 	@MethodSource("createInvalidDeleteAllByIdData")
-	@DisplayName("Try to delete all entities by id test")
-	void invalidDeleteAllByIdTest(
+	@DisplayName("Given a collection of entities with invalid data when delete all by id then throw exception")
+	void givenEntitiesWithInvalidData_whenDeleteAllById_thenThrowException(
 			final List<String> departmentIds,
 			final Class<?> exceptionClass,
 			final String exceptionMessage,

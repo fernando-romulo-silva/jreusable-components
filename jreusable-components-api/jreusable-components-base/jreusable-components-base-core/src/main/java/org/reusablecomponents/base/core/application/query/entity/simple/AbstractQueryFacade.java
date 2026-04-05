@@ -22,6 +22,25 @@ import org.slf4j.LoggerFactory;
 
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * Abstract class for query facades, providing common functionality for
+ * handling pre, post, and error functions for various query operations.
+ * 
+ * Used by QueryFacade, but can be extended by the user to create custom facades
+ * with additional functionality.
+ * 
+ * @param <Entity>         The entity type
+ * @param <Id>             The entity id type
+ * @param <QueryIdIn>      The input id type for the find by id and exists by id
+ *                         operations
+ * @param <OneResult>      The result type for the find by id operation
+ * @param <MultipleResult> The result type for the find all operation
+ * @param <CountResult>    The result type for the count all operation
+ * @param <ExistsResult>   The result type for the exists all and exists by id
+ *                         operations
+ * @author Fernando Romulo da Silva
+ * @since 1.0
+ */
 public abstract sealed class AbstractQueryFacade< // generics
         // default
         Entity extends AbstractEntity<Id>, Id, // basic
@@ -103,15 +122,15 @@ public abstract sealed class AbstractQueryFacade< // generics
     protected final PreExistsAllFunction preExistsAllFunction;
 
     /**
-     * Funcion executed in {@link QueryFacade#existsAll(Object...) existsAll} method
-     * after {@link QueryFacade#existsAllFunction existsAllFunction}, use it to
-     * configure, change, etc. the output.
+     * Function executed in {@link QueryFacade#existsAll(Object...) existsAll}
+     * method after {@link QueryFacade#existsAllFunction existsAllFunction}, use it
+     * to configure, change, etc. the output.
      */
     protected final PosExistsAllFunction<ExistsResult> posExistsAllFunction;
 
     /**
      * Function executed in {@link QueryFacade#existsAll(Object...) existsAll}
-     * method to handle link QueryFacade#existsAllFunction existsAllFunction}
+     * method to handle {@link QueryFacade#existsAllFunction existsAllFunction}
      * errors.
      */
     protected final ErrorExistsAllFunction errorExistsAllFunction;

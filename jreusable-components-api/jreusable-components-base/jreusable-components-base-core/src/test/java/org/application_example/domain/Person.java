@@ -1,16 +1,15 @@
 package org.application_example.domain;
 
-import static org.reusablecomponents.base.core.infra.util.AbstractValidatorTest.VALIDATOR;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+import org.application_example.infra.Utils;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.domain.AbstractEntityBuilder;
 
-import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -49,9 +48,7 @@ public class Person extends AbstractEntity<Long> {
     }
 
     private Person(@NotNull final Builder builder) {
-
         super();
-
         this.id = builder.id;
         this.name = builder.name;
         this.createdReason = builder.createdReason;
@@ -61,6 +58,11 @@ public class Person extends AbstractEntity<Long> {
         this.score = builder.score;
         this.gender = builder.gender;
         this.hobbies.addAll(builder.hobbies);
+    }
+
+    @Override
+    protected Optional<Validator> getValidator() {
+        return Optional.of(Utils.VALIDATOR);
     }
 
     // -------------------- getters
@@ -112,16 +114,9 @@ public class Person extends AbstractEntity<Long> {
 
         public Gender gender;
 
-        @NotNull
-        @Valid
         @Override
-        public Person build() {
-            return validate(new Person(this));
-        }
-
-        @Override
-        protected Validator getValidator() {
-            return VALIDATOR;
+        protected Person createInstance() {
+            return new Person(this);
         }
     }
 }

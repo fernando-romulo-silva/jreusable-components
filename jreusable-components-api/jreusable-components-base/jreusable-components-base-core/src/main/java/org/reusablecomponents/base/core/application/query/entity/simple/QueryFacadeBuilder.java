@@ -17,6 +17,16 @@ import org.slf4j.LoggerFactory;
 /**
  * The <code>EntityQueryFacade</code> builder's class.
  * 
+ * This class is responsible for building the <code>QueryFacade</code> object.
+ * 
+ * For each function in this class, if it is not set, it will be set with a
+ * default function that throws an UnsupportedOperationException with a message
+ * that the function is not implemented, example: "Unimplemented function
+ * 'findByIdFunction'".
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0
+ * 
  * @see QueryFacade
  */
 public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
@@ -53,7 +63,21 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	/**
 	 * Default constructor.
 	 * 
-	 * @param function Consumer function
+	 * @param function Consumer function, can't be null, used to set the builder
+	 *                 attributes with a lambda expression, example:
+	 * 
+	 *                 <pre>
+	 *                 new QueryFacadeBuilder&lt;Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult&gt;(
+	 *                 		builder -&gt; {
+	 *                 			builder.findByIdFunction = (queryIdIn, directives) -&gt; {
+	 *                 				// implementation of the find by id operation in the persistence layer.
+	 *                 			};
+	 *                 			builder.findAllFunction = directives -&gt; {
+	 *                 				// implementation of the find all operation in the persistence layer.
+	 *                 			};
+	 *                 			// set other functions...
+	 *                 		});
+	 *                 </pre>
 	 */
 	public QueryFacadeBuilder(
 			final Consumer<QueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>> function) {
@@ -71,6 +95,15 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 						existsAllFunction));
 	}
 
+	/**
+	 * Build the <code>QueryFacade</code> object, using the attributes set in this
+	 * builder. if exists functions that are not set, the builder will set them with
+	 * a default function that throws an UnsupportedOperationException with a
+	 * message that the function is not implemented, example: "Unimplemented
+	 * function 'findByIdFunction'".
+	 * 
+	 * @return A <code>QueryFacade</code> object
+	 */
 	private ExistsAllFunction<ExistsResult> getExistsAllFunction() {
 		return nonNull(existsAllFunction)
 				? existsAllFunction

@@ -8,10 +8,11 @@ import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 
 /**
- * Class design mainly to execute tests.
+ * Class design mainly create facade don't need to implement any method, just
+ * need to extend this class and inject the services in the constructor, then
+ * you can use the facade without any implementation.
  */
-public non-sealed class EmptyFacade<Entity extends AbstractEntity<Id>, Id>
-		extends BaseFacade<Entity, Id> {
+public non-sealed class EmptyFacade<Entity extends AbstractEntity<Id>, Id> extends BaseFacade<Entity, Id> {
 
 	/**
 	 * Constructor with parameters

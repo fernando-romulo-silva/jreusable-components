@@ -1,13 +1,13 @@
 package org.application_example.domain;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
+import org.application_example.infra.Utils;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.domain.AbstractEntityBuilder;
 
-import jakarta.validation.Valid;
 import jakarta.validation.Validator;
-import jakarta.validation.constraints.NotNull;
 
 public class Notification extends AbstractEntity<Long> {
 
@@ -63,16 +63,9 @@ public class Notification extends AbstractEntity<Long> {
 
         public LocalDateTime dateTime;
 
-        @NotNull
-        @Valid
         @Override
-        public Notification build() {
-            return validate(new Notification(this));
-        }
-
-        @Override
-        public Validator getValidator() {
-            return null;
+        protected Notification createInstance() {
+            return new Notification(this);
         }
     }
 }
