@@ -116,7 +116,9 @@ public non-sealed class QueryFacade< // generics
 	/**
 	 * Default constructor, used by the builder to construct this class.
 	 * 
-	 * @param builder Object in charge to construct this one
+	 * @param builder Object in charge to construct this one, can't be null
+	 * 
+	 * @throws NullPointerException if the builder is null
 	 * 
 	 * @see QueryFacadeBuilder
 	 */

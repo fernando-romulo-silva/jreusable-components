@@ -197,6 +197,8 @@ public abstract sealed class AbstractQueryFacade< // generics
      * 
      * @param builder The builder used to construct this class, can't be null
      * 
+     * @throws NullPointerException if the builder is null
+     * 
      * @see AbstractQueryFacadeBuilder
      */
     protected AbstractQueryFacade(

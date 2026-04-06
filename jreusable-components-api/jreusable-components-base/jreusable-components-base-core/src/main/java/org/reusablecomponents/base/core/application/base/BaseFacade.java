@@ -117,6 +117,9 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * Default constructor, used by the builder to construct this class.
 	 * 
 	 * @param builder Object constructor, can't be null
+	 * 
+	 * @throws NullPointerException if the builder is null
+	 * 
 	 * @see BaseFacadeBuilder
 	 */
 	protected BaseFacade(@NotNull final BaseFacadeBuilder builder) {
