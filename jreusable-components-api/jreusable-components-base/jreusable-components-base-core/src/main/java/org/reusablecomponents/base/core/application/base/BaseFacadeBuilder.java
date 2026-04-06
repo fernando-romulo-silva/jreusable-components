@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The <code>EntiyBaseFacade</code> builder's class.
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0
  */
 public class BaseFacadeBuilder {
 
@@ -39,9 +42,10 @@ public class BaseFacadeBuilder {
 	public InterfaceExceptionAdapterService exceptionAdapterService;
 
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 * 
-	 * @param function Consumer function
+	 * @param function Consumer function, can't be null, used to set the builder
+	 *                 attributes
 	 */
 	public BaseFacadeBuilder(final Consumer<? extends BaseFacadeBuilder> function) {
 		LOGGER.atDebug().log("Constructing BaseFacadeBuilder");

@@ -10,25 +10,27 @@ import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotF
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Interface responsible for establishing contracts to retrieve objects, common
- * operations to all projects.
+ * Interface responsible for establishing contracts to retrieve entities from
+ * the persistence mechanism. This interface is designed to be implemented by
+ * facades that provide query operations for entities.
  * 
  * @param <Entity>         The entity type
  * @param <Id>             The entity id type
- * 
- * @param <QueryIdIn>      The entity Id used in the query
- * 
+ * @param <QueryIdIn>      The input id type for the find by id and exists by id
  * @param <OneResult>      The one-result type, like the entity or wrap type
  *                         like Mono<Entity>
  * @param <MultipleResult> The multiple-result type, like List<Entity>,
  *                         Iterable<Entity>, or a wrap type like
- * @param <CountResult>    The count-result type
- * @param <ExistsResult>   The exist-result type
+ *                         Mono<List<Entity>>
+ * @param <CountResult>    The count-result type, like Long, Integer, or a wrap
+ *                         type like Mono<Long>
+ * @param <ExistsResult>   The exist-result type, like Boolean or a wrap type
+ *                         like Mono<Boolean>
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0
- * @see InterfaceBaseFacade
  * 
+ * @see InterfaceBaseFacade
  */
 public non-sealed interface InterfaceQueryFacade<Entity extends AbstractEntity<Id>, Id, // basic
 		QueryIdIn, // input id

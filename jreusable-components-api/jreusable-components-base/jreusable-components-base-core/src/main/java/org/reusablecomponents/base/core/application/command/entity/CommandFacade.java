@@ -3,30 +3,12 @@ package org.reusablecomponents.base.core.application.command.entity;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.reusablecomponents.base.core.application.command.entity.function.delete.DeleteFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.ErrorDeleteFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.PosDeleteFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete.PreDeleteFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.delete_all.DeleteAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete_all.ErrorDeleteAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete_all.PosDeleteAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete_all.PreDeleteAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id.DeleteByIdFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id.ErrorDeleteByIdFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id.PosDeleteByIdFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id.PreDeleteByIdFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id_all.DeleteByIdsFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id_all.ErrorDeleteByIdsFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id_all.PosDeleteByIdsFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.delete_by_id_all.PreDeleteByIdsFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.save.SaveFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.save_all.SaveAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update.ErrorUpdateFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update.PosUpdateFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update.PreUpdateFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update.UpdateFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update_all.ErrorUpdateAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update_all.PosUpdateAllFunction;
-import org.reusablecomponents.base.core.application.command.entity.function.update_all.PreUpdateAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.UpdateAllFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
@@ -35,7 +17,61 @@ import org.slf4j.LoggerFactory;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * The default <code>InterfaceEntityCommandFacade</code>'s implementation.
+ * The default <code>InterfaceCommandFacade</code>'s implementation.
+ * 
+ * <p>
+ * This class provides default implementations for the basic command operations:
+ * <ul>
+ * <li>save</li>
+ * <li>save all</li>
+ * <li>update</li>
+ * <li>update all</li>
+ * <li>delete</li>
+ * <li>delete all</li>
+ * <li>delete by id</li>
+ * <li>delete by ids</li>
+ * </ul>
+ * <p>
+ * 
+ * @param <Entity>            The entity type
+ * @param <Id>                The entity id type
+ * @param <SaveEntityIn>      The input type for the save operation
+ * @param <SaveEntityOut>     The output type for the save operation
+ * 
+ * @param <SaveEntitiesIn>    The input type for the save all operation (bulk
+ *                            version)
+ * @param <SaveEntitiesOut>   The output type for the save all operation (bulk
+ *                            version)
+ * 
+ * @param <UpdateEntityIn>    The input type for the update operation
+ * @param <UpdateEntityOut>   The output type for the update operation
+ * 
+ * @param <UpdateEntitiesIn>  The input type for the update all operation (bulk
+ *                            version)
+ * @param <UpdateEntitiesOut> The output type for the update all operation (bulk
+ *                            version)
+ * @param <DeleteEntityIn>    The input type for the delete operation
+ * @param <DeleteEntityOut>   The output type for the delete operation
+ * 
+ * @param <DeleteEntitiesIn>  The input type for the delete all operation (bulk
+ *                            version)
+ * @param <DeleteEntitiesOut> The output type for the delete all operation (bulk
+ *                            version)
+ * 
+ * @param <DeleteIdIn>        The input type for the delete by id operation
+ * @param <DeleteIdOut>       The output type for the delete by id operation
+ * 
+ * @param <DeleteIdsIn>       The input type for the delete by ids operation
+ *                            (bulk
+ *                            version)
+ * @param <DeleteIdsOut>      The output type for the delete by ids operation
+ *                            (bulk
+ *                            version)
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0
+ * @see AbstractCommandFacade
+ * @see InterfaceCommandFacade
  */
 public non-sealed class CommandFacade< // generics
 		// default
@@ -140,13 +176,19 @@ public non-sealed class CommandFacade< // generics
 	protected final DeleteByIdsFunction<DeleteIdsIn, DeleteIdsOut> deleteByIdsFunction;
 
 	/**
-	 * Default constructior
+	 * Default constructor, used by the builder to construct this class.
 	 * 
-	 * @param builder Object in charge to construct this one
+	 * @param builder Object in charge to construct this one, it cannot be null
+	 * 
+	 * @throws NullPointerException if the builder is null
+	 * 
+	 * @see CommandFacadeBuilder
 	 */
 	protected CommandFacade(
 			final CommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> builder) {
+		LOGGER.atDebug().log("Creating Command Facade with builder {}", builder);
 		super(builder);
+
 		this.saveFunction = builder.saveFunction;
 		this.saveAllFunction = builder.saveAllFunction;
 		this.updateFunction = builder.updateFunction;
@@ -226,27 +268,9 @@ public non-sealed class CommandFacade< // generics
 	}
 
 	@NotNull
-	protected PreUpdateFunction<UpdateEntityIn> getPreUpdateFunction() {
-		LOGGER.atDebug().log("Returning pre update function {}", preUpdateFunction.getName());
-		return preUpdateFunction;
-	}
-
-	@NotNull
 	protected UpdateFunction<UpdateEntityIn, UpdateEntityOut> getUpdateFunction() {
 		LOGGER.atDebug().log("Returning update function {}", updateFunction.getName());
 		return updateFunction;
-	}
-
-	@NotNull
-	protected PosUpdateFunction<UpdateEntityOut> getPosUpdateFunction() {
-		LOGGER.atDebug().log("Returning pos update function {}", posUpdateFunction.getName());
-		return posUpdateFunction;
-	}
-
-	@NotNull
-	protected ErrorUpdateFunction<UpdateEntityIn> getErrorUpdateFunction() {
-		LOGGER.atDebug().log("Returning error update function {}", errorUpdateFunction.getName());
-		return errorUpdateFunction;
 	}
 
 	/**
@@ -269,27 +293,9 @@ public non-sealed class CommandFacade< // generics
 	}
 
 	@NotNull
-	protected PreUpdateAllFunction<UpdateEntitiesIn> getPreUpdateAllFunction() {
-		LOGGER.atDebug().log("Returning pre update all function {}", preUpdateAllFunction.getName());
-		return preUpdateAllFunction;
-	}
-
-	@NotNull
 	protected UpdateAllFunction<UpdateEntitiesIn, UpdateEntitiesOut> getUpdateAllFunction() {
 		LOGGER.atDebug().log("Returning update all function {}", updateAllFunction.getName());
 		return updateAllFunction;
-	}
-
-	@NotNull
-	protected PosUpdateAllFunction<UpdateEntitiesOut> getPosUpdateAllFunction() {
-		LOGGER.atDebug().log("Returning pos update all function {}", posUpdateAllFunction.getName());
-		return posUpdateAllFunction;
-	}
-
-	@NotNull
-	protected ErrorUpdateAllFunction<UpdateEntitiesIn> getErrorUpdateAllFunction() {
-		LOGGER.atDebug().log("Returning error update all function {}", errorUpdateAllFunction.getName());
-		return errorUpdateAllFunction;
 	}
 
 	/**
@@ -310,27 +316,9 @@ public non-sealed class CommandFacade< // generics
 	}
 
 	@NotNull
-	protected PreDeleteFunction<DeleteEntityIn> getPreDeleteFunction() {
-		LOGGER.atDebug().log("Returning pre delete function {}", preDeleteFunction.getName());
-		return preDeleteFunction;
-	}
-
-	@NotNull
 	protected DeleteFunction<DeleteEntityIn, DeleteEntityOut> getDeleteFunction() {
 		LOGGER.atDebug().log("Returning delete function {}", deleteFunction.getName());
 		return deleteFunction;
-	}
-
-	@NotNull
-	protected PosDeleteFunction<DeleteEntityOut> getPosDeleteFunction() {
-		LOGGER.atDebug().log("Returning pos delete function {}", posDeleteFunction.getName());
-		return posDeleteFunction;
-	}
-
-	@NotNull
-	protected ErrorDeleteFunction<DeleteEntityIn> getErrorDeleteFunction() {
-		LOGGER.atDebug().log("Returning error delete function {}", errorDeleteFunction.getName());
-		return errorDeleteFunction;
 	}
 
 	/**
@@ -353,27 +341,9 @@ public non-sealed class CommandFacade< // generics
 	}
 
 	@NotNull
-	protected PreDeleteAllFunction<DeleteEntitiesIn> getPreDeleteAllFunction() {
-		LOGGER.atDebug().log("Returning pre delete all function {}", preDeleteAllFunction.getName());
-		return preDeleteAllFunction;
-	}
-
-	@NotNull
 	protected DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut> getDeleteAllFunction() {
 		LOGGER.atDebug().log("Returning delete all function {}", deleteAllFunction.getName());
 		return deleteAllFunction;
-	}
-
-	@NotNull
-	protected PosDeleteAllFunction<DeleteEntitiesOut> getPosDeleteAllFunction() {
-		LOGGER.atDebug().log("Returning pos delete all function {}", posDeleteAllFunction.getName());
-		return posDeleteAllFunction;
-	}
-
-	@NotNull
-	protected ErrorDeleteAllFunction<DeleteEntitiesIn> getErrorDeleteAllFunction() {
-		LOGGER.atDebug().log("Returning error delete all function {}", errorDeleteAllFunction.getName());
-		return errorDeleteAllFunction;
 	}
 
 	/**
@@ -394,27 +364,9 @@ public non-sealed class CommandFacade< // generics
 	}
 
 	@NotNull
-	protected PreDeleteByIdFunction<DeleteIdIn> getPreDeleteByIdFunction() {
-		LOGGER.atDebug().log("Returning pre delete by id function {}", preDeleteByIdFunction.getName());
-		return preDeleteByIdFunction;
-	}
-
-	@NotNull
 	protected DeleteByIdFunction<DeleteIdIn, DeleteIdOut> getDeleteByIdFunction() {
 		LOGGER.atDebug().log("Returning delete by id function {}", deleteByIdFunction.getName());
 		return deleteByIdFunction;
-	}
-
-	@NotNull
-	protected PosDeleteByIdFunction<DeleteIdOut> getPosDeleteByIdFunction() {
-		LOGGER.atDebug().log("Returning pos delete by id function {}", posDeleteByIdFunction.getName());
-		return posDeleteByIdFunction;
-	}
-
-	@NotNull
-	protected ErrorDeleteByIdFunction<DeleteIdIn> getErrorDeleteByIdFunction() {
-		LOGGER.atDebug().log("Returning error delete by id function {}", errorDeleteByIdFunction.getName());
-		return errorDeleteByIdFunction;
 	}
 
 	/**
@@ -435,26 +387,8 @@ public non-sealed class CommandFacade< // generics
 	}
 
 	@NotNull
-	protected PreDeleteByIdsFunction<DeleteIdsIn> getPreDeleteByIdsFunction() {
-		LOGGER.atDebug().log("Returning pre delete by ids function {}", preDeleteByIdsFunction.getName());
-		return preDeleteByIdsFunction;
-	}
-
-	@NotNull
 	protected DeleteByIdsFunction<DeleteIdsIn, DeleteIdsOut> getDeleteByIdsFunction() {
 		LOGGER.atDebug().log("Returning delete by ids function {}", deleteByIdsFunction.getName());
 		return deleteByIdsFunction;
-	}
-
-	@NotNull
-	protected PosDeleteByIdsFunction<DeleteIdsOut> getPosDeleteByIdsFunction() {
-		LOGGER.atDebug().log("Returning pos delete by ids function {}", posDeleteByIdsFunction.getName());
-		return posDeleteByIdsFunction;
-	}
-
-	@NotNull
-	protected ErrorDeleteByIdsFunction<DeleteIdsIn> getErrorDeleteByIdsFunction() {
-		LOGGER.atDebug().log("Returning error delete by ids function {}", errorDeleteByIdsFunction.getName());
-		return errorDeleteByIdsFunction;
 	}
 }

@@ -16,41 +16,37 @@ import com.google.common.reflect.TypeToken;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * The default <code>InterfaceEntityQueryFacade</code>'s implementation.
- * This class is non-sealed, so it can be extended by the user to create custom
- * facades.
+ * The default <code>InterfaceQueryFacade</code>'s implementation.
+ * 
  * <p>
  * This class provides default implementations for the basic query operations:
- * find by id, find all, count all, exists all and exists by id.
+ * <ul>
+ * <li>find by id</li>
+ * <li>find all</li>
+ * <li>count all</li>
+ * <li>exists all</li>
+ * <li>exists by id</li>
+ * </ul>
  * <p>
- * The user can override the default implementations by providing custom
- * functions in the constructor or by overriding the protected methods that
- * return the functions.
- * <p>
- * The user can also override the pre and post functions to add custom behavior
- * before and after the execution of the main functions.
  * 
  * @param <Entity>         The entity type
  * @param <Id>             The entity id type
  * @param <QueryIdIn>      The input id type for the find by id and exists by id
- *                         operations
- * @param <OneResult>      The result type for the find by id operation
- * @param <MultipleResult> The result type for the find all operation
- * @param <CountResult>    The result type for the count all operation
- * @param <ExistsResult>   The result type for the exists all and exists by id
- *                         operations
+ * @param <OneResult>      The one-result type, like the entity or wrap type
+ *                         like Mono<Entity>
+ * @param <MultipleResult> The multiple-result type, like List<Entity>,
+ *                         Iterable<Entity>, or a wrap type like
+ *                         Mono<List<Entity>>
+ * @param <CountResult>    The count-result type, like Long, Integer, or a wrap
+ *                         type like Mono<Long>
+ * @param <ExistsResult>   The exist-result type, like Boolean or a wrap type
+ *                         like Mono<Boolean>
+ * 
  * @author Fernando Romulo da Silva
  * @since 1.0
  * 
- * @see InterfaceQueryFacade
  * @see AbstractQueryFacade
- * 
- * @see QueryFacadeBuilder
- * @see FindByIdFunction
- * @see FindAllFunction
- * @see CountAllFunction
- * @see ExistsAllFunction
- * @see ExistsByIdFunction
+ * @see InterfaceQueryFacade
  */
 public non-sealed class QueryFacade< // generics
 		// default
@@ -74,30 +70,40 @@ public non-sealed class QueryFacade< // generics
 	/**
 	 * Function that executes the find by id operation in the
 	 * {@link #findById(Object, Object...) findById} method
+	 * 
+	 * @see FindByIdFunction
 	 */
 	protected final FindByIdFunction<QueryIdIn, OneResult> findByIdFunction;
 
 	/**
 	 * Function that executes the find all operation in the
 	 * {@link #findAll(Object...) findAll} method
+	 * 
+	 * @see FindAllFunction
 	 */
 	protected final FindAllFunction<MultipleResult> findAllFunction;
 
 	/**
 	 * Function that executes the count all operation in the
 	 * {@link #countAll(Object...) countAll} method
+	 * 
+	 * @see CountAllFunction
 	 */
 	protected final CountAllFunction<CountResult> countAllFunction;
 
 	/**
 	 * Function that executes the exists all operation in the
 	 * {@link #existsAll(Object...) existsAll} method
+	 * 
+	 * @see ExistsAllFunction
 	 */
 	protected final ExistsAllFunction<ExistsResult> existsAllFunction;
 
 	/**
 	 * Function that executes the exists by id operation in the
 	 * {@link #existsById(Object, Object...) existsById} method
+	 * 
+	 * @see ExistsByIdFunction
 	 */
 	protected final ExistsByIdFunction<QueryIdIn, ExistsResult> existsByIdFunction;
 
@@ -111,9 +117,12 @@ public non-sealed class QueryFacade< // generics
 	 * Default constructor, used by the builder to construct this class.
 	 * 
 	 * @param builder Object in charge to construct this one
+	 * 
+	 * @see QueryFacadeBuilder
 	 */
 	protected QueryFacade(
 			final QueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> builder) {
+		LOGGER.atDebug().log("Creating Query Facade with builder {}", builder);
 		super(builder);
 		this.existsByIdFunction = builder.existsByIdFunction;
 		this.findByIdFunction = builder.findByIdFunction;
@@ -121,6 +130,7 @@ public non-sealed class QueryFacade< // generics
 		this.countAllFunction = builder.countAllFunction;
 		this.existsAllFunction = builder.existsAllFunction;
 		this.queryIdInClazz = retrieveQueryIdClazz();
+		LOGGER.atDebug().log("Query Facade created with builder {}", builder);
 	}
 
 	@SuppressWarnings("unchecked")

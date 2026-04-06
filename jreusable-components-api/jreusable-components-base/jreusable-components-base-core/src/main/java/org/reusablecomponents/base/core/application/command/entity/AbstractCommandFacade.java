@@ -32,7 +32,48 @@ import org.slf4j.LoggerFactory;
 import jakarta.validation.constraints.NotNull;
 
 /**
+ * Abstract class for command facades, providing common functionality for
+ * handling pre, post, and error functions for various command operations.
  * 
+ * @param <Entity>            The entity type
+ * @param <Id>                The entity id type
+ * @param <SaveEntityIn>      The input type for the save operation
+ * @param <SaveEntityOut>     The output type for the save operation
+ * 
+ * @param <SaveEntitiesIn>    The input type for the save all operation (bulk
+ *                            version)
+ * @param <SaveEntitiesOut>   The output type for the save all operation (bulk
+ *                            version)
+ * 
+ * @param <UpdateEntityIn>    The input type for the update operation
+ * @param <UpdateEntityOut>   The output type for the update operation
+ * 
+ * @param <UpdateEntitiesIn>  The input type for the update all operation (bulk
+ *                            version)
+ * @param <UpdateEntitiesOut> The output type for the update all operation (bulk
+ *                            version)
+ * @param <DeleteEntityIn>    The input type for the delete operation
+ * @param <DeleteEntityOut>   The output type for the delete operation
+ * 
+ * @param <DeleteEntitiesIn>  The input type for the delete all operation (bulk
+ *                            version)
+ * @param <DeleteEntitiesOut> The output type for the delete all operation (bulk
+ *                            version)
+ * 
+ * @param <DeleteIdIn>        The input type for the delete by id operation
+ * @param <DeleteIdOut>       The output type for the delete by id operation
+ * 
+ * @param <DeleteIdsIn>       The input type for the delete by ids operation
+ *                            (bulk
+ *                            version)
+ * @param <DeleteIdsOut>      The output type for the delete by ids operation
+ *                            (bulk
+ *                            version)
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0
+ * 
+ * @see BaseFacade
  */
 public abstract sealed class AbstractCommandFacade< // generics
 		// default
@@ -58,6 +99,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#save(Object, Object...) save}
 	 * method before the {@link CommandFacade#saveFunction saveFunction}, use it to
 	 * configure, change, etc. the saveEntityIn object.
+	 * 
+	 * @see PreSaveFunction
 	 */
 	protected final PreSaveFunction<SaveEntityIn> preSaveFunction;
 
@@ -65,12 +108,16 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#save(Object, Object...) save}
 	 * method after {@link CommandFacade#saveFunction saveFunction}, use it to
 	 * configure, change, etc. the saveEntityOut object.
+	 * 
+	 * @see PosSaveFunction
 	 */
 	protected final PosSaveFunction<SaveEntityOut> posSaveFunction;
 
 	/**
 	 * Function executed in {@link CommandFacade#save(Object, Object...) save}
 	 * method to handle {@link CommandFacade#saveFunction saveFunction} errors.
+	 * 
+	 * @see ErrorSaveFunction
 	 */
 	protected final ErrorSaveFunction<SaveEntityIn> errorSaveFunction;
 
@@ -78,6 +125,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#saveAll(Object, Object...) saveAll}
 	 * method before the {@link CommandFacade#saveAllFunction saveAllFunction}, use
 	 * it to configure, change, * etc. the input.
+	 * 
+	 * @see PreSaveAllFunction
 	 */
 	protected final PreSaveAllFunction<SaveEntitiesIn> preSaveAllFunction;
 
@@ -85,6 +134,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#saveAll(Object, Object...) saveAll}
 	 * method after {@link CommandFacade#saveAllFunction saveAllFunction}, use it to
 	 * configure, change, etc. the output.
+	 * 
+	 * @see PosSaveAllFunction
 	 */
 	protected final PosSaveAllFunction<SaveEntitiesOut> posSaveAllFunction;
 
@@ -92,6 +143,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#saveAll(Object, Object...) saveAll}
 	 * method to handle {@link CommandFacade#saveAllFunction saveAllFunction}
 	 * errors.
+	 * 
+	 * @see ErrorSaveAllFunction
 	 */
 	protected final ErrorSaveAllFunction<SaveEntitiesIn> errorSaveAllFunction;
 
@@ -99,6 +152,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#update(Object, Object...) update}
 	 * method before the {@link CommandFacade#updateFunction updateFunction}, use it
 	 * to configure, change, etc. the input.
+	 * 
+	 * @see PreUpdateFunction
 	 */
 	protected final PreUpdateFunction<UpdateEntityIn> preUpdateFunction;
 
@@ -106,12 +161,16 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#update(Object, Object...) update}
 	 * method after {@link CommandFacade#updateFunction updateFunction}, use it to
 	 * configure, change, etc. the output.
+	 * 
+	 * @see PosUpdateFunction
 	 */
 	protected final PosUpdateFunction<UpdateEntityOut> posUpdateFunction;
 
 	/**
 	 * Function executed in {@link CommandFacade#update(Object, Object...) update}
 	 * method to handle {@link CommandFacade#updateFunction updateFunction} errors.
+	 * 
+	 * @see ErrorUpdateFunction
 	 */
 	protected final ErrorUpdateFunction<UpdateEntityIn> errorUpdateFunction;
 
@@ -119,6 +178,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#updateAll(Object, Object...)
 	 * updateAll} method before the {@link CommandFacade#updateAllFunction
 	 * updateAllFunction}, use it to change values.
+	 * 
+	 * @see PreUpdateAllFunction
 	 */
 	protected final PreUpdateAllFunction<UpdateEntitiesIn> preUpdateAllFunction;
 
@@ -126,6 +187,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#updateAll(Object, Object...)
 	 * updateAll} method after {@link CommandFacade#updateAllFunction
 	 * updateAllFunction}, use it to configure, change, etc. the output.
+	 * 
+	 * @see PosUpdateAllFunction
 	 */
 	protected final PosUpdateAllFunction<UpdateEntitiesOut> posUpdateAllFunction;
 
@@ -133,6 +196,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#updateAll(Object, Object...)
 	 * updateAll} method to handle {@link CommandFacade#updateAllFunction
 	 * updateAllFunction} errors.
+	 * 
+	 * @see ErrorUpdateAllFunction
 	 */
 	protected final ErrorUpdateAllFunction<UpdateEntitiesIn> errorUpdateAllFunction;
 
@@ -140,6 +205,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#delete(Object, Object...) delete}
 	 * method before the {@link CommandFacade#deleteFunction deleteFunction}, use it
 	 * to configure, change, etc. the input.
+	 * 
+	 * @see PreDeleteFunction
 	 */
 	protected final PreDeleteFunction<DeleteEntityIn> preDeleteFunction;
 
@@ -147,12 +214,16 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#delete(Object, Object...) delete}
 	 * method after {@link CommandFacade#deleteFunction deleteFunction}, use it to
 	 * configure, change, etc. the output.
+	 * 
+	 * @see PosDeleteFunction
 	 */
 	protected final PosDeleteFunction<DeleteEntityOut> posDeleteFunction;
 
 	/**
 	 * Function executed in {@link CommandFacade#delete(Object, Object...) delete}
 	 * method to handle {@link CommandFacade#deleteFunction deleteFunction} errors.
+	 * 
+	 * @see ErrorDeleteFunction
 	 */
 	protected final ErrorDeleteFunction<DeleteEntityIn> errorDeleteFunction;
 
@@ -160,6 +231,9 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#deleteAll(Object, Object...)
 	 * deleteAll} method before the {@link CommandFacade#deleteAllFunction
 	 * deleteAllFunction}, use it to change values.
+	 * 
+	 * @see PreDeleteAllFunction
+	 * 
 	 */
 	protected final PreDeleteAllFunction<DeleteEntitiesIn> preDeleteAllFunction;
 
@@ -167,6 +241,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#deleteAll(Object, Object...)
 	 * deleteAll} method after {@link CommandFacade#deleteAllFunction
 	 * deleteAllFunction}, use it to configure, change, etc. the output.
+	 * 
+	 * @see PosDeleteAllFunction
 	 */
 	protected final PosDeleteAllFunction<DeleteEntitiesOut> posDeleteAllFunction;
 
@@ -174,6 +250,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#deleteAll(Object, Object...)
 	 * deleteAll} method to handle {@link CommandFacade#deleteAllFunction
 	 * deleteAllFunction} errors.
+	 * 
+	 * @see ErrorDeleteAllFunction
 	 */
 	protected final ErrorDeleteAllFunction<DeleteEntitiesIn> errorDeleteAllFunction;
 
@@ -181,6 +259,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#deleteBy(Object, Object...)
 	 * deleteBy} method before the {@link CommandFacade#deleteByIdFunction
 	 * deleteByIdFunction}, use it to change values.
+	 * 
+	 * @see PreDeleteByIdFunction
 	 */
 	protected final PreDeleteByIdFunction<DeleteIdIn> preDeleteByIdFunction;
 
@@ -188,6 +268,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#deleteBy(Object, Object...)
 	 * deleteBy} method after {@link CommandFacade#deleteByIdFunction
 	 * deleteByIdFunction}, use it to configure, change, etc. the input.
+	 * 
+	 * @see PosDeleteByIdFunction
 	 */
 	protected final PosDeleteByIdFunction<DeleteIdOut> posDeleteByIdFunction;
 
@@ -195,6 +277,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#deleteBy(Object, Object...)
 	 * deleteBy} method to handle {@link CommandFacade#deleteByIdFunction
 	 * deleteByIdFunction} errors.
+	 * 
+	 * @see ErrorDeleteByIdFunction
 	 */
 	protected final ErrorDeleteByIdFunction<DeleteIdIn> errorDeleteByIdFunction;
 
@@ -202,6 +286,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#deleteAllBy(Object, Object...)
 	 * deleteAllBy} method before the {@link CommandFacade#deleteByIdsFunction
 	 * deleteAllByIdFunction}, use it to configure, change, etc. the input.
+	 * 
+	 * @see PreDeleteByIdsFunction
 	 */
 	protected final PreDeleteByIdsFunction<DeleteIdsIn> preDeleteByIdsFunction;
 
@@ -209,6 +295,8 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#deleteAllBy(Object, Object...)
 	 * deleteAllBy} method after {@link CommandFacade#deleteByIdsFunction
 	 * deleteAllByIdFunction}, use it to change values.
+	 * 
+	 * @see PosDeleteByIdsFunction
 	 */
 	protected final PosDeleteByIdsFunction<DeleteIdsOut> posDeleteByIdsFunction;
 
@@ -216,13 +304,17 @@ public abstract sealed class AbstractCommandFacade< // generics
 	 * Function executed in {@link CommandFacade#deleteAllBy(Object, Object...)
 	 * deleteAllBy} method to handle {@link CommandFacade#deleteByIdsFunction
 	 * deleteAllByIdFunction} errors.
+	 * 
+	 * @see ErrorDeleteByIdsFunction
 	 */
 	protected final ErrorDeleteByIdsFunction<DeleteIdsIn> errorDeleteByIdsFunction;
 
 	/**
-	 * Default constructor
+	 * Default constructor, used by the builder to construct this class.
 	 * 
-	 * @param builder
+	 * @param builder Object constructor, can't be null
+	 * 
+	 * @see AbstractCommandFacadeBuilder
 	 */
 	protected AbstractCommandFacade(
 			@NotNull final AbstractCommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> builder) {

@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotNull;
 /**
  * Base facade interface for all interfaces.
  * 
+ * 
  * @param <Entity> The facade entity type
  * @param <Id>     The facade entity id type
  * 

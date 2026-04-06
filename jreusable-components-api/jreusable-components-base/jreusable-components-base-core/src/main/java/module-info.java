@@ -32,6 +32,12 @@ open module org.reusablecomponent.base.core {
 
     // -- queries facades
     exports org.reusablecomponents.base.core.application.query.entity.simple;
+    exports org.reusablecomponents.base.core.application.query.entity.simple.function.find_all;
+    exports org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id;
+    exports org.reusablecomponents.base.core.application.query.entity.simple.function.exists_by_id;
+    exports org.reusablecomponents.base.core.application.query.entity.simple.function.exists_all;
+    exports org.reusablecomponents.base.core.application.query.entity.simple.function.count_all;
+
     exports org.reusablecomponents.base.core.application.query.entity.pagination;
     exports org.reusablecomponents.base.core.application.query.entity.paginationspecification;
     exports org.reusablecomponents.base.core.application.query.entity.specification;

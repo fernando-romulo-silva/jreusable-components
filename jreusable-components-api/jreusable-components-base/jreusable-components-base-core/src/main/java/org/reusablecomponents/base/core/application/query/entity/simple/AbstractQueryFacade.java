@@ -32,14 +32,20 @@ import jakarta.validation.constraints.NotNull;
  * @param <Entity>         The entity type
  * @param <Id>             The entity id type
  * @param <QueryIdIn>      The input id type for the find by id and exists by id
- *                         operations
- * @param <OneResult>      The result type for the find by id operation
- * @param <MultipleResult> The result type for the find all operation
- * @param <CountResult>    The result type for the count all operation
- * @param <ExistsResult>   The result type for the exists all and exists by id
- *                         operations
+ * @param <OneResult>      The one-result type, like the entity or wrap type
+ *                         like Mono<Entity>
+ * @param <MultipleResult> The multiple-result type, like List<Entity>,
+ *                         Iterable<Entity>, or a wrap type like
+ *                         Mono<List<Entity>>
+ * @param <CountResult>    The count-result type, like Long, Integer, or a wrap
+ *                         type like Mono<Long>
+ * @param <ExistsResult>   The exist-result type, like Boolean or a wrap type
+ *                         like Mono<Boolean>
+ * 
  * @author Fernando Romulo da Silva
  * @since 1.0
+ * 
+ * @see QueryFacade
  */
 public abstract sealed class AbstractQueryFacade< // generics
         // default
@@ -57,6 +63,8 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Function executed in {@link QueryFacade#findById(Object, Object...) findById}
      * method before the {@link QueryFacade#findByIdFunction findByIdFunction}, use
      * it to configure, change, etc. the queryIdIn object.
+     * 
+     * @see PreFindByIdFunction
      */
     protected final PreFindByIdFunction<QueryIdIn> preFindByIdFunction;
 
@@ -64,6 +72,8 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Function executed in {@link QueryFacade#findById(Object, Object...) findById}
      * method after the {@link QueryFacade#findByIdFunction findByIdFunction}, use
      * it to configure, change, etc. the oneResult object.
+     * 
+     * @see PosFindByIdFunction
      */
     protected final PosFindByIdFunction<OneResult> posFindByIdFunction;
 
@@ -71,6 +81,8 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Function executed in {@link QueryFacade#findById(Object, Object...) findById}
      * method to handle {@link QueryFacade#findByIdFunction findByIdFunction}
      * errors.
+     * 
+     * @see ErrorFindByIdFunction
      */
     protected final ErrorFindByIdFunction<QueryIdIn> errorFindByIdFunction;
 
@@ -78,6 +90,8 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Function executed in {@link QueryFacade#findAll(Object...) findAll} method
      * before the {@link QueryFacade#findAllFunction findAllFunction}, use it to
      * execute pre operations for find all operation.
+     * 
+     * @see PreFindAllFunction
      */
     protected final PreFindAllFunction preFindAllFunction;
 
@@ -85,12 +99,16 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Function executed in {@link QueryFacade#findAll(Object...) findAll} method
      * after {@link QueryFacade#findAllFunction findAllFunction}, use it to
      * configure, change, etc. the output.
+     * 
+     * @see PosFindAllFunction
      */
     protected final PosFindAllFunction<MultipleResult> posFindAllFunction;
 
     /**
      * Function executed in {@link QueryFacade#findAll(Object...) findAll} method to
      * handle {@link QueryFacade#findAllFunction findAllFunction} errors.
+     * 
+     * @see ErrorFindAllFunction
      */
     protected final ErrorFindAllFunction errorFindAllFunction;
 
@@ -98,6 +116,8 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Function executed in {@link QueryFacade#countAll(Object...) countAll} method
      * before the {@link QueryFacade#countAllFunction countAllFunction}, use it to
      * configure, change, etc. the input.
+     * 
+     * @see PreCountAllFunction
      */
     protected final PreCountAllFunction preCountAllFunction;
 
@@ -105,12 +125,16 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Function executed in {@link QueryFacade#countAll(Object...) countAll} method
      * after {@link QueryFacade#countAllFunction countAllFunction}, use it to
      * configure, change, etc. the output.
+     * 
+     * @see PosCountAllFunction
      */
     protected final PosCountAllFunction<CountResult> posCountAllFunction;
 
     /**
      * Function executed in {@link QueryFacade#countAll(Object...) countAll} method
      * to handle {@link QueryFacade#countAllFunction countAllFunction} errors.
+     * 
+     * @see ErrorCountAllFunction
      */
     protected final ErrorCountAllFunction errorCountAllFunction;
 
@@ -118,6 +142,8 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Function executed in {@link QueryFacade#existsAll(Object...) #existsAll}
      * method before the {@link QueryFacade#existsAllFunction existsAllFunction},
      * use it to configure, change, etc. the input.
+     * 
+     * @see PreExistsAllFunction
      */
     protected final PreExistsAllFunction preExistsAllFunction;
 
@@ -125,6 +151,8 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Function executed in {@link QueryFacade#existsAll(Object...) existsAll}
      * method after {@link QueryFacade#existsAllFunction existsAllFunction}, use it
      * to configure, change, etc. the output.
+     * 
+     * @see PosExistsAllFunction
      */
     protected final PosExistsAllFunction<ExistsResult> posExistsAllFunction;
 
@@ -132,6 +160,8 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Function executed in {@link QueryFacade#existsAll(Object...) existsAll}
      * method to handle {@link QueryFacade#existsAllFunction existsAllFunction}
      * errors.
+     * 
+     * @see ErrorExistsAllFunction
      */
     protected final ErrorExistsAllFunction errorExistsAllFunction;
 
@@ -139,6 +169,8 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Function executed in {@link QueryFacade#existsById(Object, Object...)
      * #existsById} method before the {@link QueryFacade#existsByIdFunction
      * existsByIdFunction}, use it to configure, change, etc. the input.
+     * 
+     * @see PreExistsByIdFunction
      */
     protected final PreExistsByIdFunction<QueryIdIn> preExistsByIdFunction;
 
@@ -146,6 +178,8 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Function executed in {@link QueryFacade#existsById(Object, Object...)
      * #existsById} method after the {@link QueryFacade#existsByIdFunction
      * existsByIdFunction}, use it to configure, change, etc. the output.
+     * 
+     * @see PosExistsByIdFunction
      */
     protected final PosExistsByIdFunction<ExistsResult> posExistsByIdFunction;
 
@@ -153,9 +187,18 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Function executed in {@link QueryFacade#existsById(Object, Object...)
      * existsById} method to handle {@link QueryFacade#existsByIdFunction
      * existsByIdFunction} errors.
+     * 
+     * @see ErrorExistsByIdFunction
      */
     protected final ErrorExistsByIdFunction<QueryIdIn> errorExistsByIdFunction;
 
+    /**
+     * Default constructor, used by the builder to construct this class.
+     * 
+     * @param builder The builder used to construct this class, can't be null
+     * 
+     * @see AbstractQueryFacadeBuilder
+     */
     protected AbstractQueryFacade(
             @NotNull final AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> builder) {
         LOGGER.atDebug().log("Constructing AbstractQueryFacade");

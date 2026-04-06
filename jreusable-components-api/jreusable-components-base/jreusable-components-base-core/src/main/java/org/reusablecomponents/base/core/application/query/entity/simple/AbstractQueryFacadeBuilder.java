@@ -24,45 +24,140 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * The <code>AbstractQueryFacade</code> builder's class.
+ * This class is responsible for building the <code>AbstractQuery</code> object.
  * 
+ * @param <Entity>         The entity type
+ * @param <Id>             The entity id type
+ * @param <QueryIdIn>      The input id type for the find by id and exists by id
+ * @param <OneResult>      The one-result type, like the entity or wrap type
+ *                         like Mono<Entity>
+ * @param <MultipleResult> The multiple-result type, like List<Entity>,
+ *                         Iterable<Entity>, or a wrap type like
+ *                         Mono<List<Entity>>
+ * @param <CountResult>    The count-result type, like Long, Integer, or a wrap
+ *                         type like Mono<Long>
+ * @param <ExistsResult>   The exist-result type, like Boolean or a wrap type
+ *                         like Mono<Boolean>
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0
  */
-// throw new UnsupportedOperationException("Unimplemented method
-// 'getPosFindAllFunction'");
 public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
         extends BaseFacadeBuilder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractQueryFacadeBuilder.class);
 
+    /**
+     * Function that executes pre-find by id operation
+     * 
+     * @see PreFindByIdFunction
+     */
     public PreFindByIdFunction<QueryIdIn> preFindByIdFunction;
 
+    /**
+     * Function that executes post-find by id operation
+     * 
+     * @see PosFindByIdFunction
+     */
     public PosFindByIdFunction<OneResult> posFindByIdFunction;
 
+    /**
+     * Function that executes error-find by id operation
+     * 
+     * @see ErrorFindByIdFunction
+     */
     public ErrorFindByIdFunction<QueryIdIn> errorFindByIdFunction;
 
+    /**
+     * Function that executes pre-find all operation
+     * 
+     * @see PreFindAllFunction
+     */
     public PreFindAllFunction preFindAllFunction;
 
+    /**
+     * Function that executes post-find all operation
+     * 
+     * @see PosFindAllFunction
+     */
     public PosFindAllFunction<MultipleResult> posFindAllFunction;
 
+    /**
+     * Function that executes error-find all operation
+     * 
+     * @see ErrorFindAllFunction
+     */
     public ErrorFindAllFunction errorFindAllFunction;
 
+    /**
+     * Function that executes pre-count all operation
+     * 
+     * @see PreCountAllFunction
+     */
     public PreCountAllFunction preCountAllFunction;
 
+    /**
+     * Function that executes post-count all operation
+     * 
+     * @see PosCountAllFunction
+     */
     public PosCountAllFunction<CountResult> posCountAllFunction;
 
+    /**
+     * Function that executes error-count all operation
+     * 
+     * @see ErrorCountAllFunction
+     */
     public ErrorCountAllFunction errorCountAllFunction;
 
+    /**
+     * Function that executes pre-exists all operation
+     * 
+     * @see PreExistsAllFunction
+     */
     public PreExistsAllFunction preExistsAllFunction;
 
+    /**
+     * Function that executes post-exists all operation
+     * 
+     * @see PosExistsAllFunction
+     */
     public PosExistsAllFunction<ExistsResult> posExistsAllFunction;
 
+    /**
+     * Function that executes error-exists all operation
+     * 
+     * @see ErrorExistsAllFunction
+     */
     public ErrorExistsAllFunction errorExistsAllFunction;
 
+    /**
+     * Function that executes pre-exists by id operation
+     * 
+     * @see PreExistsByIdFunction
+     */
     public PreExistsByIdFunction<QueryIdIn> preExistsByIdFunction;
 
+    /**
+     * Function that executes post-exists by id operation
+     * 
+     * @see PosExistsByIdFunction
+     */
     public PosExistsByIdFunction<ExistsResult> posExistsByIdFunction;
 
+    /**
+     * Function that executes error-exists by id operation
+     * 
+     * @see ErrorExistsByIdFunction
+     */
     public ErrorExistsByIdFunction<QueryIdIn> errorExistsByIdFunction;
 
+    /**
+     * Constructor for AbstractQueryFacadeBuilder
+     * 
+     * @param function A consumer function to initialize the builder, can't be null.
+     */
     protected AbstractQueryFacadeBuilder(
             Consumer<? extends AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>> function) {
         LOGGER.atDebug().log("Constructing AbstractQueryFacadeBuilder");

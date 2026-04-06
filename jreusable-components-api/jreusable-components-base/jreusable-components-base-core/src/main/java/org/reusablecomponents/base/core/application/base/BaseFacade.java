@@ -39,8 +39,22 @@ import com.google.common.reflect.TypeToken;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * The <code>InterfaceEntityBaseFacade</code> common implementation to all
- * facades that manage entities.
+ * The <code>InterfaceEntityBaseFacade</code> sealed common implementation to
+ * all facades.
+ * 
+ * The main purpose of this class is to provide common attributes and methods to
+ * all facades that manage entities.
+ * 
+ * The main methods are the execute methods, that execute operations with pre,
+ * main, pos, and error functions.
+ * 
+ * An operation is built of a main function (main purpose), pre-function
+ * (executed before the main function), pos-function (executed after the main
+ * function), and error-function (executed if the main function throws an
+ * exception).
+ * 
+ * And it provides security service, internationalization service, exception
+ * adapter service, and generic class type capture for the entity and id.
  * 
  * @param <Entity> The facade entity type
  * @param <Id>     The facade entity id type
@@ -49,6 +63,12 @@ import jakarta.validation.constraints.NotNull;
  * @since 1.0
  * 
  * @see InterfaceBaseFacade
+ * @see EmptyFacade
+ * @see AbstractCommandFacade
+ * @see AbstractQueryFacade
+ * @see AbstractQuerySpecificationFacade
+ * @see AbstractQueryPaginationFacade
+ * @see AbstractQueryPaginationSpecificationFacade
  */
 public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 		implements InterfaceBaseFacade<Entity, Id>
@@ -63,17 +83,23 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	/**
 	 * The security service used by the facade to get the session and other security
 	 * related operations.
+	 * 
+	 * @see InterfaceSecurityService
 	 */
 	protected final InterfaceSecurityService securityService;
 
 	/**
 	 * The internationalization service used by the facade to translate messages.
+	 * 
+	 * @see InterfaceI18nService
 	 */
 	protected final InterfaceI18nService i18nService;
 
 	/**
 	 * The exception adapter service used by the facade to translate from
 	 * persistence exceptions to application exceptions.
+	 * 
+	 * @see InterfaceExceptionAdapterService
 	 */
 	protected final InterfaceExceptionAdapterService exceptionAdapterService;
 
@@ -90,7 +116,8 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	/**
 	 * Default constructor, used by the builder to construct this class.
 	 * 
-	 * @param builder Object attribute constructor, can't be null
+	 * @param builder Object constructor, can't be null
+	 * @see BaseFacadeBuilder
 	 */
 	protected BaseFacade(@NotNull final BaseFacadeBuilder builder) {
 		LOGGER.atDebug().log("Constructing BaseFacade with builder {}", builder);
@@ -142,14 +169,8 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	 * Execute operations with no input and but with output, like findAll,
 	 * existsAll, etc.
 	 * 
-	 * An operation is built of a main function (main purpose), pre-function
-	 * (executed before the main function), pos-function (executed after the main
-	 * function), and error-function (executed if the main function throws an
-	 * exception).
-	 * 
 	 * @param <Out>         The output type
 	 * 
-	 * @param operation     The operation data, used for logs
 	 * @param preFunction   The function executed before the main function
 	 * @param posFunction   The function executed after the main function
 	 * @param mainFunction  The main function
@@ -246,16 +267,10 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	/**
 	 * Execute operations with one input, like save, delete, saveAll, etc.
 	 * 
-	 * An operation is built of a main function (main purpose), pre-function
-	 * (executed before the main function), pos-function (executed after the main
-	 * function), and error-function (executed if the main function throws an
-	 * exception).
-	 * 
 	 * @param <In>          The input type
 	 * @param <Out>         The output type
 	 * 
 	 * @param in            The operation input
-	 * @param operation     The operation data, used for logs
 	 * @param preFunction   The function executed before the main function
 	 * @param posFunction   The function executed after the main function
 	 * @param mainFunction  The main function
@@ -352,18 +367,12 @@ public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
 	/**
 	 * Execute operations with two inputs, like findOneByPaginationSorted, etc.
 	 * 
-	 * An operation is built of a main function (main purpose), pre-function
-	 * (executed before the main function), pos-function (executed after the main
-	 * function), and error-function (executed if the main function throws an
-	 * exception).
-	 * 
 	 * @param <In1>         The first input type
 	 * @param <In2>         The second input type
 	 * @param <Out>         The output type
 	 * 
 	 * @param in1           The first operation input
 	 * @param in2           The second operation input
-	 * @param operation     The operation data, used for logs
 	 * @param preFunction   The function executed before the main function
 	 * @param posFunction   The function executed after the main function
 	 * @param mainFunction  The main function
