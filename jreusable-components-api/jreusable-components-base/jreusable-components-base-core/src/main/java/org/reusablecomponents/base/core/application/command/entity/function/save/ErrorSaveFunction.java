@@ -5,8 +5,17 @@ import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction3Args;
 
 /**
-* 
-*/
+ * A functional interface representing an error function for an entity save
+ * operation. This function is executed when an error occurs during the save
+ * operation and can be used to perform any necessary operations or
+ * transformations on the exception or the entity involved in the save
+ * operation.
+ *
+ * @param <SaveEntityIn> the type of the entity being saved
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0
+ */
 @FunctionalInterface
 public non-sealed interface ErrorSaveFunction<SaveEntityIn>
 		extends CommandFunction, OperationFunction3Args<BaseException, SaveEntityIn, Object[], BaseException> {

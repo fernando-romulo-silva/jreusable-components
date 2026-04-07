@@ -247,8 +247,6 @@ public interface InterfaceFacade<Entity extends AbstractEntity<Id>, Id, // basic
 		return getEntityQuerySpecificationFacade().countBySpecification(specification, directives);
 	}
 
-	// ---------------------------------------------------------------------
-
 	/**
 	 * {@inheritDoc}
 	 */

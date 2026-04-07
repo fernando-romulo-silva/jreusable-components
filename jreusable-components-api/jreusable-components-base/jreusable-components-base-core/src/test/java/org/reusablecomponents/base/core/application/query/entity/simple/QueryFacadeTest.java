@@ -92,8 +92,8 @@ class QueryFacadeTest {
 
     @Test
     @Order(1)
-    @DisplayName("Find by id test")
-    void findByIdTest() {
+    @DisplayName("Given id when find by id then return entity test")
+    void givenId_whenFindById_thenReturnEntity() {
         // given
         final var id = "x1";
 
@@ -108,8 +108,8 @@ class QueryFacadeTest {
 
     @Test
     @Order(2)
-    @DisplayName("Find all test")
-    void findAllTest() {
+    @DisplayName("Given no criteria when find all then return all entities test")
+    void givenNoCriteria_whenFindAll_thenReturnAllEntities() {
         // given
         final var currentData = defaultData;
 
@@ -122,8 +122,8 @@ class QueryFacadeTest {
 
     @Test
     @Order(3)
-    @DisplayName("Count all test")
-    void countAllTest() {
+    @DisplayName("Given no criteria when count all then return count all entities test")
+    void givenNoCriteria_whenCountAll_thenReturnCountAllEntities() {
         // given
         final var currentSize = defaultData.size();
 
@@ -136,8 +136,8 @@ class QueryFacadeTest {
 
     @Test
     @Order(4)
-    @DisplayName("Exists all test")
-    void existsAllTest() {
+    @DisplayName("Given no criteria when exists all then return if exists any entities test")
+    void givenNoCriteria_whenExistsAll_thenReturnIfExistsAnyEntities() {
         // given
         final var existsAll = defaultData.size() > 0;
 
@@ -155,8 +155,8 @@ class QueryFacadeTest {
 
     @Test
     @Order(5)
-    @DisplayName("Exists by id test")
-    void existsByIdTest() {
+    @DisplayName("Given id when exists by id then return if exists entity test")
+    void givenId_whenExistsById_thenReturnIfExistsEntity() {
         // given
         final var id = "x1";
 
@@ -172,7 +172,7 @@ class QueryFacadeTest {
     @Test
     @Order(6)
     @DisplayName("Find by id with null id test")
-    void findByIdWithNullIdTest() {
+    void givenNullId_whenFindById_thenThrowNullPointerException() {
 
         // given
         final String nullId = null;
@@ -187,7 +187,7 @@ class QueryFacadeTest {
     @Test
     @Order(7)
     @DisplayName("Find by id with null id bean validation test")
-    void findByIdWithNullIdBeanValidationTest() throws NoSuchMethodException, SecurityException {
+    void givenNullId_whenFindByIdWithBeanValidation_thenThrowConstraintViolationException() throws Exception {
 
         final var method = defaultQueryFacade.getClass()
                 .getMethod("findById", Object.class, Object[].class);
@@ -203,8 +203,8 @@ class QueryFacadeTest {
 
     @Test
     @Order(8)
-    @DisplayName("Find by id test with id not found test")
-    void findByIdWithIdNotFoundTest() {
+    @DisplayName("Given id not found when find by id then throw ElementWithIdNotFoundException test")
+    void givenIdNotFound_whenFindById_thenThrowElementWithIdNotFoundException() {
 
         // given
         final var id = "notExists";
@@ -218,8 +218,8 @@ class QueryFacadeTest {
 
     @Test
     @Order(9)
-    @DisplayName("Find by id test with unexpected error test")
-    void findByIdWithUnexpectedErrorTest() {
+    @DisplayName("Given unexpected error when find by id then throw UnexpectedException test")
+    void givenUnexpectedError_whenFindById_thenThrowUnexpectedException() {
 
         // given
         final var directives = new Object[] { "error" };
@@ -234,8 +234,8 @@ class QueryFacadeTest {
 
     @Test
     @Order(10)
-    @DisplayName("Find all test with unexpected error test")
-    void findAllWithUnexpectedErrorTest() {
+    @DisplayName("Given unexpected error when find all then throw UnexpectedException test")
+    void givenUnexpectedError_whenFindAll_thenThrowUnexpectedException() {
 
         // given
         final var directives = new Object[] { "error" };
@@ -250,8 +250,8 @@ class QueryFacadeTest {
 
     @Test
     @Order(11)
-    @DisplayName("Count all with unexpected error test")
-    void countAllWithUnexpectedErrorTest() {
+    @DisplayName("Given unexpected error when count all then throw UnexpectedException test")
+    void givenUnexpectedError_whenCountAll_thenThrowUnexpectedException() {
 
         // given
         final var directives = new Object[] { "error" };
@@ -265,8 +265,8 @@ class QueryFacadeTest {
 
     @Test
     @Order(12)
-    @DisplayName("Exist all with unexpected error test")
-    void existAllWithUnexpectedErrorTest() {
+    @DisplayName("Given unexpected error when exist all then throw UnexpectedException test")
+    void givenUnexpectedError_whenExistAll_thenThrowUnexpectedException() {
 
         // given
         final var directives = new Object[] { "error" };
@@ -280,8 +280,8 @@ class QueryFacadeTest {
 
     @Test
     @Order(13)
-    @DisplayName("Exists by id with null id test")
-    void existsByIdWithNullIdTest() {
+    @DisplayName("Given null id when exists by id then throw NullPointerException test")
+    void givenNullId_whenExistsById_thenThrowNullPointerException() {
 
         // given
         final String nullId = null;
@@ -295,8 +295,8 @@ class QueryFacadeTest {
 
     @Test
     @Order(14)
-    @DisplayName("Exists by id with null id bean validation test")
-    void existsByIdWithNullIdBeanValidationTest() throws NoSuchMethodException, SecurityException {
+    @DisplayName("Given null id when exists by id then throw NullPointerException with bean validation test")
+    void givenNullId_whenExistsById_thenThrowNullPointerExceptionWithBeanValidation() throws Exception {
 
         final var method = defaultQueryFacade.getClass()
                 .getMethod("existsById", Object.class, Object[].class);
@@ -312,8 +312,8 @@ class QueryFacadeTest {
 
     @Test
     @Order(15)
-    @DisplayName("Exists by id with unexpected error test")
-    void existsByIdWithUnexpectedErrorTest() {
+    @DisplayName("Given unexpected error when exists by id then throw UnexpectedException test")
+    void givenUnexpectedError_whenExistsById_thenThrowUnexpectedException() {
 
         // given
         final var directives = new Object[] { "error" };

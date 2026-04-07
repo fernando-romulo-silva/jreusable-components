@@ -40,6 +40,9 @@ public non-sealed interface InterfaceQueryFacade<Entity extends AbstractEntity<I
 		ExistsResult> // exist result
 		extends InterfaceBaseFacade<Entity, Id> {
 
+	// TODO: Remove the ElementWithIdNotFoundException exception and replace it with
+	// Optional approach, but it will be a breaking change, so it will be done in
+	// the next major version (2.0)
 	/**
 	 * Find and retrieve a {@code OneResult} object by id.
 	 * 

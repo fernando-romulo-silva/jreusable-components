@@ -70,6 +70,7 @@ import jakarta.validation.constraints.NotNull;
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0
+ * 
  * @see AbstractCommandFacade
  * @see InterfaceCommandFacade
  */
