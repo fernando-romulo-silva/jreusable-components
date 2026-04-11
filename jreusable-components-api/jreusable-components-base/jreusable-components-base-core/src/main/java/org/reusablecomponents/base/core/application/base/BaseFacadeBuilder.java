@@ -26,18 +26,24 @@ public class BaseFacadeBuilder {
 	/**
 	 * Security service, in case of null, the <code>DefaultSecurityService</code>
 	 * will be used.
+	 * 
+	 * @see InterfaceSecurityService
 	 */
 	public InterfaceSecurityService securityService;
 
 	/**
 	 * Language translator service, in case of null, the
 	 * <code>JavaSEI18nService</code> will be used.
+	 * 
+	 * @see InterfaceI18nService
 	 */
 	public InterfaceI18nService i18nService;
 
 	/**
 	 * Exception adapter service, in case of null, the
 	 * <code>DefaultExceptionAdapterService</code> will be used.
+	 * 
+	 * @see InterfaceExceptionAdapterService
 	 */
 	public InterfaceExceptionAdapterService exceptionAdapterService;
 

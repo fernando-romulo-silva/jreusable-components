@@ -12,6 +12,10 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * operation.
  *
  * @param <SaveEntityIn> the type of the entity being saved
+ * @param <Object[]>     the type of the additional arguments that may be needed
+ * 
+ * @return a {@link BaseException} that represents the error that occurred
+ *         during the save operation
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0

@@ -6,7 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.reusablecomponents.messaging.event.Event;
 
 /**
- * Utility class for event operations
+ * Utility class for event related operations.
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
  */
 public final class EventUtils {
 

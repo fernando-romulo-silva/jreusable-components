@@ -6,6 +6,12 @@ import java.util.Objects;
 
 /**
  * Represents the cause behind an event.
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ * 
+ * @param reason      The reason for the event.
+ * @param description The description of the reason.
  */
 public record Why(String reason, String description) {
 

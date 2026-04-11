@@ -1,11 +1,23 @@
 package org.reusablecomponents.messaging;
 
+/**
+ * Constants for messaging layouts.
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ */
 public class MessagingConst {
 
+  /**
+   * Private constructor to prevent instantiation
+   */
   private MessagingConst() {
     throw new UnsupportedOperationException("You can't instanciate this class");
   }
 
+  /**
+   * JSON layout for messaging.
+   */
   public static final String JSON_LAYOUT = """
       {
          "id": "${id}",
@@ -37,6 +49,9 @@ public class MessagingConst {
          }
       }""";
 
+  /**
+   * XML layout for messaging.
+   */
   public static final String XML_LAYOUT = """
       <?xml version="1.0" encoding="UTF-8" ?>
       <event>
@@ -69,6 +84,9 @@ public class MessagingConst {
           </why>
       </event>""";
 
+  /**
+   * YAML layout for messaging.
+   */
   public static final String YAML_LAYOUT = """
       ---
       id: "${id}"

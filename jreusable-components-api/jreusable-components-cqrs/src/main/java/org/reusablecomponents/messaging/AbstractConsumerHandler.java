@@ -9,6 +9,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Abstract implementation of the {@link InterfaceConsumerService} that provides
+ * a template method for consuming messages and handling exceptions.
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ */
 public abstract class AbstractConsumerHandler implements InterfaceConsumerService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractConsumerHandler.class);

@@ -1,7 +1,11 @@
 package org.reusablecomponents.base.security;
 
 /**
+ * 
  * Interface service in charge for security matters. <br />
+ * Use this service to retrieve information about the logged user, session,
+ * machine and application.
+ * 
  * Implementations should use its technology to retrieve information about:
  * 
  * <ul>

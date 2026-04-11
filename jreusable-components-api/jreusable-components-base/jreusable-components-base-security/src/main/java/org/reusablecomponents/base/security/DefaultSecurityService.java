@@ -7,6 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * Default <code>InterfaceSecurityService</code>'s implementation.
+ * This implementation retrieves the user name and machine name using Java's
+ * system properties and network interfaces. The realm, session, and application
+ * information are not available in this implementation and will return default
+ * values.
  */
 public class DefaultSecurityService implements InterfaceSecurityService {
 

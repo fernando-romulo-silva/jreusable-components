@@ -75,9 +75,7 @@ import jakarta.validation.constraints.NotNull;
  * 
  * @see BaseFacade
  */
-public abstract sealed class AbstractCommandFacade< // generics
-		// default
-		Entity extends AbstractEntity<Id>, Id, // basic
+public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity<Id>, Id, // basic
 		// save
 		SaveEntityIn, SaveEntityOut, // entity
 		SaveEntitiesIn, SaveEntitiesOut, // entities

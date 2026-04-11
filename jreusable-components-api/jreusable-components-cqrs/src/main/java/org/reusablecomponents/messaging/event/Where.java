@@ -4,6 +4,15 @@ import java.util.Objects;
 
 /**
  * Represents the location where an event occurred.
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ * 
+ * @param machine     The machine where the event occurred.
+ * @param application The application where the event occurred.
+ * @param version     The version of the application.
+ * @param build       The build of the application.
+ * @param descriptor  The descriptor of the location.
  */
 public record Where(String machine, String application, String version, String build, String descriptor) {
 

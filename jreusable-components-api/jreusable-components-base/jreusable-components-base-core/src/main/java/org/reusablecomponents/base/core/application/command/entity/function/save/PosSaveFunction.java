@@ -10,6 +10,10 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * been persisted.
  *
  * @param <SaveEntityOut> the type of the entity being saved
+ * @param <Object[]>      the type of the additional arguments that may be
+ *                        needed for post-save operations, such as context
+ *                        information or related data
+ * @return the saved entity after any post-save operations have been applied
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0

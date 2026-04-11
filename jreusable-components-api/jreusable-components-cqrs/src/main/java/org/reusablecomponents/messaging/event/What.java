@@ -6,6 +6,12 @@ import java.util.Objects;
 
 /**
  * Represents the data involved in an event.
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ * 
+ * @param dataIn  The input data.
+ * @param dataOut The output data.
  */
 public record What(String dataIn, String dataOut) {
 

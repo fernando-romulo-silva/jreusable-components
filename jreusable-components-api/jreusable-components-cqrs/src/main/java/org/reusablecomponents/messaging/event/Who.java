@@ -6,6 +6,13 @@ import java.util.Objects;
 
 /**
  * Represents the actor behind an event.
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ * 
+ * @param realm   The realm of the actor.
+ * @param login   The login of the actor.
+ * @param session The session of the actor.
  */
 public record Who(String realm, String login, String session) {
 

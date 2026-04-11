@@ -20,6 +20,9 @@ import org.slf4j.LoggerFactory;
  * This version use the Java SE code to translate error messages.
  * 
  * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ * 
+ * @see InterfaceI18nService
  */
 public class JavaSEI18nService implements InterfaceI18nService {
 

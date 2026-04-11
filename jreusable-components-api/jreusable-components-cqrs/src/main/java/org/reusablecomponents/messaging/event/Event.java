@@ -12,6 +12,9 @@ import jakarta.validation.constraints.NotNull;
 /**
  * An immutable object represents a system event, like a command (saveEntity,
  * etc.) or a query (findById, etc.).
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
  */
 public class Event {
 

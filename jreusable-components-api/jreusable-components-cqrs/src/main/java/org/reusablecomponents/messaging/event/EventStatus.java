@@ -1,7 +1,7 @@
 package org.reusablecomponents.messaging.event;
 
 /**
- * Commons event statuses.
+ * Enumeration representing the status of an event.
  */
 public enum EventStatus {
 
