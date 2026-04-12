@@ -16,8 +16,17 @@ import org.slf4j.LoggerFactory;
 /**
  * The <code>EntiyBaseFacade</code> builder's class.
  * 
+ * The builder is used to construct the base facade, which is the base class for
+ * all facades. The builder is used to set the security service, the i18n
+ * service and the exception adapter service. If any of these services is not
+ * set, the default implementation will be used.
+ * 
  * @author Fernando Romulo da Silva
  * @since 1.0
+ * 
+ * @see InterfaceSecurityService
+ * @see InterfaceI18nService
+ * @see InterfaceExceptionAdapterService
  */
 public class BaseFacadeBuilder {
 
@@ -50,8 +59,18 @@ public class BaseFacadeBuilder {
 	/**
 	 * Default constructor.
 	 * 
+	 * The constructor receives a consumer function, which is used to set the
+	 * builder attributes. The function is called with the builder instance as
+	 * parameter.
+	 * 
 	 * @param function Consumer function, can't be null, used to set the builder
 	 *                 attributes
+	 * 
+	 * @throws NullPointerException if the function is null
+	 * 
+	 * @see JavaSEI18nService
+	 * @see DefaultSecurityService
+	 * @see DefaultExceptionAdapterService
 	 */
 	public BaseFacadeBuilder(final Consumer<? extends BaseFacadeBuilder> function) {
 		LOGGER.atDebug().log("Constructing BaseFacadeBuilder");

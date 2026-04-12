@@ -1,12 +1,14 @@
 package org.reusablecomponents.base.core.application.command.entity.function.save_all;
 
 import org.reusablecomponents.base.core.application.command.CommandFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save.PosSaveFunction;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction2Args;
 
 /**
  * A functional interface representing a post-save operation for saving multiple
- * entities. This function is executed after the actual save operation and can
- * be used to perform any necessary transformations or validations on the output
+ * entities (bulk version of {@link PosSaveFunction}). This function is
+ * executed after the actual save operation and can be used to perform any
+ * necessary transformations or validations on the output
  * data.
  * 
  * @param <SaveEntitiesOut> The type of the output data for the save operation,

@@ -6,9 +6,9 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 
 /**
  * A functional interface representing an error handling operation for saving
- * multiple entities. This function is executed when an error occurs during the
- * save operation and can be used to perform any necessary error handling or
- * logging.
+ * multiple entities (bulk version of {@link ErrorSaveFunction}). This function
+ * is executed when an error occurs during the save operation and can be used to
+ * perform any necessary error handling or logging.
  * 
  * @param <SaveEntitiesIn> The type of the input data for the save operation,
  *                         typically a collection of entities.

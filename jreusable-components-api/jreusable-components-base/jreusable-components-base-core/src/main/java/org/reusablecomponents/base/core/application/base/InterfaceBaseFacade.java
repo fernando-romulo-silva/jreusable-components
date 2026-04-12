@@ -10,7 +10,7 @@ import org.reusablecomponents.base.core.domain.AbstractEntity;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Base facade interface for all interfaces.
+ * Base facade interface. All facades must implement this interface.
  * 
  * @param <Entity> The facade entity type
  * @param <Id>     The facade entity id type

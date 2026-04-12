@@ -1,12 +1,14 @@
 package org.reusablecomponents.base.core.application.command.entity.function.save_all;
 
 import org.reusablecomponents.base.core.application.command.CommandFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save.SaveFunction;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction2Args;
 
 /**
  * A functional interface representing a save operation for saving multiple
- * entities. This function is executed to perform the actual save operation and
- * can be used to persist the input data to a database or any other storage
+ * entities (bulk version of {@link SaveFunction}). This function is executed to
+ * perform the actual save operation and can be used to persist the input data
+ * to a database or any other storage
  * mechanism.
  * 
  * @param <SaveEntitiesIn>  The type of the input collection of entities to be

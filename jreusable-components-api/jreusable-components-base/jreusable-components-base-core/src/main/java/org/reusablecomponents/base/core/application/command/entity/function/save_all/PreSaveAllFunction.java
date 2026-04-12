@@ -1,12 +1,14 @@
 package org.reusablecomponents.base.core.application.command.entity.function.save_all;
 
 import org.reusablecomponents.base.core.application.command.CommandFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save.PreSaveFunction;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction2Args;
 
 /**
  * A functional interface representing a pre-save operation for saving multiple
- * entities. This function is executed before the actual save operation and can
- * be used to perform any necessary transformations or validations on the input
+ * entities (bulk version of {@link PreSaveFunction}). This function is executed
+ * before the actual save operation and can be used to perform any necessary
+ * transformations or validations on the input
  * data.
  *
  * @param <SaveEntitiesIn> The type of the input data for the save operation,

@@ -69,14 +69,12 @@ import jakarta.validation.constraints.NotNull;
  *                            version)
  * 
  * @author Fernando Romulo da Silva
- * @since 1.0
+ * @since 1.0.0
  * 
  * @see AbstractCommandFacade
  * @see InterfaceCommandFacade
  */
-public non-sealed class CommandFacade< // generics
-		// default
-		Entity extends AbstractEntity<Id>, Id, // basic
+public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // basic
 		// save
 		SaveEntityIn, SaveEntityOut, // entity
 		SaveEntitiesIn, SaveEntitiesOut, // entities
@@ -131,48 +129,64 @@ public non-sealed class CommandFacade< // generics
 	/**
 	 * Function that executes the save operation in the
 	 * {@link #save(Object, Object...) save} method
+	 * 
+	 * @see SaveFunction
 	 */
 	protected final SaveFunction<SaveEntityIn, SaveEntityOut> saveFunction;
 
 	/**
 	 * Function that executes the save all (bunch save) operation in the
 	 * {@link #saveAll(Object, Object...) saveAll} method
+	 * 
+	 * @see SaveAllFunction
 	 */
 	protected final SaveAllFunction<SaveEntitiesIn, SaveEntitiesOut> saveAllFunction;
 
 	/**
 	 * Function that executes the update operation in the
 	 * {@link #update(Object, Object...) update} method
+	 * 
+	 * @see UpdateFunction
 	 */
 	protected final UpdateFunction<UpdateEntityIn, UpdateEntityOut> updateFunction;
 
 	/**
 	 * Function that executes the update all (bunch update) operation in the
 	 * {@link #updateAll(Object, Object...) updateAll} method
+	 * 
+	 * @see UpdateAllFunction
 	 */
 	protected final UpdateAllFunction<UpdateEntitiesIn, UpdateEntitiesOut> updateAllFunction;
 
 	/**
 	 * Function that executes the delete operation in the
 	 * {@link #delete(Object, Object...) delete} method
+	 * 
+	 * @see DeleteFunction
 	 */
 	protected final DeleteFunction<DeleteEntityIn, DeleteEntityOut> deleteFunction;
 
 	/**
 	 * Function that executes the delete all (bunch delete) operation in the
 	 * {@link #deleteAll(Object, Object...) deleteAll} method
+	 * 
+	 * @see DeleteAllFunction
 	 */
 	protected final DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut> deleteAllFunction;
 
 	/**
 	 * Function that executes the delete by id operation in the
 	 * {@link #deleteBy(Object, Object...) deleteBy} method
+	 * 
+	 * @see DeleteByIdFunction
 	 */
 	protected final DeleteByIdFunction<DeleteIdIn, DeleteIdOut> deleteByIdFunction;
 
 	/**
 	 * Function that executes the delete all by id (bunch delete by id) operation in
 	 * the {@link #deleteAllBy(Object, Object...) deleteAllBy} method
+	 * 
+	 * @see DeleteByIdsFunction
 	 */
 	protected final DeleteByIdsFunction<DeleteIdsIn, DeleteIdsOut> deleteByIdsFunction;
 
@@ -180,7 +194,6 @@ public non-sealed class CommandFacade< // generics
 	 * Default constructor, used by the builder to construct this class.
 	 * 
 	 * @param builder Object in charge to construct this one, it cannot be null
-	 * 
 	 * @throws NullPointerException if the builder is null
 	 * 
 	 * @see CommandFacadeBuilder

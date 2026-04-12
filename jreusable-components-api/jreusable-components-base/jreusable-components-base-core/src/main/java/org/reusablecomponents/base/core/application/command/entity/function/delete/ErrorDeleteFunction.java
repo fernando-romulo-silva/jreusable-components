@@ -5,7 +5,11 @@ import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction3Args;
 
 /**
- * A function that handles errors during the delete operation of an entity.
+ * A functional interface representing an error function for an entity delete
+ * operation. This function is executed when an error occurs during the delete
+ * operation and can be used to perform any necessary operations or
+ * transformations on the exception or the entity involved in the delete
+ * operation.
  * 
  * @param <DeleteEntityIn> The type of the input used to identify and delete
  *                         the entity.
@@ -21,6 +25,6 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  */
 @FunctionalInterface
 public non-sealed interface ErrorDeleteFunction<DeleteEntityIn>
-                extends CommandFunction,
-                OperationFunction3Args<BaseException, DeleteEntityIn, Object[], BaseException> {
+        extends CommandFunction,
+        OperationFunction3Args<BaseException, DeleteEntityIn, Object[], BaseException> {
 }

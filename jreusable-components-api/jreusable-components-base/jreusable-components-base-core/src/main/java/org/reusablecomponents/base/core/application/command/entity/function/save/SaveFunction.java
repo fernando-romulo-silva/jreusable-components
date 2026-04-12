@@ -19,7 +19,7 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * @return the saved entity after any save operations have been applied
  * 
  * @author Fernando Romulo da Silva
- * @since 1.0
+ * @since 1.0.0
  */
 @FunctionalInterface
 public non-sealed interface SaveFunction<SaveEntityIn, SaveEntityOut>

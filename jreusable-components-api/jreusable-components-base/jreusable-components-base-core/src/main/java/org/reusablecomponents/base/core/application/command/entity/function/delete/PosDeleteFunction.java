@@ -5,10 +5,9 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 
 /**
  * A function that handles the successful completion of the delete operation of
- * an entity.
- * This function is executed after deleting an entity and can be used to perform
- * any necessary operations or transformations on the deleted entity after it
- * has been removed.
+ * an entity. This function is executed after deleting an entity and can be used
+ * to perform any necessary operations or transformations on the deleted entity
+ * after it has been removed.
  * 
  * @param <DeleteEntityOut> The type of the output result of the delete
  *                          operation.
@@ -24,5 +23,5 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  */
 @FunctionalInterface
 public non-sealed interface PosDeleteFunction<DeleteEntityOut>
-                extends CommandFunction, OperationFunction2Args<DeleteEntityOut, Object[], DeleteEntityOut> {
+        extends CommandFunction, OperationFunction2Args<DeleteEntityOut, Object[], DeleteEntityOut> {
 }
