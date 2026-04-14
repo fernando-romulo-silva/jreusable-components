@@ -12,7 +12,7 @@ import org.reusablecomponents.base.core.application.query.entity.simple.QueryFac
  *                      type like Mono<Long>
  * 
  * @author Fernando Romulo da Silva
- * @since 1.0
+ * @since 1.0.0
  */
 @FunctionalInterface
 public non-sealed interface CountAllFunction<CountResult>

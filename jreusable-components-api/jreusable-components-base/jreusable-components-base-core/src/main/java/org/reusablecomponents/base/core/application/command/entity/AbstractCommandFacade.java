@@ -71,7 +71,7 @@ import jakarta.validation.constraints.NotNull;
  *                            version)
  * 
  * @author Fernando Romulo da Silva
- * @since 1.0
+ * @since 1.0.0
  * 
  * @see BaseFacade
  */

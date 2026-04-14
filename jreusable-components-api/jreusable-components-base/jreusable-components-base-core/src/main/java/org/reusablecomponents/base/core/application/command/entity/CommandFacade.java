@@ -233,6 +233,15 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 		return saveEntityOut;
 	}
 
+	/**
+	 * Returns the function that executes the save operation in the
+	 * {@link #save(Object, Object...) save} method.
+	 * 
+	 * @return The <code>SaveFunction</code> function instance, it cannot be null
+	 * @throws NullPointerException if the function is null
+	 * 
+	 * @see SaveFunction
+	 */
 	@NotNull
 	protected SaveFunction<SaveEntityIn, SaveEntityOut> getSaveFunction() {
 		LOGGER.atDebug().log("Returning save function {}", saveFunction.getName());
@@ -257,6 +266,15 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 		return saveEntitiesOut;
 	}
 
+	/**
+	 * Returns the function that executes the save operation in the
+	 * {@link #saveAll(Object, Object...) saveAll} method.
+	 * 
+	 * @return The <code>SaveAllFunction</code> function instance, it cannot be null
+	 * @throws NullPointerException if the function is null
+	 * 
+	 * @see SaveAllFunction
+	 */
 	@NotNull
 	protected SaveAllFunction<SaveEntitiesIn, SaveEntitiesOut> getSaveAllFunction() {
 		LOGGER.atDebug().log("Returning save all function {}", saveAllFunction.getName());
@@ -281,6 +299,15 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 		return updateEntityOut;
 	}
 
+	/**
+	 * Returns the function that executes the update operation in the
+	 * {@link #update(Object, Object...) update} method.
+	 * 
+	 * @return The <code>UpdateFunction</code> function instance, it cannot be null
+	 * @throws NullPointerException if the function is null
+	 * 
+	 * @see UpdateFunction
+	 */
 	@NotNull
 	protected UpdateFunction<UpdateEntityIn, UpdateEntityOut> getUpdateFunction() {
 		LOGGER.atDebug().log("Returning update function {}", updateFunction.getName());
@@ -306,6 +333,16 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 		return updateEntitiesOut;
 	}
 
+	/**
+	 * Returns the function that executes the update operation in the
+	 * {@link #updateAll(Object, Object...) updateAll} method.
+	 * 
+	 * @return The <code>UpdateAllFunction</code> function instance, it cannot be
+	 *         null
+	 * @throws NullPointerException if the function is null
+	 * 
+	 * @see UpdateAllFunction
+	 */
 	@NotNull
 	protected UpdateAllFunction<UpdateEntitiesIn, UpdateEntitiesOut> getUpdateAllFunction() {
 		LOGGER.atDebug().log("Returning update all function {}", updateAllFunction.getName());
@@ -329,6 +366,15 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 		return deleteEntityOut;
 	}
 
+	/**
+	 * Returns the function that executes the delete operation in the
+	 * {@link #delete(Object, Object...) delete} method.
+	 * 
+	 * @return The <code>DeleteFunction</code> function instance, it cannot be null
+	 * @throws NullPointerException if the function is null
+	 * 
+	 * @see DeleteFunction
+	 */
 	@NotNull
 	protected DeleteFunction<DeleteEntityIn, DeleteEntityOut> getDeleteFunction() {
 		LOGGER.atDebug().log("Returning delete function {}", deleteFunction.getName());
@@ -354,6 +400,16 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 		return deleteEntitiesOut;
 	}
 
+	/**
+	 * Returns the function that executes the delete operation in the
+	 * {@link #deleteAll(Object, Object...) deleteAll} method.
+	 * 
+	 * @return The <code>DeleteAllFunction</code> function instance, it cannot be
+	 *         null
+	 * @throws NullPointerException if the function is null
+	 * 
+	 * @see DeleteAllFunction
+	 */
 	@NotNull
 	protected DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut> getDeleteAllFunction() {
 		LOGGER.atDebug().log("Returning delete all function {}", deleteAllFunction.getName());

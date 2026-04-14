@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  *                         like Mono<Boolean>
  * 
  * @author Fernando Romulo da Silva
- * @since 1.0
+ * @since 1.0.0
  * 
  * @see AbstractQueryFacadeBuilder
  */
@@ -119,15 +119,14 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	}
 
 	/**
-	 * Build the <code>QueryFacade</code> object, using the attributes set in this
-	 * builder. if exists functions that are not set, the builder will set them with
-	 * a default function that throws an UnsupportedOperationException with a
-	 * message that the function is not implemented, example: "Unimplemented
-	 * function 'findByIdFunction'".
+	 * Gets the exists all function, if it is not set, it will be set with a
+	 * function that throws an UnsupportedOperationException when executed.
 	 * 
-	 * @return A <code>QueryFacade</code> object
+	 * @return the exists all function
+	 * @see ExistsAllFunction
+	 * @see UnsupportedOperationException
 	 */
-	private ExistsAllFunction<ExistsResult> getExistsAllFunction() {
+	protected ExistsAllFunction<ExistsResult> getExistsAllFunction() {
 		return nonNull(existsAllFunction)
 				? existsAllFunction
 				: directives -> {
@@ -135,7 +134,15 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 				};
 	}
 
-	private CountAllFunction<CountResult> getCountAllFunction() {
+	/**
+	 * Gets the count all function, if it is not set, it will be set with a
+	 * function that throws an UnsupportedOperationException when executed.
+	 * 
+	 * @return the count all function
+	 * @see CountAllFunction
+	 * @see UnsupportedOperationException
+	 */
+	protected CountAllFunction<CountResult> getCountAllFunction() {
 		return nonNull(countAllFunction)
 				? countAllFunction
 				: directives -> {
@@ -143,7 +150,15 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 				};
 	}
 
-	private FindAllFunction<MultipleResult> getFindAllFunction() {
+	/**
+	 * Gets the find all function, if it is not set, it will be set with a
+	 * function that throws an UnsupportedOperationException when executed.
+	 * 
+	 * @return the find all function
+	 * @see FindAllFunction
+	 * @see UnsupportedOperationException
+	 */
+	protected FindAllFunction<MultipleResult> getFindAllFunction() {
 		return nonNull(findAllFunction)
 				? findAllFunction
 				: directives -> {
@@ -151,7 +166,15 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 				};
 	}
 
-	private ExistsByIdFunction<QueryIdIn, ExistsResult> getExistsByIdFunction() {
+	/**
+	 * Gets the exists by id function, if it is not set, it will be set with a
+	 * function that throws an UnsupportedOperationException when executed.
+	 * 
+	 * @return the exists by id function
+	 * @see ExistsByIdFunction
+	 * @see UnsupportedOperationException
+	 */
+	protected ExistsByIdFunction<QueryIdIn, ExistsResult> getExistsByIdFunction() {
 		return nonNull(existsByIdFunction)
 				? existsByIdFunction
 				: (queryIdIn, directives) -> {
@@ -159,7 +182,15 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 				};
 	}
 
-	private FindByIdFunction<QueryIdIn, OneResult> getFindByIdFunction() {
+	/**
+	 * Gets the find by id function, if it is not set, it will be set with a
+	 * function that throws an UnsupportedOperationException when executed.
+	 * 
+	 * @return the find by id function
+	 * @see FindByIdFunction
+	 * @see UnsupportedOperationException
+	 */
+	protected FindByIdFunction<QueryIdIn, OneResult> getFindByIdFunction() {
 		return nonNull(findByIdFunction)
 				? findByIdFunction
 				: (queryIdIn, directives) -> {

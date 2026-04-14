@@ -25,7 +25,12 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The <code>AbstractQueryFacade</code> builder's class.
+ * 
  * This class is responsible for building the <code>AbstractQuery</code> object.
+ * 
+ * For each function in this class, if it is not set, it will be set with a
+ * default function that just logs the execution and returns the input
+ * parameters, example: "Default function 'functionName', input parameters: {}".
  * 
  * @param <Entity>         The entity type
  * @param <Id>             The entity id type
@@ -41,9 +46,9 @@ import org.slf4j.LoggerFactory;
  *                         like Mono<Boolean>
  * 
  * @author Fernando Romulo da Silva
- * @since 1.0
+ * @since 1.0.0
  */
-public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
+abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
         extends BaseFacadeBuilder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractQueryFacadeBuilder.class);
@@ -186,7 +191,14 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
         LOGGER.atDebug().log("AbstractQueryFacadeBuilder constructed");
     }
 
-    private PreExistsByIdFunction<QueryIdIn> getPreExistsByIdFunction() {
+    /**
+     * Gets the pre exists by id function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the pre exists by id function
+     * @see PreExistsByIdFunction
+     */
+    protected PreExistsByIdFunction<QueryIdIn> getPreExistsByIdFunction() {
         return nonNull(preExistsByIdFunction)
                 ? preExistsByIdFunction
                 : (queryIdIn, directives) -> {
@@ -195,7 +207,14 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private ErrorExistsByIdFunction<QueryIdIn> getErrorExistsByIdFunction() {
+    /**
+     * Gets the error-exists by id function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the error exists by id function
+     * @see ErrorExistsByIdFunction
+     */
+    protected ErrorExistsByIdFunction<QueryIdIn> getErrorExistsByIdFunction() {
         return nonNull(errorExistsByIdFunction)
                 ? errorExistsByIdFunction
                 : (exception, queryIdIn, directives) -> {
@@ -205,7 +224,14 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PosExistsByIdFunction<ExistsResult> getPosExistsByIdFunction() {
+    /**
+     * Gets the pos exists by id function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the pos exists by id function
+     * @see PosExistsByIdFunction
+     */
+    protected PosExistsByIdFunction<ExistsResult> getPosExistsByIdFunction() {
         return nonNull(posExistsByIdFunction)
                 ? posExistsByIdFunction
                 : (existsResult, directives) -> {
@@ -215,7 +241,14 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PreFindAllFunction getPreFindAllFunction() {
+    /**
+     * Gets the pre find all function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the pre find all function
+     * @see PreFindAllFunction
+     */
+    protected PreFindAllFunction getPreFindAllFunction() {
         return nonNull(preFindAllFunction)
                 ? preFindAllFunction
                 : directives -> {
@@ -230,18 +263,32 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PosFindAllFunction<MultipleResult> getPosFindAllFunction() {
+    /**
+     * Gets the pos find all function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the pos find all function
+     * @see PosFindAllFunction
+     */
+    protected PosFindAllFunction<MultipleResult> getPosFindAllFunction() {
         return nonNull(posFindAllFunction)
                 ? posFindAllFunction
                 : (multipleResult, directives) -> {
-                    LOGGER.atDebug().log("Default posFindAll, multipleResult {}, directives {}", multipleResult,
-                            directives);
+                    LOGGER.atDebug().log("Default posFindAll, multipleResult {}, directives {}",
+                            multipleResult, directives);
                     return multipleResult;
                 };
 
     }
 
-    private ErrorFindAllFunction getErrorFindAllFunction() {
+    /**
+     * Gets the error find all function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the error find all function
+     * @see ErrorFindAllFunction
+     */
+    protected ErrorFindAllFunction getErrorFindAllFunction() {
         return nonNull(errorFindAllFunction)
                 ? errorFindAllFunction
                 : (exception, directives) -> {
@@ -251,25 +298,46 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PreFindByIdFunction<QueryIdIn> getPreFindByIdFunction() {
+    /**
+     * Gets the pre find by id function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the pre find by id function
+     * @see PreFindByIdFunction
+     */
+    protected PreFindByIdFunction<QueryIdIn> getPreFindByIdFunction() {
         return nonNull(preFindByIdFunction)
                 ? preFindByIdFunction
                 : (queryIdIn, directives) -> {
-                    LOGGER.atDebug().log("Default preFindBy, queryIdIn {}, directives {}", queryIdIn, directives);
+                    LOGGER.atDebug().log("Default preFindById, queryIdIn {}, directives {}", queryIdIn, directives);
                     return queryIdIn;
                 };
     }
 
-    private PosFindByIdFunction<OneResult> getPosFindByIdFunction() {
+    /**
+     * Gets the pos find by id function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the pos find by id function
+     * @see PosFindByIdFunction
+     */
+    protected PosFindByIdFunction<OneResult> getPosFindByIdFunction() {
         return nonNull(posFindByIdFunction)
                 ? posFindByIdFunction
                 : (oneResult, directives) -> {
-                    LOGGER.atDebug().log("Default posFindBy, oneResult {}, directives {}", oneResult, directives);
+                    LOGGER.atDebug().log("Default posFindById, oneResult {}, directives {}", oneResult, directives);
                     return oneResult;
                 };
     }
 
-    private ErrorFindByIdFunction<QueryIdIn> getErrorFindByIdFunction() {
+    /**
+     * Gets the error find by id function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the error find by id function
+     * @see ErrorFindByIdFunction
+     */
+    protected ErrorFindByIdFunction<QueryIdIn> getErrorFindByIdFunction() {
         return nonNull(errorFindByIdFunction)
                 ? errorFindByIdFunction
                 : (exception, queryIdIn, directives) -> {
@@ -279,7 +347,14 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PreCountAllFunction getPreCountAllFunction() {
+    /**
+     * Gets the pre count all function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the pre count all function
+     * @see PreCountAllFunction
+     */
+    protected PreCountAllFunction getPreCountAllFunction() {
         return nonNull(preCountAllFunction)
                 ? preCountAllFunction
                 : (final Object... directives) -> {
@@ -288,7 +363,14 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PosCountAllFunction<CountResult> getPosCountAllFunction() {
+    /**
+     * Gets the pos count all function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the pos count all function
+     * @see PosCountAllFunction
+     */
+    protected PosCountAllFunction<CountResult> getPosCountAllFunction() {
         return nonNull(posCountAllFunction)
                 ? posCountAllFunction
                 : (final CountResult countResult, final Object... directives) -> {
@@ -298,7 +380,14 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private ErrorCountAllFunction getErrorCountAllFunction() {
+    /**
+     * Gets the error count all function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the error count all function
+     * @see ErrorCountAllFunction
+     */
+    protected ErrorCountAllFunction getErrorCountAllFunction() {
         return nonNull(errorCountAllFunction)
                 ? errorCountAllFunction
                 : (exception, directives) -> {
@@ -307,7 +396,14 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PreExistsAllFunction getPreExistsAllFunction() {
+    /**
+     * Gets the pre exists all function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the pre exists all function
+     * @see PreExistsAllFunction
+     */
+    protected PreExistsAllFunction getPreExistsAllFunction() {
         return nonNull(preExistsAllFunction)
                 ? preExistsAllFunction
                 : directives -> {
@@ -316,18 +412,32 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
                 };
     }
 
-    private PosExistsAllFunction<ExistsResult> getPosExistsAllFunction() {
+    /**
+     * Gets the pos exists all function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the pos exists all function
+     * @see PosExistsAllFunction
+     */
+    protected PosExistsAllFunction<ExistsResult> getPosExistsAllFunction() {
         return nonNull(posExistsAllFunction)
                 ? posExistsAllFunction
                 : (existsResult, directives) -> {
-                    LOGGER.atDebug().log("Default posExistsAll, countResult {}, directives {} ", existsResult,
-                            directives);
+                    LOGGER.atDebug().log("Default posExistsAll, existsResult {}, directives {} ",
+                            existsResult, directives);
                     return existsResult;
                 };
 
     }
 
-    private ErrorExistsAllFunction getErrorExistsAllFunction() {
+    /**
+     * Gets the error exists all function, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return the error exists all function
+     * @see ErrorExistsAllFunction
+     */
+    protected ErrorExistsAllFunction getErrorExistsAllFunction() {
         return nonNull(errorExistsAllFunction)
                 ? errorExistsAllFunction
                 : (exception, directives) -> {

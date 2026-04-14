@@ -82,4 +82,12 @@ public sealed interface OperationFunction2Args<In1, In2, Out> extends BiFunction
 		PosFindAllPagedFunction, FindOneSortedFunction, PosFindOneSortedFunction,
 		PosFindOneBySpecificationSortedFunction,
 		PosFindBySpecificationPagedFunction {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "OperationFunction2Args";
+	}
 }

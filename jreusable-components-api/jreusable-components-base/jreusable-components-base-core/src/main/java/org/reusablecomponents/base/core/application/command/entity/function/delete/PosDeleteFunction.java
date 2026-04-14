@@ -23,5 +23,13 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  */
 @FunctionalInterface
 public non-sealed interface PosDeleteFunction<DeleteEntityOut>
-        extends CommandFunction, OperationFunction2Args<DeleteEntityOut, Object[], DeleteEntityOut> {
+		extends CommandFunction, OperationFunction2Args<DeleteEntityOut, Object[], DeleteEntityOut> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "PosDeleteFunction";
+	}
 }

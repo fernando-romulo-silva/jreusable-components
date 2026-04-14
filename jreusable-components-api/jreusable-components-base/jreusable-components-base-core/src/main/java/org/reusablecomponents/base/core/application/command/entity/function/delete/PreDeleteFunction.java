@@ -23,5 +23,13 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  */
 @FunctionalInterface
 public non-sealed interface PreDeleteFunction<DeleteEntityIn>
-        extends CommandFunction, OperationFunction2Args<DeleteEntityIn, Object[], DeleteEntityIn> {
+		extends CommandFunction, OperationFunction2Args<DeleteEntityIn, Object[], DeleteEntityIn> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "PreDeleteFunction";
+	}
 }

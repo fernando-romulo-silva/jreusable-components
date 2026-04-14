@@ -25,6 +25,14 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  */
 @FunctionalInterface
 public non-sealed interface ErrorDeleteFunction<DeleteEntityIn>
-        extends CommandFunction,
-        OperationFunction3Args<BaseException, DeleteEntityIn, Object[], BaseException> {
+		extends CommandFunction,
+		OperationFunction3Args<BaseException, DeleteEntityIn, Object[], BaseException> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "ErrorDeleteFunction";
+	}
 }

@@ -21,4 +21,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface PosSaveFunction<SaveEntityOut>
 		extends CommandFunction, OperationFunction2Args<SaveEntityOut, Object[], SaveEntityOut> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "PosSaveFunction";
+	}
 }

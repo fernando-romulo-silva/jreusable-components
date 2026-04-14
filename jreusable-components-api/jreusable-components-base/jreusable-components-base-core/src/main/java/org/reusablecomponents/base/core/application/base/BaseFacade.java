@@ -3,24 +3,21 @@ package org.reusablecomponents.base.core.application.base;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCause;
-
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_DIRECTIVES_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_ERROR_FUNCTION_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_MAIN_FUNCTION_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_POS_FUNCTION_MSG;
 import static org.reusablecomponents.base.core.application.base.BaseFacadeMessage.NON_NULL_PRE_FUNCTION_MSG;
-
 import static org.reusablecomponents.base.core.infra.util.function.FunctionCommonUtils.createNullPointerException;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.reusablecomponents.base.core.application.command.entity.AbstractCommandFacade;
 import org.reusablecomponents.base.core.application.empty.EmptyFacade;
+import org.reusablecomponents.base.core.application.query.entity.pagination.AbstractQueryPaginationFacade;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.AbstractQueryPaginationSpecificationFacade;
 import org.reusablecomponents.base.core.application.query.entity.simple.AbstractQueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.specification.AbstractQuerySpecificationFacade;
-import org.reusablecomponents.base.core.application.query.entity.pagination.AbstractQueryPaginationFacade;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
@@ -28,7 +25,6 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction2Args;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction3Args;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction4Args;
-import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunctionArgs;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.slf4j.Logger;
@@ -60,7 +56,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <Id>     The facade entity id type
  * 
  * @author Fernando Romulo da Silva
- * @since 1.0
+ * @since 1.0.0
  * 
  * @see InterfaceBaseFacade
  * @see EmptyFacade

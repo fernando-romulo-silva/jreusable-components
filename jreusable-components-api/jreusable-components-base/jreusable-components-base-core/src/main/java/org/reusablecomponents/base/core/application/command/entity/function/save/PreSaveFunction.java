@@ -20,4 +20,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface PreSaveFunction<SaveEntityIn>
 		extends CommandFunction, OperationFunction2Args<SaveEntityIn, Object[], SaveEntityIn> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "PreSaveFunction";
+	}
 }

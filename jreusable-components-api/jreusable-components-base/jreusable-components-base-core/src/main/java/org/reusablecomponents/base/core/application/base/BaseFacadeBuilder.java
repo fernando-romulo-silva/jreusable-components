@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * set, the default implementation will be used.
  * 
  * @author Fernando Romulo da Silva
- * @since 1.0
+ * @since 1.0.0
  * 
  * @see InterfaceSecurityService
  * @see InterfaceI18nService
@@ -62,6 +62,10 @@ public class BaseFacadeBuilder {
 	 * The constructor receives a consumer function, which is used to set the
 	 * builder attributes. The function is called with the builder instance as
 	 * parameter.
+	 * 
+	 * The constructor also checks if the security service, the i18n service and the
+	 * exception adapter service are null, and if so, assigns the default
+	 * implementations.
 	 * 
 	 * @param function Consumer function, can't be null, used to set the builder
 	 *                 attributes

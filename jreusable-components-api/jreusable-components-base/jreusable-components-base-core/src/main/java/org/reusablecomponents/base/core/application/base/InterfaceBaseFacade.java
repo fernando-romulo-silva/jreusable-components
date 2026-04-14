@@ -16,7 +16,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <Id>     The facade entity id type
  * 
  * @author Fernando Romulo da Silva
- * @since 1.0
+ * @since 1.0.0
  * 
  * @see InterfaceCommandFacade
  * @see InterfaceQueryFacade
