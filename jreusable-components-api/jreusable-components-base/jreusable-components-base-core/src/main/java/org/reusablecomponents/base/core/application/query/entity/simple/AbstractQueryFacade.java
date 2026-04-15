@@ -43,7 +43,7 @@ import jakarta.validation.constraints.NotNull;
  *                         like Mono<Boolean>
  * 
  * @author Fernando Romulo da Silva
- * @since 1.0
+ * @since 1.0.0
  * 
  * @see QueryFacade
  */
@@ -229,90 +229,210 @@ public abstract sealed class AbstractQueryFacade< // generics
         LOGGER.atDebug().log("AbstractQueryFacade constructed");
     }
 
+    /**
+     * Gets the pre find by id function, provided by the builder, used on the
+     * {@link QueryFacade#findById(Object, Object...) findById} method.
+     * 
+     * @return the pre find by id function
+     * 
+     * @see PreFindByIdFunction
+     */
     @NotNull
     protected PreFindByIdFunction<QueryIdIn> getPreFindByIdFunction() {
         LOGGER.atDebug().log("Returning pre findById function {}", preFindByIdFunction.getName());
         return preFindByIdFunction;
     }
 
+    /**
+     * Gets the pos find by id function, provided by the builder, used on the
+     * {@link QueryFacade#findById(Object, Object...) findById} method.
+     * 
+     * @return the pos find by id function
+     * 
+     * @see PosFindByIdFunction
+     */
     @NotNull
     protected PosFindByIdFunction<OneResult> getPosFindByIdFunction() {
         LOGGER.atDebug().log("Returning pos findById function {}", posFindByIdFunction.getName());
         return posFindByIdFunction;
     }
 
+    /**
+     * Gets the error find by id function, provided by the builder, used on the
+     * {@link QueryFacade#findById(Object, Object...) findById} method.
+     * 
+     * @return the error find by id function
+     * 
+     * @see ErrorFindByIdFunction
+     */
     @NotNull
     protected ErrorFindByIdFunction<QueryIdIn> getErrorFindByIdFunction() {
         LOGGER.atDebug().log("Returning error findById function {}", errorFindByIdFunction.getName());
         return errorFindByIdFunction;
     }
 
+    /**
+     * Gets the pre find all function, provided by the builder, used on the
+     * {@link QueryFacade#findAll(Object...) findAll} method.
+     * 
+     * @return the pre find all function
+     * 
+     * @see PreFindAllFunction
+     */
     @NotNull
     protected PreFindAllFunction getPreFindAllFunction() {
         LOGGER.atDebug().log("Returning pre findAll function {}", preFindAllFunction.getName());
         return preFindAllFunction;
     }
 
+    /**
+     * Gets the pos find all function, provided by the builder, used on the
+     * {@link QueryFacade#findAll(Object...) findAll} method.
+     * 
+     * @return the pos find all function
+     * 
+     * @see PosFindAllFunction
+     */
     @NotNull
     protected PosFindAllFunction<MultipleResult> getPosFindAllFunction() {
         LOGGER.atDebug().log("Returning pos findAll function {}", posFindAllFunction.getName());
         return posFindAllFunction;
     }
 
+    /**
+     * Gets the error find all function, provided by the builder, used on the
+     * {@link QueryFacade#findAll(Object...) findAll} method.
+     * 
+     * @return the error find all function
+     * 
+     * @see ErrorFindAllFunction
+     */
     @NotNull
     protected ErrorFindAllFunction getErrorFindAllFunction() {
         LOGGER.atDebug().log("Returning error findById function {}", errorFindAllFunction.getName());
         return errorFindAllFunction;
     }
 
+    /**
+     * Gets the pre count all function, provided by the builder, used on the
+     * {@link QueryFacade#countAll(Object...) countAll} method.
+     * 
+     * @return the pre count all function
+     * 
+     * @see PreCountAllFunction
+     */
     @NotNull
     protected PreCountAllFunction getPreCountAllFunction() {
         LOGGER.atDebug().log("Returning pre countAll function {}", preCountAllFunction.getName());
         return preCountAllFunction;
     }
 
+    /**
+     * Gets the pos count all function, provided by the builder, used on the
+     * {@link QueryFacade#countAll(Object...) countAll} method.
+     * 
+     * @return the pos count all function
+     * 
+     * @see PosCountAllFunction
+     */
     @NotNull
     protected PosCountAllFunction<CountResult> getPosCountAllFunction() {
         LOGGER.atDebug().log("Returning pos countAll function {}", posCountAllFunction.getName());
         return posCountAllFunction;
     }
 
+    /**
+     * Gets the error count all function, provided by the builder, used on the
+     * {@link QueryFacade#countAll(Object...) countAll} method.
+     * 
+     * @return the error count all function
+     * 
+     * @see ErrorCountAllFunction
+     */
     @NotNull
     protected ErrorCountAllFunction getErrorCountAllFunction() {
         LOGGER.atDebug().log("Returning error countAll function {}", errorCountAllFunction.getName());
         return errorCountAllFunction;
     }
 
+    /**
+     * Gets the pre exists all function, provided by the builder, used on the
+     * {@link QueryFacade#existsAll(Object...) existsAll} method.
+     * 
+     * @return the pre exists all function
+     * 
+     * @see PreExistsAllFunction
+     */
     @NotNull
     protected PreExistsAllFunction getPreExistsAllFunction() {
         LOGGER.atDebug().log("Returning pre existsAll function {}", preExistsAllFunction.getName());
         return preExistsAllFunction;
     }
 
+    /**
+     * Gets the pos exists all function, provided by the builder, used on the
+     * {@link QueryFacade#existsAll(Object...) existsAll} method.
+     * 
+     * @return the pos exists all function
+     * 
+     * @see PosExistsAllFunction
+     */
     @NotNull
     protected PosExistsAllFunction<ExistsResult> getPosExistsAllFunction() {
         LOGGER.atDebug().log("Returning pos existsAll function {}", posExistsAllFunction.getName());
         return posExistsAllFunction;
     }
 
+    /**
+     * Gets the error exists all function, provided by the builder, used on the
+     * {@link QueryFacade#existsAll(Object...) existsAll} method.
+     * 
+     * @return the error exists all function
+     * 
+     * @see ErrorExistsAllFunction
+     */
     @NotNull
     protected ErrorExistsAllFunction getErrorExistsAllFunction() {
         LOGGER.atDebug().log("Returning error existsAll function {}", errorExistsAllFunction.getName());
         return errorExistsAllFunction;
     }
 
+    /**
+     * Gets the pre exists by id function, provided by the builder, used on the
+     * {@link QueryFacade#existsById(Object, Object...) existsById} method.
+     * 
+     * @return the pre exists by id function
+     * 
+     * @see PreExistsByIdFunction
+     */
     @NotNull
     protected PreExistsByIdFunction<QueryIdIn> getPreExistsByIdFunction() {
         LOGGER.atDebug().log("Returning pre existsById function {}", preExistsByIdFunction.getName());
         return preExistsByIdFunction;
     }
 
+    /**
+     * Gets the pos exists by id function, provided by the builder, used on the
+     * {@link QueryFacade#existsById(Object, Object...) existsById} method.
+     * 
+     * @return the pos exists by id function
+     * 
+     * @see PosExistsByIdFunction
+     */
     @NotNull
     protected PosExistsByIdFunction<ExistsResult> getPosExistsByIdFunction() {
         LOGGER.atDebug().log("Returning pos existsById function {}", posExistsByIdFunction.getName());
         return posExistsByIdFunction;
     }
 
+    /**
+     * Gets the error exists by id function, provided by the builder, used on the
+     * {@link QueryFacade#existsById(Object, Object...) existsById} method.
+     * 
+     * @return the error exists by id function
+     * 
+     * @see ErrorExistsByIdFunction
+     */
     @NotNull
     protected ErrorExistsByIdFunction<QueryIdIn> getErrorExistsByIdFunction() {
         LOGGER.atDebug().log("Returning error existsById function {}", errorExistsByIdFunction.getName());

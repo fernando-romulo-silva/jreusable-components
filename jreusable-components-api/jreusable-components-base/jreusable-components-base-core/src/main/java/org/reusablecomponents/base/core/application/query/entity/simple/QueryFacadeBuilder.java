@@ -114,8 +114,9 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 		this.existsAllFunction = getExistsAllFunction();
 
 		LOGGER.atDebug().log("CommandFacadeBuilder constructed commands, functions {}",
-				List.of(existsByIdFunction, findByIdFunction, findAllFunction, countAllFunction,
-						existsAllFunction));
+				List.of(existsByIdFunction.getName(),
+						findByIdFunction.getName(), findAllFunction.getName(),
+						countAllFunction.getName(), existsAllFunction.getName()));
 	}
 
 	/**

@@ -33,7 +33,7 @@ import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, // basic
+abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, // basic
 		// save
 		SaveEntityIn, SaveEntityOut, // save a entity
 		SaveEntitiesIn, SaveEntitiesOut, // save entities
@@ -46,7 +46,8 @@ abstract class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, I
 		// delete by id
 		DeleteIdIn, DeleteIdOut, // delete entity by id
 		DeleteIdsIn, DeleteIdsOut> // delete entities by ids
-		extends BaseFacadeBuilder {
+		extends BaseFacadeBuilder
+		permits CommandFacadeBuilder {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCommandFacadeBuilder.class);
 

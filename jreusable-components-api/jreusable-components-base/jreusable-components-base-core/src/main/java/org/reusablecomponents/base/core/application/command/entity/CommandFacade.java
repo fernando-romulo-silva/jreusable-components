@@ -386,8 +386,8 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	 */
 	@Override
 	public DeleteEntitiesOut deleteAll(final DeleteEntitiesIn deleteEntitiesIn, final Object... directives) {
-		LOGGER.atDebug().log("Executing default deleteAll, deleteEntitiesIn {}, directives {} ", deleteEntitiesIn,
-				directives);
+		LOGGER.atDebug().log("Executing default deleteAll, deleteEntitiesIn {}, directives {}",
+				deleteEntitiesIn, directives);
 
 		checkNotNull(deleteEntitiesIn, NON_NULL_GROUP_OF_ENTITIES_MSG, getEntityClazz().getSimpleName());
 
@@ -395,8 +395,8 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 				deleteEntitiesIn, getPreDeleteAllFunction(), getDeleteAllFunction(),
 				getPosDeleteAllFunction(), getErrorDeleteAllFunction(), directives);
 
-		LOGGER.atDebug().log("Default deleteAll executed, deleteEntitiesOut {}, directives {} ", deleteEntitiesOut,
-				directives);
+		LOGGER.atDebug().log("Default deleteAll executed, deleteEntitiesOut {}, directives {}",
+				deleteEntitiesOut, directives);
 		return deleteEntitiesOut;
 	}
 
@@ -421,15 +421,14 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	 */
 	@Override
 	public DeleteIdOut deleteBy(final DeleteIdIn deleteIdIn, final Object... directives) {
-		LOGGER.atDebug().log("Executing default deleteBy, deleteIdIn {}, directives {} ", deleteIdIn, directives);
-
+		LOGGER.atDebug().log("Executing default deleteBy, deleteIdIn {}, directives {}", deleteIdIn, directives);
 		checkNotNull(deleteIdIn, NON_NULL_ID_MSG, getEntityClazz().getSimpleName());
 
 		final var deleteIdOut = execute(
 				deleteIdIn, getPreDeleteByIdFunction(), getDeleteByIdFunction(),
 				getPosDeleteByIdFunction(), getErrorDeleteByIdFunction(), directives);
 
-		LOGGER.atDebug().log("Default deleteBy executed, deleteIdOut {}, directives {} ", deleteIdOut, directives);
+		LOGGER.atDebug().log("Default deleteBy executed, deleteIdOut {}, directives {}", deleteIdOut, directives);
 		return deleteIdOut;
 	}
 
@@ -444,7 +443,7 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	 */
 	@Override
 	public DeleteIdsOut deleteAllBy(final DeleteIdsIn deleteIdsIn, final Object... directives) {
-		LOGGER.atDebug().log("Executing default deleteAllBy, deleteIdsIn {}, directives {} ", deleteIdsIn, directives);
+		LOGGER.atDebug().log("Executing default deleteAllBy, deleteIdsIn {}, directives {}", deleteIdsIn, directives);
 
 		checkNotNull(deleteIdsIn, NON_NULL_GROUP_OF_IDS_MSG, getEntityClazz().getSimpleName());
 
@@ -452,7 +451,7 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 				deleteIdsIn, getPreDeleteByIdsFunction(), getDeleteByIdsFunction(),
 				getPosDeleteByIdsFunction(), getErrorDeleteByIdsFunction(), directives);
 
-		LOGGER.atDebug().log("Default deleteAllBy executed, deleteIdsOut {}, directives {} ", deleteIdsOut, directives);
+		LOGGER.atDebug().log("Default deleteAllBy executed, deleteIdsOut {}, directives {}", deleteIdsOut, directives);
 		return deleteIdsOut;
 	}
 

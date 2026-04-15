@@ -109,7 +109,8 @@ public non-sealed class QueryFacade< // generics
 
 	/**
 	 * QueryIdIn class used on find by id {@link #findById(Object, Object...)
-	 * findById} method
+	 * findById} method and exists by id {@link #existsById(Object, Object...)
+	 * existsById} method.
 	 */
 	protected final Class<QueryIdIn> queryIdInClazz;
 
@@ -135,6 +136,13 @@ public non-sealed class QueryFacade< // generics
 		LOGGER.atDebug().log("Query Facade created with builder {}", builder);
 	}
 
+	/**
+	 * Retrieves the QueryIdIn class using reflection and TypeToken from Guava.
+	 * This is used to populate the queryIdInClazz attribute, which is used on find
+	 * by id and exists by id methods.
+	 * 
+	 * @return the QueryIdIn class
+	 */
 	@SuppressWarnings("unchecked")
 	private Class<QueryIdIn> retrieveQueryIdClazz() {
 		final var entityTypeToken = new TypeToken<QueryIdIn>(getClass()) {
@@ -160,6 +168,14 @@ public non-sealed class QueryFacade< // generics
 		return multipleResult;
 	}
 
+	/**
+	 * Gets the find all function, provided by the builder, used on the
+	 * {@link #findAll(Object...) findAll} method.
+	 * 
+	 * @return the find all function
+	 * 
+	 * @see FindAllFunction
+	 */
 	@NotNull
 	protected FindAllFunction<MultipleResult> getFindAllFunction() {
 		LOGGER.atDebug().log("Returning findAll function {}", findAllFunction.getName());
@@ -182,6 +198,14 @@ public non-sealed class QueryFacade< // generics
 		return oneResult;
 	}
 
+	/**
+	 * Gets the find by id function, provided by the builder, used on the
+	 * {@link #findById(Object, Object...) findById} method.
+	 * 
+	 * @return the find by id function
+	 * 
+	 * @see FindByIdFunction
+	 */
 	@NotNull
 	protected FindByIdFunction<QueryIdIn, OneResult> getFindByIdFunction() {
 		LOGGER.atDebug().log("Returning findById function {}", findByIdFunction.getName());
@@ -203,6 +227,14 @@ public non-sealed class QueryFacade< // generics
 		return countResult;
 	}
 
+	/**
+	 * Gets the count all function, provided by the builder, used on the
+	 * {@link #countAll(Object...) countAll} method.
+	 * 
+	 * @return the count all function
+	 * 
+	 * @see CountAllFunction
+	 */
 	@NotNull
 	protected CountAllFunction<CountResult> getCountAllFunction() {
 		LOGGER.atDebug().log("Returning countAll function {}", countAllFunction.getName());
@@ -224,6 +256,14 @@ public non-sealed class QueryFacade< // generics
 		return existsResult;
 	}
 
+	/**
+	 * Gets the exists all function, provided by the builder, used on
+	 * {@link #existsAll(Object...) existsAll} method.
+	 * 
+	 * @return the exists all function
+	 * 
+	 * @see ExistsAllFunction
+	 */
 	@NotNull
 	protected ExistsAllFunction<ExistsResult> getExistsAllFunction() {
 		LOGGER.atDebug().log("Returning existsAll function {}", existsAllFunction.getName());
@@ -248,12 +288,27 @@ public non-sealed class QueryFacade< // generics
 		return existsResult;
 	}
 
+	/**
+	 * Gets the exists by id function, provided by the builder, used on the
+	 * {@link #existsById(Object, Object...) existsById} method.
+	 * 
+	 * @return the exists by id function
+	 * 
+	 * @see ExistsByIdFunction
+	 */
 	@NotNull
 	protected ExistsByIdFunction<QueryIdIn, ExistsResult> getExistsByIdFunction() {
-		LOGGER.atDebug().log("Returning existsAll function {}", existsByIdFunction.getName());
+		LOGGER.atDebug().log("Returning existsById function {}", existsByIdFunction.getName());
 		return existsByIdFunction;
 	}
 
+	/**
+	 * Gets the query id in class, used on find by id and exists by id methods.
+	 * It is populated by the constructor using reflection to retrieve the generic
+	 * type QueryIdIn.
+	 * 
+	 * @return the query id in class
+	 */
 	@NotNull
 	protected Class<QueryIdIn> getQueryIdInClazz() {
 		return queryIdInClazz;

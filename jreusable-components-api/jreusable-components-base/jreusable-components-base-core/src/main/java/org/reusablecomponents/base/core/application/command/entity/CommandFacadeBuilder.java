@@ -20,9 +20,16 @@ import org.slf4j.LoggerFactory;
 /**
  * The <code>CommandFacade</code> builder's class.
  * 
+ * This class is responsible for building the <code>CommandFacade</code> object.
+ * 
+ * For each function in this class, if it is not set, it will be set with a
+ * default function that throws an UnsupportedOperationException with a message
+ * that the function is not implemented, example: "Unimplemented function
+ * 'functionName'".
+ * 
  * @see CommandFacade
  */
-public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, // basic
+public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, // basic
 		// save
 		SaveEntityIn, SaveEntityOut, // save a entity
 		SaveEntitiesIn, SaveEntitiesOut, // save entities
@@ -66,7 +73,7 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 		LOGGER.atDebug().log("Constructing CommandFacadeBuilder function {} ", function);
 		super(function);
 
-		this.saveFunction = getPreSaveFunction();
+		this.saveFunction = getSaveFunction();
 		this.saveAllFunction = getSaveAllFunction();
 		this.updateFunction = getUpdateFunction();
 		this.updateAllFunction = getUpdateAllFunction();
@@ -82,7 +89,16 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 						deleteByIdFunction, deleteByIdsFunction));
 	}
 
-	private SaveFunction<SaveEntityIn, SaveEntityOut> getPreSaveFunction() {
+	/**
+	 * Gets the save function, if it is not set, it will be set with a
+	 * function that throws an UnsupportedOperationException when executed.
+	 * 
+	 * @return the save function
+	 * 
+	 * @see SaveFunction
+	 * @see UnsupportedOperationException
+	 */
+	protected SaveFunction<SaveEntityIn, SaveEntityOut> getSaveFunction() {
 		return nonNull(saveFunction)
 				? saveFunction
 				: (saveEntityIn, directives) -> {
@@ -90,7 +106,16 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 				};
 	}
 
-	private SaveAllFunction<SaveEntitiesIn, SaveEntitiesOut> getSaveAllFunction() {
+	/**
+	 * Gets the save all function, if it is not set, it will be set with a
+	 * function that throws an UnsupportedOperationException when executed.
+	 * 
+	 * @return the save all function
+	 * 
+	 * @see SaveAllFunction
+	 * @see UnsupportedOperationException
+	 */
+	protected SaveAllFunction<SaveEntitiesIn, SaveEntitiesOut> getSaveAllFunction() {
 		return nonNull(saveAllFunction)
 				? saveAllFunction
 				: (saveEntitiesIn, directives) -> {
@@ -98,7 +123,16 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 				};
 	}
 
-	private UpdateFunction<UpdateEntityIn, UpdateEntityOut> getUpdateFunction() {
+	/**
+	 * Gets the update function, if it is not set, it will be set with a
+	 * function that throws an UnsupportedOperationException when executed.
+	 * 
+	 * @return the update function
+	 * 
+	 * @see UpdateFunction
+	 * @see UnsupportedOperationException
+	 */
+	protected UpdateFunction<UpdateEntityIn, UpdateEntityOut> getUpdateFunction() {
 		return nonNull(updateFunction)
 				? updateFunction
 				: (updateEntityIn, directives) -> {
@@ -106,7 +140,16 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 				};
 	}
 
-	private UpdateAllFunction<UpdateEntitiesIn, UpdateEntitiesOut> getUpdateAllFunction() {
+	/**
+	 * Gets the update all function, if it is not set, it will be set with a
+	 * function that throws an UnsupportedOperationException when executed.
+	 * 
+	 * @return the update all function
+	 * 
+	 * @see UpdateAllFunction
+	 * @see UnsupportedOperationException
+	 */
+	protected UpdateAllFunction<UpdateEntitiesIn, UpdateEntitiesOut> getUpdateAllFunction() {
 		return nonNull(updateAllFunction)
 				? updateAllFunction
 				: (updateEntitiesIn, directives) -> {
@@ -114,7 +157,16 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 				};
 	}
 
-	private DeleteFunction<DeleteEntityIn, DeleteEntityOut> getDeleteFunction() {
+	/**
+	 * Gets the delete function, if it is not set, it will be set with a
+	 * function that throws an UnsupportedOperationException when executed.
+	 * 
+	 * @return the delete function
+	 * 
+	 * @see DeleteFunction
+	 * @see UnsupportedOperationException
+	 */
+	protected DeleteFunction<DeleteEntityIn, DeleteEntityOut> getDeleteFunction() {
 		return nonNull(deleteFunction)
 				? deleteFunction
 				: (deleteEntityIn, directives) -> {
@@ -122,7 +174,16 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 				};
 	}
 
-	private DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut> getDeleteAllFunction() {
+	/**
+	 * Gets the delete all function, if it is not set, it will be set with a
+	 * function that throws an UnsupportedOperationException when executed.
+	 * 
+	 * @return the delete all function
+	 * 
+	 * @see DeleteAllFunction
+	 * @see UnsupportedOperationException
+	 */
+	protected DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut> getDeleteAllFunction() {
 		return nonNull(deleteAllFunction)
 				? deleteAllFunction
 				: (deleteEntitiesIn, directives) -> {
@@ -130,7 +191,16 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 				};
 	}
 
-	private DeleteByIdFunction<DeleteIdIn, DeleteIdOut> getDeleteByIdFunction() {
+	/**
+	 * Gets the delete by id function, if it is not set, it will be set with a
+	 * function that throws an UnsupportedOperationException when executed.
+	 * 
+	 * @return the delete by id function
+	 * 
+	 * @see DeleteByIdFunction
+	 * @see UnsupportedOperationException
+	 */
+	protected DeleteByIdFunction<DeleteIdIn, DeleteIdOut> getDeleteByIdFunction() {
 		return nonNull(deleteByIdFunction)
 				? deleteByIdFunction
 				: (deleteIdIn, directives) -> {
@@ -138,10 +208,19 @@ public final class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, /
 				};
 	}
 
-	private DeleteByIdsFunction<DeleteIdsIn, DeleteIdsOut> getDeleteByIdsFunction() {
+	/**
+	 * Gets the delete by ids function, if it is not set, it will be set with a
+	 * function that throws an UnsupportedOperationException when executed.
+	 * 
+	 * @return the delete by ids function
+	 * 
+	 * @see DeleteByIdsFunction
+	 * @see UnsupportedOperationException
+	 */
+	protected DeleteByIdsFunction<DeleteIdsIn, DeleteIdsOut> getDeleteByIdsFunction() {
 		return nonNull(deleteByIdsFunction)
 				? deleteByIdsFunction
-				: (deleteIdIn, directives) -> {
+				: (deleteIdsIn, directives) -> {
 					throw new UnsupportedOperationException("Unimplemented function 'deleteByIdsFunction'");
 				};
 	}
