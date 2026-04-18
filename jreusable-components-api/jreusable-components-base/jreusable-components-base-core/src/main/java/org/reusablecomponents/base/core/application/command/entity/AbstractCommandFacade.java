@@ -25,6 +25,8 @@ import org.reusablecomponents.base.core.application.command.entity.function.upda
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.ErrorUpdateAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.PosUpdateAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.PreUpdateAllFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacade;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id.PreFindByIdFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,11 +66,9 @@ import jakarta.validation.constraints.NotNull;
  * @param <DeleteIdOut>       The output type for the delete by id operation
  * 
  * @param <DeleteIdsIn>       The input type for the delete by ids operation
- *                            (bulk
- *                            version)
+ *                            (bulk version)
  * @param <DeleteIdsOut>      The output type for the delete by ids operation
- *                            (bulk
- *                            version)
+ *                            (bulk version)
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0.0
@@ -351,144 +351,336 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 		this.errorDeleteByIdsFunction = builder.errorDeleteByIdsFunction;
 	}
 
+	/**
+	 * Gets the pre save function, provided by the builder, used on the
+	 * {@link CommandFacade#save(Object, Object...) save} method.
+	 * 
+	 * @return the pre save function
+	 * 
+	 * @see PreSaveFunction
+	 */
 	@NotNull
 	protected PreSaveFunction<SaveEntityIn> getPreSaveFunction() {
 		LOGGER.atDebug().log("Returning preSaveFunction function {}", preSaveFunction.getName());
 		return preSaveFunction;
 	}
 
+	/**
+	 * Gets the pos save function, provided by the builder, used on the
+	 * {@link CommandFacade#save(Object, Object...) save} method.
+	 * 
+	 * @return the pos save function
+	 * 
+	 * @see PosSaveFunction
+	 */
 	@NotNull
 	protected PosSaveFunction<SaveEntityOut> getPosSaveFunction() {
 		LOGGER.atDebug().log("Returning posSaveFunction function {}", posSaveFunction.getName());
 		return posSaveFunction;
 	}
 
+	/**
+	 * Gets the error save function, provided by the builder, used on the
+	 * {@link CommandFacade#save(Object, Object...) save} method.
+	 * 
+	 * @return the error save function
+	 * 
+	 * @see ErrorSaveFunction
+	 */
 	@NotNull
 	protected ErrorSaveFunction<SaveEntityIn> getErrorSaveFunction() {
 		LOGGER.atDebug().log("Returning errorSaveFunction function {}", errorSaveFunction.getName());
 		return errorSaveFunction;
 	}
 
+	/**
+	 * Gets the pre save all function, provided by the builder, used on the
+	 * {@link CommandFacade#save(Object, Object...) save} method.
+	 * 
+	 * @return the pre save all function
+	 * 
+	 * @see PreSaveAllFunction
+	 */
 	@NotNull
 	protected PreSaveAllFunction<SaveEntitiesIn> getPreSaveAllFunction() {
 		LOGGER.atDebug().log("Returning preSaveAllFunction function {}", preSaveAllFunction.getName());
 		return preSaveAllFunction;
 	}
 
+	/**
+	 * Gets the pos save all function, provided by the builder, used on the
+	 * {@link CommandFacade#save(Object, Object...) save} method.
+	 * 
+	 * @return the pos save all function
+	 * 
+	 * @see PosSaveAllFunction
+	 */
 	@NotNull
 	protected PosSaveAllFunction<SaveEntitiesOut> getPosSaveAllFunction() {
 		LOGGER.atDebug().log("Returning posSaveAllFunction function {}", posSaveAllFunction.getName());
 		return posSaveAllFunction;
 	}
 
+	/**
+	 * Gets the error save all function, provided by the builder, used on the
+	 * {@link CommandFacade#save(Object, Object...) save} method.
+	 * 
+	 * @return the error save all function
+	 * 
+	 * @see ErrorSaveAllFunction
+	 */
 	@NotNull
 	protected ErrorSaveAllFunction<SaveEntitiesIn> getErrorSaveAllFunction() {
 		LOGGER.atDebug().log("Returning errorSaveAllFunction function {}", errorSaveAllFunction.getName());
 		return errorSaveAllFunction;
 	}
 
+	/**
+	 * Gets the pre update function, provided by the builder, used on the
+	 * {@link CommandFacade#update(Object, Object...) update} method.
+	 * 
+	 * @return the pre update function
+	 * 
+	 * @see PreUpdateFunction
+	 */
 	@NotNull
 	protected PreUpdateFunction<UpdateEntityIn> getPreUpdateFunction() {
 		LOGGER.atDebug().log("Returning preUpdateFunction function {}", preUpdateFunction.getName());
 		return preUpdateFunction;
 	}
 
+	/**
+	 * Gets the pos update function, provided by the builder, used on the
+	 * {@link CommandFacade#update(Object, Object...) update} method.
+	 * 
+	 * @return the pos update function
+	 * 
+	 * @see PosUpdateFunction
+	 */
 	@NotNull
 	protected PosUpdateFunction<UpdateEntityOut> getPosUpdateFunction() {
 		LOGGER.atDebug().log("Returning posUpdateFunction function {}", posUpdateFunction.getName());
 		return posUpdateFunction;
 	}
 
+	/**
+	 * Gets the error update function, provided by the builder, used on the
+	 * {@link CommandFacade#update(Object, Object...) update} method.
+	 * 
+	 * @return the error update function
+	 * 
+	 * @see ErrorUpdateFunction
+	 */
 	@NotNull
 	protected ErrorUpdateFunction<UpdateEntityIn> getErrorUpdateFunction() {
 		LOGGER.atDebug().log("Returning errorUpdateFunction function {}", errorUpdateFunction.getName());
 		return errorUpdateFunction;
 	}
 
+	/**
+	 * Gets the pre update all function, provided by the builder, used on the
+	 * {@link CommandFacade#updateAll(Object, Object...) updateAll} method.
+	 * 
+	 * @return the pre update all function
+	 * 
+	 * @see PreUpdateAllFunction
+	 */
 	@NotNull
 	protected PreUpdateAllFunction<UpdateEntitiesIn> getPreUpdateAllFunction() {
 		LOGGER.atDebug().log("Returning preUpdateAllFunction function {}", preUpdateAllFunction.getName());
 		return preUpdateAllFunction;
 	}
 
+	/**
+	 * Gets the pos update all function, provided by the builder, used on the
+	 * {@link CommandFacade#updateAll(Object, Object...) updateAll} method.
+	 * 
+	 * @return the pos update all function
+	 * 
+	 * @see PosUpdateAllFunction
+	 */
 	@NotNull
 	protected PosUpdateAllFunction<UpdateEntitiesOut> getPosUpdateAllFunction() {
 		LOGGER.atDebug().log("Returning posUpdateAllFunction function {}", posUpdateAllFunction.getName());
 		return posUpdateAllFunction;
 	}
 
+	/**
+	 * Gets the error update all function, provided by the builder, used on the
+	 * {@link CommandFacade#updateAll(Object, Object...) updateAll} method.
+	 * 
+	 * @return the error update all function
+	 * 
+	 * @see ErrorUpdateAllFunction
+	 */
 	@NotNull
 	protected ErrorUpdateAllFunction<UpdateEntitiesIn> getErrorUpdateAllFunction() {
 		LOGGER.atDebug().log("Returning errorUpdateAllFunction function {}", errorUpdateAllFunction.getName());
 		return errorUpdateAllFunction;
 	}
 
+	/**
+	 * Gets the pre delete function, provided by the builder, used on the
+	 * {@link CommandFacade#delete(Object, Object...) delete} method.
+	 * 
+	 * @return the pre delete function
+	 * 
+	 * @see PreDeleteFunction
+	 */
 	@NotNull
 	protected PreDeleteFunction<DeleteEntityIn> getPreDeleteFunction() {
 		LOGGER.atDebug().log("Returning preDeleteFunction function {}", preDeleteFunction.getName());
 		return preDeleteFunction;
 	}
 
+	/**
+	 * Gets the pos delete function, provided by the builder, used on the
+	 * {@link CommandFacade#delete(Object, Object...) delete} method.
+	 * 
+	 * @return the pos delete function
+	 * 
+	 * @see PosDeleteFunction
+	 */
 	@NotNull
 	protected PosDeleteFunction<DeleteEntityOut> getPosDeleteFunction() {
 		LOGGER.atDebug().log("Returning posDeleteFunction function {}", posDeleteFunction.getName());
 		return posDeleteFunction;
 	}
 
+	/**
+	 * Gets the error delete function, provided by the builder, used on the
+	 * {@link CommandFacade#delete(Object, Object...) delete} method.
+	 * 
+	 * @return the error delete function
+	 * 
+	 * @see ErrorDeleteFunction
+	 */
 	@NotNull
 	protected ErrorDeleteFunction<DeleteEntityIn> getErrorDeleteFunction() {
 		LOGGER.atDebug().log("Returning errorDeleteFunction function {}", errorDeleteFunction.getName());
 		return errorDeleteFunction;
 	}
 
+	/**
+	 * Gets the pre delete all function, provided by the builder, used on the
+	 * {@link CommandFacade#deleteAll(Object, Object...) deleteAll} method.
+	 * 
+	 * @return the pre delete all function
+	 * 
+	 * @see PreDeleteAllFunction
+	 */
 	@NotNull
 	protected PreDeleteAllFunction<DeleteEntitiesIn> getPreDeleteAllFunction() {
 		LOGGER.atDebug().log("Returning preDeleteAllFunction function {}", preDeleteAllFunction.getName());
 		return preDeleteAllFunction;
 	}
 
+	/**
+	 * Gets the pos delete all function, provided by the builder, used on the
+	 * {@link CommandFacade#deleteAll(Object, Object...) deleteAll} method.
+	 * 
+	 * @return the pos delete all function
+	 * 
+	 * @see PosDeleteAllFunction
+	 */
 	@NotNull
 	protected PosDeleteAllFunction<DeleteEntitiesOut> getPosDeleteAllFunction() {
 		LOGGER.atDebug().log("Returning posDeleteAllFunction function {}", posDeleteAllFunction.getName());
 		return posDeleteAllFunction;
 	}
 
+	/**
+	 * Gets the error delete all function, provided by the builder, used on the
+	 * {@link CommandFacade#deleteAll(Object, Object...) deleteAll} method.
+	 * 
+	 * @return the error delete all function
+	 * 
+	 * @see ErrorDeleteAllFunction
+	 */
 	@NotNull
 	protected ErrorDeleteAllFunction<DeleteEntitiesIn> getErrorDeleteAllFunction() {
 		LOGGER.atDebug().log("Returning errorDeleteAllFunction function {}", errorDeleteAllFunction.getName());
 		return errorDeleteAllFunction;
 	}
 
+	/**
+	 * Gets the pre delete by id function, provided by the builder, used on the
+	 * {@link CommandFacade#deleteById(Object, Object...) deleteById} method.
+	 * 
+	 * @return the pre delete by id function
+	 * 
+	 * @see PreDeleteByIdFunction
+	 */
 	@NotNull
 	protected PreDeleteByIdFunction<DeleteIdIn> getPreDeleteByIdFunction() {
 		LOGGER.atDebug().log("Returning preDeleteByIdFunction function {}", preDeleteByIdFunction.getName());
 		return preDeleteByIdFunction;
 	}
 
+	/**
+	 * Gets the pos delete by id function, provided by the builder, used on the
+	 * {@link CommandFacade#deleteById(Object, Object...) deleteById} method.
+	 * 
+	 * @return the pos delete by id function
+	 * 
+	 * @see PosDeleteByIdFunction
+	 */
 	@NotNull
 	protected PosDeleteByIdFunction<DeleteIdOut> getPosDeleteByIdFunction() {
 		LOGGER.atDebug().log("Returning posDeleteByIdFunction function {}", posDeleteByIdFunction.getName());
 		return posDeleteByIdFunction;
 	}
 
+	/**
+	 * Gets the error delete by id function, provided by the builder, used on the
+	 * {@link CommandFacade#deleteById(Object, Object...) deleteById} method.
+	 * 
+	 * @return the error delete by id function
+	 * 
+	 * @see ErrorDeleteByIdFunction
+	 */
 	@NotNull
 	protected ErrorDeleteByIdFunction<DeleteIdIn> getErrorDeleteByIdFunction() {
 		LOGGER.atDebug().log("Returning errorDeleteByIdFunction function {}", errorDeleteByIdFunction.getName());
 		return errorDeleteByIdFunction;
 	}
 
+	/**
+	 * Gets the pre delete by ids function, provided by the builder, used on the
+	 * {@link CommandFacade#deleteByIds(Object, Object...) deleteByIds} method.
+	 * 
+	 * @return the pre delete by ids function
+	 * 
+	 * @see PreDeleteByIdsFunction
+	 */
 	@NotNull
 	protected PreDeleteByIdsFunction<DeleteIdsIn> getPreDeleteByIdsFunction() {
 		LOGGER.atDebug().log("Returning preDeleteByIdsFunction function {}", preDeleteByIdsFunction.getName());
 		return preDeleteByIdsFunction;
 	}
 
+	/**
+	 * Gets the pos delete by ids function, provided by the builder, used on the
+	 * {@link CommandFacade#deleteByIds(Object, Object...) deleteByIds} method.
+	 * 
+	 * @return the pos delete by ids function
+	 * 
+	 * @see PosDeleteByIdsFunction
+	 */
 	@NotNull
 	protected PosDeleteByIdsFunction<DeleteIdsOut> getPosDeleteByIdsFunction() {
 		LOGGER.atDebug().log("Returning posDeleteByIdsFunction function {}", posDeleteByIdsFunction.getName());
 		return posDeleteByIdsFunction;
 	}
 
+	/**
+	 * Gets the error delete by ids function, provided by the builder, used on the
+	 * {@link CommandFacade#deleteByIds(Object, Object...) deleteByIds} method.
+	 * 
+	 * @return the error delete by ids function
+	 * 
+	 * @see ErrorDeleteByIdsFunction
+	 */
 	@NotNull
 	protected ErrorDeleteByIdsFunction<DeleteIdsIn> getErrorDeleteByIdsFunction() {
 		LOGGER.atDebug().log("Returning errorDeleteByIdsFunction function {}", errorDeleteByIdsFunction.getName());

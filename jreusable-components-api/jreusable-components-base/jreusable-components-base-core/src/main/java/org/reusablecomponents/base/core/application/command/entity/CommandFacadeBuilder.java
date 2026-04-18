@@ -56,18 +56,82 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommandFacadeBuilder.class);
 
+	/**
+	 * Function that executes save operation
+	 * 
+	 * @see SaveFunction
+	 */
 	public SaveFunction<SaveEntityIn, SaveEntityOut> saveFunction;
+
+	/**
+	 * Function that executes save all operation
+	 * 
+	 * @see SaveAllFunction
+	 */
 	public SaveAllFunction<SaveEntitiesIn, SaveEntitiesOut> saveAllFunction;
 
+	/**
+	 * Function that executes update operation
+	 * 
+	 * @see UpdateFunction
+	 */
 	public UpdateFunction<UpdateEntityIn, UpdateEntityOut> updateFunction;
+
+	/**
+	 * Function that executes update all operation
+	 * 
+	 * @see UpdateAllFunction
+	 */
 	public UpdateAllFunction<UpdateEntitiesIn, UpdateEntitiesOut> updateAllFunction;
 
+	/**
+	 * Function that executes delete operation
+	 * 
+	 * @see DeleteFunction
+	 */
 	public DeleteFunction<DeleteEntityIn, DeleteEntityOut> deleteFunction;
+
+	/**
+	 * Function that executes delete all operation
+	 * 
+	 * @see DeleteAllFunction
+	 */
 	public DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut> deleteAllFunction;
 
+	/**
+	 * Function that executes delete by id operation
+	 * 
+	 * @see DeleteByIdFunction
+	 */
 	public DeleteByIdFunction<DeleteIdIn, DeleteIdOut> deleteByIdFunction;
+
+	/**
+	 * Function that executes delete all by ids operation
+	 * 
+	 * @see DeleteByIdsFunction
+	 */
 	public DeleteByIdsFunction<DeleteIdsIn, DeleteIdsOut> deleteByIdsFunction;
 
+	/**
+	 * Default constructor.
+	 * 
+	 * @param function Consumer function, can't be null, used to set the builder
+	 *                 attributes with a lambda expression, example:
+	 * 
+	 *                 <pre>
+	 *                 new CommandFacadeBuilder&lt;Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut&gt;(
+	 *                 		builder -&gt; {
+	 *                 			builder.saveFunction = (saveEntityIn, directives) -&gt; {
+	 *                 				// implementation of the save operation in the persistence layer.
+	 *                 			};
+	 *                 			builder.saveAllFunction = (saveEntitiesIn, directives) -&gt; {
+	 *                 				// implementation of the save all operation in the persistence layer.
+	 *                 			};
+	 * 
+	 *                 			// set other functions...
+	 *                 		});
+	 *                 </pre>
+	 */
 	public CommandFacadeBuilder(
 			final Consumer<CommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>> function) {
 		LOGGER.atDebug().log("Constructing CommandFacadeBuilder function {} ", function);

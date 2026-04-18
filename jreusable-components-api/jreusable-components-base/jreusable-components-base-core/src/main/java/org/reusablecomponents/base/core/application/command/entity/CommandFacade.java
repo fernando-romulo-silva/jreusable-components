@@ -62,11 +62,9 @@ import jakarta.validation.constraints.NotNull;
  * @param <DeleteIdOut>       The output type for the delete by id operation
  * 
  * @param <DeleteIdsIn>       The input type for the delete by ids operation
- *                            (bulk
- *                            version)
+ *                            (bulk version)
  * @param <DeleteIdsOut>      The output type for the delete by ids operation
- *                            (bulk
- *                            version)
+ *                            (bulk version)
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0.0
@@ -194,6 +192,7 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	 * Default constructor, used by the builder to construct this class.
 	 * 
 	 * @param builder Object in charge to construct this one, it cannot be null
+	 * 
 	 * @throws NullPointerException if the builder is null
 	 * 
 	 * @see CommandFacadeBuilder
@@ -237,8 +236,7 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	 * Returns the function that executes the save operation in the
 	 * {@link #save(Object, Object...) save} method.
 	 * 
-	 * @return The <code>SaveFunction</code> function instance, it cannot be null
-	 * @throws NullPointerException if the function is null
+	 * @return The save function
 	 * 
 	 * @see SaveFunction
 	 */
@@ -270,8 +268,7 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	 * Returns the function that executes the save operation in the
 	 * {@link #saveAll(Object, Object...) saveAll} method.
 	 * 
-	 * @return The <code>SaveAllFunction</code> function instance, it cannot be null
-	 * @throws NullPointerException if the function is null
+	 * @return The save all function
 	 * 
 	 * @see SaveAllFunction
 	 */
@@ -303,8 +300,7 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	 * Returns the function that executes the update operation in the
 	 * {@link #update(Object, Object...) update} method.
 	 * 
-	 * @return The <code>UpdateFunction</code> function instance, it cannot be null
-	 * @throws NullPointerException if the function is null
+	 * @return The update function
 	 * 
 	 * @see UpdateFunction
 	 */
@@ -337,9 +333,7 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	 * Returns the function that executes the update operation in the
 	 * {@link #updateAll(Object, Object...) updateAll} method.
 	 * 
-	 * @return The <code>UpdateAllFunction</code> function instance, it cannot be
-	 *         null
-	 * @throws NullPointerException if the function is null
+	 * @return The update all function
 	 * 
 	 * @see UpdateAllFunction
 	 */
@@ -370,8 +364,7 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	 * Returns the function that executes the delete operation in the
 	 * {@link #delete(Object, Object...) delete} method.
 	 * 
-	 * @return The <code>DeleteFunction</code> function instance, it cannot be null
-	 * @throws NullPointerException if the function is null
+	 * @return The delete function
 	 * 
 	 * @see DeleteFunction
 	 */
@@ -404,9 +397,7 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	 * Returns the function that executes the delete operation in the
 	 * {@link #deleteAll(Object, Object...) deleteAll} method.
 	 * 
-	 * @return The <code>DeleteAllFunction</code> function instance, it cannot be
-	 *         null
-	 * @throws NullPointerException if the function is null
+	 * @return The delete all function
 	 * 
 	 * @see DeleteAllFunction
 	 */
@@ -432,6 +423,14 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 		return deleteIdOut;
 	}
 
+	/**
+	 * Returns the function that executes the delete operation in the
+	 * {@link #deleteBy(Object, Object...) deleteBy} method.
+	 * 
+	 * @return The delete by id function
+	 * 
+	 * @see DeleteByIdFunction
+	 */
 	@NotNull
 	protected DeleteByIdFunction<DeleteIdIn, DeleteIdOut> getDeleteByIdFunction() {
 		LOGGER.atDebug().log("Returning delete by id function {}", deleteByIdFunction.getName());
@@ -455,6 +454,14 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 		return deleteIdsOut;
 	}
 
+	/**
+	 * Returns the function that executes the delete operation in the
+	 * {@link #deleteAllBy(Object, Object...) deleteAllBy} method.
+	 * 
+	 * @return The delete by ids function
+	 * 
+	 * @see DeleteByIdsFunction
+	 */
 	@NotNull
 	protected DeleteByIdsFunction<DeleteIdsIn, DeleteIdsOut> getDeleteByIdsFunction() {
 		LOGGER.atDebug().log("Returning delete by ids function {}", deleteByIdsFunction.getName());

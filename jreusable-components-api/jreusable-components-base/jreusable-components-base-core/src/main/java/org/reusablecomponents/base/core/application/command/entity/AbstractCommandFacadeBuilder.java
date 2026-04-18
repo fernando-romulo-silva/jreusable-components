@@ -33,7 +33,54 @@ import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, // basic
+/**
+ * The <code>AbstractCommandFacade</code> builder's abstract class.
+ * 
+ * This class is responsible for building the
+ * <code>AbstractCommandFacadeBuilder</code> object.
+ * 
+ * For each function in this class, if it is not set, it will be set with a
+ * default function that just logs the execution and returns the input
+ * parameters, example: "Default function 'functionName', input parameters:
+ * ['parameter1']".
+ * 
+ * @param <Entity>            The entity type
+ * @param <Id>                The entity id type
+ * @param <SaveEntityIn>      The input type for the save operation
+ * @param <SaveEntityOut>     The output type for the save operation
+ * 
+ * @param <SaveEntitiesIn>    The input type for the save all operation (bulk
+ *                            version)
+ * @param <SaveEntitiesOut>   The output type for the save all operation (bulk
+ *                            version)
+ * 
+ * @param <UpdateEntityIn>    The input type for the update operation
+ * @param <UpdateEntityOut>   The output type for the update operation
+ * 
+ * @param <UpdateEntitiesIn>  The input type for the update all operation (bulk
+ *                            version)
+ * @param <UpdateEntitiesOut> The output type for the update all operation (bulk
+ *                            version)
+ * @param <DeleteEntityIn>    The input type for the delete operation
+ * @param <DeleteEntityOut>   The output type for the delete operation
+ * 
+ * @param <DeleteEntitiesIn>  The input type for the delete all operation (bulk
+ *                            version)
+ * @param <DeleteEntitiesOut> The output type for the delete all operation (bulk
+ *                            version)
+ * 
+ * @param <DeleteIdIn>        The input type for the delete by id operation
+ * @param <DeleteIdOut>       The output type for the delete by id operation
+ * 
+ * @param <DeleteIdsIn>       The input type for the delete by ids operation
+ *                            (bulk version)
+ * @param <DeleteIdsOut>      The output type for the delete by ids operation
+ *                            (bulk version)
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ */
+public abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, // basic
 		// save
 		SaveEntityIn, SaveEntityOut, // save a entity
 		SaveEntitiesIn, SaveEntitiesOut, // save entities
@@ -51,52 +98,172 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCommandFacadeBuilder.class);
 
+	/**
+	 * Function that executes pre save operation
+	 * 
+	 * @see PreSaveFunction
+	 */
 	public PreSaveFunction<SaveEntityIn> preSaveFunction;
 
+	/**
+	 * Function that executes post save operation
+	 * 
+	 * @see PosSaveFunction
+	 */
 	public PosSaveFunction<SaveEntityOut> posSaveFunction;
 
+	/**
+	 * Function that executes error save operation
+	 * 
+	 * @see ErrorSaveFunction
+	 */
 	public ErrorSaveFunction<SaveEntityIn> errorSaveFunction;
 
+	/**
+	 * Function that executes pre save all operation
+	 * 
+	 * @see PreSaveAllFunction
+	 */
 	public PreSaveAllFunction<SaveEntitiesIn> preSaveAllFunction;
 
+	/**
+	 * Function that executes post save all operation
+	 * 
+	 * @see PosSaveAllFunction
+	 */
 	public PosSaveAllFunction<SaveEntitiesOut> posSaveAllFunction;
 
+	/**
+	 * Function that executes error save all operation
+	 * 
+	 * @see ErrorSaveAllFunction
+	 */
 	public ErrorSaveAllFunction<SaveEntitiesIn> errorSaveAllFunction;
 
+	/**
+	 * Function that executes pre update operation
+	 * 
+	 * @see PreUpdateFunction
+	 */
 	public PreUpdateFunction<UpdateEntityIn> preUpdateFunction;
 
+	/**
+	 * Function that executes post update operation
+	 * 
+	 * @see PosUpdateFunction
+	 */
 	public PosUpdateFunction<UpdateEntityOut> posUpdateFunction;
 
+	/**
+	 * Function that executes error update operation
+	 * 
+	 * @see ErrorUpdateFunction
+	 */
 	public ErrorUpdateFunction<UpdateEntityIn> errorUpdateFunction;
 
+	/**
+	 * Function that executes pre update all operation
+	 * 
+	 * @see PreUpdateAllFunction
+	 */
 	public PreUpdateAllFunction<UpdateEntitiesIn> preUpdateAllFunction;
 
+	/**
+	 * Function that executes post update all operation
+	 * 
+	 * @see PosUpdateAllFunction
+	 */
 	public PosUpdateAllFunction<UpdateEntitiesOut> posUpdateAllFunction;
 
+	/**
+	 * Function that executes error update all operation
+	 * 
+	 * @see ErrorUpdateAllFunction
+	 */
 	public ErrorUpdateAllFunction<UpdateEntitiesIn> errorUpdateAllFunction;
 
+	/**
+	 * Function that executes pre delete operation
+	 * 
+	 * @see PreDeleteFunction
+	 */
 	public PreDeleteFunction<DeleteEntityIn> preDeleteFunction;
 
+	/**
+	 * Function that executes post delete operation
+	 * 
+	 * @see PosDeleteFunction
+	 */
 	public PosDeleteFunction<DeleteEntityOut> posDeleteFunction;
 
+	/**
+	 * Function that executes error delete operation
+	 * 
+	 * @see ErrorDeleteFunction
+	 */
 	public ErrorDeleteFunction<DeleteEntityIn> errorDeleteFunction;
 
+	/**
+	 * Function that executes pre delete all operation
+	 * 
+	 * @see PreDeleteAllFunction
+	 */
 	public PreDeleteAllFunction<DeleteEntitiesIn> preDeleteAllFunction;
 
+	/**
+	 * Function that executes post delete all operation
+	 * 
+	 * @see PosDeleteAllFunction
+	 */
 	public PosDeleteAllFunction<DeleteEntitiesOut> posDeleteAllFunction;
 
+	/**
+	 * Function that executes error delete all operation
+	 * 
+	 * @see ErrorDeleteAllFunction
+	 */
 	public ErrorDeleteAllFunction<DeleteEntitiesIn> errorDeleteAllFunction;
 
+	/**
+	 * Function that executes pre delete by id operation
+	 * 
+	 * @see PreDeleteByIdFunction
+	 */
 	public PreDeleteByIdFunction<DeleteIdIn> preDeleteByIdFunction;
 
+	/**
+	 * Function that executes post delete by id operation
+	 * 
+	 * @see PosDeleteByIdFunction
+	 */
 	public PosDeleteByIdFunction<DeleteIdOut> posDeleteByIdFunction;
 
+	/**
+	 * Function that executes error delete by id operation
+	 * 
+	 * @see ErrorDeleteByIdFunction
+	 */
 	public ErrorDeleteByIdFunction<DeleteIdIn> errorDeleteByIdFunction;
 
+	/**
+	 * Function that executes pre delete by ids operation
+	 * 
+	 * @see PreDeleteByIdsFunction
+	 */
 	public PreDeleteByIdsFunction<DeleteIdsIn> preDeleteByIdsFunction;
 
+	/**
+	 * Function that executes post delete by ids operation
+	 * 
+	 * @see PosDeleteByIdsFunction
+	 */
 	public PosDeleteByIdsFunction<DeleteIdsOut> posDeleteByIdsFunction;
 
+	/**
+	 * Function that executes error delete by ids operation
+	 * 
+	 * @see ErrorDeleteByIdsFunction
+	 */
 	public ErrorDeleteByIdsFunction<DeleteIdsIn> errorDeleteByIdsFunction;
 
 	protected AbstractCommandFacadeBuilder(
@@ -137,37 +304,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 		this.errorDeleteByIdsFunction = getErrorDeleteByIdsFunction();
 	}
 
-	private PreDeleteFunction<DeleteEntityIn> getPreDeleteFunction() {
-		return nonNull(preDeleteFunction)
-				? preDeleteFunction
-				: (deleteEntityIn, directives) -> {
-					LOGGER.atDebug().log("Default preDeleteFunction, deleteEntityIn {}, directives {}",
-							deleteEntityIn, directives);
-					return deleteEntityIn;
-				};
-	}
-
-	private PosDeleteFunction<DeleteEntityOut> getPosDeleteFunction() {
-		return nonNull(posDeleteFunction)
-				? posDeleteFunction
-				: (deleteEntityOut, directives) -> {
-					LOGGER.atDebug().log("Default posDeleteFunction, deleteEntityOut {}, directives {}",
-							deleteEntityOut, directives);
-					return deleteEntityOut;
-				};
-	}
-
-	private ErrorDeleteFunction<DeleteEntityIn> getErrorDeleteFunction() {
-		return nonNull(errorDeleteFunction)
-				? errorDeleteFunction
-				: (exception, deleteEntityIn, directives) -> {
-					LOGGER.atDebug().log("Default errorDeleteFunction, exception {}, deleteEntityIn {}, directives {}",
-							deleteEntityIn, exception, directives);
-					return exception;
-				};
-	}
-
-	private PreSaveFunction<SaveEntityIn> getPreSaveFunction() {
+	/**
+	 * Gets the pre save function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pre save function
+	 * @see PreSaveFunction
+	 */
+	protected PreSaveFunction<SaveEntityIn> getPreSaveFunction() {
 		return nonNull(preSaveFunction)
 				? preSaveFunction
 				: (saveEntityIn, directives) -> {
@@ -177,7 +321,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PosSaveFunction<SaveEntityOut> getPosSaveFunction() {
+	/**
+	 * Gets the pos save function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pos save function
+	 * @see PosSaveFunction
+	 */
+	protected PosSaveFunction<SaveEntityOut> getPosSaveFunction() {
 		return nonNull(posSaveFunction)
 				? posSaveFunction
 				: (saveEntityOut, directives) -> {
@@ -187,7 +338,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private ErrorSaveFunction<SaveEntityIn> getErrorSaveFunction() {
+	/**
+	 * Gets the error save function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the error save function
+	 * @see ErrorSaveFunction
+	 */
+	protected ErrorSaveFunction<SaveEntityIn> getErrorSaveFunction() {
 		return nonNull(errorSaveFunction)
 				? errorSaveFunction
 				: (exception, saveEntityIn, directives) -> {
@@ -197,7 +355,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PreSaveAllFunction<SaveEntitiesIn> getPreSaveAllFunction() {
+	/**
+	 * Gets the pre save all function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pre save all function
+	 * @see PreSaveAllFunction
+	 */
+	protected PreSaveAllFunction<SaveEntitiesIn> getPreSaveAllFunction() {
 		return nonNull(preSaveAllFunction)
 				? preSaveAllFunction
 				: (saveEntitiesIn, directives) -> {
@@ -207,7 +372,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PosSaveAllFunction<SaveEntitiesOut> getPosSaveAllFunction() {
+	/**
+	 * Gets the pos save all function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pos save all function
+	 * @see PosSaveAllFunction
+	 */
+	protected PosSaveAllFunction<SaveEntitiesOut> getPosSaveAllFunction() {
 		return nonNull(posSaveAllFunction)
 				? posSaveAllFunction
 				: (saveEntitiesOut, directives) -> {
@@ -217,7 +389,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private ErrorSaveAllFunction<SaveEntitiesIn> getErrorSaveAllFunction() {
+	/**
+	 * Gets the error save all function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the error save all function
+	 * @see ErrorSaveAllFunction
+	 */
+	protected ErrorSaveAllFunction<SaveEntitiesIn> getErrorSaveAllFunction() {
 		return nonNull(errorSaveAllFunction)
 				? errorSaveAllFunction
 				: (exception, saveEntitiesIn, directives) -> {
@@ -227,7 +406,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PreUpdateFunction<UpdateEntityIn> getPreUpdateFunction() {
+	/**
+	 * Gets the pos update function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pos update function
+	 * @see PosUpdateFunction
+	 */
+	protected PreUpdateFunction<UpdateEntityIn> getPreUpdateFunction() {
 		return nonNull(preUpdateFunction)
 				? preUpdateFunction
 				: (updateEntityIn, directives) -> {
@@ -237,7 +423,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PosUpdateFunction<UpdateEntityOut> getPosUpdateFunction() {
+	/**
+	 * Gets the pos update function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pos update function
+	 * @see PosUpdateFunction
+	 */
+	protected PosUpdateFunction<UpdateEntityOut> getPosUpdateFunction() {
 		return nonNull(posUpdateFunction)
 				? posUpdateFunction
 				: (updateEntityOut, directives) -> {
@@ -247,27 +440,48 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private ErrorUpdateFunction<UpdateEntityIn> getErrorUpdateFunction() {
+	/**
+	 * Gets the error update function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the error update function
+	 * @see ErrorUpdateFunction
+	 */
+	protected ErrorUpdateFunction<UpdateEntityIn> getErrorUpdateFunction() {
 		return nonNull(errorUpdateFunction)
 				? errorUpdateFunction
 				: (exception, updateEntityIn, directives) -> {
-					LOGGER.atDebug().log("Default errorUpdate, exception {}, updateEntityIn {}, directives {}",
+					LOGGER.atDebug().log("Default errorUpdateFunction, exception {}, updateEntityIn {}, directives {}",
 							exception, updateEntityIn, directives);
 					return exception;
 				};
 	}
 
-	private PreUpdateAllFunction<UpdateEntitiesIn> getPreUpdateAllFunction() {
+	/**
+	 * Gets the pre update all function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pre update all function
+	 * @see PreUpdateAllFunction
+	 */
+	protected PreUpdateAllFunction<UpdateEntitiesIn> getPreUpdateAllFunction() {
 		return nonNull(preUpdateAllFunction)
 				? preUpdateAllFunction
 				: (updateEntitiesIn, directives) -> {
-					LOGGER.atDebug().log("Default preUpdateAllFunction, updateEntityIn {}, directives {}",
+					LOGGER.atDebug().log("Default preUpdateAllFunction, updateEntitiesIn {}, directives {}",
 							updateEntitiesIn, directives);
 					return updateEntitiesIn;
 				};
 	}
 
-	private PosUpdateAllFunction<UpdateEntitiesOut> getPosUpdateAllFunction() {
+	/**
+	 * Gets the pos update all function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pos update all function
+	 * @see PosUpdateAllFunction
+	 */
+	protected PosUpdateAllFunction<UpdateEntitiesOut> getPosUpdateAllFunction() {
 		return nonNull(posUpdateAllFunction)
 				? posUpdateAllFunction
 				: (final UpdateEntitiesOut updateEntitiesOut,
@@ -278,7 +492,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private ErrorUpdateAllFunction<UpdateEntitiesIn> getErrorUpdateAllFunction() {
+	/**
+	 * Gets the error update all function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the error update all function
+	 * @see ErrorUpdateAllFunction
+	 */
+	protected ErrorUpdateAllFunction<UpdateEntitiesIn> getErrorUpdateAllFunction() {
 		return nonNull(errorUpdateAllFunction)
 				? errorUpdateAllFunction
 				: (exception, updateEntitiesIn, directives) -> {
@@ -289,18 +510,83 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PreDeleteAllFunction<DeleteEntitiesIn> getPreDeleteAllFunction() {
+	/**
+	 * Gets the pre delete function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pre delete function
+	 * @see PreDeleteFunction
+	 */
+	protected PreDeleteFunction<DeleteEntityIn> getPreDeleteFunction() {
+		return nonNull(preDeleteFunction)
+				? preDeleteFunction
+				: (deleteEntityIn, directives) -> {
+					LOGGER.atDebug().log("Default preDeleteFunction, deleteEntityIn {}, directives {}",
+							deleteEntityIn, directives);
+					return deleteEntityIn;
+				};
+	}
+
+	/**
+	 * Gets the pos delete function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pos delete function
+	 * @see PosDeleteFunction
+	 */
+	protected PosDeleteFunction<DeleteEntityOut> getPosDeleteFunction() {
+		return nonNull(posDeleteFunction)
+				? posDeleteFunction
+				: (deleteEntityOut, directives) -> {
+					LOGGER.atDebug().log("Default posDeleteFunction, deleteEntityOut {}, directives {}",
+							deleteEntityOut, directives);
+					return deleteEntityOut;
+				};
+	}
+
+	/**
+	 * Gets the error delete function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the error delete function
+	 * @see ErrorDeleteFunction
+	 */
+	protected ErrorDeleteFunction<DeleteEntityIn> getErrorDeleteFunction() {
+		return nonNull(errorDeleteFunction)
+				? errorDeleteFunction
+				: (exception, deleteEntityIn, directives) -> {
+					LOGGER.atDebug().log("Default errorDeleteFunction, exception {}, deleteEntityIn {}, directives {}",
+							exception, deleteEntityIn, directives);
+					return exception;
+				};
+	}
+
+	/**
+	 * Gets the pre delete all function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pre delete all function
+	 * @see PreDeleteAllFunction
+	 */
+	protected PreDeleteAllFunction<DeleteEntitiesIn> getPreDeleteAllFunction() {
 		return nonNull(preDeleteAllFunction)
 				? preDeleteAllFunction
 				: (deleteEntitiesIn, directives) -> {
-					LOGGER.atDebug().log("Default preDeleteAllFunction, deleteEntityIn {}, directives {}",
+					LOGGER.atDebug().log("Default preDeleteAllFunction, deleteEntitiesIn {}, directives {}",
 							deleteEntitiesIn,
 							directives);
 					return deleteEntitiesIn;
 				};
 	}
 
-	private PosDeleteAllFunction<DeleteEntitiesOut> getPosDeleteAllFunction() {
+	/**
+	 * Gets the pos delete by id function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pos delete by id function
+	 * @see PosDeleteByIdFunction
+	 */
+	protected PosDeleteAllFunction<DeleteEntitiesOut> getPosDeleteAllFunction() {
 		return nonNull(posDeleteAllFunction)
 				? posDeleteAllFunction
 				: (deleteEntitiesOut, directives) -> {
@@ -310,7 +596,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private ErrorDeleteAllFunction<DeleteEntitiesIn> getErrorDeleteAllFunction() {
+	/**
+	 * Gets the error delete all function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the error delete all function
+	 * @see ErrorDeleteAllFunction
+	 */
+	protected ErrorDeleteAllFunction<DeleteEntitiesIn> getErrorDeleteAllFunction() {
 		return nonNull(errorDeleteAllFunction)
 				? errorDeleteAllFunction
 				: (exception, deleteEntitiesIn, directives) -> {
@@ -321,7 +614,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PreDeleteByIdFunction<DeleteIdIn> getPreDeleteByIdFunction() {
+	/**
+	 * Gets the pre delete by id function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pre delete by id function
+	 * @see PreDeleteByIdFunction
+	 */
+	protected PreDeleteByIdFunction<DeleteIdIn> getPreDeleteByIdFunction() {
 		return nonNull(preDeleteByIdFunction)
 				? preDeleteByIdFunction
 				: (deleteIdIn, directives) -> {
@@ -331,7 +631,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PosDeleteByIdFunction<DeleteIdOut> getPosDeleteByIdFunction() {
+	/**
+	 * Gets the pos delete by id function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pos delete by id function
+	 * @see PosDeleteByIdFunction
+	 */
+	protected PosDeleteByIdFunction<DeleteIdOut> getPosDeleteByIdFunction() {
 		return nonNull(posDeleteByIdFunction)
 				? posDeleteByIdFunction
 				: (deleteIdOut, directives) -> {
@@ -341,7 +648,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private ErrorDeleteByIdFunction<DeleteIdIn> getErrorDeleteByIdFunction() {
+	/**
+	 * Gets the error delete by id function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the error delete by id function
+	 * @see ErrorDeleteByIdFunction
+	 */
+	protected ErrorDeleteByIdFunction<DeleteIdIn> getErrorDeleteByIdFunction() {
 		return nonNull(errorDeleteByIdFunction)
 				? errorDeleteByIdFunction
 				: (exception, deleteIdIn, directives) -> {
@@ -351,7 +665,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PreDeleteByIdsFunction<DeleteIdsIn> getPreDeleteByIdsFunction() {
+	/**
+	 * Gets the pre delete by ids function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pre delete by ids function
+	 * @see PreDeleteByIdsFunction
+	 */
+	protected PreDeleteByIdsFunction<DeleteIdsIn> getPreDeleteByIdsFunction() {
 		return nonNull(preDeleteByIdsFunction)
 				? preDeleteByIdsFunction
 				: (deleteIdsIn, directives) -> {
@@ -361,7 +682,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private PosDeleteByIdsFunction<DeleteIdsOut> getPosDeleteByIdsFunction() {
+	/**
+	 * Gets the pos delete by ids function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the pos delete by ids function
+	 * @see PosDeleteByIdsFunction
+	 */
+	protected PosDeleteByIdsFunction<DeleteIdsOut> getPosDeleteByIdsFunction() {
 		return nonNull(posDeleteByIdsFunction)
 				? posDeleteByIdsFunction
 				: (deleteIdsOut, directives) -> {
@@ -371,7 +699,14 @@ abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity
 				};
 	}
 
-	private ErrorDeleteByIdsFunction<DeleteIdsIn> getErrorDeleteByIdsFunction() {
+	/**
+	 * Gets the error delete by ids function, if it is not set, it will be set with
+	 * a default function that logs the execution.
+	 * 
+	 * @return the error delete by ids function
+	 * @see ErrorDeleteByIdsFunction
+	 */
+	protected ErrorDeleteByIdsFunction<DeleteIdsIn> getErrorDeleteByIdsFunction() {
 		return nonNull(errorDeleteByIdsFunction)
 				? errorDeleteByIdsFunction
 				: (exception, deleteIdsIn, directives) -> {

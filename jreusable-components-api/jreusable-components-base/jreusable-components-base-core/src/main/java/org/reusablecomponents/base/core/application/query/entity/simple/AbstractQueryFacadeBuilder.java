@@ -30,7 +30,8 @@ import org.slf4j.LoggerFactory;
  * 
  * For each function in this class, if it is not set, it will be set with a
  * default function that just logs the execution and returns the input
- * parameters, example: "Default function 'functionName', input parameters: {}".
+ * parameters, example: "Default function 'functionName', input parameters:
+ * ['parameter1']".
  * 
  * @param <Entity>         The entity type
  * @param <Id>             The entity id type
@@ -48,7 +49,7 @@ import org.slf4j.LoggerFactory;
  * @author Fernando Romulo da Silva
  * @since 1.0.0
  */
-abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
+public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
         extends BaseFacadeBuilder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractQueryFacadeBuilder.class);

@@ -113,7 +113,7 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 		this.countAllFunction = getCountAllFunction();
 		this.existsAllFunction = getExistsAllFunction();
 
-		LOGGER.atDebug().log("CommandFacadeBuilder constructed commands, functions {}",
+		LOGGER.atDebug().log("QueryFacadeBuilder constructed functions {}",
 				List.of(existsByIdFunction.getName(),
 						findByIdFunction.getName(), findAllFunction.getName(),
 						countAllFunction.getName(), existsAllFunction.getName()));
@@ -124,6 +124,7 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	 * function that throws an UnsupportedOperationException when executed.
 	 * 
 	 * @return the exists all function
+	 * 
 	 * @see ExistsAllFunction
 	 * @see UnsupportedOperationException
 	 */
@@ -140,6 +141,7 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	 * function that throws an UnsupportedOperationException when executed.
 	 * 
 	 * @return the count all function
+	 * 
 	 * @see CountAllFunction
 	 * @see UnsupportedOperationException
 	 */
@@ -156,6 +158,7 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	 * function that throws an UnsupportedOperationException when executed.
 	 * 
 	 * @return the find all function
+	 * 
 	 * @see FindAllFunction
 	 * @see UnsupportedOperationException
 	 */
@@ -172,6 +175,7 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	 * function that throws an UnsupportedOperationException when executed.
 	 * 
 	 * @return the exists by id function
+	 * 
 	 * @see ExistsByIdFunction
 	 * @see UnsupportedOperationException
 	 */
@@ -188,6 +192,7 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	 * function that throws an UnsupportedOperationException when executed.
 	 * 
 	 * @return the find by id function
+	 * 
 	 * @see FindByIdFunction
 	 * @see UnsupportedOperationException
 	 */

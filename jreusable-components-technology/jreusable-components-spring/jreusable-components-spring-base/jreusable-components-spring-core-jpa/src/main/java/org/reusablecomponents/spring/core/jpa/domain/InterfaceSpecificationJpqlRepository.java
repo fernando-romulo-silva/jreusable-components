@@ -8,9 +8,9 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface InterfaceSpecificationJpqlRepository<Entity extends AbstractEntity<Id>, Id>
-                extends
-                InterfaceSpringSpecificationRepository<Entity, Id, String>,
-                InterfaceCustomSpecificationJpqlRepository<Entity, Id>,
-                JpaRepository<Entity, Id> {
+        extends
+        InterfaceSpringSpecificationRepository<Entity, Id, String>,
+        InterfaceCustomSpecificationJpqlRepository<Entity, Id>,
+        JpaRepository<Entity, Id> {
 
 }
