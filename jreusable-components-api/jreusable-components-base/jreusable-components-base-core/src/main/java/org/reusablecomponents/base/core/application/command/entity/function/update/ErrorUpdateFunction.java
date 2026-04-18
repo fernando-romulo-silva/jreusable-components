@@ -12,8 +12,7 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * @param <UpdateEntityIn> The type of the input data for the update operation,
  *                         typically the entity to be updated.
  * @param <Object[]>       The type of the additional arguments that may be
- *                         needed for error handling, such as context
- *                         information or error details.
+ *                         used.
  * 
  * @return A {@link BaseException} that represents the error that occurred
  *         during the update operation.
@@ -25,4 +24,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 public non-sealed interface ErrorUpdateFunction<UpdateEntityIn>
         extends CommandFunction,
         OperationFunction3Args<BaseException, UpdateEntityIn, Object[], BaseException> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "ErrorUpdateFunction";
+    }
 }

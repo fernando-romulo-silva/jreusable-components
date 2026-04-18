@@ -10,9 +10,8 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * has been persisted.
  *
  * @param <UpdateEntityOut> the type of the entity being updated
- * @param <Object[]>        the type of the additional arguments that may be
- *                          needed for post-update operations, such as context
- *                          information or related data
+ * @param <Object[]>        The type of the additional arguments that may be
+ *                          used.
  * 
  * @return the updated entity after any post-update operations have been applied
  * 
@@ -22,4 +21,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface PosUpdateFunction<UpdateEntityOut>
 		extends CommandFunction, OperationFunction2Args<UpdateEntityOut, Object[], UpdateEntityOut> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "PosUpdateFunction";
+	}
 }

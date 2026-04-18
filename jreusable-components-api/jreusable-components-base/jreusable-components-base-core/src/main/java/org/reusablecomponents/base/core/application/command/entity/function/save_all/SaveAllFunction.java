@@ -14,11 +14,8 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * @param <SaveEntitiesIn>  The type of the input collection of entities to be
  *                          saved.
  * @param <SaveEntitiesOut> The type of the output result of the save operation.
- * 
- * @param <Object[]>        The type of the additional arguments that can be
- *                          passed to the function, which can be used for
- *                          various purposes such as providing context or
- *                          additional data needed for the save operation.
+ * @param <Object[]>        The type of the additional arguments that may be
+ *                          used
  * 
  * @return the result of the save operation after any save operations have
  *         been applied.
@@ -29,4 +26,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface SaveAllFunction<SaveEntitiesIn, SaveEntitiesOut>
 		extends CommandFunction, OperationFunction2Args<SaveEntitiesIn, Object[], SaveEntitiesOut> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "SaveAllFunction";
+	}
 }

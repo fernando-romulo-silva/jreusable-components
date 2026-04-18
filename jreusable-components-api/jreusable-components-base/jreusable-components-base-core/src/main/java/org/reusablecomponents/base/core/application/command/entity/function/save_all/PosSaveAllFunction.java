@@ -13,10 +13,8 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * 
  * @param <SaveEntitiesOut> The type of the output data for the save operation,
  *                          typically a collection of entities.
- * @param <Object[]>        The type of the additional arguments that can be
- *                          passed to the function, which can be used for
- *                          various purposes such as providing context or
- *                          additional data needed for the post-save operation.
+ * @param <Object[]>        The type of the additional arguments that may be
+ *                          used
  * 
  * @return The result of the post-save operation, which can be the transformed
  *         output data.
@@ -27,4 +25,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface PosSaveAllFunction<SaveEntitiesOut>
 		extends CommandFunction, OperationFunction2Args<SaveEntitiesOut, Object[], SaveEntitiesOut> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "PosSaveAllFunction";
+	}
 }

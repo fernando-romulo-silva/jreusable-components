@@ -13,8 +13,7 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * @param <UpdateEntityOut> The type of the output result of the update
  *                          operation.
  * @param <Object[]>        The type of the additional arguments that may be
- *                          needed for the update operation, such as context
- *                          information or related data.
+ *                          used.
  * 
  * @return the result of the update operation after any update operations have
  *         been applied.
@@ -24,5 +23,13 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  */
 @FunctionalInterface
 public non-sealed interface UpdateFunction<UpdateEntityIn, UpdateEntityOut>
-                extends CommandFunction, OperationFunction2Args<UpdateEntityIn, Object[], UpdateEntityOut> {
+        extends CommandFunction, OperationFunction2Args<UpdateEntityIn, Object[], UpdateEntityOut> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "UpdateFunction";
+    }
 }

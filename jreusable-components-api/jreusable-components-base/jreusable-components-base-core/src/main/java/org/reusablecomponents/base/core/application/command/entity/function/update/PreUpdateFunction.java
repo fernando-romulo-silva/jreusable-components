@@ -12,8 +12,7 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * @param <UpdateEntityIn> The type of the input data for the update operation,
  *                         typically the entity to be updated.
  * @param <Object[]>       The type of the additional arguments that may be
- *                         needed for pre-update operations, such as context
- *                         information or related data.
+ *                         used.
  * 
  * @return the transformed input data after any pre-update operations have been
  *         applied
@@ -24,4 +23,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface PreUpdateFunction<UpdateEntityIn>
         extends CommandFunction, OperationFunction2Args<UpdateEntityIn, Object[], UpdateEntityIn> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "PreUpdateFunction";
+    }
 }

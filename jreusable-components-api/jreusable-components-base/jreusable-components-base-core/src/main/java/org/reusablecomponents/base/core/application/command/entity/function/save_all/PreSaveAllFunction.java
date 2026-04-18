@@ -13,8 +13,7 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  *
  * @param <SaveEntitiesIn> The type of the input data for the save operation,
  *                         typically a collection of entities.
- * @param <Object[]>       The type of the additional arguments that can be
- *                         passed to the function, if needed.
+ * @param <Object[]>       The type of the additional arguments that may be used
  * 
  * @return The transformed input data that will be used for the save operation.
  * 
@@ -24,4 +23,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface PreSaveAllFunction<SaveEntitiesIn>
 		extends CommandFunction, OperationFunction2Args<SaveEntitiesIn, Object[], SaveEntitiesIn> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "PreSaveAllFunction";
+	}
 }

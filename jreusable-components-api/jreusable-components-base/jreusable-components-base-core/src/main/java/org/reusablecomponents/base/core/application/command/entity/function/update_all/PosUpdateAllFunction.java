@@ -13,8 +13,7 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  *                            operation, typically a collection of updated
  *                            entities.
  * @param <Object[]>          The type of the additional arguments that may be
- *                            needed for the update operation, such as context
- *                            information or related data.
+ *                            used.
  * 
  * @return The result of the post-update operation, which may be the same as
  *         the input data or a modified version of it.
@@ -24,5 +23,13 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  */
 @FunctionalInterface
 public non-sealed interface PosUpdateAllFunction<UpdateEntitiesOut>
-                extends CommandFunction, OperationFunction2Args<UpdateEntitiesOut, Object[], UpdateEntitiesOut> {
+        extends CommandFunction, OperationFunction2Args<UpdateEntitiesOut, Object[], UpdateEntitiesOut> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "PosUpdateAllFunction";
+    }
 }

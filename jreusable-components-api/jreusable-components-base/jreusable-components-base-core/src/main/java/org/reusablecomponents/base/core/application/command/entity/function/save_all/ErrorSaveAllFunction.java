@@ -25,4 +25,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface ErrorSaveAllFunction<SaveEntitiesIn>
 		extends CommandFunction, OperationFunction3Args<BaseException, SaveEntitiesIn, Object[], BaseException> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "ErrorSaveAllFunction";
+	}
 }

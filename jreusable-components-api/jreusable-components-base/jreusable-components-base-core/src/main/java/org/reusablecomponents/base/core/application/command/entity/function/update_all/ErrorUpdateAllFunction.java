@@ -13,8 +13,7 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * @param <UpdateEntitiesIn> The type of the input data for the update
  *                           operation, typically a collection of entities.
  * @param <Object[]>         The type of the additional arguments that may be
- *                           needed for the update operation, such as context
- *                           information or related data.
+ *                           used.
  * 
  * @return A {@link BaseException} that represents the error that occurred
  *         during the update operation.
@@ -24,6 +23,14 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  */
 @FunctionalInterface
 public non-sealed interface ErrorUpdateAllFunction<UpdateEntitiesIn>
-                extends CommandFunction,
-                OperationFunction3Args<BaseException, UpdateEntitiesIn, Object[], BaseException> {
+        extends CommandFunction,
+        OperationFunction3Args<BaseException, UpdateEntitiesIn, Object[], BaseException> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "ErrorUpdateAllFunction";
+    }
 }

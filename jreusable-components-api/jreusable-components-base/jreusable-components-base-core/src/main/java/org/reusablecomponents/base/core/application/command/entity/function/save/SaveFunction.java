@@ -12,9 +12,7 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * 
  * @param <SaveEntityIn>  The type of the entity to be saved
  * @param <SaveEntityOut> The type of the saved entity
- * @param <Object[]>      The type of the additional arguments that may be
- *                        needed for the save operation, such as context
- *                        information or related data
+ * @param <Object[]>      The type of the additional arguments that may be used
  * 
  * @return the saved entity after any save operations have been applied
  * 
