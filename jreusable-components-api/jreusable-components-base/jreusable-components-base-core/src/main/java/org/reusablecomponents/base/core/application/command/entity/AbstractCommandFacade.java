@@ -25,8 +25,6 @@ import org.reusablecomponents.base.core.application.command.entity.function.upda
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.ErrorUpdateAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.PosUpdateAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.PreUpdateAllFunction;
-import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacade;
-import org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id.PreFindByIdFunction;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
