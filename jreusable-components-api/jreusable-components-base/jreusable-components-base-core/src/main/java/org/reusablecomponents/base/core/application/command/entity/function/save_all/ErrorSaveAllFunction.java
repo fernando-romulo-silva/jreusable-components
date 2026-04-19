@@ -1,6 +1,7 @@
 package org.reusablecomponents.base.core.application.command.entity.function.save_all;
 
 import org.reusablecomponents.base.core.application.command.CommandFunction;
+import org.reusablecomponents.base.core.application.command.entity.function.save.ErrorSaveFunction;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction3Args;
 
@@ -13,8 +14,7 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * @param <SaveEntitiesIn> The type of the input data for the save operation,
  *                         typically a collection of entities.
  * @param <Object[]>       The type of the additional arguments that may be
- *                         needed for the save operation, such as context
- *                         information or related data.
+ *                         used.
  * 
  * @return A {@link BaseException} that represents the error that occurred
  *         during the save operation.

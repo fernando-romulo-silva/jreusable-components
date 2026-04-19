@@ -5,9 +5,32 @@ import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction3Args;
 
 /**
-* 
-*/
+ * A functional interface representing an error function for a delete by ID
+ * operation. This function is executed when an error occurs during the delete
+ * operation and can be used to perform any necessary operations or
+ * transformations on the exception or the entity involved in the delete
+ * operation.
+ * 
+ * @param <DeleteIdIn> The type of the input used to identify and delete
+ *                     the entity.
+ * @param <Object[]>   The type of the additional arguments that can be
+ *                     passed to the function, if needed.
+ * 
+ * @return A {@link BaseException} that represents the error that occurred
+ *         during the delete by id operation.
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ */
 @FunctionalInterface
 public non-sealed interface ErrorDeleteByIdFunction<DeleteIdIn>
         extends CommandFunction, OperationFunction3Args<BaseException, DeleteIdIn, Object[], BaseException> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "ErrorDeleteByIdFunction";
+    }
 }

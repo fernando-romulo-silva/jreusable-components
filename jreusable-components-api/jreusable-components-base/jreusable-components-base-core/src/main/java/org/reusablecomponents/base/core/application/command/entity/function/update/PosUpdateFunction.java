@@ -9,11 +9,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * any necessary operations or transformations on the updated entity after it
  * has been persisted.
  *
- * @param <UpdateEntityOut> the type of the entity being updated
+ * @param <UpdateEntityOut> The type of the entity being updated.
  * @param <Object[]>        The type of the additional arguments that may be
  *                          used.
  * 
- * @return the updated entity after any post-update operations have been applied
+ * @return The updated entity after any post-update operations have been
+ *         applied.
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0.0

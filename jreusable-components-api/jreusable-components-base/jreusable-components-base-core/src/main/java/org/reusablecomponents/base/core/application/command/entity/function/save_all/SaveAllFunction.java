@@ -15,9 +15,9 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  *                          saved.
  * @param <SaveEntitiesOut> The type of the output result of the save operation.
  * @param <Object[]>        The type of the additional arguments that may be
- *                          used
+ *                          used.
  * 
- * @return the result of the save operation after any save operations have
+ * @return The result of the save operation after any save operations have
  *         been applied.
  * 
  * @author Fernando Romulo da Silva

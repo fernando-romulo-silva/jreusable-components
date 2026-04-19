@@ -4,24 +4,34 @@ import org.reusablecomponents.base.core.application.command.CommandFunction;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction2Args;
 
 /**
- * A function that deletes an entity by its id.
+ * This function is used to delete an entity by its ID.
+ * The output is the result of the delete operation, which can be a confirmation
+ * of deletion, the deleted id, or any relevant information about the operation.
  * 
- * <p>
- * This function is used in the <code>DeleteByIdCommand</code> to perform the
- * delete operation.
- * <p>
+ * @param <DeleteIdIn>  The type of the input used to identify and delete
+ *                      the entity.
+ * @param <DeleteIdOut> The type of the output result of the delete
+ *                      operation.
+ * @param <Object[]>    The type of the additional arguments that can be
+ *                      passed to the function.
  * 
- * @param <DeleteIdIn>  The input id type for the delete by id operation
- * @param <DeleteIdOut> The output type for the delete by id operation, like
- *                      void, Boolean, or a wrap type like Mono<Void> or
- *                      Mono<Boolean>
+ * @return The result of the delete operation, which can be a confirmation of
+ *         deletion, the deleted id, or any relevant information about the
+ *         operation.
  * 
  * @author Fernando Romulo da Silva
- * @since 1.0
- * 
- * @see DeleteByIdCommand
+ * @since 1.0.0
  */
 @FunctionalInterface
 public non-sealed interface DeleteByIdFunction<DeleteIdIn, DeleteIdOut>
-                extends CommandFunction, OperationFunction2Args<DeleteIdIn, Object[], DeleteIdOut> {
+        extends CommandFunction, OperationFunction2Args<DeleteIdIn, Object[], DeleteIdOut> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "DeleteByIdFunction";
+    }
+
 }

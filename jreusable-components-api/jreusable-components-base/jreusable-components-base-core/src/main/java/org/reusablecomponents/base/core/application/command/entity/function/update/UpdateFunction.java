@@ -15,7 +15,7 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * @param <Object[]>        The type of the additional arguments that may be
  *                          used.
  * 
- * @return the result of the update operation after any update operations have
+ * @return The result of the update operation after any update operations have
  *         been applied.
  * 
  * @author Fernando Romulo da Silva

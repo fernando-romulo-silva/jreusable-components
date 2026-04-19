@@ -13,7 +13,8 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  *
  * @param <SaveEntitiesIn> The type of the input data for the save operation,
  *                         typically a collection of entities.
- * @param <Object[]>       The type of the additional arguments that may be used
+ * @param <Object[]>       The type of the additional arguments that may be
+ *                         used.
  * 
  * @return The transformed input data that will be used for the save operation.
  * 

@@ -11,9 +11,9 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * deleted entities, or any relevant information about the operation.
  * 
  * @param <DeleteEntitiesIn>  The input type for the delete all operation, like
- *                            a filter or criteria object
+ *                            a filter or criteria object.
  * @param <DeleteEntitiesOut> The output type for the delete all operation, like
- *                            the number of deleted entities or a status object
+ *                            the number of deleted entities or a status object.
  * @param <Object[]>          The type of the additional arguments that can be
  *                            passed to the function, if needed.
  * 

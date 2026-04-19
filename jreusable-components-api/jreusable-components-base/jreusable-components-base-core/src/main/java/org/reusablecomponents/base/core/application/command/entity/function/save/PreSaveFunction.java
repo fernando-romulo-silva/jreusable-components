@@ -8,10 +8,10 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * function is executed before saving an entity and can be used to perform any
  * necessary operations or transformations on the entity before it is persisted.
  *
- * @param <SaveEntityIn> the type of the entity being saved
- * @param <Object[]>     The type of the additional arguments that may be used
+ * @param <SaveEntityIn> The type of the entity being saved.
+ * @param <Object[]>     The type of the additional arguments that may be used.
  * 
- * @return the entity after any pre-save operations have been applied
+ * @return The entity after any pre-save operations have been applied.
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0.0

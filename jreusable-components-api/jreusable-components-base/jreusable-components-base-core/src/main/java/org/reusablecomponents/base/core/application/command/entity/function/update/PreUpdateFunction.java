@@ -14,8 +14,8 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
  * @param <Object[]>       The type of the additional arguments that may be
  *                         used.
  * 
- * @return the transformed input data after any pre-update operations have been
- *         applied
+ * @return The transformed input data after any pre-update operations have been
+ *         applied.
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0.0
