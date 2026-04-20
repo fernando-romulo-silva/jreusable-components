@@ -1,13 +1,9 @@
 package org.application_example.domain;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
-import org.application_example.infra.Utils;
 import org.reusablecomponents.base.core.domain.AbstractEntity;
 import org.reusablecomponents.base.core.domain.AbstractEntityBuilder;
-
-import jakarta.validation.Validator;
 
 public class Notification extends AbstractEntity<Long> {
 

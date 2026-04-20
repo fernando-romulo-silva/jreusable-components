@@ -233,10 +233,10 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	}
 
 	/**
-	 * Returns the function that executes the save operation in the
-	 * {@link #save(Object, Object...) save} method.
+	 * Gets the save function {@link #saveFunction saveFunction}, provided by the
+	 * builder.
 	 * 
-	 * @return The save function
+	 * @return the save function
 	 * 
 	 * @see SaveFunction
 	 */
@@ -265,10 +265,10 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	}
 
 	/**
-	 * Returns the function that executes the save operation in the
-	 * {@link #saveAll(Object, Object...) saveAll} method.
+	 * Gets the save all function {@link #saveAllFunction saveAllFunction}, provided
+	 * by the builder.
 	 * 
-	 * @return The save all function
+	 * @return the save all function
 	 * 
 	 * @see SaveAllFunction
 	 */
@@ -297,10 +297,10 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	}
 
 	/**
-	 * Returns the function that executes the update operation in the
-	 * {@link #update(Object, Object...) update} method.
+	 * Gets the update function {@link #updateFunction updateFunction}, provided by
+	 * the builder.
 	 * 
-	 * @return The update function
+	 * @return the update function
 	 * 
 	 * @see UpdateFunction
 	 */
@@ -330,10 +330,10 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	}
 
 	/**
-	 * Returns the function that executes the update operation in the
-	 * {@link #updateAll(Object, Object...) updateAll} method.
+	 * Gets the update all function {@link #updateAllFunction updateAllFunction},
+	 * provided by the builder.
 	 * 
-	 * @return The update all function
+	 * @return the update all function
 	 * 
 	 * @see UpdateAllFunction
 	 */
@@ -361,10 +361,10 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	}
 
 	/**
-	 * Returns the function that executes the delete operation in the
-	 * {@link #delete(Object, Object...) delete} method.
+	 * Gets the delete all function {@link #deleteFunction
+	 * deleteFunction}, provided by the builder.
 	 * 
-	 * @return The delete function
+	 * @return the delete function
 	 * 
 	 * @see DeleteFunction
 	 */
@@ -394,12 +394,12 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	}
 
 	/**
-	 * Returns the function that executes the delete operation in the
-	 * {@link #deleteAll(Object, Object...) deleteAll} method.
+	 * Gets the delete all function {@link #deleteAllFunction
+	 * deleteAllFunction}, provided by the builder.
 	 * 
-	 * @return The delete all function
+	 * @return the delete all function
 	 * 
-	 * @see DeleteAllFunction
+	 * @see deleteAllFunction
 	 */
 	@NotNull
 	protected DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut> getDeleteAllFunction() {
@@ -424,10 +424,10 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	}
 
 	/**
-	 * Returns the function that executes the delete operation in the
-	 * {@link #deleteBy(Object, Object...) deleteBy} method.
+	 * Gets the delete by id function {@link #deleteByIdFunction
+	 * deleteByIdFunction}, provided by the builder.
 	 * 
-	 * @return The delete by id function
+	 * @return the delete by id function
 	 * 
 	 * @see DeleteByIdFunction
 	 */
@@ -455,10 +455,10 @@ public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // 
 	}
 
 	/**
-	 * Returns the function that executes the delete operation in the
-	 * {@link #deleteAllBy(Object, Object...) deleteAllBy} method.
+	 * Gets the delete by ids function {@link #deleteByIdsFunction
+	 * deleteByIdsFunction}, provided by the builder.
 	 * 
-	 * @return The delete by ids function
+	 * @return the delete by ids function
 	 * 
 	 * @see DeleteByIdsFunction
 	 */

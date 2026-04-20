@@ -57,56 +57,64 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommandFacadeBuilder.class);
 
 	/**
-	 * Function that executes save operation
+	 * Function that executes the save operation in the
+	 * {@link #save(Object, Object...) save} method
 	 * 
 	 * @see SaveFunction
 	 */
 	public SaveFunction<SaveEntityIn, SaveEntityOut> saveFunction;
 
 	/**
-	 * Function that executes save all operation
+	 * Function that executes the save all operation in the
+	 * {@link #saveAll(Object, Object...) saveAll} method
 	 * 
 	 * @see SaveAllFunction
 	 */
 	public SaveAllFunction<SaveEntitiesIn, SaveEntitiesOut> saveAllFunction;
 
 	/**
-	 * Function that executes update operation
+	 * Function that executes the update operation in the
+	 * {@link #update(Object, Object...) update} method
 	 * 
 	 * @see UpdateFunction
 	 */
 	public UpdateFunction<UpdateEntityIn, UpdateEntityOut> updateFunction;
 
 	/**
-	 * Function that executes update all operation
+	 * Function that executes the update all operation in the
+	 * {@link #updateAll(Object, Object...) updateAll} method
 	 * 
 	 * @see UpdateAllFunction
 	 */
 	public UpdateAllFunction<UpdateEntitiesIn, UpdateEntitiesOut> updateAllFunction;
 
 	/**
-	 * Function that executes delete operation
+	 * Function that executes the delete operation in the
+	 * {@link #delete(Object, Object...) delete} method
 	 * 
 	 * @see DeleteFunction
 	 */
 	public DeleteFunction<DeleteEntityIn, DeleteEntityOut> deleteFunction;
 
 	/**
-	 * Function that executes delete all operation
+	 * Function that executes the delete all operation in the
+	 * {@link #deleteAll(Object, Object...) deleteAll} method
 	 * 
 	 * @see DeleteAllFunction
 	 */
 	public DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut> deleteAllFunction;
 
 	/**
-	 * Function that executes delete by id operation
+	 * Function that executes the delete by id operation in the
+	 * {@link #deleteById(Object, Object...) deleteById} method
 	 * 
 	 * @see DeleteByIdFunction
 	 */
 	public DeleteByIdFunction<DeleteIdIn, DeleteIdOut> deleteByIdFunction;
 
 	/**
-	 * Function that executes delete all by ids operation
+	 * Function that executes the delete all by ids operation in the
+	 * {@link #deleteAllByIds(Object, Object...) deleteAllByIds} method
 	 * 
 	 * @see DeleteByIdsFunction
 	 */
@@ -154,8 +162,9 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	}
 
 	/**
-	 * Gets the save function, if it is not set, it will be set with a
-	 * function that throws an UnsupportedOperationException when executed.
+	 * Gets the save function {@link #saveFunction saveFunction}, if it is not set,
+	 * it will be set with a function that throws an UnsupportedOperationException
+	 * when executed.
 	 * 
 	 * @return the save function
 	 * 
@@ -171,8 +180,9 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	}
 
 	/**
-	 * Gets the save all function, if it is not set, it will be set with a
-	 * function that throws an UnsupportedOperationException when executed.
+	 * Gets the save all function {@link #saveAllFunction saveAllFunction}, if it is
+	 * not set, it will be set with a function that throws an
+	 * UnsupportedOperationException when executed.
 	 * 
 	 * @return the save all function
 	 * 
@@ -188,8 +198,9 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	}
 
 	/**
-	 * Gets the update function, if it is not set, it will be set with a
-	 * function that throws an UnsupportedOperationException when executed.
+	 * Gets the update function {@link #updateFunction updateFunction}, if it is not
+	 * set, it will be set with a function that throws an
+	 * UnsupportedOperationException when executed.
 	 * 
 	 * @return the update function
 	 * 
@@ -205,8 +216,9 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	}
 
 	/**
-	 * Gets the update all function, if it is not set, it will be set with a
-	 * function that throws an UnsupportedOperationException when executed.
+	 * Gets the update all function {@link #updateAllFunction updateAllFunction}, if
+	 * it is not set, it will be set with a function that throws an
+	 * UnsupportedOperationException when executed.
 	 * 
 	 * @return the update all function
 	 * 
@@ -222,8 +234,9 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	}
 
 	/**
-	 * Gets the delete function, if it is not set, it will be set with a
-	 * function that throws an UnsupportedOperationException when executed.
+	 * Gets the delete function {@link #deleteFunction deleteFunction}, if it is not
+	 * set, it will be set with a function that throws an
+	 * UnsupportedOperationException when executed.
 	 * 
 	 * @return the delete function
 	 * 
@@ -239,7 +252,8 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	}
 
 	/**
-	 * Gets the delete all function, if it is not set, it will be set with a
+	 * Gets the delete all function {@link #deleteAllFunction deleteAllFunction}, if
+	 * it is not set, it will be set with a
 	 * function that throws an UnsupportedOperationException when executed.
 	 * 
 	 * @return the delete all function
@@ -256,7 +270,8 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	}
 
 	/**
-	 * Gets the delete by id function, if it is not set, it will be set with a
+	 * Gets the delete by id function {@link #deleteByIdFunction
+	 * deleteByIdFunction}, if it is not set, it will be set with a
 	 * function that throws an UnsupportedOperationException when executed.
 	 * 
 	 * @return the delete by id function
@@ -273,7 +288,8 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	}
 
 	/**
-	 * Gets the delete by ids function, if it is not set, it will be set with a
+	 * Gets the delete by ids function {@link #deleteByIdsFunction
+	 * deleteByIdsFunction}, if it is not set, it will be set with a
 	 * function that throws an UnsupportedOperationException when executed.
 	 * 
 	 * @return the delete by ids function

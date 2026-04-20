@@ -68,9 +68,9 @@ public class BaseFacadeBuilder {
 	 * implementations.
 	 * 
 	 * @param function Consumer function, can't be null, used to set the builder
-	 *                 attributes
+	 *                 attributes.
 	 * 
-	 * @throws NullPointerException if the function is null
+	 * @throws NullPointerException if the function is null.
 	 * 
 	 * @see JavaSEI18nService
 	 * @see DefaultSecurityService

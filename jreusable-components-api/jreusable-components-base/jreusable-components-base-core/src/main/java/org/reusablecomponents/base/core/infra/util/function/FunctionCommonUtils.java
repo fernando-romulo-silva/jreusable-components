@@ -11,8 +11,9 @@ import org.reusablecomponents.base.translation.InterfaceI18nService;
  */
 public class FunctionCommonUtils {
 
-    /*
-     * Default constructor
+    /**
+     * Default constructor, made private to avoid instantiation of this class, since
+     * it's a util class
      */
     private FunctionCommonUtils() {
         throw new UnsupportedOperationException("You can't instanciate this class");

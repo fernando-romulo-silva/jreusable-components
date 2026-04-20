@@ -50,6 +50,9 @@ public final class ExceptionMessages {
      */
     public static final String UNEXPECTED_ERROR_MSG = "{exception.unexpectedException}";
 
+    /**
+     * Private constructor to avoid instantiation of this class.
+     */
     private ExceptionMessages() {
         throw new IllegalStateException("You cannot instanciate this class");
     }

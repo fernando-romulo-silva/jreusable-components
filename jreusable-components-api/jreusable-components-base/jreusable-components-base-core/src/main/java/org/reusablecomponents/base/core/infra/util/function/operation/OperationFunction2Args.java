@@ -60,6 +60,26 @@ import org.reusablecomponents.base.core.application.query.entity.specification.f
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.PreFindOneBySpecificationFunction;
 import org.reusablecomponents.base.core.infra.util.function.operation.custom.CustomOperation2Args;
 
+/**
+ * OperationFunction2Args is a functional interface that represents an operation
+ * function with two arguments in the application.
+ * 
+ * It extends the BiFunction interface and the OperationFunction interface,
+ * providing additional methods for describing the operation, controlling its
+ * execution, and handling exceptions.
+ * 
+ * This interface can be used as a base for creating specific operation function
+ * implementations that require two arguments like save, update, delete,
+ * findById,
+ * and custom operations.
+ * 
+ * @param <In1> The type of the first input to the function
+ * @param <In2> The type of the second input to the function
+ * @param <Out> The type of the result of the function
+ * 
+ * @see OperationFunction
+ * @see BiFunction
+ */
 public sealed interface OperationFunction2Args<In1, In2, Out> extends BiFunction<In1, In2, Out>, OperationFunction
 		permits CustomOperation2Args,
 		PreSaveFunction, SaveFunction, PosSaveFunction,

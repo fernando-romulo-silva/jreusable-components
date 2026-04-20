@@ -52,8 +52,8 @@ import jakarta.validation.constraints.NotNull;
  * And it provides security service, internationalization service, exception
  * adapter service, and generic class type capture for the entity and id.
  * 
- * @param <Entity> The facade entity type
- * @param <Id>     The facade entity id type
+ * @param <Entity> The facade entity type.
+ * @param <Id>     The facade entity id type.
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0.0

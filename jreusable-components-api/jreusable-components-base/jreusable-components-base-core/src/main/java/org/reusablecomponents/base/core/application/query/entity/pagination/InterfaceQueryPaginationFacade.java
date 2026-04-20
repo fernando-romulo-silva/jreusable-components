@@ -8,8 +8,8 @@ import org.reusablecomponents.base.core.domain.AbstractEntity;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Interface responsible for establishing contracts to retrieve objects using
- * pagination.
+ * This interface is used to retrieve objects using pagination, and it is
+ * intended to be used in the query layer of the application.
  * 
  * @param <Entity>              The facade entity type
  * @param <Id>                  The facade entity id type
@@ -19,12 +19,13 @@ import jakarta.validation.constraints.NotNull;
  * @param <Pageable>            The query result controll
  * 
  * @param <Sort>                The query result order
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ * 
+ * @see InterfaceBaseFacade
  */
-public non-sealed interface InterfaceQueryPaginationFacade<Entity extends AbstractEntity<Id>, Id, //
-        OneResult, //
-        MultiplePagedResult, //
-        Pageable, //
-        Sort> //
+public non-sealed interface InterfaceQueryPaginationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort>
         extends InterfaceBaseFacade<Entity, Id> {
 
     /**

@@ -46,6 +46,7 @@ import jakarta.validation.constraints.NotNull;
  * @since 1.0.0
  * 
  * @see QueryFacade
+ * @see BaseFacade
  */
 public abstract sealed class AbstractQueryFacade< // generics
         // default
@@ -230,8 +231,8 @@ public abstract sealed class AbstractQueryFacade< // generics
     }
 
     /**
-     * Gets the pre find by id function, provided by the builder, used on the
-     * {@link QueryFacade#findById(Object, Object...) findById} method.
+     * Gets the pre find by id function {@link #preFindByIdFunction}, provided by
+     * the builder.
      * 
      * @return the pre find by id function
      * 
@@ -244,8 +245,8 @@ public abstract sealed class AbstractQueryFacade< // generics
     }
 
     /**
-     * Gets the pos find by id function, provided by the builder, used on the
-     * {@link QueryFacade#findById(Object, Object...) findById} method.
+     * Gets the pos find by id function {@link #posFindByIdFunction}, provided by
+     * the builder.
      * 
      * @return the pos find by id function
      * 
@@ -258,8 +259,8 @@ public abstract sealed class AbstractQueryFacade< // generics
     }
 
     /**
-     * Gets the error find by id function, provided by the builder, used on the
-     * {@link QueryFacade#findById(Object, Object...) findById} method.
+     * Gets the error find by id function {@link #errorFindByIdFunction}, provided
+     * by the builder.
      * 
      * @return the error find by id function
      * 
@@ -272,8 +273,8 @@ public abstract sealed class AbstractQueryFacade< // generics
     }
 
     /**
-     * Gets the pre find all function, provided by the builder, used on the
-     * {@link QueryFacade#findAll(Object...) findAll} method.
+     * Gets the pre find all function {@link #preFindAllFunction}, provided by the
+     * builder.
      * 
      * @return the pre find all function
      * 
@@ -286,8 +287,8 @@ public abstract sealed class AbstractQueryFacade< // generics
     }
 
     /**
-     * Gets the pos find all function, provided by the builder, used on the
-     * {@link QueryFacade#findAll(Object...) findAll} method.
+     * Gets the pos find all function {@link #posFindAllFunction}, provided by the
+     * builder.
      * 
      * @return the pos find all function
      * 
@@ -300,8 +301,8 @@ public abstract sealed class AbstractQueryFacade< // generics
     }
 
     /**
-     * Gets the error find all function, provided by the builder, used on the
-     * {@link QueryFacade#findAll(Object...) findAll} method.
+     * Gets the error find all function {@link #errorFindAllFunction}, provided by
+     * the builder.
      * 
      * @return the error find all function
      * 
@@ -309,13 +310,13 @@ public abstract sealed class AbstractQueryFacade< // generics
      */
     @NotNull
     protected ErrorFindAllFunction getErrorFindAllFunction() {
-        LOGGER.atDebug().log("Returning error findById function {}", errorFindAllFunction.getName());
+        LOGGER.atDebug().log("Returning error findAll function {}", errorFindAllFunction.getName());
         return errorFindAllFunction;
     }
 
     /**
-     * Gets the pre count all function, provided by the builder, used on the
-     * {@link QueryFacade#countAll(Object...) countAll} method.
+     * Gets the pre count all function {@link #preCountAllFunction}, provided by the
+     * builder.
      * 
      * @return the pre count all function
      * 
@@ -328,8 +329,8 @@ public abstract sealed class AbstractQueryFacade< // generics
     }
 
     /**
-     * Gets the pos count all function, provided by the builder, used on the
-     * {@link QueryFacade#countAll(Object...) countAll} method.
+     * Gets the pos count all function {@link #posCountAllFunction}, provided by the
+     * builder.
      * 
      * @return the pos count all function
      * 
@@ -342,8 +343,8 @@ public abstract sealed class AbstractQueryFacade< // generics
     }
 
     /**
-     * Gets the error count all function, provided by the builder, used on the
-     * {@link QueryFacade#countAll(Object...) countAll} method.
+     * Gets the error count all function {@link #errorCountAllFunction}, provided by
+     * the builder.
      * 
      * @return the error count all function
      * 
@@ -356,8 +357,8 @@ public abstract sealed class AbstractQueryFacade< // generics
     }
 
     /**
-     * Gets the pre exists all function, provided by the builder, used on the
-     * {@link QueryFacade#existsAll(Object...) existsAll} method.
+     * Gets the pre exists all function {@link #preExistsAllFunction},
+     * provided by the builder.
      * 
      * @return the pre exists all function
      * 
@@ -370,8 +371,8 @@ public abstract sealed class AbstractQueryFacade< // generics
     }
 
     /**
-     * Gets the pos exists all function, provided by the builder, used on the
-     * {@link QueryFacade#existsAll(Object...) existsAll} method.
+     * Gets the pos exists all function {@link #posExistsAllFunction},
+     * provided by the builder.
      * 
      * @return the pos exists all function
      * 
@@ -384,8 +385,8 @@ public abstract sealed class AbstractQueryFacade< // generics
     }
 
     /**
-     * Gets the error exists all function, provided by the builder, used on the
-     * {@link QueryFacade#existsAll(Object...) existsAll} method.
+     * Gets the error exists all function {@link #errorExistsAllFunction},
+     * provided by the builder.
      * 
      * @return the error exists all function
      * 
@@ -398,8 +399,8 @@ public abstract sealed class AbstractQueryFacade< // generics
     }
 
     /**
-     * Gets the pre exists by id function, provided by the builder, used on the
-     * {@link QueryFacade#existsById(Object, Object...) existsById} method.
+     * Gets the pre exists by id function {@link #preExistsByIdFunction},
+     * provided by the builder.
      * 
      * @return the pre exists by id function
      * 
@@ -412,8 +413,8 @@ public abstract sealed class AbstractQueryFacade< // generics
     }
 
     /**
-     * Gets the pos exists by id function, provided by the builder, used on the
-     * {@link QueryFacade#existsById(Object, Object...) existsById} method.
+     * Gets the pos exists by id function {@link #posExistsByIdFunction},
+     * provided by the builder.
      * 
      * @return the pos exists by id function
      * 
@@ -426,8 +427,8 @@ public abstract sealed class AbstractQueryFacade< // generics
     }
 
     /**
-     * Gets the error exists by id function, provided by the builder, used on the
-     * {@link QueryFacade#existsById(Object, Object...) existsById} method.
+     * Gets the error exists by id function {@link #errorExistsByIdFunction},
+     * provided by the builder.
      * 
      * @return the error exists by id function
      * 

@@ -8,6 +8,9 @@ import jakarta.validation.constraints.NotNull;
 /**
  * This service is responsible to converter persistence mechanism exceptions to
  * JReusable Components exceptions.
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
  */
 @FunctionalInterface
 public interface InterfaceExceptionAdapterService {

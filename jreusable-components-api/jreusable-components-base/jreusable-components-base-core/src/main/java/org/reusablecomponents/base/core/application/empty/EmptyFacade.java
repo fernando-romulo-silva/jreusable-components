@@ -15,7 +15,7 @@ import org.reusablecomponents.base.translation.InterfaceI18nService;
 public non-sealed class EmptyFacade<Entity extends AbstractEntity<Id>, Id> extends BaseFacade<Entity, Id> {
 
 	/**
-	 * Constructor with parameters
+	 * Constructor with parameters.
 	 * 
 	 * @param i18nService             Language translator service
 	 * @param securityService         Security service
@@ -34,7 +34,7 @@ public non-sealed class EmptyFacade<Entity extends AbstractEntity<Id>, Id> exten
 	}
 
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	public EmptyFacade() {
 		super(new BaseFacadeBuilder($ -> {

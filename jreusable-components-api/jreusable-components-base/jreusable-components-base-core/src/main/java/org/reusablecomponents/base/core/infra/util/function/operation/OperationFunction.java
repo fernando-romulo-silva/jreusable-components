@@ -1,11 +1,19 @@
 package org.reusablecomponents.base.core.infra.util.function.operation;
 
-import org.reusablecomponents.base.core.infra.util.function.BaseFunction;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- * Describe a operation on framework, event, etc.
+ * OperationFunction is a functional interface that represents an operation
+ * function in the application.
+ * 
+ * It provides additional methods for describing the operation, controlling its
+ * execution, and handling exceptions.
+ * 
+ * This interface can be used as a base for creating specific operation function
+ * implementations that require a description, execution control, and exception
+ * handling.
  */
-public sealed interface OperationFunction extends BaseFunction
+public sealed interface OperationFunction
         permits OperationFunction1Args, OperationFunction2Args, OperationFunction3Args, OperationFunction4Args {
 
     /**
@@ -23,7 +31,7 @@ public sealed interface OperationFunction extends BaseFunction
      * @return true if is active, the function will be executed or false, the
      *         function won't be executed
      */
-    default boolean isActice() {
+    default boolean isActive() {
         return true;
     }
 
@@ -35,5 +43,20 @@ public sealed interface OperationFunction extends BaseFunction
      */
     default boolean reTrowException() {
         return true;
+    }
+
+    /**
+     * Return the function name, the default's instance simple name
+     * 
+     * @return A String with function name
+     */
+    default String getName() {
+        final var simpleName = this.getClass().getSimpleName();
+
+        if (simpleName.contains("$")) {
+            return StringUtils.substringBefore(simpleName, "$");
+        }
+
+        return simpleName;
     }
 }

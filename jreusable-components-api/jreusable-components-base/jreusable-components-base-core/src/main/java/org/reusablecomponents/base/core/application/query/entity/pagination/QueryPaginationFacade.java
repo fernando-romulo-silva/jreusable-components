@@ -20,13 +20,13 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 
 	/**
 	 * Function that executes the find all operation in the
-	 * {@link #findAllPaged(Object, Object...) findAll} method
+	 * {@link #findAllPaged(Object, Object...) findAllPaged} method
 	 */
 	protected final FindAllPagedFunction<Pageable, MultiplePagedResult> findAllPagedFunction;
 
 	/**
-	 * Function that executes the find all operation in the
-	 * {@link #findOneSorted(Object, Object...) findAll} method
+	 * Function that executes the find one operation in the
+	 * {@link #findOneSorted(Object, Object...) findOneSorted} method
 	 */
 	protected final FindOneSortedFunction<Sort, OneResult> findOneSortedFunction;
 
@@ -60,6 +60,20 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	}
 
 	/**
+	 * Gets the find all paged function {@link #findAllPagedFunction},
+	 * provided by the builder.
+	 * 
+	 * @return the find all paged function
+	 * 
+	 * @see FindAllPagedFunction
+	 */
+	@NotNull
+	protected FindAllPagedFunction<Pageable, MultiplePagedResult> getFindAllPagedFunction() {
+		LOGGER.atDebug().log("Returning findAllPagedFunction function {}", findAllPagedFunction.getName());
+		return findAllPagedFunction;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -76,14 +90,8 @@ public non-sealed class QueryPaginationFacade<Entity extends AbstractEntity<Id>,
 	}
 
 	@NotNull
-	public FindAllPagedFunction<Pageable, MultiplePagedResult> getFindAllPagedFunction() {
-		LOGGER.atDebug().log("Returning findAllFunction function {}", findAllPagedFunction.getName());
-		return findAllPagedFunction;
-	}
-
-	@NotNull
-	public FindOneSortedFunction<Sort, OneResult> getFindOneSortedFunction() {
-		LOGGER.atDebug().log("Returning findOneFunction function {}", findOneSortedFunction.getName());
+	protected FindOneSortedFunction<Sort, OneResult> getFindOneSortedFunction() {
+		LOGGER.atDebug().log("Returning findOneSortedFunction function {}", findOneSortedFunction.getName());
 		return findOneSortedFunction;
 	}
 }

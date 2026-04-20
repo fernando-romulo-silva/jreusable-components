@@ -169,8 +169,7 @@ public non-sealed class QueryFacade< // generics
 	}
 
 	/**
-	 * Gets the find all function, provided by the builder, used on the
-	 * {@link #findAll(Object...) findAll} method.
+	 * Gets the find all function {@link #findAllFunction}, provided by the builder.
 	 * 
 	 * @return the find all function
 	 * 
@@ -199,8 +198,8 @@ public non-sealed class QueryFacade< // generics
 	}
 
 	/**
-	 * Gets the find by id function, provided by the builder, used on the
-	 * {@link #findById(Object, Object...) findById} method.
+	 * Gets the find by id function {@link #findByIdFunction}, provided by the
+	 * builder.
 	 * 
 	 * @return the find by id function
 	 * 
@@ -228,8 +227,8 @@ public non-sealed class QueryFacade< // generics
 	}
 
 	/**
-	 * Gets the count all function, provided by the builder, used on the
-	 * {@link #countAll(Object...) countAll} method.
+	 * Gets the count all function {@link #countAllFunction}, provided by the
+	 * builder.
 	 * 
 	 * @return the count all function
 	 * 
@@ -257,8 +256,8 @@ public non-sealed class QueryFacade< // generics
 	}
 
 	/**
-	 * Gets the exists all function, provided by the builder, used on
-	 * {@link #existsAll(Object...) existsAll} method.
+	 * Gets the exists all function {@link #existsAllFunction}, provided by the
+	 * builder.
 	 * 
 	 * @return the exists all function
 	 * 
@@ -289,8 +288,8 @@ public non-sealed class QueryFacade< // generics
 	}
 
 	/**
-	 * Gets the exists by id function, provided by the builder, used on the
-	 * {@link #existsById(Object, Object...) existsById} method.
+	 * Gets the exists by id function {@link #existsByIdFunction}, provided by the
+	 * builder.
 	 * 
 	 * @return the exists by id function
 	 * 

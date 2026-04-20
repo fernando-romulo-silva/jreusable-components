@@ -28,21 +28,13 @@ import jakarta.validation.constraints.NotNull;
  *                         like Mono<Boolean>
  * 
  * @author Fernando Romulo da Silva
- * @since 1.0
+ * @since 1.0.0
  * 
  * @see InterfaceBaseFacade
  */
-public non-sealed interface InterfaceQueryFacade<Entity extends AbstractEntity<Id>, Id, // basic
-		QueryIdIn, // input id
-		OneResult, // one result
-		MultipleResult, // multiple result
-		CountResult, // count result
-		ExistsResult> // exist result
+public non-sealed interface InterfaceQueryFacade<Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
 		extends InterfaceBaseFacade<Entity, Id> {
 
-	// TODO: Remove the ElementWithIdNotFoundException exception and replace it with
-	// Optional approach, but it will be a breaking change, so it will be done in
-	// the next major version (2.0)
 	/**
 	 * Find and retrieve a {@code OneResult} object by id.
 	 * 

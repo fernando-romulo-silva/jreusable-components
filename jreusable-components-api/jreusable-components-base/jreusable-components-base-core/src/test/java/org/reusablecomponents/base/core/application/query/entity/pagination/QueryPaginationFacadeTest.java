@@ -1,6 +1,9 @@
 package org.reusablecomponents.base.core.application.query.entity.pagination;
 
+import static org.apache.commons.lang3.StringUtils.leftPad;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 import java.util.ArrayList;
@@ -34,12 +37,12 @@ import jakarta.validation.ValidatorFactory;
 import jakarta.validation.executable.ExecutableValidator;
 
 @Tag("unit")
-@DisplayName("Test the EntityQueryFacade entity test, unhappy path :( ")
+@DisplayName("Test the QueryPaginationFacade entity test")
 @ExtendWith(MockitoExtension.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
 @SuppressWarnings("null")
-class QueryPaginationFacadeUnhappyPathTest {
+class QueryPaginationFacadeTest {
 
     static final ResourceBundleMessageInterpolator INTERPOLATOR = new ResourceBundleMessageInterpolator(
             new AggregateResourceBundleLocator(Arrays.asList("ValidationMessages")));
@@ -60,6 +63,7 @@ class QueryPaginationFacadeUnhappyPathTest {
 
     Department department01;
     Department department02;
+    Department department03;
 
     Manager manager;
 
@@ -72,10 +76,21 @@ class QueryPaginationFacadeUnhappyPathTest {
     void setUp() {
         defaultData.clear();
 
+        manager = new Manager("x2", "Business Happy");
+
         department01 = new Department("x1", "Default 01", "Peopple", manager);
         department02 = new Department("x2", "Default 02", "Resource", manager);
+        department03 = new Department("x3", "Default 03", "IT", manager);
 
-        defaultData.addAll(List.of(department01, department02));
+        defaultData.addAll(List.of(department01, department02, department03));
+
+        var i = 3;
+        var total = 20;
+
+        while (i++ < total) {
+            final var counterString = leftPad("" + i, 2, "0");
+            defaultData.add(new Department("x" + i, "Default " + counterString, "Sector " + counterString, manager));
+        }
     }
 
     @AfterAll
@@ -86,8 +101,43 @@ class QueryPaginationFacadeUnhappyPathTest {
 
     @Test
     @Order(1)
-    @DisplayName("Find one sorted with null sort")
-    void findOneSortedTest() {
+    @DisplayName("Given sort object when find one sorted then return sorted result test")
+    void givenSortObject_whenFindOneSorted_thenReturnSortedResult() {
+        // given
+        final var sort = (Comparator<Department>) Comparator.comparing(Department::getName).reversed();
+
+        // when
+        final var result = assertDoesNotThrow(() -> defaultQueryFacade.findOneSorted(sort));
+
+        // then
+        assertThat(defaultData.getLast()).isEqualTo(result);
+        assertThat(defaultData).contains(result);
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("Given pageable object when find all paged then return paged result test")
+    void givenPageableObject_whenFindAllPaged_thenReturnPagedResult() {
+        // given
+        final var pageable = new PageList<>(5, 0, defaultData);
+        final var departmentInsidePage = defaultData.get(2);
+        final var departmentOusidePage = defaultData.get(5);
+
+        // when
+        final var result = assertDoesNotThrow(() -> defaultQueryFacade.findAllPaged(pageable));
+
+        // then
+        assertThat(result)
+                .size().isEqualTo(5)
+                .returnToIterable()
+                .contains(departmentInsidePage)
+                .doesNotContain(departmentOusidePage);
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("Given null sort object when find one sorted then throw NullPointerException test")
+    void givenNullSortObject_whenFindOneSorted_thenThrowNullPointerException() {
 
         // given
         final Comparator<Department> sort = null;
@@ -100,9 +150,9 @@ class QueryPaginationFacadeUnhappyPathTest {
     }
 
     @Test
-    @Order(2)
-    @DisplayName("Find one sorted with unexpected error test")
-    void findOneSortedWithUnexpectedErrorTest() {
+    @Order(4)
+    @DisplayName("Given sort object when find one sorted with unexpected error then throw UnexpectedException test")
+    void givenSortObject_whenFindOneSortedWithUnexpectedError_thenThrowUnexpectedException() {
 
         // given
         final var directives = new Object[] { "error" };
@@ -112,13 +162,13 @@ class QueryPaginationFacadeUnhappyPathTest {
         assertThatThrownBy(() -> defaultQueryFacade.findOneSorted(sort, directives))
                 // then
                 .isInstanceOf(UnexpectedException.class)
-                .hasMessageContaining("Unexpecte error happened");
+                .hasMessageContaining("Unexpected error happened");
     }
 
     @Test
-    @Order(3)
-    @DisplayName("Find all test with null pageable test")
-    void findAllWitNullPageableTest() {
+    @Order(5)
+    @DisplayName("Given null pageable object when find all paged then throw NullPointerException test")
+    void givenNullPageableObject_whenFindAllPaged_thenThrowNullPointerException() {
 
         // given
         final PageList<Department> pageable = null;
@@ -131,9 +181,9 @@ class QueryPaginationFacadeUnhappyPathTest {
     }
 
     @Test
-    @Order(4)
-    @DisplayName("Find all test with unexpected error test")
-    void findAllWithUnexpectedErrorTest() {
+    @Order(6)
+    @DisplayName("Given pageable object when find all paged with unexpected error then throw UnexpectedException test")
+    void givenPageableObject_whenFindAllPagedWithUnexpectedError_thenThrowUnexpectedException() {
 
         // given
         final var directives = new Object[] { "error" };
@@ -143,7 +193,6 @@ class QueryPaginationFacadeUnhappyPathTest {
         assertThatThrownBy(() -> defaultQueryFacade.findAllPaged(pageable, directives))
                 // then
                 .isInstanceOf(UnexpectedException.class)
-                .hasMessageContaining("Unexpecte error happened");
+                .hasMessageContaining("Unexpected error happened");
     }
-
 }
