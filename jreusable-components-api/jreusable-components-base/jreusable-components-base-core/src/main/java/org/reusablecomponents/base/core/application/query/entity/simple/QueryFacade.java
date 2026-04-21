@@ -43,21 +43,13 @@ import jakarta.validation.constraints.NotNull;
  *                         like Mono<Boolean>
  * 
  * @author Fernando Romulo da Silva
- * @since 1.0
+ * @since 1.0.0
  * 
  * @see AbstractQueryFacade
  * @see InterfaceQueryFacade
  */
-public non-sealed class QueryFacade< // generics
-		// default
-		Entity extends AbstractEntity<Id>, Id, // basic
-		// input id
-		QueryIdIn, //
-		// results
-		OneResult, MultipleResult, CountResult, ExistsResult>
-		// Base Facade
+public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
 		extends AbstractQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
-		// Interface QueryFacade
 		implements InterfaceQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> {
 
 	private static final String NON_NULL_ID_MSG = "Please pass a non-null %s id";

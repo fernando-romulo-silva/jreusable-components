@@ -79,193 +79,216 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0.0
+ * 
+ * @see BaseFacadeBuilder
+ * @see AbstractCommandFacade
  */
-public abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, // basic
-		// save
-		SaveEntityIn, SaveEntityOut, // save a entity
-		SaveEntitiesIn, SaveEntitiesOut, // save entities
-		// update
-		UpdateEntityIn, UpdateEntityOut, // update a entity
-		UpdateEntitiesIn, UpdateEntitiesOut, // update entities
-		// delete
-		DeleteEntityIn, DeleteEntityOut, // delete a entity
-		DeleteEntitiesIn, DeleteEntitiesOut, // delete entities
-		// delete by id
-		DeleteIdIn, DeleteIdOut, // delete entity by id
-		DeleteIdsIn, DeleteIdsOut> // delete entities by ids
+public abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
 		extends BaseFacadeBuilder
 		permits CommandFacadeBuilder {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCommandFacadeBuilder.class);
 
 	/**
-	 * Function that executes pre save operation
+	 * Check {@link AbstractCommandFacade#preSaveFunction
+	 * AbstractCommandFacade.preSaveFunction}.
 	 * 
 	 * @see PreSaveFunction
 	 */
 	public PreSaveFunction<SaveEntityIn> preSaveFunction;
 
 	/**
-	 * Function that executes post save operation
+	 * Check {@link AbstractCommandFacade#posSaveFunction
+	 * AbstractCommandFacade.posSaveFunction}.
 	 * 
 	 * @see PosSaveFunction
 	 */
 	public PosSaveFunction<SaveEntityOut> posSaveFunction;
 
 	/**
-	 * Function that executes error save operation
+	 * Check {@link AbstractCommandFacade#errorSaveFunction
+	 * AbstractCommandFacade.errorSaveFunction}.
 	 * 
 	 * @see ErrorSaveFunction
 	 */
 	public ErrorSaveFunction<SaveEntityIn> errorSaveFunction;
 
 	/**
-	 * Function that executes pre save all operation
+	 * Check {@link AbstractCommandFacade#preSaveAllFunction
+	 * AbstractCommandFacade.preSaveAllFunction}.
 	 * 
 	 * @see PreSaveAllFunction
 	 */
 	public PreSaveAllFunction<SaveEntitiesIn> preSaveAllFunction;
 
 	/**
-	 * Function that executes post save all operation
+	 * Check {@link AbstractCommandFacade#posSaveAllFunction
+	 * AbstractCommandFacade.posSaveAllFunction}.
 	 * 
 	 * @see PosSaveAllFunction
 	 */
 	public PosSaveAllFunction<SaveEntitiesOut> posSaveAllFunction;
 
 	/**
-	 * Function that executes error save all operation
+	 * Check {@link AbstractCommandFacade#errorSaveAllFunction
+	 * AbstractCommandFacade.errorSaveAllFunction}.
 	 * 
 	 * @see ErrorSaveAllFunction
 	 */
 	public ErrorSaveAllFunction<SaveEntitiesIn> errorSaveAllFunction;
 
 	/**
-	 * Function that executes pre update operation
+	 * Check {@link AbstractCommandFacade#preUpdateFunction
+	 * AbstractCommandFacade.preUpdateFunction}.
 	 * 
 	 * @see PreUpdateFunction
 	 */
 	public PreUpdateFunction<UpdateEntityIn> preUpdateFunction;
 
 	/**
-	 * Function that executes post update operation
+	 * Check {@link AbstractCommandFacade#posUpdateFunction
+	 * AbstractCommandFacade.posUpdateFunction}.
 	 * 
 	 * @see PosUpdateFunction
 	 */
 	public PosUpdateFunction<UpdateEntityOut> posUpdateFunction;
 
 	/**
-	 * Function that executes error update operation
+	 * Check {@link AbstractCommandFacade#errorUpdateFunction
+	 * AbstractCommandFacade.errorUpdateFunction}.
 	 * 
 	 * @see ErrorUpdateFunction
 	 */
 	public ErrorUpdateFunction<UpdateEntityIn> errorUpdateFunction;
 
 	/**
-	 * Function that executes pre update all operation
+	 * Check {@link AbstractCommandFacade#preUpdateAllFunction
+	 * AbstractCommandFacade.preUpdateAllFunction}.
 	 * 
 	 * @see PreUpdateAllFunction
 	 */
 	public PreUpdateAllFunction<UpdateEntitiesIn> preUpdateAllFunction;
 
 	/**
-	 * Function that executes post update all operation
+	 * Check {@link AbstractCommandFacade#posUpdateAllFunction
+	 * AbstractCommandFacade.posUpdateAllFunction}.
 	 * 
 	 * @see PosUpdateAllFunction
 	 */
 	public PosUpdateAllFunction<UpdateEntitiesOut> posUpdateAllFunction;
 
 	/**
-	 * Function that executes error update all operation
+	 * Check {@link AbstractCommandFacade#errorUpdateAllFunction
+	 * AbstractCommandFacade.errorUpdateAllFunction}.
 	 * 
 	 * @see ErrorUpdateAllFunction
 	 */
 	public ErrorUpdateAllFunction<UpdateEntitiesIn> errorUpdateAllFunction;
 
 	/**
-	 * Function that executes pre delete operation
+	 * Check {@link AbstractCommandFacade#preDeleteFunction
+	 * AbstractCommandFacade.preDeleteFunction}.
 	 * 
 	 * @see PreDeleteFunction
 	 */
 	public PreDeleteFunction<DeleteEntityIn> preDeleteFunction;
 
 	/**
-	 * Function that executes post delete operation
+	 * Check {@link AbstractCommandFacade#posDeleteFunction
+	 * AbstractCommandFacade.posDeleteFunction}.
 	 * 
 	 * @see PosDeleteFunction
 	 */
 	public PosDeleteFunction<DeleteEntityOut> posDeleteFunction;
 
 	/**
-	 * Function that executes error delete operation
+	 * Check {@link AbstractCommandFacade#errorDeleteFunction
+	 * AbstractCommandFacade.errorDeleteFunction}.
 	 * 
 	 * @see ErrorDeleteFunction
 	 */
 	public ErrorDeleteFunction<DeleteEntityIn> errorDeleteFunction;
 
 	/**
-	 * Function that executes pre delete all operation
+	 * Check {@link AbstractCommandFacade#preDeleteAllFunction
+	 * AbstractCommandFacade.preDeleteAllFunction}.
 	 * 
 	 * @see PreDeleteAllFunction
 	 */
 	public PreDeleteAllFunction<DeleteEntitiesIn> preDeleteAllFunction;
 
 	/**
-	 * Function that executes post delete all operation
+	 * Check {@link AbstractCommandFacade#posDeleteAllFunction
+	 * AbstractCommandFacade.posDeleteAllFunction}.
 	 * 
 	 * @see PosDeleteAllFunction
 	 */
 	public PosDeleteAllFunction<DeleteEntitiesOut> posDeleteAllFunction;
 
 	/**
-	 * Function that executes error delete all operation
+	 * Check {@link AbstractCommandFacade#errorDeleteAllFunction
+	 * AbstractCommandFacade.errorDeleteAllFunction}.
 	 * 
 	 * @see ErrorDeleteAllFunction
 	 */
 	public ErrorDeleteAllFunction<DeleteEntitiesIn> errorDeleteAllFunction;
 
 	/**
-	 * Function that executes pre delete by id operation
+	 * Check {@link AbstractCommandFacade#preDeleteByIdFunction
+	 * AbstractCommandFacade.preDeleteByIdFunction}.
 	 * 
 	 * @see PreDeleteByIdFunction
 	 */
 	public PreDeleteByIdFunction<DeleteIdIn> preDeleteByIdFunction;
 
 	/**
-	 * Function that executes post delete by id operation
+	 * Check {@link AbstractCommandFacade#posDeleteByIdFunction
+	 * AbstractCommandFacade.posDeleteByIdFunction}.
 	 * 
 	 * @see PosDeleteByIdFunction
 	 */
 	public PosDeleteByIdFunction<DeleteIdOut> posDeleteByIdFunction;
 
 	/**
-	 * Function that executes error delete by id operation
+	 * Check {@link AbstractCommandFacade#errorDeleteByIdFunction
+	 * AbstractCommandFacade.errorDeleteByIdFunction}.
 	 * 
 	 * @see ErrorDeleteByIdFunction
 	 */
 	public ErrorDeleteByIdFunction<DeleteIdIn> errorDeleteByIdFunction;
 
 	/**
-	 * Function that executes pre delete by ids operation
+	 * Check {@link AbstractCommandFacade#preDeleteByIdsFunction
+	 * AbstractCommandFacade.preDeleteByIdsFunction}.
 	 * 
 	 * @see PreDeleteByIdsFunction
 	 */
 	public PreDeleteByIdsFunction<DeleteIdsIn> preDeleteByIdsFunction;
 
 	/**
-	 * Function that executes post delete by ids operation
+	 * Check {@link AbstractCommandFacade#posDeleteByIdsFunction
+	 * AbstractCommandFacade.posDeleteByIdsFunction}.
 	 * 
 	 * @see PosDeleteByIdsFunction
 	 */
 	public PosDeleteByIdsFunction<DeleteIdsOut> posDeleteByIdsFunction;
 
 	/**
-	 * Function that executes error delete by ids operation
+	 * Check {@link AbstractCommandFacade#errorDeleteByIdsFunction
+	 * AbstractCommandFacade.errorDeleteByIdsFunction}.
 	 * 
 	 * @see ErrorDeleteByIdsFunction
 	 */
 	public ErrorDeleteByIdsFunction<DeleteIdsIn> errorDeleteByIdsFunction;
 
+	/**
+	 * Constructor for AbstractCommandFacadeBuilder.
+	 * 
+	 * @param builder the builder to be used in the construction of the
+	 *                AbstractCommandFacadeBuilder, can't be null
+	 * 
+	 * @throws NullPointerException if the builder is null
+	 */
 	protected AbstractCommandFacadeBuilder(
 			final Consumer<? extends AbstractCommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>> builder) {
 		LOGGER.atDebug().log("Constructing AbstractCommandFacadeBuilder {}", builder);
@@ -308,7 +331,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pre save function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pre save function
+	 * @return The pre save function.
+	 * 
 	 * @see PreSaveFunction
 	 */
 	protected PreSaveFunction<SaveEntityIn> getPreSaveFunction() {
@@ -325,7 +349,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pos save function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pos save function
+	 * @return The pos save function.
+	 * 
 	 * @see PosSaveFunction
 	 */
 	protected PosSaveFunction<SaveEntityOut> getPosSaveFunction() {
@@ -342,7 +367,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the error save function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the error save function
+	 * @return The error save function.
+	 * 
 	 * @see ErrorSaveFunction
 	 */
 	protected ErrorSaveFunction<SaveEntityIn> getErrorSaveFunction() {
@@ -359,7 +385,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pre save all function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pre save all function
+	 * @return The pre save all function.
+	 * 
 	 * @see PreSaveAllFunction
 	 */
 	protected PreSaveAllFunction<SaveEntitiesIn> getPreSaveAllFunction() {
@@ -376,7 +403,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pos save all function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pos save all function
+	 * @return The pos save all function.
+	 * 
 	 * @see PosSaveAllFunction
 	 */
 	protected PosSaveAllFunction<SaveEntitiesOut> getPosSaveAllFunction() {
@@ -393,7 +421,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the error save all function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the error save all function
+	 * @return The error save all function.
+	 * 
 	 * @see ErrorSaveAllFunction
 	 */
 	protected ErrorSaveAllFunction<SaveEntitiesIn> getErrorSaveAllFunction() {
@@ -410,8 +439,9 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pos update function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pos update function
-	 * @see PosUpdateFunction
+	 * @return The pre update function.
+	 * 
+	 * @see PreUpdateFunction
 	 */
 	protected PreUpdateFunction<UpdateEntityIn> getPreUpdateFunction() {
 		return nonNull(preUpdateFunction)
@@ -427,7 +457,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pos update function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pos update function
+	 * @return The pos update function.
+	 * 
 	 * @see PosUpdateFunction
 	 */
 	protected PosUpdateFunction<UpdateEntityOut> getPosUpdateFunction() {
@@ -444,7 +475,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the error update function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the error update function
+	 * @return The error update function.
+	 * 
 	 * @see ErrorUpdateFunction
 	 */
 	protected ErrorUpdateFunction<UpdateEntityIn> getErrorUpdateFunction() {
@@ -461,7 +493,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pre update all function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pre update all function
+	 * @return The pre update all function.
+	 * 
 	 * @see PreUpdateAllFunction
 	 */
 	protected PreUpdateAllFunction<UpdateEntitiesIn> getPreUpdateAllFunction() {
@@ -478,7 +511,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pos update all function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pos update all function
+	 * @return The pos update all function.
+	 * 
 	 * @see PosUpdateAllFunction
 	 */
 	protected PosUpdateAllFunction<UpdateEntitiesOut> getPosUpdateAllFunction() {
@@ -496,7 +530,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the error update all function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the error update all function
+	 * @return The error update all function.
+	 * 
 	 * @see ErrorUpdateAllFunction
 	 */
 	protected ErrorUpdateAllFunction<UpdateEntitiesIn> getErrorUpdateAllFunction() {
@@ -514,7 +549,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pre delete function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pre delete function
+	 * @return The pre delete function.
+	 * 
 	 * @see PreDeleteFunction
 	 */
 	protected PreDeleteFunction<DeleteEntityIn> getPreDeleteFunction() {
@@ -531,7 +567,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pos delete function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pos delete function
+	 * @return The pos delete function.
+	 * 
 	 * @see PosDeleteFunction
 	 */
 	protected PosDeleteFunction<DeleteEntityOut> getPosDeleteFunction() {
@@ -548,7 +585,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the error delete function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the error delete function
+	 * @return The error delete function.
+	 * 
 	 * @see ErrorDeleteFunction
 	 */
 	protected ErrorDeleteFunction<DeleteEntityIn> getErrorDeleteFunction() {
@@ -565,7 +603,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pre delete all function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pre delete all function
+	 * @return The pre delete all function.
+	 * 
 	 * @see PreDeleteAllFunction
 	 */
 	protected PreDeleteAllFunction<DeleteEntitiesIn> getPreDeleteAllFunction() {
@@ -583,7 +622,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pos delete by id function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pos delete by id function
+	 * @return The pos delete by id function.
+	 * 
 	 * @see PosDeleteByIdFunction
 	 */
 	protected PosDeleteAllFunction<DeleteEntitiesOut> getPosDeleteAllFunction() {
@@ -600,7 +640,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the error delete all function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the error delete all function
+	 * @return The error delete all function.
+	 * 
 	 * @see ErrorDeleteAllFunction
 	 */
 	protected ErrorDeleteAllFunction<DeleteEntitiesIn> getErrorDeleteAllFunction() {
@@ -618,7 +659,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pre delete by id function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pre delete by id function
+	 * @return The pre delete by id function.
+	 * 
 	 * @see PreDeleteByIdFunction
 	 */
 	protected PreDeleteByIdFunction<DeleteIdIn> getPreDeleteByIdFunction() {
@@ -635,7 +677,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pos delete by id function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pos delete by id function
+	 * @return The pos delete by id function.
+	 * 
 	 * @see PosDeleteByIdFunction
 	 */
 	protected PosDeleteByIdFunction<DeleteIdOut> getPosDeleteByIdFunction() {
@@ -652,7 +695,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the error delete by id function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the error delete by id function
+	 * @return The error delete by id function.
+	 * 
 	 * @see ErrorDeleteByIdFunction
 	 */
 	protected ErrorDeleteByIdFunction<DeleteIdIn> getErrorDeleteByIdFunction() {
@@ -669,7 +713,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pre delete by ids function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pre delete by ids function
+	 * @return The pre delete by ids function.
+	 * 
 	 * @see PreDeleteByIdsFunction
 	 */
 	protected PreDeleteByIdsFunction<DeleteIdsIn> getPreDeleteByIdsFunction() {
@@ -686,7 +731,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the pos delete by ids function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the pos delete by ids function
+	 * @return The pos delete by ids function.
+	 * 
 	 * @see PosDeleteByIdsFunction
 	 */
 	protected PosDeleteByIdsFunction<DeleteIdsOut> getPosDeleteByIdsFunction() {
@@ -703,7 +749,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	 * Gets the error delete by ids function, if it is not set, it will be set with
 	 * a default function that logs the execution.
 	 * 
-	 * @return the error delete by ids function
+	 * @return The error delete by ids function.
+	 * 
 	 * @see ErrorDeleteByIdsFunction
 	 */
 	protected ErrorDeleteByIdsFunction<DeleteIdsIn> getErrorDeleteByIdsFunction() {

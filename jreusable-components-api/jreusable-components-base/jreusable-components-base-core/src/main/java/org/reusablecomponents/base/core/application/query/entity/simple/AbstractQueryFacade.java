@@ -48,14 +48,7 @@ import jakarta.validation.constraints.NotNull;
  * @see QueryFacade
  * @see BaseFacade
  */
-public abstract sealed class AbstractQueryFacade< // generics
-        // default
-        Entity extends AbstractEntity<Id>, Id, // basic
-        // input id
-        QueryIdIn, //
-        // results
-        OneResult, MultipleResult, CountResult, ExistsResult>
-        // Base Facade
+public abstract sealed class AbstractQueryFacade<Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
         extends BaseFacade<Entity, Id> permits QueryFacade {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractQueryFacade.class);
@@ -234,7 +227,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the pre find by id function {@link #preFindByIdFunction}, provided by
      * the builder.
      * 
-     * @return the pre find by id function
+     * @return The pre find by id function.
      * 
      * @see PreFindByIdFunction
      */
@@ -248,7 +241,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the pos find by id function {@link #posFindByIdFunction}, provided by
      * the builder.
      * 
-     * @return the pos find by id function
+     * @return The pos find by id function.
      * 
      * @see PosFindByIdFunction
      */
@@ -262,7 +255,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the error find by id function {@link #errorFindByIdFunction}, provided
      * by the builder.
      * 
-     * @return the error find by id function
+     * @return The error find by id function.
      * 
      * @see ErrorFindByIdFunction
      */
@@ -276,7 +269,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the pre find all function {@link #preFindAllFunction}, provided by the
      * builder.
      * 
-     * @return the pre find all function
+     * @return The pre find all function.
      * 
      * @see PreFindAllFunction
      */
@@ -290,7 +283,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the pos find all function {@link #posFindAllFunction}, provided by the
      * builder.
      * 
-     * @return the pos find all function
+     * @return The pos find all function.
      * 
      * @see PosFindAllFunction
      */
@@ -304,7 +297,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the error find all function {@link #errorFindAllFunction}, provided by
      * the builder.
      * 
-     * @return the error find all function
+     * @return The error find all function.
      * 
      * @see ErrorFindAllFunction
      */
@@ -318,7 +311,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the pre count all function {@link #preCountAllFunction}, provided by the
      * builder.
      * 
-     * @return the pre count all function
+     * @return The pre count all function.
      * 
      * @see PreCountAllFunction
      */
@@ -332,7 +325,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the pos count all function {@link #posCountAllFunction}, provided by the
      * builder.
      * 
-     * @return the pos count all function
+     * @return The pos count all function.
      * 
      * @see PosCountAllFunction
      */
@@ -346,7 +339,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the error count all function {@link #errorCountAllFunction}, provided by
      * the builder.
      * 
-     * @return the error count all function
+     * @return The error count all function.
      * 
      * @see ErrorCountAllFunction
      */
@@ -360,7 +353,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the pre exists all function {@link #preExistsAllFunction},
      * provided by the builder.
      * 
-     * @return the pre exists all function
+     * @return The pre exists all function.
      * 
      * @see PreExistsAllFunction
      */
@@ -374,7 +367,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the pos exists all function {@link #posExistsAllFunction},
      * provided by the builder.
      * 
-     * @return the pos exists all function
+     * @return The pos exists all function.
      * 
      * @see PosExistsAllFunction
      */
@@ -388,7 +381,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the error exists all function {@link #errorExistsAllFunction},
      * provided by the builder.
      * 
-     * @return the error exists all function
+     * @return The error exists all function.
      * 
      * @see ErrorExistsAllFunction
      */
@@ -402,7 +395,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the pre exists by id function {@link #preExistsByIdFunction},
      * provided by the builder.
      * 
-     * @return the pre exists by id function
+     * @return The pre exists by id function.
      * 
      * @see PreExistsByIdFunction
      */
@@ -416,7 +409,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the pos exists by id function {@link #posExistsByIdFunction},
      * provided by the builder.
      * 
-     * @return the pos exists by id function
+     * @return The pos exists by id function.
      * 
      * @see PosExistsByIdFunction
      */
@@ -430,7 +423,7 @@ public abstract sealed class AbstractQueryFacade< // generics
      * Gets the error exists by id function {@link #errorExistsByIdFunction},
      * provided by the builder.
      * 
-     * @return the error exists by id function
+     * @return The error exists by id function.
      * 
      * @see ErrorExistsByIdFunction
      */

@@ -49,35 +49,35 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	private static final Logger LOGGER = LoggerFactory.getLogger(QueryFacadeBuilder.class);
 
 	/**
-	 * Function that executes exists by id operation
+	 * Same as {@link QueryFacade#existsByIdFunction existsByIdFunction}.
 	 * 
 	 * @see ExistsByIdFunction
 	 */
 	public ExistsByIdFunction<QueryIdIn, ExistsResult> existsByIdFunction;
 
 	/**
-	 * Function that executes find by id operation
+	 * Same as {@link QueryFacade#findByIdFunction findByIdFunction}.
 	 * 
 	 * @see FindByIdFunction
 	 */
 	public FindByIdFunction<QueryIdIn, OneResult> findByIdFunction;
 
 	/**
-	 * Function that executes find all operation
+	 * Same as {@link QueryFacade#findAllFunction findAllFunction}.
 	 * 
 	 * @see FindAllFunction
 	 */
 	public FindAllFunction<MultipleResult> findAllFunction;
 
 	/**
-	 * Function that executes count all operation
+	 * Same as {@link QueryFacade#countAllFunction countAllFunction}.
 	 * 
 	 * @see CountAllFunction
 	 */
 	public CountAllFunction<CountResult> countAllFunction;
 
 	/**
-	 * Function that executes exist all operation
+	 * Same as {@link QueryFacade#existsAllFunction existsAllFunction}.
 	 * 
 	 * @see ExistsAllFunction
 	 */

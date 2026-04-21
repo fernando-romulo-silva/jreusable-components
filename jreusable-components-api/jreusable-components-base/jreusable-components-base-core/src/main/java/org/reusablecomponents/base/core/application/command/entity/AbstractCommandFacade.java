@@ -71,22 +71,10 @@ import jakarta.validation.constraints.NotNull;
  * @author Fernando Romulo da Silva
  * @since 1.0.0
  * 
+ * @see CommandFacade
  * @see BaseFacade
  */
-public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity<Id>, Id, // basic
-		// save
-		SaveEntityIn, SaveEntityOut, // entity
-		SaveEntitiesIn, SaveEntitiesOut, // entities
-		// update
-		UpdateEntityIn, UpdateEntityOut, // entity
-		UpdateEntitiesIn, UpdateEntitiesOut, // entities
-		// delete
-		DeleteEntityIn, DeleteEntityOut, // entity
-		DeleteEntitiesIn, DeleteEntitiesOut, // entities
-		// delete by id
-		DeleteIdIn, DeleteIdOut, // id
-		DeleteIdsIn, DeleteIdsOut> // ids
-		// Base Facade
+public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity<Id>, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
 		extends BaseFacade<Entity, Id> permits CommandFacade {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCommandFacade.class);
@@ -353,7 +341,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pre save function {@link #preSaveFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pre save function
+	 * @return The pre save function.
 	 * 
 	 * @see PreSaveFunction
 	 */
@@ -367,7 +355,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pos save function {@link #posSaveFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pos save function
+	 * @return The pos save function.
 	 * 
 	 * @see PosSaveFunction
 	 */
@@ -381,7 +369,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the error save function {@link #errorSaveFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the error save function
+	 * @return The error save function.
 	 * 
 	 * @see ErrorSaveFunction
 	 */
@@ -395,7 +383,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pre save all function {@link #preSaveAllFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pre save all function
+	 * @return The pre save all function.
 	 * 
 	 * @see PreSaveAllFunction
 	 */
@@ -409,7 +397,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pos save all function {@link #posSaveAllFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pos save all function
+	 * @return The pos save all function.
 	 * 
 	 * @see PosSaveAllFunction
 	 */
@@ -423,7 +411,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the error save all function {@link #errorSaveAllFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the error save all function
+	 * @return The error save all function.
 	 * 
 	 * @see ErrorSaveAllFunction
 	 */
@@ -437,7 +425,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pre update function {@link #preUpdateFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pre update function
+	 * @return The pre update function.
 	 * 
 	 * @see PreUpdateFunction
 	 */
@@ -451,7 +439,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pos update function {@link #posUpdateFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pos update function
+	 * @return The pos update function.
 	 * 
 	 * @see PosUpdateFunction
 	 */
@@ -465,7 +453,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the error update function {@link #errorUpdateFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the error update function
+	 * @return The error update function.
 	 * 
 	 * @see ErrorUpdateFunction
 	 */
@@ -479,7 +467,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pre update all function {@link #preUpdateAllFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pre update all function
+	 * @return The pre update all function.
 	 * 
 	 * @see PreUpdateAllFunction
 	 */
@@ -493,7 +481,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pos update all function {@link #posUpdateAllFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pos update all function
+	 * @return The pos update all function.
 	 * 
 	 * @see PosUpdateAllFunction
 	 */
@@ -507,7 +495,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the error update all function {@link #errorUpdateAllFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the error update all function
+	 * @return The error update all function.
 	 * 
 	 * @see ErrorUpdateAllFunction
 	 */
@@ -521,7 +509,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pre delete function {@link #preDeleteFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pre delete function
+	 * @return The pre delete function.
 	 * 
 	 * @see PreDeleteFunction
 	 */
@@ -535,7 +523,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pos delete function {@link #posDeleteFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pos delete function
+	 * @return The pos delete function.
 	 * 
 	 * @see PosDeleteFunction
 	 */
@@ -549,7 +537,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the error delete function {@link #errorDeleteFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the error delete function
+	 * @return The error delete function.
 	 * 
 	 * @see ErrorDeleteFunction
 	 */
@@ -563,7 +551,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pre delete all function {@link #preDeleteAllFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pre delete all function
+	 * @return The pre delete all function.
 	 * 
 	 * @see PreDeleteAllFunction
 	 */
@@ -577,7 +565,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pos delete all function {@link #posDeleteAllFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pos delete all function
+	 * @return The pos delete all function.
 	 * 
 	 * @see PosDeleteAllFunction
 	 */
@@ -591,7 +579,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the error delete all function {@link #errorDeleteAllFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the error delete all function
+	 * @return The error delete all function.
 	 * 
 	 * @see ErrorDeleteAllFunction
 	 */
@@ -605,7 +593,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pre delete by id function {@link #preDeleteByIdFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pre delete by id function
+	 * @return The pre delete by id function.
 	 * 
 	 * @see PreDeleteByIdFunction
 	 */
@@ -619,7 +607,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pos delete by id function {@link #posDeleteByIdFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pos delete by id function
+	 * @return The pos delete by id function.
 	 * 
 	 * @see PosDeleteByIdFunction
 	 */
@@ -633,7 +621,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the error delete by id function {@link #errorDeleteByIdFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the error delete by id function
+	 * @return The error delete by id function.
 	 * 
 	 * @see ErrorDeleteByIdFunction
 	 */
@@ -647,7 +635,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pre delete by ids function {@link #preDeleteByIdsFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pre delete by ids function
+	 * @return The pre delete by ids function.
 	 * 
 	 * @see PreDeleteByIdsFunction
 	 */
@@ -661,7 +649,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the pos delete by ids function {@link #posDeleteByIdsFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the pos delete by ids function
+	 * @return The pos delete by ids function.
 	 * 
 	 * @see PosDeleteByIdsFunction
 	 */
@@ -675,7 +663,7 @@ public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity
 	 * Gets the error delete by ids function {@link #errorDeleteByIdsFunction},
 	 * provided by the builder.
 	 * 
-	 * @return the error delete by ids function
+	 * @return The error delete by ids function.
 	 * 
 	 * @see ErrorDeleteByIdsFunction
 	 */

@@ -72,47 +72,11 @@ import jakarta.validation.constraints.NotNull;
  * @see AbstractCommandFacade
  * @see InterfaceCommandFacade
  */
-public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, // basic
-		// save
-		SaveEntityIn, SaveEntityOut, // entity
-		SaveEntitiesIn, SaveEntitiesOut, // entities
-		// update
-		UpdateEntityIn, UpdateEntityOut, // entity
-		UpdateEntitiesIn, UpdateEntitiesOut, // entities
-		// delete
-		DeleteEntityIn, DeleteEntityOut, // entity
-		DeleteEntitiesIn, DeleteEntitiesOut, // entities
-		// delete by id
-		DeleteIdIn, DeleteIdOut, // id
-		DeleteIdsIn, DeleteIdsOut> // ids
-		// Base Facade
-		extends AbstractCommandFacade<Entity, Id, // basic
-				// save
-				SaveEntityIn, SaveEntityOut, // entity
-				SaveEntitiesIn, SaveEntitiesOut, // entities
-				// update
-				UpdateEntityIn, UpdateEntityOut, // entity
-				UpdateEntitiesIn, UpdateEntitiesOut, // entities
-				// delete
-				DeleteEntityIn, DeleteEntityOut, // entity
-				DeleteEntitiesIn, DeleteEntitiesOut, // entities
-				// delete by id
-				DeleteIdIn, DeleteIdOut, // id
-				DeleteIdsIn, DeleteIdsOut> // ids
-		// Interface command facade
-		implements InterfaceCommandFacade<Entity, Id, // basic
-				// save
-				SaveEntityIn, SaveEntityOut, // entity
-				SaveEntitiesIn, SaveEntitiesOut, // entities
-				// update
-				UpdateEntityIn, UpdateEntityOut, // entity
-				UpdateEntitiesIn, UpdateEntitiesOut, // entities
-				// delete
-				DeleteEntityIn, DeleteEntityOut, // entity
-				DeleteEntitiesIn, DeleteEntitiesOut, // entities
-				// delete by id
-				DeleteIdIn, DeleteIdOut, // id
-				DeleteIdsIn, DeleteIdsOut> { // ids
+public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
+		extends
+		AbstractCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
+		implements
+		InterfaceCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> {
 
 	private static final String NON_NULL_GROUP_OF_ENTITIES_MSG = "Please pass a non-null group of %s entities";
 

@@ -57,64 +57,60 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommandFacadeBuilder.class);
 
 	/**
-	 * Function that executes the save operation in the
-	 * {@link #save(Object, Object...) save} method
+	 * Check {@link CommandFacade#saveFunction CommandFacade.saveFunction}.
 	 * 
 	 * @see SaveFunction
 	 */
 	public SaveFunction<SaveEntityIn, SaveEntityOut> saveFunction;
 
 	/**
-	 * Function that executes the save all operation in the
-	 * {@link #saveAll(Object, Object...) saveAll} method
+	 * Check {@link CommandFacade#saveAllFunction CommandFacade.saveAllFunction}.
 	 * 
 	 * @see SaveAllFunction
 	 */
 	public SaveAllFunction<SaveEntitiesIn, SaveEntitiesOut> saveAllFunction;
 
 	/**
-	 * Function that executes the update operation in the
-	 * {@link #update(Object, Object...) update} method
+	 * Check {@link CommandFacade#updateFunction CommandFacade.updateFunction}.
 	 * 
 	 * @see UpdateFunction
 	 */
 	public UpdateFunction<UpdateEntityIn, UpdateEntityOut> updateFunction;
 
 	/**
-	 * Function that executes the update all operation in the
-	 * {@link #updateAll(Object, Object...) updateAll} method
+	 * Check {@link CommandFacade#updateAllFunction
+	 * CommandFacade.updateAllFunction}.
 	 * 
 	 * @see UpdateAllFunction
 	 */
 	public UpdateAllFunction<UpdateEntitiesIn, UpdateEntitiesOut> updateAllFunction;
 
 	/**
-	 * Function that executes the delete operation in the
-	 * {@link #delete(Object, Object...) delete} method
+	 * Check {@link CommandFacade#deleteFunction CommandFacade.deleteFunction}.
 	 * 
 	 * @see DeleteFunction
 	 */
 	public DeleteFunction<DeleteEntityIn, DeleteEntityOut> deleteFunction;
 
 	/**
-	 * Function that executes the delete all operation in the
-	 * {@link #deleteAll(Object, Object...) deleteAll} method
+	 * Check {@link CommandFacade#deleteAllFunction
+	 * CommandFacade.deleteAllFunction}.
 	 * 
 	 * @see DeleteAllFunction
 	 */
 	public DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut> deleteAllFunction;
 
 	/**
-	 * Function that executes the delete by id operation in the
-	 * {@link #deleteById(Object, Object...) deleteById} method
+	 * Check {@link CommandFacade#deleteByIdFunction
+	 * CommandFacade.deleteByIdFunction}.
 	 * 
 	 * @see DeleteByIdFunction
 	 */
 	public DeleteByIdFunction<DeleteIdIn, DeleteIdOut> deleteByIdFunction;
 
 	/**
-	 * Function that executes the delete all by ids operation in the
-	 * {@link #deleteAllByIds(Object, Object...) deleteAllByIds} method
+	 * Check {@link CommandFacade#deleteByIdsFunction
+	 * CommandFacade.deleteByIdsFunction}.
 	 * 
 	 * @see DeleteByIdsFunction
 	 */
