@@ -49,35 +49,35 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	private static final Logger LOGGER = LoggerFactory.getLogger(QueryFacadeBuilder.class);
 
 	/**
-	 * Same as {@link QueryFacade#existsByIdFunction existsByIdFunction}.
+	 * Check {@link QueryFacade#existsByIdFunction QueryFacade.existsByIdFunction}.
 	 * 
 	 * @see ExistsByIdFunction
 	 */
 	public ExistsByIdFunction<QueryIdIn, ExistsResult> existsByIdFunction;
 
 	/**
-	 * Same as {@link QueryFacade#findByIdFunction findByIdFunction}.
+	 * Check {@link QueryFacade#findByIdFunction QueryFacade.findByIdFunction}.
 	 * 
 	 * @see FindByIdFunction
 	 */
 	public FindByIdFunction<QueryIdIn, OneResult> findByIdFunction;
 
 	/**
-	 * Same as {@link QueryFacade#findAllFunction findAllFunction}.
+	 * Check {@link QueryFacade#findAllFunction QueryFacade.findAllFunction}.
 	 * 
 	 * @see FindAllFunction
 	 */
 	public FindAllFunction<MultipleResult> findAllFunction;
 
 	/**
-	 * Same as {@link QueryFacade#countAllFunction countAllFunction}.
+	 * Check {@link QueryFacade#countAllFunction QueryFacade.countAllFunction}.
 	 * 
 	 * @see CountAllFunction
 	 */
 	public CountAllFunction<CountResult> countAllFunction;
 
 	/**
-	 * Same as {@link QueryFacade#existsAllFunction existsAllFunction}.
+	 * Check {@link QueryFacade#existsAllFunction QueryFacade.existsAllFunction}.
 	 * 
 	 * @see ExistsAllFunction
 	 */
@@ -120,8 +120,9 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	}
 
 	/**
-	 * Gets the exists all function, if it is not set, it will be set with a
-	 * function that throws an UnsupportedOperationException when executed.
+	 * Gets the exists all function {@link #existsAllFunction}, if it is not set, it
+	 * will be set with a function that throws an UnsupportedOperationException when
+	 * executed.
 	 * 
 	 * @return the exists all function
 	 * 
@@ -137,8 +138,9 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	}
 
 	/**
-	 * Gets the count all function, if it is not set, it will be set with a
-	 * function that throws an UnsupportedOperationException when executed.
+	 * Gets the count all function {@link #countAllFunction}, if it is not set, it
+	 * will be set with a function that throws an UnsupportedOperationException when
+	 * executed.
 	 * 
 	 * @return the count all function
 	 * 
@@ -154,8 +156,9 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	}
 
 	/**
-	 * Gets the find all function, if it is not set, it will be set with a
-	 * function that throws an UnsupportedOperationException when executed.
+	 * Gets the find all function {@link #findAllFunction}, if it is not set, it
+	 * will be set with a function that throws an UnsupportedOperationException when
+	 * executed.
 	 * 
 	 * @return the find all function
 	 * 
@@ -171,8 +174,9 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	}
 
 	/**
-	 * Gets the exists by id function, if it is not set, it will be set with a
-	 * function that throws an UnsupportedOperationException when executed.
+	 * Gets the exists by id function {@link #existsByIdFunction}, if it is not set,
+	 * it will be set with a function that throws an UnsupportedOperationException
+	 * when executed.
 	 * 
 	 * @return the exists by id function
 	 * 
@@ -188,8 +192,9 @@ public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn
 	}
 
 	/**
-	 * Gets the find by id function, if it is not set, it will be set with a
-	 * function that throws an UnsupportedOperationException when executed.
+	 * Gets the find by id function {@link #findByIdFunction}, if it is not set, it
+	 * will be set with a function that throws an UnsupportedOperationException when
+	 * executed.
 	 * 
 	 * @return the find by id function
 	 * 

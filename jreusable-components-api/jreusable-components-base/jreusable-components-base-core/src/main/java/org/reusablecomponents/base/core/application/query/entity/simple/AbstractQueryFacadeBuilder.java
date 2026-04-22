@@ -63,7 +63,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     public PreFindByIdFunction<QueryIdIn> preFindByIdFunction;
 
     /**
-     * Check {@link AbstractQueryFacade#posFindByIdFunction posFindByIdFunction}.
+     * Check {@link AbstractQueryFacade#posFindByIdFunction
+     * AbstractQueryFacade.posFindByIdFunction}.
      * 
      * @see PosFindByIdFunction
      */
@@ -71,21 +72,23 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
 
     /**
      * Check {@link AbstractQueryFacade#errorFindByIdFunction
-     * errorFindByIdFunction}.
+     * AbstractQueryFacade.errorFindByIdFunction}.
      * 
      * @see ErrorFindByIdFunction
      */
     public ErrorFindByIdFunction<QueryIdIn> errorFindByIdFunction;
 
     /**
-     * Check {@link AbstractQueryFacade#preFindAllFunction preFindAllFunction}.
+     * Check {@link AbstractQueryFacade#preFindAllFunction
+     * AbstractQueryFacade.preFindAllFunction}.
      * 
      * @see PreFindAllFunction
      */
     public PreFindAllFunction preFindAllFunction;
 
     /**
-     * Check {@link AbstractQueryFacade#posFindAllFunction posFindAllFunction}.
+     * Check {@link AbstractQueryFacade#posFindAllFunction
+     * AbstractQueryFacade.posFindAllFunction}.
      * 
      * @see PosFindAllFunction
      */
@@ -93,21 +96,23 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
 
     /**
      * Check {@link AbstractQueryFacade#errorFindAllFunction
-     * errorFindAllFunction}.
+     * AbstractQueryFacade.errorFindAllFunction}.
      * 
      * @see ErrorFindAllFunction
      */
     public ErrorFindAllFunction errorFindAllFunction;
 
     /**
-     * Check {@link AbstractQueryFacade#preCountAllFunction preCountAllFunction}.
+     * Check {@link AbstractQueryFacade#preCountAllFunction
+     * AbstractQueryFacade.preCountAllFunction}.
      * 
      * @see PreCountAllFunction
      */
     public PreCountAllFunction preCountAllFunction;
 
     /**
-     * Check {@link AbstractQueryFacade#posCountAllFunction posCountAllFunction}.
+     * Check {@link AbstractQueryFacade#posCountAllFunction
+     * AbstractQueryFacade.posCountAllFunction}.
      * 
      * @see PosCountAllFunction
      */
@@ -115,7 +120,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
 
     /**
      * Check {@link AbstractQueryFacade#errorCountAllFunction
-     * errorCountAllFunction}.
+     * AbstractQueryFacade.errorCountAllFunction}.
      * 
      * @see ErrorCountAllFunction
      */
@@ -123,7 +128,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
 
     /**
      * Check {@link AbstractQueryFacade#preExistsAllFunction
-     * preExistsAllFunction}.
+     * AbstractQueryFacade.preExistsAllFunction}.
      * 
      * @see PreExistsAllFunction
      */
@@ -131,7 +136,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
 
     /**
      * Check {@link AbstractQueryFacade#posExistsAllFunction
-     * posExistsAllFunction}.
+     * AbstractQueryFacade.posExistsAllFunction}.
      * 
      * @see PosExistsAllFunction
      */
@@ -139,7 +144,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
 
     /**
      * Check {@link AbstractQueryFacade#errorExistsAllFunction
-     * errorExistsAllFunction}.
+     * AbstractQueryFacade.errorExistsAllFunction}.
      * 
      * @see ErrorExistsAllFunction
      */
@@ -147,7 +152,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
 
     /**
      * Check {@link AbstractQueryFacade#preExistsByIdFunction
-     * preExistsByIdFunction}.
+     * AbstractQueryFacade.preExistsByIdFunction}.
      * 
      * @see PreExistsByIdFunction
      */
@@ -155,7 +160,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
 
     /**
      * Check {@link AbstractQueryFacade#posExistsByIdFunction
-     * posExistsByIdFunction}.
+     * AbstractQueryFacade.posExistsByIdFunction}.
      * 
      * @see PosExistsByIdFunction
      */
@@ -163,7 +168,7 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
 
     /**
      * Check {@link AbstractQueryFacade#errorExistsByIdFunction
-     * errorExistsByIdFunction}.
+     * AbstractQueryFacade.errorExistsByIdFunction}.
      * 
      * @see ErrorExistsByIdFunction
      */

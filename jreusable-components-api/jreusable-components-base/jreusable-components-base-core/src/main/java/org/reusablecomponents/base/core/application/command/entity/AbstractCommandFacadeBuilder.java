@@ -328,8 +328,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pre save function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pre save function {@link #preSaveFunction}, if it is not set, it
+	 * will be set with a default function that logs the execution.
 	 * 
 	 * @return The pre save function.
 	 * 
@@ -346,8 +346,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pos save function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pos save function {@link #posSaveFunction}, if it is not set, it
+	 * will be set with a default function that logs the execution.
 	 * 
 	 * @return The pos save function.
 	 * 
@@ -364,8 +364,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the error save function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the error save function {@link #errorSaveFunction}, if it is not set, it
+	 * will be set with a default function that logs the execution.
 	 * 
 	 * @return The error save function.
 	 * 
@@ -400,8 +400,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pos save all function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pos save all function {@link #posSaveAllFunction}, if it is not set,
+	 * it will be set with a default function that logs the execution.
 	 * 
 	 * @return The pos save all function.
 	 * 
@@ -418,8 +418,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the error save all function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the error save all function {@link #errorSaveAllFunction}, if it is not
+	 * set, it will be set with a default function that logs the execution.
 	 * 
 	 * @return The error save all function.
 	 * 
@@ -436,8 +436,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pos update function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pos update function {@link #preUpdateFunction}, if it is not set, it
+	 * will be set with a default function that logs the execution.
 	 * 
 	 * @return The pre update function.
 	 * 
@@ -454,8 +454,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pos update function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pos update function {@link #posUpdateFunction}, if it is not set, it
+	 * will be set with a default function that logs the execution.
 	 * 
 	 * @return The pos update function.
 	 * 
@@ -472,8 +472,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the error update function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the error update function {@link #errorUpdateFunction}, if it is not
+	 * set, it will be set with a default function that logs the execution.
 	 * 
 	 * @return The error update function.
 	 * 
@@ -490,8 +490,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pre update all function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pre update all function {@link #preUpdateAllFunction}, if it is not
+	 * set, it will be set with a default function that logs the execution.
 	 * 
 	 * @return The pre update all function.
 	 * 
@@ -508,8 +508,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pos update all function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pos update all function {@link #posUpdateAllFunction}, if it is not
+	 * set, it will be set with a default function that logs the execution.
 	 * 
 	 * @return The pos update all function.
 	 * 
@@ -527,8 +527,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the error update all function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the error update all function {@link #errorUpdateAllFunction}, if it is
+	 * not set, it will be set with a default function that logs the execution.
 	 * 
 	 * @return The error update all function.
 	 * 
@@ -546,8 +546,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pre delete function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pre delete function {@link #preDeleteFunction}, if it is not set, it
+	 * will be set with a default function that logs the execution.
 	 * 
 	 * @return The pre delete function.
 	 * 
@@ -564,8 +564,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pos delete function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pos delete function {@link #posDeleteFunction}, if it is not set, it
+	 * will be set with a default function that logs the execution.
 	 * 
 	 * @return The pos delete function.
 	 * 
@@ -582,8 +582,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the error delete function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the error delete function {@link #errorDeleteFunction}, if it is not
+	 * set, it will be set with a default function that logs the execution.
 	 * 
 	 * @return The error delete function.
 	 * 
@@ -600,8 +600,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pre delete all function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pre delete all function {@link #preDeleteAllFunction}, if it is not
+	 * set, it will be set with a default function that logs the execution.
 	 * 
 	 * @return The pre delete all function.
 	 * 
@@ -619,8 +619,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pos delete by id function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pos delete by id function {@link #posDeleteByIdFunction}, if it is
+	 * not set, it will be set with a default function that logs the execution.
 	 * 
 	 * @return The pos delete by id function.
 	 * 
@@ -637,8 +637,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the error delete all function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the error delete all function {@link #errorDeleteAllFunction}, if it is
+	 * not set, it will be set with a default function that logs the execution.
 	 * 
 	 * @return The error delete all function.
 	 * 
@@ -656,8 +656,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pre delete by id function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pre delete by id function {@link #preDeleteByIdFunction}, if it is
+	 * not set, it will be set with a default function that logs the execution.
 	 * 
 	 * @return The pre delete by id function.
 	 * 
@@ -674,8 +674,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pos delete by id function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pos delete by id function {@link #posDeleteByIdFunction}, if it is
+	 * not set, it will be set with a default function that logs the execution.
 	 * 
 	 * @return The pos delete by id function.
 	 * 
@@ -710,8 +710,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pre delete by ids function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pre delete by ids function {@link #preDeleteByIdsFunction}, if it is
+	 * not set, it will be set with a default function that logs the execution.
 	 * 
 	 * @return The pre delete by ids function.
 	 * 
@@ -728,8 +728,8 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the pos delete by ids function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the pos delete by ids function {@link #posDeleteByIdsFunction}, if it is
+	 * not set, it will be set with a default function that logs the execution.
 	 * 
 	 * @return The pos delete by ids function.
 	 * 
@@ -746,8 +746,9 @@ public abstract sealed class AbstractCommandFacadeBuilder<Entity extends Abstrac
 	}
 
 	/**
-	 * Gets the error delete by ids function, if it is not set, it will be set with
-	 * a default function that logs the execution.
+	 * Gets the error delete by ids function {@link #errorDeleteByIdsFunction}, if
+	 * it is not set, it will be set with a default function that logs the
+	 * execution.
 	 * 
 	 * @return The error delete by ids function.
 	 * 

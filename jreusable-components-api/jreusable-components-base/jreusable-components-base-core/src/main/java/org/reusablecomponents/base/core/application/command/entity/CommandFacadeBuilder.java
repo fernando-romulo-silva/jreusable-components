@@ -162,7 +162,7 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	 * it will be set with a function that throws an UnsupportedOperationException
 	 * when executed.
 	 * 
-	 * @return the save function
+	 * @return The save function.
 	 * 
 	 * @see SaveFunction
 	 * @see UnsupportedOperationException
@@ -180,7 +180,7 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	 * not set, it will be set with a function that throws an
 	 * UnsupportedOperationException when executed.
 	 * 
-	 * @return the save all function
+	 * @return The save all function.
 	 * 
 	 * @see SaveAllFunction
 	 * @see UnsupportedOperationException
@@ -198,7 +198,7 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	 * set, it will be set with a function that throws an
 	 * UnsupportedOperationException when executed.
 	 * 
-	 * @return the update function
+	 * @return The update function.
 	 * 
 	 * @see UpdateFunction
 	 * @see UnsupportedOperationException
@@ -216,7 +216,7 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	 * it is not set, it will be set with a function that throws an
 	 * UnsupportedOperationException when executed.
 	 * 
-	 * @return the update all function
+	 * @return The update all function.
 	 * 
 	 * @see UpdateAllFunction
 	 * @see UnsupportedOperationException
@@ -234,7 +234,7 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	 * set, it will be set with a function that throws an
 	 * UnsupportedOperationException when executed.
 	 * 
-	 * @return the delete function
+	 * @return The delete function.
 	 * 
 	 * @see DeleteFunction
 	 * @see UnsupportedOperationException
@@ -252,7 +252,7 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	 * it is not set, it will be set with a
 	 * function that throws an UnsupportedOperationException when executed.
 	 * 
-	 * @return the delete all function
+	 * @return The delete all function.
 	 * 
 	 * @see DeleteAllFunction
 	 * @see UnsupportedOperationException
@@ -270,7 +270,7 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	 * deleteByIdFunction}, if it is not set, it will be set with a
 	 * function that throws an UnsupportedOperationException when executed.
 	 * 
-	 * @return the delete by id function
+	 * @return The delete by id function.
 	 * 
 	 * @see DeleteByIdFunction
 	 * @see UnsupportedOperationException
@@ -288,7 +288,7 @@ public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, 
 	 * deleteByIdsFunction}, if it is not set, it will be set with a
 	 * function that throws an UnsupportedOperationException when executed.
 	 * 
-	 * @return the delete by ids function
+	 * @return The delete by ids function.
 	 * 
 	 * @see DeleteByIdsFunction
 	 * @see UnsupportedOperationException
