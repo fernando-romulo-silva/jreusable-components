@@ -13,6 +13,34 @@ import jakarta.validation.constraints.NotNull;
 /**
  * The default <code>InterfaceEntityQuerySpecificationFacade</code>'s
  * implementation.
+ * 
+ * <p>
+ * This class provides default implementations for the basic query operations:
+ * <ul>
+ * <li>Find by specification</li>
+ * <li>Find one by specification</li>
+ * <li>Exists by specification</li>
+ * <li>Count by specification</li>
+ * </ul>
+ * <p>
+ * 
+ * @param <Entity>         The facade entity type
+ * @param <Id>             The facade entity id type
+ * 
+ * @param <OneResult>      The one-result type, like the entity or wrap type
+ * @param <MultipleResult> The multiple-result type, like List<Entity>,
+ *                         Iterable<Entity>, or a wrap type like
+ *                         Mono<List<Entity>>
+ * @param <CountResult>    The count-result type, like Long or Integer
+ * @param <ExistsResult>   The exists-result type, like Boolean
+ * @param <Specification>  The specification type, used to filter queries
+ * 
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ * 
+ * @see InterfaceQuerySpecificationFacade
+ * @see AbstractQuerySpecificationFacade
  */
 public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>
 		extends
@@ -29,7 +57,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	protected final FindBySpecificationFunction<Specification, MultipleResult> findBySpecificationFunction;
 
 	/**
-	 * Function that executes the find all operation in the
+	 * Function that executes the find one operation in the
 	 * {@link #findOneBySpecification(Object, Object...) findOneBySpec} method
 	 */
 	protected final FindOneBySpecFunction<Specification, OneResult> findOneBySpecFunction;
@@ -80,6 +108,22 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	}
 
 	/**
+	 * Gets the find by specification function
+	 * {@link #findBySpecificationFunction},
+	 * provided by the builder.
+	 * 
+	 * @return The find by specification function.
+	 * 
+	 * @see FindBySpecificationFunction
+	 */
+	@NotNull
+	protected FindBySpecificationFunction<Specification, MultipleResult> getFindBySpecificationFunction() {
+		LOGGER.atDebug().log("Returning findBySpecificationFunction function {}",
+				findBySpecificationFunction.getName());
+		return findBySpecificationFunction;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -96,6 +140,20 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 		LOGGER.atDebug().log("Default findOneBySpecification executed, oneResult {}, directives {}",
 				oneResult, directives);
 		return oneResult;
+	}
+
+	/**
+	 * Gets the find one by specification function {@link #findOneBySpecFunction},
+	 * provided by the builder.
+	 * 
+	 * @return The find one by specification function.
+	 * 
+	 * @see FindOneBySpecFunction
+	 */
+	@NotNull
+	protected FindOneBySpecFunction<Specification, OneResult> getFindOneBySpecFunction() {
+		LOGGER.atDebug().log("Returning findOneBySpecFunction function {}", findOneBySpecFunction.getName());
+		return findOneBySpecFunction;
 	}
 
 	/**
@@ -116,6 +174,20 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	}
 
 	/**
+	 * Gets the exists by specification function {@link #existsBySpecFunction},
+	 * provided by the builder.
+	 * 
+	 * @return The exists by specification function.
+	 * 
+	 * @see ExistsBySpecificationFunction
+	 */
+	@NotNull
+	protected ExistsBySpecificationFunction<Specification, ExistsResult> getExistsBySpecFunction() {
+		LOGGER.atDebug().log("Returning existsBySpecFunction function {}", existsBySpecFunction.getName());
+		return existsBySpecFunction;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -131,26 +203,16 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 		return countResult;
 	}
 
+	/**
+	 * Gets the count by specification function {@link #countBySpecFunction},
+	 * provided by the builder.
+	 * 
+	 * @return The count by specification function.
+	 * 
+	 * @see CountBySpecificationFunction
+	 */
 	@NotNull
-	public FindBySpecificationFunction<Specification, MultipleResult> getFindBySpecificationFunction() {
-		LOGGER.atDebug().log("Returning findBySpecFunction function {}", findBySpecificationFunction.getName());
-		return findBySpecificationFunction;
-	}
-
-	@NotNull
-	public FindOneBySpecFunction<Specification, OneResult> getFindOneBySpecFunction() {
-		LOGGER.atDebug().log("Returning findOneBySpecFunction function {}", findOneBySpecFunction.getName());
-		return findOneBySpecFunction;
-	}
-
-	@NotNull
-	public ExistsBySpecificationFunction<Specification, ExistsResult> getExistsBySpecFunction() {
-		LOGGER.atDebug().log("Returning existsBySpecFunction function {}", existsBySpecFunction.getName());
-		return existsBySpecFunction;
-	}
-
-	@NotNull
-	public CountBySpecificationFunction<Specification, CountResult> getCountBySpecFunction() {
+	protected CountBySpecificationFunction<Specification, CountResult> getCountBySpecFunction() {
 		LOGGER.atDebug().log("Returning countBySpecFunction function {}", countBySpecFunction.getName());
 		return countBySpecFunction;
 	}

@@ -163,7 +163,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	/**
 	 * Gets the find all function {@link #findAllFunction}, provided by the builder.
 	 * 
-	 * @return the find all function
+	 * @return The find all function.
 	 * 
 	 * @see FindAllFunction
 	 */
@@ -193,7 +193,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * Gets the find by id function {@link #findByIdFunction}, provided by the
 	 * builder.
 	 * 
-	 * @return the find by id function
+	 * @return The find by id function.
 	 * 
 	 * @see FindByIdFunction
 	 */
@@ -222,7 +222,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * Gets the count all function {@link #countAllFunction}, provided by the
 	 * builder.
 	 * 
-	 * @return the count all function
+	 * @return The count all function.
 	 * 
 	 * @see CountAllFunction
 	 */
@@ -251,7 +251,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * Gets the exists all function {@link #existsAllFunction}, provided by the
 	 * builder.
 	 * 
-	 * @return the exists all function
+	 * @return The exists all function.
 	 * 
 	 * @see ExistsAllFunction
 	 */
@@ -283,7 +283,7 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	 * Gets the exists by id function {@link #existsByIdFunction}, provided by the
 	 * builder.
 	 * 
-	 * @return the exists by id function
+	 * @return The exists by id function.
 	 * 
 	 * @see ExistsByIdFunction
 	 */
@@ -294,11 +294,12 @@ public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, Query
 	}
 
 	/**
-	 * Gets the query id in class, used on find by id and exists by id methods.
+	 * Gets the query id in class {@link #queryIdInClazz}, used on find by id and
+	 * exists by id methods.
 	 * It is populated by the constructor using reflection to retrieve the generic
 	 * type QueryIdIn.
 	 * 
-	 * @return the query id in class
+	 * @return The query id in class.
 	 */
 	@NotNull
 	protected Class<QueryIdIn> getQueryIdInClazz() {
