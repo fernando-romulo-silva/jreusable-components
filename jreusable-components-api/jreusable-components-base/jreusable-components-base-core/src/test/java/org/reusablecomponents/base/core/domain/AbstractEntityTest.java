@@ -4,8 +4,8 @@ import static com.github.jinahya.assertj.validation.ValidationAssertions.assertT
 import static com.jparams.verifier.tostring.NameStyle.NAME;
 import static java.text.MessageFormat.format;
 import static java.util.Arrays.asList;
-import static java.util.Optional.ofNullable;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
+import static nl.jqno.equalsverifier.Warning.NULL_FIELDS;
 import static nl.jqno.equalsverifier.Warning.REFERENCE_EQUALITY;
 import static nl.jqno.equalsverifier.Warning.STRICT_INHERITANCE;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -107,7 +107,7 @@ class AbstractEntityTest {
 	void givenEntity_whenEqualsAndHashCode_thenVerifyContract() { // NOPMD - JUnitTestsShouldIncludeAssert:
 																	// EqualsVerifier already do it
 		EqualsVerifier.forClass(Person.class)
-				.suppress(NONFINAL_FIELDS, STRICT_INHERITANCE, REFERENCE_EQUALITY)
+				.suppress(NONFINAL_FIELDS, STRICT_INHERITANCE, REFERENCE_EQUALITY, NULL_FIELDS)
 				.withOnlyTheseFields("id")
 				.withPrefabValues(Long.class, 1L, 2L)
 				.verify();

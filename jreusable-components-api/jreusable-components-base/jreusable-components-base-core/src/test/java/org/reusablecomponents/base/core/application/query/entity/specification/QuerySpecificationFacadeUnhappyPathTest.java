@@ -137,7 +137,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultQueryFacade.findOneBySpecification(spec, directives))
 				// then
 				.isInstanceOf(UnexpectedException.class)
-				.hasMessageContaining("Unexpecte error happened");
+				.hasMessageContaining("Unexpected error happened");
 	}
 
 	@Test
@@ -169,7 +169,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultQueryFacade.findBySpecification(spec, directives))
 				// then
 				.isInstanceOf(UnexpectedException.class)
-				.hasMessageContaining("Unexpecte error happened");
+				.hasMessageContaining("Unexpected error happened");
 	}
 
 	@Test
@@ -201,7 +201,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultQueryFacade.countBySpecification(spec, directives))
 				// then
 				.isInstanceOf(UnexpectedException.class)
-				.hasMessageContaining("Unexpecte error happened");
+				.hasMessageContaining("Unexpected error happened");
 	}
 
 	@Test
@@ -233,7 +233,7 @@ class QuerySpecificationFacadeUnhappyPathTest {
 		assertThatThrownBy(() -> defaultQueryFacade.existsBySpecification(spec, directives))
 				// then
 				.isInstanceOf(UnexpectedException.class)
-				.hasMessageContaining("Unexpecte error happened");
+				.hasMessageContaining("Unexpected error happened");
 	}
 
 	Stream<Arguments> methodWithNullSpecBeanValidationData() {

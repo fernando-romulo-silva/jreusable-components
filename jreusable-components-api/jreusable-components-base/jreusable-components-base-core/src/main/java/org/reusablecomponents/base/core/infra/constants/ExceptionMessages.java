@@ -43,10 +43,10 @@ public final class ExceptionMessages {
     /**
      * Id already exists: The entity ''{0}'' with id ''{1}'' already exists
      */
-    public static final String ID_ALREADY_EXITS_EXCEPTION_MSG = "{exception.idAlreadyExistsException}";
+    public static final String ID_ALREADY_EXISTS_EXCEPTION_MSG = "{exception.idAlreadyExistsException}";
 
     /**
-     * Unexpected error: Unexpecte error happened
+     * Unexpected error: Unexpected error happened
      */
     public static final String UNEXPECTED_ERROR_MSG = "{exception.unexpectedException}";
 
@@ -54,6 +54,6 @@ public final class ExceptionMessages {
      * Private constructor to avoid instantiation of this class.
      */
     private ExceptionMessages() {
-        throw new IllegalStateException("You cannot instanciate this class");
+        throw new IllegalStateException("You cannot instantiate this class");
     }
 }

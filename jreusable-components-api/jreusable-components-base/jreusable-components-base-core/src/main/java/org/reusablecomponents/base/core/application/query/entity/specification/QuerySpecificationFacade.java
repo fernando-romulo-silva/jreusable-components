@@ -63,13 +63,13 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	protected final FindOneBySpecFunction<Specification, OneResult> findOneBySpecFunction;
 
 	/**
-	 * Function that executes the find all operation in the
+	 * Function that executes the exists by specification operation in the
 	 * {@link #existsBySpecification(Object, Object...) existsBySpec} method
 	 */
 	protected final ExistsBySpecificationFunction<Specification, ExistsResult> existsBySpecFunction;
 
 	/**
-	 * Function that executes the find all operation in the
+	 * Function that executes the count by specification operation in the
 	 * {@link #countBySpecification(Object, Object...) countBySpec} method
 	 */
 	protected final CountBySpecificationFunction<Specification, CountResult> countBySpecFunction;
@@ -77,7 +77,8 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	/**
 	 * Default constructor
 	 * 
-	 * @param builder Object in charge to construct this one
+	 * @param builder Object in charge to construct this one, It can't be null, and
+	 *                must provide the functions to execute the operations
 	 */
 	protected QuerySpecificationFacade(
 			@NotNull final QuerySpecificationFacadeBuilder<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> builder) {
@@ -108,8 +109,7 @@ public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<I
 	}
 
 	/**
-	 * Gets the find by specification function
-	 * {@link #findBySpecificationFunction},
+	 * Gets the find by specification function {@link #findBySpecificationFunction},
 	 * provided by the builder.
 	 * 
 	 * @return The find by specification function.

@@ -229,7 +229,7 @@ class QueryFacadeTest {
         assertThatThrownBy(() -> defaultQueryFacade.findById(queryIdIn, directives))
                 // then
                 .isInstanceOf(UnexpectedException.class)
-                .hasMessageContaining("Unexpecte error happened");
+                .hasMessageContaining("Unexpected error happened");
     }
 
     @Test
@@ -245,7 +245,7 @@ class QueryFacadeTest {
                 // then
                 .isInstanceOf(UnexpectedException.class)
                 .hasRootCauseInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Unexpecte error happened");
+                .hasMessageContaining("Unexpected error happened");
     }
 
     @Test
@@ -260,7 +260,7 @@ class QueryFacadeTest {
         assertThatThrownBy(() -> defaultQueryFacade.countAll(directives))
                 // then
                 .isInstanceOf(UnexpectedException.class)
-                .hasMessageContaining("Unexpecte error happened");
+                .hasMessageContaining("Unexpected error happened");
     }
 
     @Test
@@ -275,7 +275,7 @@ class QueryFacadeTest {
         assertThatThrownBy(() -> defaultQueryFacade.existsAll(directives))
                 // then
                 .isInstanceOf(UnexpectedException.class)
-                .hasMessageContaining("Unexpecte error happened");
+                .hasMessageContaining("Unexpected error happened");
     }
 
     @Test
@@ -322,7 +322,7 @@ class QueryFacadeTest {
         assertThatThrownBy(() -> defaultQueryFacade.existsById("some Id", directives))
                 // then
                 .isInstanceOf(UnexpectedException.class)
-                .hasMessageContaining("Unexpecte error happened");
+                .hasMessageContaining("Unexpected error happened");
     }
 
 }

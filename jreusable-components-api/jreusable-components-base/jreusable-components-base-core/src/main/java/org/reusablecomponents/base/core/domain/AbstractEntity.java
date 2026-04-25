@@ -1,12 +1,14 @@
 package org.reusablecomponents.base.core.domain;
 
+import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
@@ -69,7 +71,7 @@ public abstract class AbstractEntity<Id> implements InterfaceEntity<Id, Abstract
                 .map(validator -> validator.validate(this))
                 .orElseGet(Set::of);
 
-        if (ObjectUtils.isNotEmpty(violations)) {
+        if (isNotEmpty(violations)) {
             throw new ConstraintViolationException(violations);
         }
     }
@@ -135,27 +137,26 @@ public abstract class AbstractEntity<Id> implements InterfaceEntity<Id, Abstract
 
     @Override
     public boolean equals(final Object obj) {
-
-        final boolean result;
-
-        if (Objects.isNull(obj)) {
-            result = false;
-
-        } else if (this == obj) {
-            result = true;
-
-        } else if (obj instanceof AbstractEntity<?> other) {
-            result = Objects.equals(this.id, other.id);
-
-        } else {
-            result = false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
         }
 
-        return result;
+        final var other = (AbstractEntity<?>) obj;
+
+        return id != null && Objects.equals(this.id, other.id);
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("createdDate", createdDate)
+                .append("createdReason", createdReason)
+                .append("updatedDate", updatedDate)
+                .append("updatedReason", updatedReason)
+                .toString();
     }
 }

@@ -1,5 +1,7 @@
 package org.reusablecomponents.base.core.domain;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.function.Consumer;
 
 import jakarta.validation.Valid;
@@ -30,10 +32,10 @@ public abstract class AbstractEntityBuilder<Id, Entity extends AbstractEntity<Id
      *                 call any of its methods to set properties.
      * @return the Builder instance, allowing for method chaining.
      */
-    @SuppressWarnings("unchecked")
     protected Builder with(@NotNull final Consumer<Builder> function) {
-        function.accept((Builder) this);
-        return (Builder) this;
+        requireNonNull(function, "function must not be null")
+                .accept(self());
+        return self();
     }
 
     /**
@@ -47,9 +49,14 @@ public abstract class AbstractEntityBuilder<Id, Entity extends AbstractEntity<Id
     @Valid
     @NotNull
     public Entity build() {
-        final var entity = createInstance();
+        final var entity = requireNonNull(createInstance(), "createInstance() must not return null");
         entity.validate();
         return entity;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected final Builder self() {
+        return (Builder) this;
     }
 
     /**

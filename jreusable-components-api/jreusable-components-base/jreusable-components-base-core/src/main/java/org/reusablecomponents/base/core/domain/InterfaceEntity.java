@@ -7,6 +7,10 @@ import java.util.Optional;
 
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * Interface for entities. Provides common functionality for
+ * managing entity state and validation.
+ */
 public interface InterfaceEntity<Id, Entity extends InterfaceEntity<Id, Entity>> {
 
     Id getId();

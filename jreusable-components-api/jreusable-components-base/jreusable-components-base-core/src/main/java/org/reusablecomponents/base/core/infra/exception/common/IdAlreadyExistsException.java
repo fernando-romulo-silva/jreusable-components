@@ -1,7 +1,7 @@
 package org.reusablecomponents.base.core.infra.exception.common;
 
 import static org.apache.commons.lang3.ArrayUtils.addAll;
-import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.ID_ALREADY_EXITS_EXCEPTION_MSG;
+import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.ID_ALREADY_EXISTS_EXCEPTION_MSG;
 
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 
@@ -30,7 +30,7 @@ public class IdAlreadyExistsException extends ElementConflictException {
             final Throwable ex,
             final Object id) {
         super(
-                ID_ALREADY_EXITS_EXCEPTION_MSG,
+                ID_ALREADY_EXISTS_EXCEPTION_MSG,
                 i18n,
                 ex,
                 addAll(new Object[] { cls.getSimpleName() }, id));
