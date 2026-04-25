@@ -148,7 +148,7 @@ SpringCommandFacade<Entity extends AbstractEntity<Id>, Id>
 
 ### Maven Multi-Module Build
 
-- **Root POM**: Aggregates 3 modules (jreusable-components-api, jreusable-components-technology, jreusable-components-apptest)
+- **Root POM**: Aggregates 3 modules (jreusable-components-api, jreusable-components-technology)
 - **Parent Dependencies**: Extends `allset-java` parent POM for centralized plugin/dependency management
 - **Quality Tools**: Maven plugins configured for PMD, SpotBugs, Checkstyle, JaCoCo code coverage, and Javadoc generation
 
@@ -165,7 +165,6 @@ mvn checkstyle:check       # Code style validation
 
 - **jreusable-components-api** provides abstractions
 - **jreusable-components-technology** implementations depend on jreusable-components-api
-- **jreusable-components-apptest** provides integration tests and example usage
 
 ## Key Files & Locations
 

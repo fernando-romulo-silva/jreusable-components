@@ -151,12 +151,16 @@ public abstract class AbstractEntity<Id> implements InterfaceEntity<Id, Abstract
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("createdDate", createdDate)
-                .append("createdReason", createdReason)
-                .append("updatedDate", updatedDate)
-                .append("updatedReason", updatedReason)
-                .toString();
+        // TODO: Consider using a more concise ToStringStyle customizing the output
+        return ToStringBuilder.reflectionToString(this);
+        /*
+         * return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+         * .append("id", id)
+         * .append("createdDate", createdDate)
+         * .append("createdReason", createdReason)
+         * .append("updatedDate", updatedDate)
+         * .append("updatedReason", updatedReason)
+         * .toString();
+         */
     }
 }

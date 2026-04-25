@@ -23,7 +23,6 @@
 	<modules>
 		<module>jreusable-components-api</module>
 		<module>jreusable-components-technology</module>
-		<module>jreusable-components-apptest</module>
 	</modules>
 
 	<properties>
