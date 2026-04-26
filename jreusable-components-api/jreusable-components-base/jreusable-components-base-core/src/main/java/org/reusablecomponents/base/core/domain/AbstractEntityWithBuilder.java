@@ -20,7 +20,7 @@ import jakarta.validation.constraints.NotNull;
  * creating immutable instances.
  */
 @Valid
-public class AbstractEntityWithBuilder<Id> extends AbstractEntity<Id> {
+public abstract class AbstractEntityWithBuilder<Id> extends AbstractInternalEntity<Id> {
 
     /**
      * Constructor. Protected, since this is an abstract class, and should only be
@@ -40,6 +40,7 @@ public class AbstractEntityWithBuilder<Id> extends AbstractEntity<Id> {
     protected AbstractEntityWithBuilder(
             final AbstractEntityBuilder<Id, ? extends AbstractEntityWithBuilder<Id>, ? extends AbstractEntityBuilder<?, ?, ?>> builder) {
         requireNonNull(builder, "builder must not be null");
+        this.id = builder.id;
         this.createdDate = builder.createdDate;
         this.createdReason = builder.createdReason;
     }
@@ -49,6 +50,14 @@ public class AbstractEntityWithBuilder<Id> extends AbstractEntity<Id> {
      * building and validating entities.
      */
     public static abstract class AbstractEntityBuilder<Id, Entity extends AbstractEntityWithBuilder<Id>, Builder extends AbstractEntityBuilder<Id, Entity, Builder>> {
+
+        /**
+         * Unique identifier of the entity. It is protected, since it should only be
+         * accessed by sub‑classes, and not by external code. It is also not final,
+         * since it may be set by frameworks like JPA, which require a no‑arg
+         * constructor and a setter for the ID field.
+         */
+        protected Id id;
 
         /**
          * Created reason is required, since it is a non‑null field in the entity. It
@@ -98,10 +107,10 @@ public class AbstractEntityWithBuilder<Id> extends AbstractEntity<Id> {
         @Valid
         @NotNull
         public Entity build() {
-            final var entity = requireNonNull(createInstance(), "createInstance() must not return null");
             createdDate = ObjectUtils.getIfNull(createdDate, LocalDateTime.now());
             createdReason = ObjectUtils.getIfNull(createdReason, "Initial creation");
-            validate();
+            final var entity = requireNonNull(createInstance(), "createInstance() must not return null");
+            validate(entity);
             return entity;
         }
 
@@ -121,9 +130,9 @@ public class AbstractEntityWithBuilder<Id> extends AbstractEntity<Id> {
          * @param entity the entity to validate
          * @throws ConstraintViolationException if the entity is invalid
          */
-        protected void validate() {
+        protected void validate(final Entity entity) {
             final var violations = getValidator()
-                    .map(validator -> validator.validate(this))
+                    .map(validator -> validator.validate(entity))
                     .orElseGet(Set::of);
 
             if (ObjectUtils.isNotEmpty(violations)) {

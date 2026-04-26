@@ -30,10 +30,13 @@ public interface InterfaceEntity<Id> {
 
     /**
      * Returns the date and time when the entity was last updated.
+     * If the entity has never been updated, this method returns an empty Optional.
      *
      * @return the last update date and time
      */
-    Optional<LocalDateTime> getUpdatedDate();
+    default Optional<LocalDateTime> getUpdatedDate() {
+        return Optional.empty();
+    }
 
     /**
      * Returns the reason why the entity was created.
@@ -41,19 +44,23 @@ public interface InterfaceEntity<Id> {
      * @return the creation reason
      */
     @NotNull
-    String getCreatedReason();
+    default String getCreatedReason() {
+        return "Initial creation";
+    }
 
     /**
      * Returns the reason why the entity was last updated.
      *
      * @return the last update reason
      */
-    Optional<String> getUpdatedReason();
+    default Optional<String> getUpdatedReason() {
+        return Optional.empty();
+    }
 
     /**
-     * Returns true if the entity is publishable, false otherwise. By default, all
-     * entities are publishable, but this can be overridden by sub‑classes if they
-     * want to be non‑publishable.
+     * Returns true if the entity is publishable, false otherwise.
+     * By default, all entities are publishable, but this can be overridden by
+     * sub‑classes if they want to be non‑publishable.
      *
      * @return true if the entity is publishable, false otherwise
      */

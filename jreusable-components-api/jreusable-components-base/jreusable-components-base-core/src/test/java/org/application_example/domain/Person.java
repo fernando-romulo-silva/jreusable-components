@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.application_example.infra.Utils;
 import org.reusablecomponents.base.core.domain.AbstractEntityWithBuilder;
 
@@ -43,7 +45,6 @@ public class Person extends AbstractEntityWithBuilder<Long> {
 
     private Person(@NotNull final Builder builder) {
         super(builder);
-        this.id = builder.id;
         this.name = builder.name;
         this.createdReason = builder.createdReason;
         this.country = builder.country;
@@ -84,9 +85,27 @@ public class Person extends AbstractEntityWithBuilder<Long> {
         return gender;
     }
 
-    public static class Builder extends AbstractEntityWithBuilder.AbstractEntityBuilder<Long, Person, Builder> {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("createdDate", createdDate)
+                .append("createdReason", createdReason)
+                .append("updatedDate", updatedDate)
+                .append("updatedReason", updatedReason)
+                .append("name", name)
+                .append("score", score)
+                .append("country", country)
+                .append("hobbies", hobbies)
+                .append("birthDate", birthDate)
+                .append("gender", gender)
+                .toString();
+    }
 
-        public Long id;
+    public static class Builder extends AbstractEntityWithBuilder.AbstractEntityBuilder<Long, Person, Builder> {
 
         public String name;
 

@@ -2,14 +2,16 @@ package org.application_example.domain;
 
 import java.util.Optional;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.application_example.infra.Utils;
-import org.reusablecomponents.base.core.domain.AbstractNoBuilderEntity;
+import org.reusablecomponents.base.core.domain.AbstractEntity;
 
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public class Project extends AbstractNoBuilderEntity<Long> {
+public class Project extends AbstractEntity<Long> {
 
     @NotEmpty
     private String name;
@@ -50,5 +52,21 @@ public class Project extends AbstractNoBuilderEntity<Long> {
 
     public Optional<Department> getDepartment() {
         return Optional.ofNullable(department);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("createdDate", createdDate)
+                .append("createdReason", createdReason)
+                .append("updatedDate", updatedDate)
+                .append("updatedReason", updatedReason)
+                .append("name", name)
+                .append("department", department)
+                .toString();
     }
 }

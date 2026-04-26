@@ -2,24 +2,30 @@ package org.application_example.domain;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import org.application_example.infra.Utils;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.application_example.infra.Utils;
 import org.reusablecomponents.base.core.domain.AbstractEntityWithBuilder;
 
 import jakarta.validation.Validator;
 
 public class Notification extends AbstractEntityWithBuilder<Long> {
 
-    private final String name;
+    private String name;
 
-    private final String description;
+    private String description;
 
-    private final Integer sequence;
+    private Integer sequence;
 
-    private final LocalDateTime dateTime;
+    private LocalDateTime dateTime;
+
+    Notification() {
+        super();
+    }
 
     private Notification(final Builder builder) {
-        super();
+        super(builder);
 
         this.id = builder.id;
         this.name = builder.name;
@@ -42,6 +48,24 @@ public class Notification extends AbstractEntityWithBuilder<Long> {
 
     public LocalDateTime getDateTime() {
         return dateTime;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("createdDate", createdDate)
+                .append("createdReason", createdReason)
+                .append("updatedDate", updatedDate)
+                .append("updatedReason", updatedReason)
+                .append("name", name)
+                .append("description", description)
+                .append("sequence", sequence)
+                .append("dateTime", dateTime)
+                .toString();
     }
 
     public static class Builder extends AbstractEntityBuilder<Long, Notification, Builder> {

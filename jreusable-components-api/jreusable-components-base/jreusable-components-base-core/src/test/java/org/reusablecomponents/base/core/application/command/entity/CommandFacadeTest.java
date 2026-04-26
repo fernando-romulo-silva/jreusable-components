@@ -281,8 +281,7 @@ class CommandFacadeTest {
 		final Department repeatedDepartment = new Department("x1", "Development 01", "Technology", manager);
 		final Department invalidDepartment = new Department(null, "Development 01", "Technology", manager);
 
-		final var elementAlreadyExistsParams = List.of(
-				"org.application_example.domain.Department");
+		final var elementAlreadyExistsParams = List.of("Department");
 
 		return Stream.of(
 				Arguments.of(nullDepartment, NullPointerException.class, "Please pass a non-null %s entity",
@@ -320,8 +319,7 @@ class CommandFacadeTest {
 		final var correctDepartment = new Department("x3", "Default 02", "Resource", manager);
 		final var invalidDepartment = new Department(null, "Development 01", "Technology", manager);
 
-		final var elementAlreadyExistsParams = List.of(
-				"org.application_example.domain.Department");
+		final var elementAlreadyExistsParams = List.of("Department");
 
 		return Stream.of(
 				Arguments.of(nullList, NullPointerException.class,
@@ -378,8 +376,7 @@ class CommandFacadeTest {
 		final Department unknownDepartment = new Department("x34", "Development 01", "Technology", manager);
 		final Department invalidDepartment = new Department(null, "Development 01", "Technology", manager);
 
-		final var elementNotExistsParams = List.of(
-				"org.application_example.domain.Department");
+		final var elementNotExistsParams = List.of("Department");
 
 		return Stream.of(
 				Arguments.of(nullDepartment, NullPointerException.class,
@@ -417,8 +414,7 @@ class CommandFacadeTest {
 		final var correctDepartment = new Department("x3", "Default 02", "Resource", manager);
 		final var invalidDepartment = new Department(null, "Development 01", "Technology", manager);
 
-		final var elementAlreadyExistsParams = List.of(
-				"org.application_example.domain.Department");
+		final var elementAlreadyExistsParams = List.of("Department");
 
 		return Stream.of(
 				Arguments.of(nullList, NullPointerException.class,
@@ -456,7 +452,7 @@ class CommandFacadeTest {
 		final Department unknownDepartment = new Department("x34", "Development 01", "Technology", manager);
 		unknownDepartment.removeManager();
 
-		final var elementNotExistsParams = List.of("org.application_example.domain.Department");
+		final var elementNotExistsParams = List.of("Department");
 
 		final var invalidDepartment = new Department(null, "Development 01", "Technology", manager);
 		invalidDepartment.removeManager();
@@ -502,14 +498,14 @@ class CommandFacadeTest {
 
 		final var correctDepartment = new Department("x3", "Default 02", "Resource", manager);
 
-		final var elementNotExistsParams = List.of("org.application_example.domain.Department");
+		final var elementNotExistsParams = List.of("Department");
 
 		final var invalidDepartment = new Department(null, "Development 01", "Technology", manager);
 		invalidDepartment.removeManager();
 
 		final var conflictDepartment = new Department("x1", "Development 01", "Technology", manager);
 
-		final var elementAlreadyExistsParams = List.of("org.application_example.domain.Department");
+		final var elementAlreadyExistsParams = List.of("Department");
 
 		return Stream.of(
 				Arguments.of(nullList,

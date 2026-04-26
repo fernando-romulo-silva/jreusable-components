@@ -1,7 +1,6 @@
 package org.reusablecomponents.base.core.domain;
 
 import static com.github.jinahya.assertj.validation.ValidationAssertions.assertThatBean;
-import static com.jparams.verifier.tostring.NameStyle.NAME;
 import static java.text.MessageFormat.format;
 import static java.util.Arrays.asList;
 import static nl.jqno.equalsverifier.Warning.NONFINAL_FIELDS;
@@ -49,13 +48,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.jparams.verifier.tostring.NameStyle;
 import com.jparams.verifier.tostring.ToStringVerifier;
 
 import jakarta.validation.ConstraintViolationException;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
- * Test the {@link AbstractNoBuilderEntity} class.
+ * Test the {@link AbstractEntity} class.
  * 
  * @author Fernando Romulo da Silva
  */
@@ -119,7 +119,7 @@ class AbstractEntityTest {
 	void givenEntity_whenToString_thenReturnString() { // NOPMD - JUnitTestsShouldIncludeAssert: ToStringVerifier
 														// already do it
 		ToStringVerifier.forClass(Person.class)
-				.withClassName(NAME)
+				.withClassName(NameStyle.SIMPLE_NAME)
 				.withFailOnExcludedFields(false)
 				.verify();
 	}
