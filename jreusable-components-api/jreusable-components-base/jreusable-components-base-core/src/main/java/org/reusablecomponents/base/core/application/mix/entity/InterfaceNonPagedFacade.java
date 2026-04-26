@@ -3,7 +3,7 @@ package org.reusablecomponents.base.core.application.mix.entity;
 import org.reusablecomponents.base.core.application.command.entity.InterfaceCommandFacade;
 import org.reusablecomponents.base.core.application.query.entity.simple.InterfaceQueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.specification.InterfaceQuerySpecificationFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
 /**
  * @param <Entity>            The facade entity type
@@ -35,7 +35,7 @@ import org.reusablecomponents.base.core.domain.AbstractEntity;
  * @param <ExistsResult>
  * @param <Specification>
  */
-public interface InterfaceNonPagedFacade<Entity extends AbstractEntity<Id>, Id, // basic
+public interface InterfaceNonPagedFacade<Entity extends InterfaceEntity<Id>, Id, // basic
         // ------------ command
         // save
         SaveEntityIn, SaveEntityOut, // save a entity

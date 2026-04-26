@@ -1,13 +1,13 @@
 package org.reusablecomponents.spring.core.application.mix.entity.paged;
 
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.spring.core.application.command.entity.InterfaceSpringCommandFacade;
 import org.reusablecomponents.spring.core.application.query.entity.paged.InterfaceSpringQueryPaginationFacade;
 import org.reusablecomponents.spring.core.application.query.entity.paged.InterfaceSpringQueryPaginationSpecificationFacade;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SpringPagedFacade<Entity extends AbstractEntity<Id>, Id, Specification>
+public class SpringPagedFacade<Entity extends InterfaceEntity<Id>, Id, Specification>
         implements InterfaceSpringPagedFacade<Entity, Id, Specification> {
 
     protected final InterfaceSpringCommandFacade<Entity, Id> entityCommandFacade;

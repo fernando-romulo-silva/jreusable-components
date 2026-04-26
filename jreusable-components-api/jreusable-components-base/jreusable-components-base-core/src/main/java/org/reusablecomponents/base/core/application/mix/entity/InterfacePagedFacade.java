@@ -3,9 +3,9 @@ package org.reusablecomponents.base.core.application.mix.entity;
 import org.reusablecomponents.base.core.application.command.entity.InterfaceCommandFacade;
 import org.reusablecomponents.base.core.application.query.entity.pagination.InterfaceQueryPaginationFacade;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.InterfaceQuerySpecificationPaginationFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
-public interface InterfacePagedFacade<Entity extends AbstractEntity<Id>, Id, // basic
+public interface InterfacePagedFacade<Entity extends InterfaceEntity<Id>, Id, // basic
         // ------------ command
         // save
         SaveEntityIn, SaveEntityOut, // save a entity

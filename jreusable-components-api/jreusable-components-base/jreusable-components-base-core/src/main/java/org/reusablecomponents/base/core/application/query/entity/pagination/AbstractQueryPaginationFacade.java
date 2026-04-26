@@ -8,7 +8,7 @@ import org.reusablecomponents.base.core.application.query.entity.pagination.func
 import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_one_sorted.PosFindOneSortedFunction;
 import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_one_sorted.PreFindOneSortedFunction;
 import org.reusablecomponents.base.core.application.query.entity.simple.AbstractQueryFacadeBuilder;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ import jakarta.validation.constraints.NotNull;
  * @see QueryPaginationFacade
  * @see BaseFacade
  */
-public sealed abstract class AbstractQueryPaginationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort>
+public sealed abstract class AbstractQueryPaginationFacade<Entity extends InterfaceEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort>
         extends BaseFacade<Entity, Id>
         permits QueryPaginationFacade {
 

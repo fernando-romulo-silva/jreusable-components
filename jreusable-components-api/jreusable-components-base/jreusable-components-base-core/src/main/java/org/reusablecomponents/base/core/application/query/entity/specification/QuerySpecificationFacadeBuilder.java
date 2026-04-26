@@ -8,14 +8,14 @@ import org.reusablecomponents.base.core.application.query.entity.specification.f
 import org.reusablecomponents.base.core.application.query.entity.specification.function.exists_by_spec.ExistsBySpecificationFunction;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_by_spec.FindBySpecificationFunction;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.FindOneBySpecFunction;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
 import jakarta.validation.constraints.NotNull;
 
 /**
  * The <code>EntityQuerySpecificationFacade</code> builder's class.
  */
-public class QuerySpecificationFacadeBuilder<Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>
+public class QuerySpecificationFacadeBuilder<Entity extends InterfaceEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>
         extends
         AbstractQuerySpecificationFacadeBuilder<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification> {
 

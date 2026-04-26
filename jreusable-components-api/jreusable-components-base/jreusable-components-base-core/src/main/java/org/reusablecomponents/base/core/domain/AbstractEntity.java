@@ -1,87 +1,57 @@
 package org.reusablecomponents.base.core.domain;
 
-import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
-import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Abstract base class for entities. Provides common functionality for
- * managing entity state and validation.
+ * Abstract base class for entities. Provides common functionality for managing
+ * entity state and validation.
  */
 @Valid
-public abstract class AbstractEntity<Id> implements InterfaceEntity<Id, AbstractEntity<Id>> {
+public abstract class AbstractEntity<Id> implements InterfaceEntity<Id> {
 
+    /**
+     * Unique identifier of the entity. It is protected, since it should only be
+     * accessed by sub‑classes, and not by external code. It is also not final,
+     * since it may be set by frameworks like JPA, which require a no‑arg
+     * constructor and a setter for the ID field.
+     */
     protected Id id;
 
+    /**
+     * Date and time when the entity was created. It is protected, since it should
+     * only be accessed by sub‑classes, and not by external code.
+     */
     @NotNull
     protected LocalDateTime createdDate;
 
+    /**
+     * Reason why the entity was created. It is protected, since it should only be
+     * accessed by sub‑classes, and not by external code.
+     */
     @NotNull
     protected String createdReason;
 
+    /**
+     * Date and time when the entity was last updated. It is protected, since it
+     * should only be accessed by sub‑classes, and not by external code.
+     */
     protected LocalDateTime updatedDate;
 
+    /**
+     * Reason why the entity was last updated. It is protected, since it should only
+     * be accessed by sub‑classes, and not by external code.
+     */
     protected String updatedReason;
 
-    // --------------------------------------------------------------------------
-
     /**
-     * Constructor. Protected, since this is an abstract class, and should only be
-     * called by sub‑classes.
-     */
-    protected AbstractEntity() {
-        super();
-        createdDate = LocalDateTime.now();
-        createdReason = "Initial creation";
-    }
-
-    // --------------------------------------------------------------------------
-
-    /**
-     * Sub‑classes can override this to provide a Validator, if they want the
-     * entity to be validated. If they don't override, the default is no validation.
-     * 
-     * @return an Optional containing the Validator, or empty if no validation is
-     *         desired.
-     */
-    protected Optional<Validator> getValidator() {
-        return Optional.empty();
-    }
-
-    /**
-     * Validates the given entity using the provided Validator, if any.
-     * 
-     * @param entity the entity to validate
-     * @throws ConstraintViolationException if the entity is invalid
-     */
-    protected void validate() {
-
-        final var violations = getValidator()
-                .map(validator -> validator.validate(this))
-                .orElseGet(Set::of);
-
-        if (isNotEmpty(violations)) {
-            throw new ConstraintViolationException(violations);
-        }
-    }
-
-    // --------------------------------------------------------------------------
-
-    /**
-     * Returns the unique identifier of the entity.
-     *
-     * @return the unique identifier
+     * {@inheritDoc}
      */
     @Override
     public Id getId() {
@@ -89,9 +59,7 @@ public abstract class AbstractEntity<Id> implements InterfaceEntity<Id, Abstract
     }
 
     /**
-     * Returns the date and time when the entity was created.
-     *
-     * @return the creation date and time
+     * {@inheritDoc}
      */
     @Override
     public LocalDateTime getCreatedDate() {
@@ -99,42 +67,40 @@ public abstract class AbstractEntity<Id> implements InterfaceEntity<Id, Abstract
     }
 
     /**
-     * Returns the reason why the entity was created.
-     *
-     * @return the creation reason
+     * {@inheritDoc}
      */
-
     @Override
     public String getCreatedReason() {
         return createdReason;
     }
 
     /**
-     * Returns the date and time when the entity was last updated.
-     *
-     * @return the last update date and time
+     * {@inheritDoc}
      */
-
     @Override
     public Optional<LocalDateTime> getUpdatedDate() {
         return Optional.ofNullable(updatedDate);
     }
 
     /**
-     * Returns the reason why the entity was last updated.
-     *
-     * @return the last update reason
+     * {@inheritDoc}
      */
     @Override
     public Optional<String> getUpdatedReason() {
         return Optional.ofNullable(updatedReason);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
@@ -149,6 +115,9 @@ public abstract class AbstractEntity<Id> implements InterfaceEntity<Id, Abstract
         return id != null && Objects.equals(this.id, other.id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         // TODO: Consider using a more concise ToStringStyle customizing the output

@@ -3,9 +3,9 @@ package org.reusablecomponents.spring.core.jpa.domain.custom;
 import java.util.List;
 import java.util.Optional;
 
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
-public interface InterfaceCustomSpecificationJpqlRepository<Entity extends AbstractEntity<Id>, Id> {
+public interface InterfaceCustomSpecificationJpqlRepository<Entity extends InterfaceEntity<Id>, Id> {
 
     List<Entity> findBy(final String query);
 

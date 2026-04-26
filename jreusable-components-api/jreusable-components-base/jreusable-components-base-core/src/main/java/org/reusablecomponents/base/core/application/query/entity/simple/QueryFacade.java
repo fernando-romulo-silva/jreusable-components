@@ -7,7 +7,7 @@ import org.reusablecomponents.base.core.application.query.entity.simple.function
 import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_by_id.ExistsByIdFunction;
 import org.reusablecomponents.base.core.application.query.entity.simple.function.find_all.FindAllFunction;
 import org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id.FindByIdFunction;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +48,7 @@ import jakarta.validation.constraints.NotNull;
  * @see AbstractQueryFacade
  * @see InterfaceQueryFacade
  */
-public non-sealed class QueryFacade<Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
+public non-sealed class QueryFacade<Entity extends InterfaceEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
 		extends AbstractQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
 		implements InterfaceQueryFacade<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> {
 

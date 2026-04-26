@@ -55,7 +55,7 @@ import jakarta.validation.ConstraintViolationException;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 /**
- * Test the {@link AbstractEntity} class.
+ * Test the {@link AbstractNoBuilderEntity} class.
  * 
  * @author Fernando Romulo da Silva
  */

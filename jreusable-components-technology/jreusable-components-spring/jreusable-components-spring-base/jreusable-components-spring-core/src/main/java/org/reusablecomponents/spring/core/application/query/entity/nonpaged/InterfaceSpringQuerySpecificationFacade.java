@@ -5,14 +5,14 @@ import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
 import java.util.Optional;
 
 import org.reusablecomponents.base.core.application.query.entity.specification.InterfaceQuerySpecificationFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
  */
-public interface InterfaceSpringQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, Specification>
+public interface InterfaceSpringQuerySpecificationFacade<Entity extends InterfaceEntity<Id>, Id, Specification>
 		extends
 		InterfaceQuerySpecificationFacade<Entity, Id, Optional<Entity>, Iterable<Entity>, Long, Boolean, Specification> {
 

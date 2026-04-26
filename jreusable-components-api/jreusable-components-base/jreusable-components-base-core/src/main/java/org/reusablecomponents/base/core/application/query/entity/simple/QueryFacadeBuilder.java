@@ -10,7 +10,7 @@ import org.reusablecomponents.base.core.application.query.entity.simple.function
 import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_by_id.ExistsByIdFunction;
 import org.reusablecomponents.base.core.application.query.entity.simple.function.find_all.FindAllFunction;
 import org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id.FindByIdFunction;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @see AbstractQueryFacadeBuilder
  */
-public class QueryFacadeBuilder<Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
+public class QueryFacadeBuilder<Entity extends InterfaceEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
 		extends
 		AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult> {
 

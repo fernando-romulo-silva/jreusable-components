@@ -6,11 +6,11 @@ import java.util.function.Consumer;
 
 import org.reusablecomponents.base.core.application.query.entity.simple.InterfaceQueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.specification.InterfaceQuerySpecificationFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
 import com.google.common.base.Function;
 
-public class EntityQuerySpecificationHttpBuilder<Entity extends AbstractEntity<Id>, Id, //
+public class EntityQuerySpecificationHttpBuilder<Entity extends InterfaceEntity<Id>, Id, //
 		QueryIdIn, // by id arg
 		OneResult, // One result type
 		MultipleResult, // multiple result type

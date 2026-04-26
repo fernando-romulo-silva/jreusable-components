@@ -5,9 +5,9 @@ import org.reusablecomponents.base.core.application.query.entity.pagination.Inte
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.InterfaceQuerySpecificationPaginationFacade;
 import org.reusablecomponents.base.core.application.query.entity.simple.InterfaceQueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.specification.InterfaceQuerySpecificationFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
-public interface InterfaceFacade<Entity extends AbstractEntity<Id>, Id, // basic
+public interface InterfaceFacade<Entity extends InterfaceEntity<Id>, Id, // basic
 		// ------------ command
 		// save
 		SaveEntityIn, SaveEntityOut, // save a entity

@@ -1,6 +1,6 @@
 package org.resuablecomponent.spring;
 
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.spring.core.application.mix.entity.nonpaged.SpringEntityNonPagedFacade;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ public class Test {
     //
     // @Service
     // static class PersonFacade extends SpringEntityFacade<Person, Long> {
-    ////
+    //
     // protected PersonFacade() {
     // super(null, null);
     // // TODO Auto-generated constructor stub

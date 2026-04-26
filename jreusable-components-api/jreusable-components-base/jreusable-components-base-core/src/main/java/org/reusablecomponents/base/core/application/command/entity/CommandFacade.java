@@ -10,7 +10,7 @@ import org.reusablecomponents.base.core.application.command.entity.function.save
 import org.reusablecomponents.base.core.application.command.entity.function.save_all.SaveAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update.UpdateFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.UpdateAllFunction;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +72,7 @@ import jakarta.validation.constraints.NotNull;
  * @see AbstractCommandFacade
  * @see InterfaceCommandFacade
  */
-public non-sealed class CommandFacade<Entity extends AbstractEntity<Id>, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
+public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
 		extends
 		AbstractCommandFacade<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
 		implements

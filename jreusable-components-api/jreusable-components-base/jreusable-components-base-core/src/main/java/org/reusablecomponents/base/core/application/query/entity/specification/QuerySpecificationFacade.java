@@ -4,7 +4,7 @@ import org.reusablecomponents.base.core.application.query.entity.specification.f
 import org.reusablecomponents.base.core.application.query.entity.specification.function.exists_by_spec.ExistsBySpecificationFunction;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_by_spec.FindBySpecificationFunction;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.FindOneBySpecFunction;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,7 @@ import jakarta.validation.constraints.NotNull;
  * @see InterfaceQuerySpecificationFacade
  * @see AbstractQuerySpecificationFacade
  */
-public non-sealed class QuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>
+public non-sealed class QuerySpecificationFacade<Entity extends InterfaceEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>
 		extends
 		AbstractQuerySpecificationFacade<Entity, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>
 		implements

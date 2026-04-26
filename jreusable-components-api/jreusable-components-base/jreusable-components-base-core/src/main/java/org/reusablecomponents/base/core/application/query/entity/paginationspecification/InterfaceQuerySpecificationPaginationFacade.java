@@ -3,7 +3,7 @@ package org.reusablecomponents.base.core.application.query.entity.paginationspec
 import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.NULL_POINTER_EXCEPTION_MSG;
 
 import org.reusablecomponents.base.core.application.base.InterfaceBaseFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -22,7 +22,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <Specification>       The specification is a strutucte used to filter
  *                              queries
  */
-public non-sealed interface InterfaceQuerySpecificationPaginationFacade<Entity extends AbstractEntity<Id>, Id, //
+public non-sealed interface InterfaceQuerySpecificationPaginationFacade<Entity extends InterfaceEntity<Id>, Id, //
 		OneResult, //
 		MultiplePagedResult, //
 		Specification, //

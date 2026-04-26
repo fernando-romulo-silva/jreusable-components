@@ -2,12 +2,12 @@ package org.reusablecomponents.spring.core.application.mix.entity.nonpaged;
 
 import org.reactivestreams.Publisher;
 import org.reusablecomponents.base.core.application.mix.entity.InterfaceNonPagedFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface InterfaceSpringReactiveNonPagedEntityFacade<Entity extends AbstractEntity<Id>, Id, Specification>
+public interface InterfaceSpringReactiveNonPagedEntityFacade<Entity extends InterfaceEntity<Id>, Id, Specification>
 		extends InterfaceNonPagedFacade<Entity, Id, // basic
 				// ------------ command
 				// save

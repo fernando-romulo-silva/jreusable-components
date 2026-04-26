@@ -17,13 +17,13 @@ import org.reusablecomponents.base.core.application.query.entity.specification.f
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.ErrorFindOneBySpecificationFunction;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.PosFindOneBySpecificationFunction;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.PreFindOneBySpecificationFunction;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jakarta.validation.constraints.NotNull;
 
-abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>
+abstract class AbstractQuerySpecificationFacadeBuilder<Entity extends InterfaceEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>
         extends BaseFacadeBuilder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractQuerySpecificationFacadeBuilder.class);

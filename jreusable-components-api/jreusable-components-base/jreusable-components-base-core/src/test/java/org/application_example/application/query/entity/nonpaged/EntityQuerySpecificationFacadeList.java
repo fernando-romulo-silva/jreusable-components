@@ -8,10 +8,10 @@ import org.application_example.infra.DummySecurityService;
 import org.application_example.infra.ListExceptionAdapterService;
 import org.reusablecomponents.base.core.application.query.entity.specification.QuerySpecificationFacade;
 import org.reusablecomponents.base.core.application.query.entity.specification.QuerySpecificationFacadeBuilder;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
 
-public class EntityQuerySpecificationFacadeList<Entity extends AbstractEntity<Id>, Id>
+public class EntityQuerySpecificationFacadeList<Entity extends InterfaceEntity<Id>, Id>
 		extends QuerySpecificationFacade<Entity, Id, Entity, List<Entity>, Long, Boolean, Predicate<Entity>> {
 
 	private static final void validate(final Object... directives) {

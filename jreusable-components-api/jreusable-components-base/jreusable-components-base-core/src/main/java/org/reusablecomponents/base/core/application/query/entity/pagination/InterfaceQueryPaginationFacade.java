@@ -3,7 +3,7 @@ package org.reusablecomponents.base.core.application.query.entity.pagination;
 import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.NULL_POINTER_EXCEPTION_MSG;
 
 import org.reusablecomponents.base.core.application.base.InterfaceBaseFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -25,30 +25,30 @@ import jakarta.validation.constraints.NotNull;
  * 
  * @see InterfaceBaseFacade
  */
-public non-sealed interface InterfaceQueryPaginationFacade<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort>
-        extends InterfaceBaseFacade<Entity, Id> {
+public non-sealed interface InterfaceQueryPaginationFacade<Entity extends InterfaceEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort>
+                extends InterfaceBaseFacade<Entity, Id> {
 
-    /**
-     * Find and retrieve all objects using pagination
-     * 
-     * @param pageable   Object {@code Pageable} used to controll the query's result
-     * @param directives Params used to configure the query's result
-     * 
-     * @return Return a {@code MultipleResult} object
-     */
-    MultiplePagedResult findAllPaged(
-            @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Pageable pageable,
-            final Object... directives);
+        /**
+         * Find and retrieve all objects using pagination
+         * 
+         * @param pageable   Object {@code Pageable} used to controll the query's result
+         * @param directives Params used to configure the query's result
+         * 
+         * @return Return a {@code MultipleResult} object
+         */
+        MultiplePagedResult findAllPaged(
+                        @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Pageable pageable,
+                        final Object... directives);
 
-    /**
-     * Find and retrieve one object {@code OneResult} based on sort parameter
-     * 
-     * @param sort       Object {@code Sort} used to order the query
-     * @param directives Params used to configure the query's result
-     * 
-     * @return Return a {@code OneResult} object
-     */
-    OneResult findOneSorted(
-            @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Sort sort,
-            final Object... directives);
+        /**
+         * Find and retrieve one object {@code OneResult} based on sort parameter
+         * 
+         * @param sort       Object {@code Sort} used to order the query
+         * @param directives Params used to configure the query's result
+         * 
+         * @return Return a {@code OneResult} object
+         */
+        OneResult findOneSorted(
+                        @NotNull(message = NULL_POINTER_EXCEPTION_MSG) final Sort sort,
+                        final Object... directives);
 }

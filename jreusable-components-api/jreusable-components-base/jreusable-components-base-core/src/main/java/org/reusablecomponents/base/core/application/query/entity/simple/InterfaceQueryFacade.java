@@ -3,7 +3,7 @@ package org.reusablecomponents.base.core.application.query.entity.simple;
 import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.NULL_POINTER_EXCEPTION_MSG;
 
 import org.reusablecomponents.base.core.application.base.InterfaceBaseFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementWithIdNotFoundException;
 
@@ -32,7 +32,7 @@ import jakarta.validation.constraints.NotNull;
  * 
  * @see InterfaceBaseFacade
  */
-public non-sealed interface InterfaceQueryFacade<Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
+public non-sealed interface InterfaceQueryFacade<Entity extends InterfaceEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
 		extends InterfaceBaseFacade<Entity, Id> {
 
 	/**

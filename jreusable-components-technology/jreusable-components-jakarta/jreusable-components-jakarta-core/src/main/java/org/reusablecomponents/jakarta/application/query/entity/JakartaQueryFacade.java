@@ -5,10 +5,10 @@ import java.util.stream.Stream;
 
 import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacadeBuilder;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.jakarta.domain.InterfaceJakartaRepository;
 
-public class JakartaQueryFacade<Entity extends AbstractEntity<Id>, Id>
+public class JakartaQueryFacade<Entity extends InterfaceEntity<Id>, Id>
 		extends QueryFacade<Entity, Id, // basic
 				Id, // by id arg
 				Optional<Entity>, // One result

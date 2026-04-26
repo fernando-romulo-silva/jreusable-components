@@ -3,7 +3,7 @@ package org.reusablecomponents.base.core.application.command.entity;
 import static org.reusablecomponents.base.core.infra.constants.ExceptionMessages.NULL_POINTER_EXCEPTION_MSG;
 
 import org.reusablecomponents.base.core.application.base.InterfaceBaseFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementAlreadyExistsException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementConflictException;
@@ -59,7 +59,7 @@ import jakarta.validation.constraints.NotNull;
  * 
  * @see InterfaceBaseFacade
  */
-public non-sealed interface InterfaceCommandFacade<Entity extends AbstractEntity<Id>, Id, // basic
+public non-sealed interface InterfaceCommandFacade<Entity extends InterfaceEntity<Id>, Id, // basic
 		// save
 		SaveEntityIn, SaveEntityOut, //
 		SaveEntitiesIn, SaveEntitiesOut, //

@@ -12,10 +12,10 @@ import org.application_example.infra.DummySecurityService;
 import org.application_example.infra.ListExceptionAdapterService;
 import org.reusablecomponents.base.core.application.command.entity.CommandFacade;
 import org.reusablecomponents.base.core.application.command.entity.CommandFacadeBuilder;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
 
-public class EntityCommandFacadeList<Entity extends AbstractEntity<Id>, Id>
+public class EntityCommandFacadeList<Entity extends InterfaceEntity<Id>, Id>
 		//
 		extends CommandFacade< // Basic Command Facade
 				// basic

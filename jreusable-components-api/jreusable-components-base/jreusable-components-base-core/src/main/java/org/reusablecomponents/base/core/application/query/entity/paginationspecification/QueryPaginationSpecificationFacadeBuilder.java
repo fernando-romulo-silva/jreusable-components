@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.function.find_by_specification_paged.FindBySpecificationPagedFunction;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.function.find_one_by_specification_sorted.FindOneBySpecificationSortedFunction;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -14,7 +14,7 @@ import jakarta.validation.constraints.NotNull;
  * The <code>EntityQueryPaginationSpecificationFacade</code> builder's
  * class.
  */
-public class QueryPaginationSpecificationFacadeBuilder<Entity extends AbstractEntity<Id>, Id, OneResult, MultiplePagedResult, Specification, Pageable, Sort>
+public class QueryPaginationSpecificationFacadeBuilder<Entity extends InterfaceEntity<Id>, Id, OneResult, MultiplePagedResult, Specification, Pageable, Sort>
 		extends
 		AbstractQueryPaginationSpecificationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Specification, Pageable, Sort> {
 	/**

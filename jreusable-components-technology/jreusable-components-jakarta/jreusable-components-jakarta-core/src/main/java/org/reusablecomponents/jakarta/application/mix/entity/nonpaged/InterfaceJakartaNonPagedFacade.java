@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.reusablecomponents.base.core.application.mix.entity.InterfaceNonPagedFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
 import jakarta.transaction.Transactional;
 
@@ -16,7 +16,7 @@ import jakarta.transaction.Transactional;
  * @param <Id>
  */
 @Transactional(value = SUPPORTS)
-public interface InterfaceJakartaNonPagedFacade<Entity extends AbstractEntity<Id>, Id, Specification>
+public interface InterfaceJakartaNonPagedFacade<Entity extends InterfaceEntity<Id>, Id, Specification>
 		//
 		extends InterfaceNonPagedFacade<Entity, Id,
 				// ------------ command

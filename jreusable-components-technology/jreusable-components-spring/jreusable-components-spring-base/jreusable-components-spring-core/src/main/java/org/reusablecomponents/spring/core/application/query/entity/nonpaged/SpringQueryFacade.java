@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacadeBuilder;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
@@ -12,7 +12,7 @@ import org.reusablecomponents.spring.core.domain.InterfaceSpringRepository;
 import org.springframework.cache.annotation.Cacheable;
 
 @Cacheable
-public class SpringQueryFacade<Entity extends AbstractEntity<Id>, Id>
+public class SpringQueryFacade<Entity extends InterfaceEntity<Id>, Id>
 		// base class
 		extends QueryFacade<Entity, Id, // basic
 				Id, // by id arg

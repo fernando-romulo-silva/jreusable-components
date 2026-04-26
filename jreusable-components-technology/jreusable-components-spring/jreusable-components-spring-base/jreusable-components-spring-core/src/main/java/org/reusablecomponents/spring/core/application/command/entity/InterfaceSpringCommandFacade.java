@@ -1,14 +1,14 @@
 package org.reusablecomponents.spring.core.application.command.entity;
 
 import org.reusablecomponents.base.core.application.command.entity.InterfaceCommandFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @param <Entity>
  * @param <Id>
  */
-public interface InterfaceSpringCommandFacade<Entity extends AbstractEntity<Id>, Id>
+public interface InterfaceSpringCommandFacade<Entity extends InterfaceEntity<Id>, Id>
 		//
 		extends InterfaceCommandFacade<Entity, Id,
 				// save

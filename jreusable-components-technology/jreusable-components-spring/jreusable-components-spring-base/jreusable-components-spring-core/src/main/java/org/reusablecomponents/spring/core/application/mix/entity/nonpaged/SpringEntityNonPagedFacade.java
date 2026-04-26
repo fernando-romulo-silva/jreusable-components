@@ -1,6 +1,6 @@
 package org.reusablecomponents.spring.core.application.mix.entity.nonpaged;
 
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.spring.core.application.command.entity.InterfaceSpringCommandFacade;
 import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringQueryFacade;
 import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringQuerySpecificationFacade;
@@ -9,7 +9,7 @@ import org.reusablecomponents.spring.core.application.query.entity.nonpaged.Inte
  * @param <Entity>
  * @param <Id>
  */
-public class SpringEntityNonPagedFacade<Entity extends AbstractEntity<Id>, Id, Specification>
+public class SpringEntityNonPagedFacade<Entity extends InterfaceEntity<Id>, Id, Specification>
         implements InterfaceSpringEntityNonPagedFacade<Entity, Id, Specification> {
 
     protected final InterfaceSpringCommandFacade<Entity, Id> entityCommandFacade;

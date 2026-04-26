@@ -3,12 +3,12 @@ package org.reusablecomponents.spring.core.application.mix.entity;
 import java.util.Optional;
 
 import org.reusablecomponents.base.core.application.mix.entity.InterfaceFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-public interface InterfaceSpringFacade<Entity extends AbstractEntity<Id>, Id, Specification>
+public interface InterfaceSpringFacade<Entity extends InterfaceEntity<Id>, Id, Specification>
         extends InterfaceFacade<Entity, Id, // basic
                 // ------------ command
                 // save

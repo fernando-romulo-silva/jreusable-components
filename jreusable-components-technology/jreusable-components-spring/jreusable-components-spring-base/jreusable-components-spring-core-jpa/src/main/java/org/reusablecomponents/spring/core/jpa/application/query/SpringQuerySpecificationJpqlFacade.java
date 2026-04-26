@@ -1,6 +1,6 @@
 package org.reusablecomponents.spring.core.jpa.application.query;
 
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
@@ -10,7 +10,7 @@ import org.reusablecomponents.spring.core.jpa.domain.InterfaceSpecificationJpqlR
 /**
  * 
  */
-public class SpringQuerySpecificationJpqlFacade<Entity extends AbstractEntity<Id>, Id>
+public class SpringQuerySpecificationJpqlFacade<Entity extends InterfaceEntity<Id>, Id>
         extends SpringQuerySpecificationFacade<Entity, Id, String> {
 
     /**

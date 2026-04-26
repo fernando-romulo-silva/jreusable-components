@@ -18,7 +18,8 @@ import org.reusablecomponents.base.core.application.query.entity.pagination.Abst
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.AbstractQueryPaginationSpecificationFacade;
 import org.reusablecomponents.base.core.application.query.entity.simple.AbstractQueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.specification.AbstractQuerySpecificationFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction1Args;
@@ -66,7 +67,7 @@ import jakarta.validation.constraints.NotNull;
  * @see AbstractQueryPaginationFacade
  * @see AbstractQueryPaginationSpecificationFacade
  */
-public sealed class BaseFacade<Entity extends AbstractEntity<Id>, Id>
+public sealed class BaseFacade<Entity extends InterfaceEntity<Id>, Id>
 		implements InterfaceBaseFacade<Entity, Id>
 		permits EmptyFacade,
 		AbstractCommandFacade, AbstractQueryFacade,

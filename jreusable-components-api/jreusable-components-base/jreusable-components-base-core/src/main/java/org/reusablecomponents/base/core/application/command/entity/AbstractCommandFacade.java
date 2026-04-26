@@ -25,7 +25,7 @@ import org.reusablecomponents.base.core.application.command.entity.function.upda
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.ErrorUpdateAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.PosUpdateAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.PreUpdateAllFunction;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +74,7 @@ import jakarta.validation.constraints.NotNull;
  * @see CommandFacade
  * @see BaseFacade
  */
-public abstract sealed class AbstractCommandFacade<Entity extends AbstractEntity<Id>, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
+public abstract sealed class AbstractCommandFacade<Entity extends InterfaceEntity<Id>, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
 		extends BaseFacade<Entity, Id> permits CommandFacade {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCommandFacade.class);

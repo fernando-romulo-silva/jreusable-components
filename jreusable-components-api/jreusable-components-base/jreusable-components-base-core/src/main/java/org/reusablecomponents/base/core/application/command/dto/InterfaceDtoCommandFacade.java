@@ -1,6 +1,6 @@
 package org.reusablecomponents.base.core.application.command.dto;
 
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
 /**
  * @param <DTO>
@@ -9,17 +9,18 @@ import org.reusablecomponents.base.core.domain.AbstractEntity;
  * @param <OneResult>
  * @param <MultipleResult>
  */
-public interface InterfaceDtoCommandFacade<DTO, Entity extends AbstractEntity<Id>, Id, OneResult, MultipleResult> {
-//	extends InterfaceEntityBaseFacade<Entity, Id> 
-    
+public interface InterfaceDtoCommandFacade<DTO, Entity extends InterfaceEntity<Id>, Id, OneResult, MultipleResult> {
+    // extends InterfaceEntityBaseFacade<Entity, Id>
+
     /**
      * @param dto
      * @param convertToEntity
      * @param convertToDto
      * @return
      */
-    
-    // Function<DTO, Entity> convertToEntity, final Function<Entity, DTO> convertToDto
+
+    // Function<DTO, Entity> convertToEntity, final Function<Entity, DTO>
+    // convertToDto
     OneResult save(final DTO dto);
 
     /**
@@ -37,8 +38,9 @@ public interface InterfaceDtoCommandFacade<DTO, Entity extends AbstractEntity<Id
      * @param convertToDto
      * @return
      */
-    
-    // final BiFunction<DTO, Entity, Entity> updateEntityData, final Function<Entity, DTO> convertToDto
+
+    // final BiFunction<DTO, Entity, Entity> updateEntityData, final
+    // Function<Entity, DTO> convertToDto
     OneResult update(final Id id, final DTO dto);
 
     /**
@@ -48,7 +50,8 @@ public interface InterfaceDtoCommandFacade<DTO, Entity extends AbstractEntity<Id
      * @param convertToDto
      * @return
      */
-    // final BiFunction<DTO, Entity, Entity> updateEntityData, final Function<Entity, DTO> convertToDto
-    MultipleResult updateAll(final Iterable<Id> ids, final Iterable<DTO> dtos);      
+    // final BiFunction<DTO, Entity, Entity> updateEntityData, final
+    // Function<Entity, DTO> convertToDto
+    MultipleResult updateAll(final Iterable<Id> ids, final Iterable<DTO> dtos);
 
 }

@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.reusablecomponents.base.core.application.query.entity.specification.InterfaceQuerySpecificationFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import static jakarta.transaction.Transactional.TxType.SUPPORTS;
 
 import jakarta.transaction.Transactional;
@@ -12,7 +12,7 @@ import jakarta.transaction.Transactional;
 /**
  * 
  */
-public interface InterfaceJakartaQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, Specification>
+public interface InterfaceJakartaQuerySpecificationFacade<Entity extends InterfaceEntity<Id>, Id, Specification>
 		extends InterfaceQuerySpecificationFacade<Entity, Id, // base
 				Optional<Entity>, // One result
 				Stream<Entity>, // multiple result

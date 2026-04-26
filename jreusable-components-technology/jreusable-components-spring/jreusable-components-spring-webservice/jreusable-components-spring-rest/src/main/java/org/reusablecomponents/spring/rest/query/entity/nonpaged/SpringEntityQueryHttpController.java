@@ -5,7 +5,7 @@ import static java.lang.Boolean.TRUE;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.rest.rest.query.entity.nonpaged.EntityQueryHttpController;
 import org.reusablecomponents.rest.rest.query.entity.nonpaged.EntityQueryHttpControllerBuilder;
 import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringQueryFacade;
@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
  * @param <Entity>
  * @param <Id>
  */
-public class SpringEntityQueryHttpController<Entity extends AbstractEntity<Id>, Id>
+public class SpringEntityQueryHttpController<Entity extends InterfaceEntity<Id>, Id>
 		extends EntityQueryHttpController<Entity, Id, //
 				Id, // by id arg
 				// results

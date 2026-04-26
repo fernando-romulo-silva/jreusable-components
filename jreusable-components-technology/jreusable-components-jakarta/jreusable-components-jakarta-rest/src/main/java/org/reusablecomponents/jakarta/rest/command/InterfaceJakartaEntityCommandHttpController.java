@@ -5,7 +5,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_XML;
 
 import java.util.List;
 
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.rest.infra.jsonpath.JsonPatch;
 import org.reusablecomponents.rest.rest.command.InterfaceEntityCommandHttpController;
 
@@ -25,9 +25,8 @@ import jakarta.ws.rs.core.Response;
  * @param <Entity>
  * @param <Id>
  */
-public interface InterfaceJakartaEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id> 
-	extends InterfaceEntityCommandHttpController<Entity, Id,  
-				Id, // QueryIdIn
+public interface InterfaceJakartaEntityCommandHttpController<Entity extends InterfaceEntity<Id>, Id>
+		extends InterfaceEntityCommandHttpController<Entity, Id, Id, // QueryIdIn
 				// save
 				Entity, Entity, // save a entity
 				List<Entity>, List<Entity>, // save entities
@@ -39,62 +38,59 @@ public interface InterfaceJakartaEntityCommandHttpController<Entity extends Abst
 				List<Entity>, Void, // delete entities
 				// delete by id
 				Id, Void, // delete a entity by id
-				List<Id>, Void, // delete entities by id	  
+				List<Id>, Void, // delete entities by id
 				Response> {
 
-    /**
-     * {@inheritDoc}
-     */
-    @POST
-    @Produces(value = {APPLICATION_JSON, APPLICATION_XML})
-    @Consumes(value = {APPLICATION_JSON, APPLICATION_XML})
-    Response post(
-		    final Entity entity, 
-		    
-		    final HttpServletRequest request, 
-		    final HttpServletResponse response);
+	/**
+	 * {@inheritDoc}
+	 */
+	@POST
+	@Produces(value = { APPLICATION_JSON, APPLICATION_XML })
+	@Consumes(value = { APPLICATION_JSON, APPLICATION_XML })
+	Response post(
+			final Entity entity,
 
-    /**
-     * {@inheritDoc}
-     */
-    @PUT
-    @Path("/{id}")
-    @Produces(value = {APPLICATION_JSON, APPLICATION_XML})
-    @Consumes(value = {APPLICATION_JSON, APPLICATION_XML})
-    Response put(
-		    @PathParam("id") 
-		    final Id id, 
-		    
-		    final Entity entity, 
-		    
-		    final HttpServletRequest request, 
-		    final HttpServletResponse response);
+			final HttpServletRequest request,
+			final HttpServletResponse response);
 
-    /**
-     * {@inheritDoc}
-     */
-    @PATCH
-    @Path("/{id}")
-    @Produces(value = {APPLICATION_JSON, APPLICATION_XML})
-    @Consumes(value = {APPLICATION_JSON, APPLICATION_XML})
-    Response patch(
-		    @PathParam("id") 
-		    final Id id, 
-		    
-		    final List<JsonPatch> jsonPatchs,
-		    final HttpServletRequest request, 
-		    final HttpServletResponse response);
+	/**
+	 * {@inheritDoc}
+	 */
+	@PUT
+	@Path("/{id}")
+	@Produces(value = { APPLICATION_JSON, APPLICATION_XML })
+	@Consumes(value = { APPLICATION_JSON, APPLICATION_XML })
+	Response put(
+			@PathParam("id") final Id id,
 
-    /**
-     * {@inheritDoc}
-     */
-    @DELETE
-    @Path("/{id}")
-    Response delete(
-		    @PathParam("id") 
-		    final Id id, 
-		    
-		    final HttpServletRequest request, 
-		    final HttpServletResponse response);
+			final Entity entity,
+
+			final HttpServletRequest request,
+			final HttpServletResponse response);
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@PATCH
+	@Path("/{id}")
+	@Produces(value = { APPLICATION_JSON, APPLICATION_XML })
+	@Consumes(value = { APPLICATION_JSON, APPLICATION_XML })
+	Response patch(
+			@PathParam("id") final Id id,
+
+			final List<JsonPatch> jsonPatchs,
+			final HttpServletRequest request,
+			final HttpServletResponse response);
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@DELETE
+	@Path("/{id}")
+	Response delete(
+			@PathParam("id") final Id id,
+
+			final HttpServletRequest request,
+			final HttpServletResponse response);
 
 }

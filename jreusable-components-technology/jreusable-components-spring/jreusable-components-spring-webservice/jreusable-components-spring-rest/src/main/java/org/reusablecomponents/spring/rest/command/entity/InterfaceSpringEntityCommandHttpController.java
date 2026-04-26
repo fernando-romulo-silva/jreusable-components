@@ -7,7 +7,7 @@ import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 import java.util.List;
 
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.rest.infra.jsonpath.JsonPatch;
 import org.reusablecomponents.rest.rest.command.InterfaceEntityCommandHttpController;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +26,8 @@ import jakarta.servlet.http.HttpServletResponse;
  * @param <Entity>
  * @param <Id>
  */
-public interface InterfaceSpringEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id> 
-		extends InterfaceEntityCommandHttpController<Entity, Id,
-				Id,
+public interface InterfaceSpringEntityCommandHttpController<Entity extends InterfaceEntity<Id>, Id>
+		extends InterfaceEntityCommandHttpController<Entity, Id, Id,
 				// save
 				Entity, Entity, // save a entity
 				Iterable<Entity>, Iterable<Entity>, // save entities
@@ -43,62 +42,56 @@ public interface InterfaceSpringEntityCommandHttpController<Entity extends Abstr
 				Iterable<Id>, Void, // delete entities by id
 				ResponseEntity<?>> {
 
-    /**
-     * {@inheritDoc}
-     */
-    @ResponseStatus(CREATED)
-    @PostMapping(consumes = APPLICATION_JSON_VALUE, produces = { TEXT_PLAIN_VALUE, APPLICATION_JSON_VALUE })
-    ResponseEntity<?> post(
-		    
-		    @RequestBody 
-		    final Entity entity, 
-		    
-		    final HttpServletRequest request, 
-		    final HttpServletResponse response);
+	/**
+	 * {@inheritDoc}
+	 */
+	@ResponseStatus(CREATED)
+	@PostMapping(consumes = APPLICATION_JSON_VALUE, produces = { TEXT_PLAIN_VALUE, APPLICATION_JSON_VALUE })
+	ResponseEntity<?> post(
 
-    /**
-     * {@inheritDoc}
-     */
-    @ResponseStatus(NO_CONTENT)
-    @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<?> put(
-		    
-		    @PathVariable 
-		    final Id id, 
-		    
-		    @RequestBody 
-		    final Entity entity, 
-		    
-		    final HttpServletRequest request, 
-		    final HttpServletResponse response);
+			@RequestBody final Entity entity,
 
-    /**
-     * {@inheritDoc}
-     */
-    @ResponseStatus(NO_CONTENT)
-    @PatchMapping(path = "/{id}", consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<?> patch(
-		    
-		    @PathVariable
-		    final Id id, 
-		    
-		    @RequestBody
-		    final List<JsonPatch> jsonPatchs,
-		    
-		    final HttpServletRequest request, 
-		    final HttpServletResponse response);
+			final HttpServletRequest request,
+			final HttpServletResponse response);
 
-    /**
-     * {@inheritDoc}
-     */
-    @ResponseStatus(NO_CONTENT)
-    @DeleteMapping("/{id}")
-    ResponseEntity<?> delete(
-		    
-		    @PathVariable 
-		    final Id id, 
-		    
-		    final HttpServletRequest request, 
-		    final HttpServletResponse response);
+	/**
+	 * {@inheritDoc}
+	 */
+	@ResponseStatus(NO_CONTENT)
+	@PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE)
+	ResponseEntity<?> put(
+
+			@PathVariable final Id id,
+
+			@RequestBody final Entity entity,
+
+			final HttpServletRequest request,
+			final HttpServletResponse response);
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@ResponseStatus(NO_CONTENT)
+	@PatchMapping(path = "/{id}", consumes = APPLICATION_JSON_VALUE)
+	ResponseEntity<?> patch(
+
+			@PathVariable final Id id,
+
+			@RequestBody final List<JsonPatch> jsonPatchs,
+
+			final HttpServletRequest request,
+			final HttpServletResponse response);
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@ResponseStatus(NO_CONTENT)
+	@DeleteMapping("/{id}")
+	ResponseEntity<?> delete(
+
+			@PathVariable final Id id,
+
+			final HttpServletRequest request,
+			final HttpServletResponse response);
 
 }

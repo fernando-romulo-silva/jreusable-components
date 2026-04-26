@@ -2,13 +2,13 @@ package org.reusablecomponents.spring.core.application.command.entity;
 
 import org.reactivestreams.Publisher;
 import org.reusablecomponents.base.core.application.command.entity.InterfaceCommandFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface InterfaceSpringReactiveCommandFacade<Entity extends AbstractEntity<Id>, Id>
+public interface InterfaceSpringReactiveCommandFacade<Entity extends InterfaceEntity<Id>, Id>
 		//
 		extends InterfaceCommandFacade<Entity, Id,
 				// save

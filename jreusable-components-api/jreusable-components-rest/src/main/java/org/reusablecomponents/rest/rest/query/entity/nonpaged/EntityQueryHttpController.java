@@ -1,7 +1,7 @@
 package org.reusablecomponents.rest.rest.query.entity.nonpaged;
 
 import org.reusablecomponents.base.core.application.query.entity.simple.InterfaceQueryFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.rest.rest.query.entity.base.EntityQueryBaseHttpController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * @param <CountResult>
  * @param <ExistsResult>
  */
-public class EntityQueryHttpController<Entity extends AbstractEntity<Id>, Id, //
+public class EntityQueryHttpController<Entity extends InterfaceEntity<Id>, Id, //
 		QueryIdIn, // by id arg
 		OneResult, // One result type
 		MultipleResult, // multiple result type

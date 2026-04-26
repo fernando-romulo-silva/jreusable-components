@@ -29,7 +29,7 @@ import org.reusablecomponents.base.core.application.command.entity.function.upda
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.ErrorUpdateAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.PosUpdateAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.PreUpdateAllFunction;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,7 +83,7 @@ import org.slf4j.LoggerFactory;
  * @see BaseFacadeBuilder
  * @see AbstractCommandFacade
  */
-public abstract sealed class AbstractCommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
+public abstract sealed class AbstractCommandFacadeBuilder<Entity extends InterfaceEntity<Id>, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
 		extends BaseFacadeBuilder
 		permits CommandFacadeBuilder {
 

@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.rest.infra.jsonpath.JsonPatch;
 import org.reusablecomponents.rest.infra.jsonpath.JsonPatchOperation;
 import org.reusablecomponents.rest.rest.command.EntityCommandHttpController;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @param <Id>
  */
 @RestController
-public class SpringEntityCommandHttpController<Entity extends AbstractEntity<Id>, Id>
+public class SpringEntityCommandHttpController<Entity extends InterfaceEntity<Id>, Id>
 		extends EntityCommandHttpController<Entity, Id, // basic
 				Id, Entity, //
 				// save

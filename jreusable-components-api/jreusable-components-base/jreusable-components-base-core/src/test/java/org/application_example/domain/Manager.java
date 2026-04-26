@@ -17,7 +17,6 @@ public class Manager extends AbstractEntity<String> {
 
     public Manager(final String id, final String name) {
         super();
-
         this.id = id;
         this.name = name;
     }

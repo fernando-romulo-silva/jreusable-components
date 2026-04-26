@@ -5,13 +5,13 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.reusablecomponents.base.core.application.command.entity.InterfaceCommandFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.rest.infra.jsonpath.JsonPatch;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class EntityCommandHttpController<Entity extends AbstractEntity<Id>, Id, // basic
+public class EntityCommandHttpController<Entity extends InterfaceEntity<Id>, Id, // basic
 
 		QueryIdIn, OneResult,
 		// save

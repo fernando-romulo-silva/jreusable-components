@@ -9,10 +9,10 @@ import org.application_example.infra.DummySecurityService;
 import org.application_example.infra.ListExceptionAdapterService;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.QueryPaginationSpecificationFacade;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.QueryPaginationSpecificationFacadeBuilder;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
 
-public class EntityQueryPaginationSpecificationFacadeList<Entity extends AbstractEntity<Id>, Id>
+public class EntityQueryPaginationSpecificationFacadeList<Entity extends InterfaceEntity<Id>, Id>
         extends
         QueryPaginationSpecificationFacade<Entity, Id, Entity, List<Entity>, Predicate<Entity>, PageList<Entity>, Comparator<Entity>> {
 

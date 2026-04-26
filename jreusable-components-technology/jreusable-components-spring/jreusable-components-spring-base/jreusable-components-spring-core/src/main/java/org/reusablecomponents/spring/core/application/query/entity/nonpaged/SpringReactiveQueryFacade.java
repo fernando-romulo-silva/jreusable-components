@@ -3,7 +3,7 @@ package org.reusablecomponents.spring.core.application.query.entity.nonpaged;
 import org.reactivestreams.Publisher;
 import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacadeBuilder;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
@@ -12,7 +12,7 @@ import org.reusablecomponents.spring.core.domain.InterfaceSpringReactiveReposito
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class SpringReactiveQueryFacade<Entity extends AbstractEntity<Id>, Id>
+public class SpringReactiveQueryFacade<Entity extends InterfaceEntity<Id>, Id>
 		// base class
 		extends QueryFacade<Entity, Id, Publisher<Id>, // by id arg
 				Mono<Entity>, // One result

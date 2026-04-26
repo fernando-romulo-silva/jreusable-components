@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.application_example.infra.Utils;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
-import org.reusablecomponents.base.core.domain.AbstractEntityBuilder;
+import org.reusablecomponents.base.core.domain.AbstractEntityWithBuilder;
 
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.Min;
@@ -17,9 +16,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Positive;
 
-public class Person extends AbstractEntity<Long> {
-
-    // ------------------- fields
+public class Person extends AbstractEntityWithBuilder<Long> {
 
     @NotEmpty
     private String name;
@@ -40,15 +37,12 @@ public class Person extends AbstractEntity<Long> {
     @NotNull
     private Gender gender;
 
-    // ------------------- constructors
-
-    // just for frameworks, like JPA
     Person() {
         super();
     }
 
     private Person(@NotNull final Builder builder) {
-        super();
+        super(builder);
         this.id = builder.id;
         this.name = builder.name;
         this.createdReason = builder.createdReason;
@@ -60,12 +54,6 @@ public class Person extends AbstractEntity<Long> {
         this.hobbies.addAll(builder.hobbies);
     }
 
-    @Override
-    protected Optional<Validator> getValidator() {
-        return Optional.of(Utils.VALIDATOR);
-    }
-
-    // -------------------- getters
     @NotNull
     @Min(value = 1)
     public Long getId() {
@@ -96,9 +84,7 @@ public class Person extends AbstractEntity<Long> {
         return gender;
     }
 
-    // ------------------- Builder
-
-    public static class Builder extends AbstractEntityBuilder<Long, Person, Builder> {
+    public static class Builder extends AbstractEntityWithBuilder.AbstractEntityBuilder<Long, Person, Builder> {
 
         public Long id;
 
@@ -117,6 +103,11 @@ public class Person extends AbstractEntity<Long> {
         @Override
         protected Person createInstance() {
             return new Person(this);
+        }
+
+        @Override
+        public Optional<Validator> getValidator() {
+            return Optional.of(Utils.VALIDATOR);
         }
     }
 }

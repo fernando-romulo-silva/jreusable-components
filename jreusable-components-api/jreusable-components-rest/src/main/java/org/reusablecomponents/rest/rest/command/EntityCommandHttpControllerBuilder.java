@@ -8,10 +8,10 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.reusablecomponents.base.core.application.command.entity.InterfaceCommandFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.rest.infra.jsonpath.JsonPatch;
 
-public class EntityCommandHttpControllerBuilder<Entity extends AbstractEntity<Id>, Id, // basic
+public class EntityCommandHttpControllerBuilder<Entity extends InterfaceEntity<Id>, Id, // basic
 		QueryIdIn, OneResult,
 		// save
 		SaveEntityIn, SaveEntityOut, // save a entity

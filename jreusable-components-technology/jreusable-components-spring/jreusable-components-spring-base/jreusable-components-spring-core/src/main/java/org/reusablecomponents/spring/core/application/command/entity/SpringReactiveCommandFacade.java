@@ -3,7 +3,7 @@ package org.reusablecomponents.spring.core.application.command.entity;
 import org.reactivestreams.Publisher;
 import org.reusablecomponents.base.core.application.command.entity.CommandFacade;
 import org.reusablecomponents.base.core.application.command.entity.CommandFacadeBuilder;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
@@ -12,7 +12,7 @@ import org.reusablecomponents.spring.core.domain.InterfaceSpringReactiveReposito
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public class SpringReactiveCommandFacade<Entity extends AbstractEntity<Id>, Id> // basic
+public class SpringReactiveCommandFacade<Entity extends InterfaceEntity<Id>, Id> // basic
 		// basic class
 		extends CommandFacade<Entity, Id, // basic
 				Entity, Mono<Entity>, // save a entity

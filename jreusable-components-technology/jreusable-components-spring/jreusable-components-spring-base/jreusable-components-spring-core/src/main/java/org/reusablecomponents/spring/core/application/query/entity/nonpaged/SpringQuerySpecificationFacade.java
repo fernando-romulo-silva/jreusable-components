@@ -5,13 +5,13 @@ import java.util.Optional;
 import org.apache.commons.collections4.IterableUtils;
 import org.reusablecomponents.base.core.application.query.entity.specification.QuerySpecificationFacade;
 import org.reusablecomponents.base.core.application.query.entity.specification.QuerySpecificationFacadeBuilder;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
 import org.reusablecomponents.spring.core.domain.InterfaceSpringSpecificationRepository;
 
-public class SpringQuerySpecificationFacade<Entity extends AbstractEntity<Id>, Id, Specification>
+public class SpringQuerySpecificationFacade<Entity extends InterfaceEntity<Id>, Id, Specification>
 		// base class
 		extends QuerySpecificationFacade<Entity, Id, Optional<Entity>, // One result
 				Iterable<Entity>, // multiple result

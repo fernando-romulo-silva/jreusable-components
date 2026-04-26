@@ -13,7 +13,7 @@ import org.reusablecomponents.base.core.application.command.entity.function.save
 import org.reusablecomponents.base.core.application.command.entity.function.save_all.SaveAllFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update.UpdateFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.update_all.UpdateAllFunction;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @see CommandFacade
  */
-public non-sealed class CommandFacadeBuilder<Entity extends AbstractEntity<Id>, Id, // basic
+public non-sealed class CommandFacadeBuilder<Entity extends InterfaceEntity<Id>, Id, // basic
 		// save
 		SaveEntityIn, SaveEntityOut, // save a entity
 		SaveEntitiesIn, SaveEntitiesOut, // save entities

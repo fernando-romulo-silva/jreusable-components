@@ -1,6 +1,6 @@
 package org.reusablecomponents.jakarta.application.mix.entity.nonpaged;
 
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.jakarta.application.command.entity.InterfaceJakartaCommandFacade;
 import org.reusablecomponents.jakarta.application.query.entity.InterfaceJakartaQueryFacade;
 import org.reusablecomponents.jakarta.application.query.entity.InterfaceJakartaQuerySpecificationFacade;
@@ -10,7 +10,7 @@ import org.reusablecomponents.jakarta.domain.InterfaceJakartaRepository;
  * @param <Entity>
  * @param <Id>
  */
-public class JakartaNonPagedFacade<Entity extends AbstractEntity<Id>, Id, Specification>
+public class JakartaNonPagedFacade<Entity extends InterfaceEntity<Id>, Id, Specification>
         implements InterfaceJakartaNonPagedFacade<Entity, Id, Specification> {
 
     protected InterfaceJakartaRepository<Entity, Id> repository;

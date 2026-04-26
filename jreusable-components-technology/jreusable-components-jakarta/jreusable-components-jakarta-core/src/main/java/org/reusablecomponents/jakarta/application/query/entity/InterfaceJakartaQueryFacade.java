@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.reusablecomponents.base.core.application.query.entity.simple.InterfaceQueryFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
 import jakarta.transaction.Transactional;
 
@@ -14,7 +14,7 @@ import jakarta.transaction.Transactional;
  * @param <Entity>
  * @param <Id>
  */
-public interface InterfaceJakartaQueryFacade<Entity extends AbstractEntity<Id>, Id>
+public interface InterfaceJakartaQueryFacade<Entity extends InterfaceEntity<Id>, Id>
 		//
 		extends InterfaceQueryFacade<Entity, Id, // base
 				Id, // by id arg

@@ -5,7 +5,7 @@ import org.reusablecomponents.base.core.application.query.entity.pagination.Inte
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.InterfaceQuerySpecificationPaginationFacade;
 import org.reusablecomponents.base.core.application.query.entity.simple.InterfaceQueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.specification.InterfaceQuerySpecificationFacade;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -25,7 +25,7 @@ import jakarta.validation.constraints.NotNull;
  * @see InterfaceQuerySpecificationPaginationFacade
  * @see BaseFacade
  */
-public sealed interface InterfaceBaseFacade<Entity extends AbstractEntity<Id>, Id>
+public sealed interface InterfaceBaseFacade<Entity extends InterfaceEntity<Id>, Id>
 		permits InterfaceCommandFacade, InterfaceQueryFacade, InterfaceQuerySpecificationFacade,
 		InterfaceQueryPaginationFacade, InterfaceQuerySpecificationPaginationFacade,
 		BaseFacade {

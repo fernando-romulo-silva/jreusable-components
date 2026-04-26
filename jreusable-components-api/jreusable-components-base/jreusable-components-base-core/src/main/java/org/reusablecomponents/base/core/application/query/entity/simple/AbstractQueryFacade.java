@@ -16,7 +16,7 @@ import org.reusablecomponents.base.core.application.query.entity.simple.function
 import org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id.ErrorFindByIdFunction;
 import org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id.PosFindByIdFunction;
 import org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id.PreFindByIdFunction;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +48,7 @@ import jakarta.validation.constraints.NotNull;
  * @see QueryFacade
  * @see BaseFacade
  */
-public abstract sealed class AbstractQueryFacade<Entity extends AbstractEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
+public abstract sealed class AbstractQueryFacade<Entity extends InterfaceEntity<Id>, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
         extends BaseFacade<Entity, Id> permits QueryFacade {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractQueryFacade.class);

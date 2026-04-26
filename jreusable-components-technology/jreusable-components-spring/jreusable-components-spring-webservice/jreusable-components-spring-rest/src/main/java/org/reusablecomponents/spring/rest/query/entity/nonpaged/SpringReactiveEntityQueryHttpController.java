@@ -1,7 +1,7 @@
 package org.reusablecomponents.spring.rest.query.entity.nonpaged;
 
 import org.reactivestreams.Publisher;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.rest.rest.query.entity.nonpaged.EntityQueryHttpController;
 import org.reusablecomponents.rest.rest.query.entity.nonpaged.EntityQueryHttpControllerBuilder;
 import org.reusablecomponents.spring.core.application.query.entity.nonpaged.InterfaceSpringReactiveQueryFacade;
@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
  * @param <Id>
  */
 @Loggable
-public class SpringReactiveEntityQueryHttpController<Entity extends AbstractEntity<Id>, Id>
+public class SpringReactiveEntityQueryHttpController<Entity extends InterfaceEntity<Id>, Id>
 		extends EntityQueryHttpController<Entity, Id, //
 				Publisher<Id>, // by id arg
 				// results

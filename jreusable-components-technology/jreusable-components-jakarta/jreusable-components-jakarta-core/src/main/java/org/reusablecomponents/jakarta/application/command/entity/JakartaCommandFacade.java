@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.reusablecomponents.base.core.application.command.entity.CommandFacade;
 import org.reusablecomponents.base.core.application.command.entity.CommandFacadeBuilder;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.jakarta.domain.InterfaceJakartaRepository;
 
 /**
  * 
  */
-public class JakartaCommandFacade<Entity extends AbstractEntity<Id>, Id> // basic types
+public class JakartaCommandFacade<Entity extends InterfaceEntity<Id>, Id> // basic types
 		// basic class
 		extends CommandFacade<Entity, Id, // basic types
 				// save

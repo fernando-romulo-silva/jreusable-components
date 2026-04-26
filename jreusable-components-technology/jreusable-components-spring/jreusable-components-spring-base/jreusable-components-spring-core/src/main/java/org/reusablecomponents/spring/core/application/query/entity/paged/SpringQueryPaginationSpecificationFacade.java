@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.QueryPaginationSpecificationFacade;
 import org.reusablecomponents.base.core.application.query.entity.paginationspecification.QueryPaginationSpecificationFacadeBuilder;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
@@ -16,7 +16,7 @@ import org.springframework.data.domain.Sort;
 /**
  * 
  */
-public class SpringQueryPaginationSpecificationFacade<Entity extends AbstractEntity<Id>, Id, Specification>
+public class SpringQueryPaginationSpecificationFacade<Entity extends InterfaceEntity<Id>, Id, Specification>
 		extends QueryPaginationSpecificationFacade<Entity, Id, // basic
 				Optional<Entity>, // one result type
 				Page<Entity>, // multiple result type

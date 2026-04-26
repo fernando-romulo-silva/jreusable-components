@@ -3,13 +3,13 @@ package org.reusablecomponents.spring.core.jpa.domain.custom;
 import java.util.List;
 import java.util.Optional;
 
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 
-public class CustomSpecificationJpqlRepository<Entity extends AbstractEntity<Id>, Id>
+public class CustomSpecificationJpqlRepository<Entity extends InterfaceEntity<Id>, Id>
         implements InterfaceCustomSpecificationJpqlRepository<Entity, Id> {
 
     @PersistenceContext

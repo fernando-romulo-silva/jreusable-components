@@ -3,22 +3,18 @@ package org.application_example.domain;
 import java.util.Optional;
 
 import org.application_example.infra.Utils;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.AbstractNoBuilderEntity;
 
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public class Project extends AbstractEntity<Long> {
-
-    // ------------------- fields
+public class Project extends AbstractNoBuilderEntity<Long> {
 
     @NotEmpty
     private String name;
 
     private Department department;
-
-    // ------------------- constructors
 
     Project() {
         super();
@@ -42,8 +38,6 @@ public class Project extends AbstractEntity<Long> {
     public boolean isPublishable() {
         return false;
     }
-
-    // -------------------- getters
 
     @NotNull
     public Long getId() {

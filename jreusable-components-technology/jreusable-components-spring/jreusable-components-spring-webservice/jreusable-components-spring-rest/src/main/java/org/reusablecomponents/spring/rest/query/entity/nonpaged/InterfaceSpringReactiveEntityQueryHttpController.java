@@ -6,7 +6,7 @@ import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.HEAD;
 
 import org.reactivestreams.Publisher;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.rest.rest.query.entity.nonpaged.InterfaceEntityQueryHttpController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,39 +23,42 @@ import reactor.core.publisher.Mono;
  * @param <Entity>
  * @param <Id>
  */
-public interface InterfaceSpringReactiveEntityQueryHttpController<Entity extends AbstractEntity<Id>, Id> 
-	extends InterfaceEntityQueryHttpController<Publisher<Id>, ResponseEntity<Mono<Void>>, ResponseEntity<Mono<Entity>>, ResponseEntity<Flux<Entity>>> {
+public interface InterfaceSpringReactiveEntityQueryHttpController<Entity extends InterfaceEntity<Id>, Id>
+                extends
+                InterfaceEntityQueryHttpController<Publisher<Id>, ResponseEntity<Mono<Void>>, ResponseEntity<Mono<Entity>>, ResponseEntity<Flux<Entity>>> {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @ResponseStatus(OK)
-    @GetMapping(value = "/{id}", produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE })
-    ResponseEntity<Mono<Entity>> get(@PathVariable final Publisher<Id> id, final HttpServletRequest request, final HttpServletResponse response);
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @ResponseStatus(OK)
+        @GetMapping(value = "/{id}", produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE })
+        ResponseEntity<Mono<Entity>> get(@PathVariable final Publisher<Id> id, final HttpServletRequest request,
+                        final HttpServletResponse response);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @ResponseStatus(OK)
-    @GetMapping(produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE })
-    ResponseEntity<Flux<Entity>> getAll(final HttpServletRequest request, final HttpServletResponse response);
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @ResponseStatus(OK)
-    @RequestMapping(method = HEAD, value = "/{id}", produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE })
-    ResponseEntity<Mono<Void>> head(@PathVariable final Publisher<Id> id, final HttpServletRequest request, final HttpServletResponse response);
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @ResponseStatus(OK)
+        @GetMapping(produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE })
+        ResponseEntity<Flux<Entity>> getAll(final HttpServletRequest request, final HttpServletResponse response);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @ResponseStatus(OK)
-    @RequestMapping(method = HEAD, produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE })
-    ResponseEntity<Mono<Void>> headAll(final HttpServletRequest request, final HttpServletResponse response);
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @ResponseStatus(OK)
+        @RequestMapping(method = HEAD, value = "/{id}", produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE })
+        ResponseEntity<Mono<Void>> head(@PathVariable final Publisher<Id> id, final HttpServletRequest request,
+                        final HttpServletResponse response);
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        @ResponseStatus(OK)
+        @RequestMapping(method = HEAD, produces = { APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE })
+        ResponseEntity<Mono<Void>> headAll(final HttpServletRequest request, final HttpServletResponse response);
 
 }

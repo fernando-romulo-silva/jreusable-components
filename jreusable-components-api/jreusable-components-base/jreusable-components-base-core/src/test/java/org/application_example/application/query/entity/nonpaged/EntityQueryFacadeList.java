@@ -8,11 +8,11 @@ import org.application_example.infra.DummySecurityService;
 import org.application_example.infra.ListExceptionAdapterService;
 import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacadeBuilder;
-import org.reusablecomponents.base.core.domain.AbstractEntity;
+import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.translation.JavaSEI18nService;
 
 @SuppressWarnings("null")
-public class EntityQueryFacadeList<Entity extends AbstractEntity<Id>, Id>
+public class EntityQueryFacadeList<Entity extends InterfaceEntity<Id>, Id>
         extends QueryFacade<Entity, Id, Id, Entity, List<Entity>, Long, Boolean> {
 
     private static final void validate(final Object... directives) {
