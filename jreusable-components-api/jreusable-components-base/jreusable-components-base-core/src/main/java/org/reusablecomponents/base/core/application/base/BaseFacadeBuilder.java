@@ -1,6 +1,7 @@
 package org.reusablecomponents.base.core.application.base;
 
 import static java.util.Objects.nonNull;
+import static java.util.Objects.requireNonNull;
 
 import java.util.function.Consumer;
 
@@ -78,6 +79,8 @@ public class BaseFacadeBuilder {
 	 */
 	public BaseFacadeBuilder(final Consumer<? extends BaseFacadeBuilder> function) {
 		LOGGER.atDebug().log("Constructing BaseFacadeBuilder");
+
+		requireNonNull(function, "The function parameter can't be null");
 
 		@SuppressWarnings("unchecked")
 		final var finalFunction = (Consumer<BaseFacadeBuilder>) function;

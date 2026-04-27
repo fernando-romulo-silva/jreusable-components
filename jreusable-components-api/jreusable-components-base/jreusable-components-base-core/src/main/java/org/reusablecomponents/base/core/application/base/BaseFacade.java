@@ -122,15 +122,15 @@ public sealed class BaseFacade<Entity extends InterfaceEntity<Id>, Id>
 	protected BaseFacade(@NotNull final BaseFacadeBuilder builder) {
 		LOGGER.atDebug().log("Constructing BaseFacade with builder {}", builder);
 		super();
-		final var finalBuilder = ofNullable(builder)
+		final var notNullBuilder = ofNullable(builder)
 				.orElseThrow(createNullPointerException("builder"));
 
 		this.entityClazz = retrieveEntityClazz();
 		this.idClazz = retrieveIdClazz();
 
-		this.i18nService = finalBuilder.i18nService;
-		this.securityService = finalBuilder.securityService;
-		this.exceptionAdapterService = finalBuilder.exceptionAdapterService;
+		this.i18nService = notNullBuilder.i18nService;
+		this.securityService = notNullBuilder.securityService;
+		this.exceptionAdapterService = notNullBuilder.exceptionAdapterService;
 
 		LOGGER.atDebug().log("BaseFacade constructed");
 	}
