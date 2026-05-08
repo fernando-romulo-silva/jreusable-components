@@ -11,25 +11,61 @@ import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * The <code>EntityQueryPaginationFacade</code> builder's class.
+ * The <code>QueryPaginationFacade</code> builder's class.
+ * 
+ * This class is responsible for building the <code>QueryPaginationFacade</code>
+ * object.
+ * 
+ * For each function in this class, if it is not set, it will be set with a
+ * default function that throws an UnsupportedOperationException with a message
+ * that the function is not implemented, example: "Unimplemented function
+ * 'functionName'".
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ * 
+ * @see AbstractQueryPaginationFacadeBuilder
+ * @see QueryPaginationFacade
  */
 public class QueryPaginationFacadeBuilder<Entity extends InterfaceEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort>
         extends AbstractQueryPaginationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> {
 
     /**
-     * Function that executes find all paged
+     * Check {@link QueryPaginationFacade#findAllPagedFunction
+     * QueryPaginationFacade.findAllPagedFunction}.
+     * 
+     * @see FindAllPagedFunction
      */
     public FindAllPagedFunction<Pageable, MultiplePagedResult> findAllPagedFunction;
 
     /**
-     * Function that executes find one by a specific order
+     * Check {@link QueryPaginationFacade#findOneSortedFunction
+     * QueryPaginationFacade.findOneSortedFunction}.
+     * 
+     * @see FindOneSortedFunction
      */
     public FindOneSortedFunction<Sort, OneResult> findOneSortedFunction;
 
     /**
      * Default constructor.
      * 
-     * @param function Consumer function
+     * @param function Consumer function, can't be null, used to set the builder
+     *                 attributes with a lambda expression, example:
+     * 
+     *                 <pre>
+     *                 new QueryPaginationFacadeBuilder&lt;Entity, Id, QueryIdIn, OneResult, MultiplePagedResult, Pageable, Sort&gt;(
+     *                         builder -&gt; {
+     *                             builder.findAllPagedFunction = (directives) -&gt; {
+     *                                 // implementation of the find all paged operation in the persistence
+     *                                 // layer.
+     *                             };
+     *                             builder.findOneSortedFunction = (sort, directives) -&gt; {
+     *                                 // implementation of the find one sorted operation in the persistence
+     *                                 // layer.
+     *                             };
+     *                             // set other functions...
+     *                         });
+     *                 </pre>
      */
     public QueryPaginationFacadeBuilder(
             @NotNull final Consumer<QueryPaginationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort>> function) {

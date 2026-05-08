@@ -27,32 +27,15 @@ import org.slf4j.LoggerFactory;
  * that the function is not implemented, example: "Unimplemented function
  * 'functionName'".
  * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ * 
  * @see CommandFacade
+ * @see AbstractCommandFacadeBuilder
  */
-public non-sealed class CommandFacadeBuilder<Entity extends InterfaceEntity<Id>, Id, // basic
-		// save
-		SaveEntityIn, SaveEntityOut, // save a entity
-		SaveEntitiesIn, SaveEntitiesOut, // save entities
-		// update
-		UpdateEntityIn, UpdateEntityOut, // update a entity
-		UpdateEntitiesIn, UpdateEntitiesOut, // update entities
-		// delete
-		DeleteEntityIn, DeleteEntityOut, // delete a entity
-		DeleteEntitiesIn, DeleteEntitiesOut, // delete entities
-		// delete by id
-		DeleteIdIn, DeleteIdOut, // delete entity by id
-		DeleteIdsIn, DeleteIdsOut> // delete entities by ids
-		extends AbstractCommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, // save a entity
-				SaveEntitiesIn, SaveEntitiesOut, // save entities
-				// update
-				UpdateEntityIn, UpdateEntityOut, // update a entity
-				UpdateEntitiesIn, UpdateEntitiesOut, // update entities
-				// delete
-				DeleteEntityIn, DeleteEntityOut, // delete a entity
-				DeleteEntitiesIn, DeleteEntitiesOut, // delete entities
-				// delete by id
-				DeleteIdIn, DeleteIdOut, // delete entity by id
-				DeleteIdsIn, DeleteIdsOut> {// delete entities by ids
+public non-sealed class CommandFacadeBuilder<Entity extends InterfaceEntity<Id>, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
+		extends
+		AbstractCommandFacadeBuilder<Entity, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommandFacadeBuilder.class);
 

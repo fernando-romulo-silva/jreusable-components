@@ -11,6 +11,9 @@ import org.reusablecomponents.base.core.application.query.entity.pagination.func
 import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_one_sorted.ErrorFindOneSortedFunction;
 import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_one_sorted.PosFindOneSortedFunction;
 import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_one_sorted.PreFindOneSortedFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.AbstractQueryFacade;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_by_id.PreExistsByIdFunction;
+import org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id.PreFindByIdFunction;
 import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.slf4j.Logger;
@@ -19,25 +22,80 @@ import org.slf4j.LoggerFactory;
 import jakarta.validation.constraints.NotNull;
 
 /**
+ * The <code>AbstractQueryPaginationFacade</code> builder's class.
  * 
+ * This class is responsible for building the
+ * <code>AbstractQueryPaginationFacade</code> object.
+ * 
+ * For each function in this class, if it is not set, it will be set with a
+ * default function that just logs the execution and returns the input
+ * parameters, example: "Default function 'functionName', input parameters:
+ * ['parameter1']".
+ * 
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ * 
+ * @see BaseFacadeBuilder
+ * @see AbstractQueryPaginationFacade
  */
 public class AbstractQueryPaginationFacadeBuilder<Entity extends InterfaceEntity<Id>, Id, OneResult, MultiplePagedResult, Pageable, Sort>
         extends BaseFacadeBuilder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractQueryPaginationFacadeBuilder.class);
 
+    /**
+     * Check {@link AbstractQueryPaginationFacade#preFindAllPagedFunction
+     * AbstractQueryPaginationFacade.preFindAllPagedFunction}.
+     * 
+     * @see PreFindAllPagedFunction
+     */
     public PreFindAllPagedFunction<Pageable> preFindAllPagedFunction;
 
+    /**
+     * Check {@link AbstractQueryPaginationFacade#posFindAllPagedFunction
+     * AbstractQueryPaginationFacade.posFindAllPagedFunction}.
+     * 
+     * @see PosFindAllPagedFunction
+     */
     public PosFindAllPagedFunction<MultiplePagedResult> posFindAllPagedFunction;
 
+    /**
+     * Check {@link AbstractQueryPaginationFacade#errorFindAllPagedFunction
+     * AbstractQueryPaginationFacade.errorFindAllPagedFunction}.
+     * 
+     * @see ErrorFindAllPagedFunction
+     */
     public ErrorFindAllPagedFunction<BaseException, Pageable> errorFindAllPagedFunction;
 
+    /**
+     * Check {@link AbstractQueryPaginationFacade#preFindOneSortedFunction
+     * AbstractQueryPaginationFacade.preFindOneSortedFunction}.
+     * 
+     * @see PreFindOneSortedFunction
+     */
     public PreFindOneSortedFunction<Sort> preFindOneSortedFunction;
 
+    /**
+     * Check {@link AbstractQueryPaginationFacade#posFindOneSortedFunction
+     * AbstractQueryPaginationFacade.posFindOneSortedFunction}.
+     * 
+     * @see PosFindOneSortedFunction
+     */
     public PosFindOneSortedFunction<OneResult> posFindOneSortedFunction;
 
+    /**
+     * Check {@link AbstractQueryPaginationFacade#errorFindOneSortedFunction
+     * AbstractQueryPaginationFacade.errorFindOneSortedFunction}.
+     * 
+     * @see ErrorFindOneSortedFunction
+     */
     public ErrorFindOneSortedFunction<BaseException, Sort> errorFindOneSortedFunction;
 
+    /**
+     * Constructor for AbstractQueryPaginationFacadeBuilder
+     * 
+     * @param function A consumer function to initialize the builder, can't be null.
+     */
     public AbstractQueryPaginationFacadeBuilder(
             @NotNull final Consumer<? extends AbstractQueryPaginationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort>> function) {
         super(function);
@@ -51,6 +109,14 @@ public class AbstractQueryPaginationFacadeBuilder<Entity extends InterfaceEntity
         this.errorFindOneSortedFunction = getErrorFindOneSortedFunction();
     }
 
+    /**
+     * Gets the pre find all paged function {@link #preFindAllPagedFunction
+     * preFindAllPagedFunction}, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return The pre find all paged function.
+     * @see PreFindAllPagedFunction
+     */
     private PreFindAllPagedFunction<Pageable> getPreFindAllPagedFunction() {
         return nonNull(preFindAllPagedFunction)
                 ? preFindAllPagedFunction
@@ -61,6 +127,14 @@ public class AbstractQueryPaginationFacadeBuilder<Entity extends InterfaceEntity
                 };
     }
 
+    /**
+     * Gets the pos find all paged function {@link #posFindAllPagedFunction
+     * posFindAllPagedFunction}, if it is not set, it will be set with a
+     * default function that logs the execution and returns the input parameter.
+     * 
+     * @return The pos find all paged function.
+     * @see PosFindAllPagedFunction
+     */
     private PosFindAllPagedFunction<MultiplePagedResult> getPosFindAllPagedFunction() {
         return nonNull(posFindAllPagedFunction)
                 ? posFindAllPagedFunction
@@ -71,6 +145,14 @@ public class AbstractQueryPaginationFacadeBuilder<Entity extends InterfaceEntity
                 };
     }
 
+    /**
+     * Gets the error find all paged function {@link #errorFindAllPagedFunction
+     * errorFindAllPagedFunction}, if it is not set, it will be set with a
+     * default function that logs the execution and returns the input parameter.
+     * 
+     * @return The error find all paged function.
+     * @see ErrorFindAllPagedFunction
+     */
     private ErrorFindAllPagedFunction<BaseException, Pageable> getErrorFindAllPagedFunction() {
         return nonNull(errorFindAllPagedFunction)
                 ? errorFindAllPagedFunction
@@ -81,6 +163,14 @@ public class AbstractQueryPaginationFacadeBuilder<Entity extends InterfaceEntity
                 };
     }
 
+    /**
+     * Gets the pre find one sorted function {@link #preFindOneSortedFunction
+     * preFindOneSortedFunction}, if it is not set, it will be set with a
+     * default function that logs the execution.
+     * 
+     * @return The pre find one sorted function.
+     * @see PreFindOneSortedFunction
+     */
     private PreFindOneSortedFunction<Sort> getPreFindOneSortedFunction() {
         return nonNull(preFindOneSortedFunction)
                 ? preFindOneSortedFunction
@@ -90,6 +180,14 @@ public class AbstractQueryPaginationFacadeBuilder<Entity extends InterfaceEntity
                 };
     }
 
+    /**
+     * Gets the pos find one sorted function {@link #posFindOneSortedFunction
+     * posFindOneSortedFunction}, if it is not set, it will be set with a
+     * default function that logs the execution and returns the input parameter.
+     * 
+     * @return The pos find one sorted function.
+     * @see PosFindOneSortedFunction
+     */
     private PosFindOneSortedFunction<OneResult> getPosFindOneSortedFunction() {
         return nonNull(posFindOneSortedFunction)
                 ? posFindOneSortedFunction
@@ -100,6 +198,14 @@ public class AbstractQueryPaginationFacadeBuilder<Entity extends InterfaceEntity
                 };
     }
 
+    /**
+     * Gets the error find one sorted function {@link #errorFindOneSortedFunction
+     * errorFindOneSortedFunction}, if it is not set, it will be set with a
+     * default function that logs the execution and returns the input parameter.
+     * 
+     * @return The error find one sorted function.
+     * @see ErrorFindOneSortedFunction
+     */
     private ErrorFindOneSortedFunction<BaseException, Sort> getErrorFindOneSortedFunction() {
         return nonNull(errorFindOneSortedFunction)
                 ? errorFindOneSortedFunction

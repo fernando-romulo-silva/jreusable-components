@@ -19,7 +19,6 @@ import org.reusablecomponents.base.core.application.query.entity.paginationspeci
 import org.reusablecomponents.base.core.application.query.entity.simple.AbstractQueryFacade;
 import org.reusablecomponents.base.core.application.query.entity.specification.AbstractQuerySpecificationFacade;
 import org.reusablecomponents.base.core.domain.InterfaceEntity;
-import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction1Args;

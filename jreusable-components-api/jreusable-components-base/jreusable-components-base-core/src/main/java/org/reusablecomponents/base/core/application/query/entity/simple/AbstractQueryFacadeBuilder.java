@@ -33,21 +33,11 @@ import org.slf4j.LoggerFactory;
  * parameters, example: "Default function 'functionName', input parameters:
  * ['parameter1']".
  * 
- * @param <Entity>         The entity type
- * @param <Id>             The entity id type
- * @param <QueryIdIn>      The input id type for the find by id and exists by id
- * @param <OneResult>      The one-result type, like the entity or wrap type
- *                         like Mono<Entity>
- * @param <MultipleResult> The multiple-result type, like List<Entity>,
- *                         Iterable<Entity>, or a wrap type like
- *                         Mono<List<Entity>>
- * @param <CountResult>    The count-result type, like Long, Integer, or a wrap
- *                         type like Mono<Long>
- * @param <ExistsResult>   The exist-result type, like Boolean or a wrap type
- *                         like Mono<Boolean>
- * 
  * @author Fernando Romulo da Silva
  * @since 1.0.0
+ * 
+ * @see BaseFacadeBuilder
+ * @see AbstractQueryFacade
  */
 public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResult, MultipleResult, CountResult, ExistsResult>
         extends BaseFacadeBuilder {

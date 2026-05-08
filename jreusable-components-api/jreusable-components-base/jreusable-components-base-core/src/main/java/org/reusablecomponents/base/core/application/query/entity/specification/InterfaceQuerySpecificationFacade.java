@@ -25,12 +25,7 @@ import jakarta.validation.constraints.NotNull;
  * @param <Specification>  The specification is a strutucte used to filter
  *                         queries
  */
-public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends InterfaceEntity<Id>, Id, //
-		OneResult, //
-		MultipleResult, //
-		CountResult, //
-		ExistsResult, //
-		Specification> //
+public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends InterfaceEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>
 		extends InterfaceBaseFacade<Entity, Id> {
 
 	/**
