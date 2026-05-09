@@ -11,9 +11,6 @@ import org.reusablecomponents.base.core.application.query.entity.pagination.func
 import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_one_sorted.ErrorFindOneSortedFunction;
 import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_one_sorted.PosFindOneSortedFunction;
 import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_one_sorted.PreFindOneSortedFunction;
-import org.reusablecomponents.base.core.application.query.entity.simple.AbstractQueryFacade;
-import org.reusablecomponents.base.core.application.query.entity.simple.function.exists_by_id.PreExistsByIdFunction;
-import org.reusablecomponents.base.core.application.query.entity.simple.function.find_by_id.PreFindByIdFunction;
 import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.slf4j.Logger;
@@ -121,8 +118,8 @@ public class AbstractQueryPaginationFacadeBuilder<Entity extends InterfaceEntity
         return nonNull(preFindAllPagedFunction)
                 ? preFindAllPagedFunction
                 : (pageable, directives) -> {
-                    LOGGER.atDebug().log("Executing default preFindAll, pageable {}, directives {}", pageable,
-                            directives);
+                    LOGGER.atDebug().log("Executing default preFindAll, pageable {}, directives {}",
+                            pageable, directives);
                     return pageable;
                 };
     }

@@ -24,12 +24,16 @@ import jakarta.validation.constraints.NotNull;
  * 
  * @param <Specification>  The specification is a strutucte used to filter
  *                         queries
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ * 
+ * @see InterfaceBaseFacade
  */
 public non-sealed interface InterfaceQuerySpecificationFacade<Entity extends InterfaceEntity<Id>, Id, OneResult, MultipleResult, CountResult, ExistsResult, Specification>
 		extends InterfaceBaseFacade<Entity, Id> {
 
 	/**
-	 * Find and retrieve a {@code MultipleResult} object by id
+	 * Find and retrieve a {@code MultipleResult} object by specification
 	 * 
 	 * @param specification Object {@code Specification} used to filter query's
 	 *                      result

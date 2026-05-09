@@ -21,14 +21,12 @@ import jakarta.validation.constraints.NotNull;
  * @param <Sort>                The query result order
  * @param <Specification>       The specification is a strutucte used to filter
  *                              queries
+ * @author Fernando Romulo da Silva
+ * @since 1.0.0
+ * 
+ * @see InterfaceBaseFacade
  */
-public non-sealed interface InterfaceQuerySpecificationPaginationFacade<Entity extends InterfaceEntity<Id>, Id, //
-		OneResult, //
-		MultiplePagedResult, //
-		Specification, //
-		Pageable, //
-		Sort> //
-		// Base
+public non-sealed interface InterfaceQuerySpecificationPaginationFacade<Entity extends InterfaceEntity<Id>, Id, OneResult, MultiplePagedResult, Specification, Pageable, Sort>
 		extends InterfaceBaseFacade<Entity, Id> {
 
 	/**
