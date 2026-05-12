@@ -11,8 +11,18 @@ import jakarta.validation.constraints.NotNull;
 
 /**
  * Interface responsible for establishing contracts to retrieve entities from
- * the persistence mechanism. This interface is designed to be implemented by
- * facades that provide query operations for entities.
+ * the persistence mechanism.
+ * 
+ * <p>
+ * This interface provides these methods to retrieve objects:
+ * <ul>
+ * <li>{@link #findById(Object, Object...)}
+ * <li>{@link #findAll(Object...)}
+ * <li>{@link #existsById(Object, Object...)}
+ * <li>{@link #existsAll(Object...)}
+ * <li>{@link #countAll(Object...)}
+ * </ul>
+ * <p>
  * 
  * @param <Entity>         The entity type
  * @param <Id>             The entity id type

@@ -198,9 +198,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the pre exists by id function {@link #preExistsByIdFunction
-     * preExistsByIdFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the pre exists by id function {@link #preExistsByIdFunction}, if it is
+     * not set, it will be set with a default function that logs the execution.
      * 
      * @return The pre exists by id function.
      * @see PreExistsByIdFunction
@@ -215,9 +214,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the error-exists by id function {@link #errorExistsByIdFunction
-     * errorExistsByIdFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the error-exists by id function {@link #errorExistsByIdFunction}, if it
+     * is not set, it will be set with a default function that logs the execution.
      * 
      * @return The error exists by id function.
      * @see ErrorExistsByIdFunction
@@ -233,9 +231,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the pos exists by id function {@link #posExistsByIdFunction
-     * posExistsByIdFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the pos exists by id function {@link #posExistsByIdFunction}, if it is
+     * not set, it will be set with a default function that logs the execution.
      * 
      * @return The pos exists by id function.
      * @see PosExistsByIdFunction
@@ -251,9 +248,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the pre find all function {@link #preFindAllFunction
-     * preFindAllFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the pre find all function {@link #preFindAllFunction}, if it is not set,
+     * it will be set with a default function that logs the execution.
      * 
      * @return The pre find all function.
      * @see PreFindAllFunction
@@ -274,9 +270,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the pos find all function {@link #posFindAllFunction
-     * posFindAllFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the pos find all function {@link #posFindAllFunction}, if it is not set,
+     * it will be set with a default function that logs the execution.
      * 
      * @return The pos find all function.
      * @see PosFindAllFunction
@@ -293,9 +288,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the error find all function {@link #errorFindAllFunction
-     * errorFindAllFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the error find all function {@link #errorFindAllFunction}, if it is not
+     * set, it will be set with a default function that logs the execution.
      * 
      * @return The error find all function.
      * @see ErrorFindAllFunction
@@ -311,9 +305,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the pre find by id function {@link #preFindByIdFunction
-     * preFindByIdFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the pre find by id function {@link #preFindByIdFunction}, if it is not
+     * set, it will be set with a default function that logs the execution.
      * 
      * @return The pre find by id function.
      * @see PreFindByIdFunction
@@ -328,9 +321,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the pos find by id function {@link #posFindByIdFunction
-     * posFindByIdFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the pos find by id function {@link #posFindByIdFunction}, if it is not
+     * set, it will be set with a default function that logs the execution.
      * 
      * @return The pos find by id function.
      * @see PosFindByIdFunction
@@ -345,9 +337,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the error find by id function {@link #errorFindByIdFunction
-     * errorFindByIdFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the error find by id function {@link #errorFindByIdFunction}, if it is
+     * not set, it will be set with a default function that logs the execution.
      * 
      * @return The error find by id function.
      * @see ErrorFindByIdFunction
@@ -363,9 +354,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the pre count all function {@link #preCountAllFunction
-     * preCountAllFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the pre count all function {@link #preCountAllFunction}, if it is not
+     * set, it will be set with a default function that logs the execution.
      * 
      * @return The pre count all function.
      * @see PreCountAllFunction
@@ -380,9 +370,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the pos count all function {@link #posCountAllFunction
-     * posCountAllFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the pos count all function {@link #posCountAllFunction}, if it is not
+     * set, it will be set with a default function that logs the execution.
      * 
      * @return The pos count all function.
      * @see PosCountAllFunction
@@ -398,9 +387,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the error count all function {@link #errorCountAllFunction
-     * errorCountAllFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the error count all function {@link #errorCountAllFunction}, if it is
+     * not set, it will be set with a default function that logs the execution.
      * 
      * @return The error count all function.
      * @see ErrorCountAllFunction
@@ -415,9 +403,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the pre exists all function {@link #preExistsAllFunction
-     * preExistsAllFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the pre exists all function {@link #preExistsAllFunction}, if it is not
+     * set, it will be set with a default function that logs the execution.
      * 
      * @return The pre exists all function.
      * @see PreExistsAllFunction
@@ -432,9 +419,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the pos exists all function {@link #posExistsAllFunction
-     * posExistsAllFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the pos exists all function {@link #posExistsAllFunction}, if it is not
+     * set, it will be set with a default function that logs the execution.
      * 
      * @return The pos exists all function.
      * @see PosExistsAllFunction
@@ -451,9 +437,8 @@ public abstract class AbstractQueryFacadeBuilder<Entity, Id, QueryIdIn, OneResul
     }
 
     /**
-     * Gets the error exists all function {@link #errorExistsAllFunction
-     * errorExistsAllFunction}, if it is not set, it will be set with a
-     * default function that logs the execution.
+     * Gets the error exists all function {@link #errorExistsAllFunction}, if it is
+     * not set, it will be set with a default function that logs the execution.
      * 
      * @return The error exists all function.
      * @see ErrorExistsAllFunction

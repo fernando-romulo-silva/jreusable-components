@@ -16,31 +16,38 @@ import com.google.common.reflect.TypeToken;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * The default <code>InterfaceQueryFacade</code>'s implementation.
+ * This class is responsible for implementing simple query defined in the
+ * {@link InterfaceQueryFacade} interface using functional approach. <br />
  * 
  * <p>
- * This class provides default implementations for the basic query operations:
+ * For each query operation, this class use a function:
  * <ul>
- * <li>find by id</li>
- * <li>find all</li>
- * <li>count all</li>
- * <li>exists all</li>
- * <li>exists by id</li>
- * </ul>
- * <p>
+ * <li>{@link #findByIdFunction} function used to execute the
+ * {@link #findById(Object, Object...)} method.
  * 
- * @param <Entity>         The entity type
- * @param <Id>             The entity id type
- * @param <QueryIdIn>      The input id type for the find by id and exists by id
- * @param <OneResult>      The one-result type, like the entity or wrap type
- *                         like Mono<Entity>
- * @param <MultipleResult> The multiple-result type, like List<Entity>,
- *                         Iterable<Entity>, or a wrap type like
- *                         Mono<List<Entity>>
- * @param <CountResult>    The count-result type, like Long, Integer, or a wrap
- *                         type like Mono<Long>
- * @param <ExistsResult>   The exist-result type, like Boolean or a wrap type
- *                         like Mono<Boolean>
+ * <li>{@link #findAllFunction} function used to execute the
+ * {@link #findAll(Object...)} method.
+ * 
+ * <li>{@link #countAllFunction} function used to execute the
+ * {@link #countAll(Object...)} method.
+ * 
+ * <li>{@link #existsAllFunction} function used to execute the
+ * {@link #existsAll(Object...)} method.
+ * 
+ * <li>{@link #existsByIdFunction} function used to execute the
+ * {@link #existsById(Object, Object...)} method.
+ * </ul>
+ * </p>
+ * 
+ * Each query operation also have pre and pos functions, used to execute logic
+ * before and after the main function, and an error function, used to execute
+ * logic in case of error defined in
+ * {@link AbstractQueryFacade}.
+ * 
+ * <p>
+ * All functions used in this class are provided by the
+ * {@link QueryFacadeBuilder} builder.
+ * </p>
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0.0

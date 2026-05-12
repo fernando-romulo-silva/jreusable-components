@@ -11,6 +11,14 @@ import jakarta.validation.constraints.NotNull;
  * Interface responsible for establishing contracts to retrieve objects, using
  * pagination and specification.
  * 
+ * <p>
+ * This interface provides these methods to retrieve objects:
+ * <ul>
+ * <li>{@link #findByPaginationPaged(Specification, Pageable, Object...)}
+ * <li>{@link #findOneByPaginationSorted(Specification, Sort, Object...)}
+ * </ul>
+ * <p>
+ * 
  * @param <Entity>              The facade entity type
  * @param <Id>                  The facade entity id type
  * 
