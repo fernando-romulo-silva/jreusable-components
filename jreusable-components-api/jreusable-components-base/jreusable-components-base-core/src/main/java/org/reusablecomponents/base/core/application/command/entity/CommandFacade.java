@@ -17,54 +17,39 @@ import org.slf4j.LoggerFactory;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * The default <code>InterfaceCommandFacade</code>'s implementation.
+ * This class is responsible for implementing command operations defined in the
+ * {@link InterfaceCommandFacade} interface using a functional approach. <br />
  * 
  * <p>
- * This class provides default implementations for the basic command operations:
+ * For each query operation, this class use a function:
  * <ul>
- * <li>save</li>
- * <li>save all</li>
- * <li>update</li>
- * <li>update all</li>
- * <li>delete</li>
- * <li>delete all</li>
- * <li>delete by id</li>
- * <li>delete by ids</li>
+ * <li>{@link #saveFunction} function used to execute the
+ * {@link #save(Object, Object...)} method.
+ * <li>{@link #saveAllFunction} function used to execute the
+ * {@link #saveAll(Object, Object...)} method.
+ * <li>{@link #updateFunction} function used to execute the
+ * {@link #update(Object, Object...)} method.
+ * <li>{@link #updateAllFunction} function used to execute the
+ * {@link #updateAll(Object, Object...)} method.
+ * <li>{@link #deleteFunction} function used to execute the
+ * {@link #delete(Object, Object...)} method.
+ * <li>{@link #deleteAllFunction} function used to execute the
+ * {@link #deleteAll(Object, Object...)} method.
+ * <li>{@link #deleteByIdFunction} function used to execute the
+ * {@link #deleteBy(Object, Object...)} method.
+ * <li>{@link #deleteByIdsFunction} function used to execute the
+ * {@link #deleteAllBy(Object, Object...)} method.
  * </ul>
+ * 
+ * Each query operation also have pre and pos functions, used to execute logic
+ * before and after the main function, and an error function, used to execute
+ * logic in case of error defined in
+ * {@link AbstractCommandFacade}.
+ * 
  * <p>
- * 
- * @param <Entity>            The entity type
- * @param <Id>                The entity id type
- * @param <SaveEntityIn>      The input type for the save operation
- * @param <SaveEntityOut>     The output type for the save operation
- * 
- * @param <SaveEntitiesIn>    The input type for the save all operation (bulk
- *                            version)
- * @param <SaveEntitiesOut>   The output type for the save all operation (bulk
- *                            version)
- * 
- * @param <UpdateEntityIn>    The input type for the update operation
- * @param <UpdateEntityOut>   The output type for the update operation
- * 
- * @param <UpdateEntitiesIn>  The input type for the update all operation (bulk
- *                            version)
- * @param <UpdateEntitiesOut> The output type for the update all operation (bulk
- *                            version)
- * @param <DeleteEntityIn>    The input type for the delete operation
- * @param <DeleteEntityOut>   The output type for the delete operation
- * 
- * @param <DeleteEntitiesIn>  The input type for the delete all operation (bulk
- *                            version)
- * @param <DeleteEntitiesOut> The output type for the delete all operation (bulk
- *                            version)
- * 
- * @param <DeleteIdIn>        The input type for the delete by id operation
- * @param <DeleteIdOut>       The output type for the delete by id operation
- * 
- * @param <DeleteIdsIn>       The input type for the delete by ids operation
- *                            (bulk version)
- * @param <DeleteIdsOut>      The output type for the delete by ids operation
- *                            (bulk version)
+ * All functions used in this class are provided by the
+ * {@link CommandFacadeBuilder} builder.
+ * </p>
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0.0
@@ -90,7 +75,7 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 
 	/**
 	 * Function that executes the save operation in the
-	 * {@link #save(Object, Object...) save} method
+	 * {@link #save(Object, Object...)} method
 	 * 
 	 * @see SaveFunction
 	 */
@@ -98,7 +83,7 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 
 	/**
 	 * Function that executes the save all (bunch save) operation in the
-	 * {@link #saveAll(Object, Object...) saveAll} method
+	 * {@link #saveAll(Object, Object...)} method
 	 * 
 	 * @see SaveAllFunction
 	 */
@@ -106,7 +91,7 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 
 	/**
 	 * Function that executes the update operation in the
-	 * {@link #update(Object, Object...) update} method
+	 * {@link #update(Object, Object...)} method
 	 * 
 	 * @see UpdateFunction
 	 */
@@ -114,7 +99,7 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 
 	/**
 	 * Function that executes the update all (bunch update) operation in the
-	 * {@link #updateAll(Object, Object...) updateAll} method
+	 * {@link #updateAll(Object, Object...)} method
 	 * 
 	 * @see UpdateAllFunction
 	 */
@@ -122,7 +107,7 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 
 	/**
 	 * Function that executes the delete operation in the
-	 * {@link #delete(Object, Object...) delete} method
+	 * {@link #delete(Object, Object...)} method
 	 * 
 	 * @see DeleteFunction
 	 */
@@ -130,7 +115,7 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 
 	/**
 	 * Function that executes the delete all (bunch delete) operation in the
-	 * {@link #deleteAll(Object, Object...) deleteAll} method
+	 * {@link #deleteAll(Object, Object...)} method
 	 * 
 	 * @see DeleteAllFunction
 	 */
@@ -138,7 +123,7 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 
 	/**
 	 * Function that executes the delete by id operation in the
-	 * {@link #deleteBy(Object, Object...) deleteBy} method
+	 * {@link #deleteBy(Object, Object...)} method
 	 * 
 	 * @see DeleteByIdFunction
 	 */
@@ -146,7 +131,7 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 
 	/**
 	 * Function that executes the delete all by id (bunch delete by id) operation in
-	 * the {@link #deleteAllBy(Object, Object...) deleteAllBy} method
+	 * the {@link #deleteAll(Object, Object...)} method
 	 * 
 	 * @see DeleteByIdsFunction
 	 */
@@ -197,8 +182,7 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 	}
 
 	/**
-	 * Gets the save function {@link #saveFunction saveFunction}, provided by the
-	 * builder.
+	 * Gets the save function {@link #saveFunction}, provided by the builder.
 	 * 
 	 * @return the save function
 	 * 
@@ -229,8 +213,7 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 	}
 
 	/**
-	 * Gets the save all function {@link #saveAllFunction saveAllFunction}, provided
-	 * by the builder.
+	 * Gets the save all function {@link #saveAllFunction}, provided by the builder.
 	 * 
 	 * @return the save all function
 	 * 
@@ -261,8 +244,7 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 	}
 
 	/**
-	 * Gets the update function {@link #updateFunction updateFunction}, provided by
-	 * the builder.
+	 * Gets the update function {@link #updateFunction}, provided by the builder.
 	 * 
 	 * @return the update function
 	 * 
@@ -294,8 +276,8 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 	}
 
 	/**
-	 * Gets the update all function {@link #updateAllFunction updateAllFunction},
-	 * provided by the builder.
+	 * Gets the update all function {@link #updateAllFunction}, provided by the
+	 * builder.
 	 * 
 	 * @return the update all function
 	 * 
@@ -325,8 +307,7 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 	}
 
 	/**
-	 * Gets the delete all function {@link #deleteFunction
-	 * deleteFunction}, provided by the builder.
+	 * Gets the delete function {@link #deleteFunction}, provided by the builder.
 	 * 
 	 * @return the delete function
 	 * 
@@ -358,12 +339,12 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 	}
 
 	/**
-	 * Gets the delete all function {@link #deleteAllFunction
-	 * deleteAllFunction}, provided by the builder.
+	 * Gets the delete all function {@link #deleteAllFunction}, provided by the
+	 * builder.
 	 * 
 	 * @return the delete all function
 	 * 
-	 * @see deleteAllFunction
+	 * @see DeleteAllFunction
 	 */
 	@NotNull
 	protected DeleteAllFunction<DeleteEntitiesIn, DeleteEntitiesOut> getDeleteAllFunction() {
@@ -388,8 +369,8 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 	}
 
 	/**
-	 * Gets the delete by id function {@link #deleteByIdFunction
-	 * deleteByIdFunction}, provided by the builder.
+	 * Gets the delete by id function {@link #deleteByIdFunction}, provided by the
+	 * builder.
 	 * 
 	 * @return the delete by id function
 	 * 
@@ -419,8 +400,8 @@ public non-sealed class CommandFacade<Entity extends InterfaceEntity<Id>, Id, Sa
 	}
 
 	/**
-	 * Gets the delete by ids function {@link #deleteByIdsFunction
-	 * deleteByIdsFunction}, provided by the builder.
+	 * Gets the delete by ids function {@link #deleteByIdsFunction}, provided by the
+	 * builder.
 	 * 
 	 * @return the delete by ids function
 	 * 

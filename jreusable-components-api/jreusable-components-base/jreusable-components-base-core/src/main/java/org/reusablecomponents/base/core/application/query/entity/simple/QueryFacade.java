@@ -68,7 +68,7 @@ public non-sealed class QueryFacade<Entity extends InterfaceEntity<Id>, Id, Quer
 
 	/**
 	 * Function that executes the find by id operation in the
-	 * {@link #findById(Object, Object...) findById} method
+	 * {@link #findById(Object, Object...)} method
 	 * 
 	 * @see FindByIdFunction
 	 */
@@ -76,7 +76,7 @@ public non-sealed class QueryFacade<Entity extends InterfaceEntity<Id>, Id, Quer
 
 	/**
 	 * Function that executes the find all operation in the
-	 * {@link #findAll(Object...) findAll} method
+	 * {@link #findAll(Object...)} method
 	 * 
 	 * @see FindAllFunction
 	 */
@@ -84,7 +84,7 @@ public non-sealed class QueryFacade<Entity extends InterfaceEntity<Id>, Id, Quer
 
 	/**
 	 * Function that executes the count all operation in the
-	 * {@link #countAll(Object...) countAll} method
+	 * {@link #countAll(Object...)} method
 	 * 
 	 * @see CountAllFunction
 	 */
@@ -92,7 +92,7 @@ public non-sealed class QueryFacade<Entity extends InterfaceEntity<Id>, Id, Quer
 
 	/**
 	 * Function that executes the exists all operation in the
-	 * {@link #existsAll(Object...) existsAll} method
+	 * {@link #existsAll(Object...)} method
 	 * 
 	 * @see ExistsAllFunction
 	 */
@@ -100,16 +100,15 @@ public non-sealed class QueryFacade<Entity extends InterfaceEntity<Id>, Id, Quer
 
 	/**
 	 * Function that executes the exists by id operation in the
-	 * {@link #existsById(Object, Object...) existsById} method
+	 * {@link #existsById(Object, Object...)} method
 	 * 
 	 * @see ExistsByIdFunction
 	 */
 	protected final ExistsByIdFunction<QueryIdIn, ExistsResult> existsByIdFunction;
 
 	/**
-	 * QueryIdIn class used on find by id {@link #findById(Object, Object...)
-	 * findById} method and exists by id {@link #existsById(Object, Object...)
-	 * existsById} method.
+	 * QueryIdIn class used on find by id {@link #findById(Object, Object...)}
+	 * method and exists by id {@link #existsById(Object, Object...)} method.
 	 */
 	protected final Class<QueryIdIn> queryIdInClazz;
 

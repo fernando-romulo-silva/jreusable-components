@@ -32,41 +32,12 @@ import org.slf4j.LoggerFactory;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Abstract class for command facades, providing common functionality for
- * handling pre, post, and error functions for various command operations.
+ * Abstract class for command facades, providing common
+ * functionality for handling pre, post, and error functions for various command
+ * operations.
  * 
- * @param <Entity>            The entity type
- * @param <Id>                The entity id type
- * @param <SaveEntityIn>      The input type for the save operation
- * @param <SaveEntityOut>     The output type for the save operation
- * 
- * @param <SaveEntitiesIn>    The input type for the save all operation (bulk
- *                            version)
- * @param <SaveEntitiesOut>   The output type for the save all operation (bulk
- *                            version)
- * 
- * @param <UpdateEntityIn>    The input type for the update operation
- * @param <UpdateEntityOut>   The output type for the update operation
- * 
- * @param <UpdateEntitiesIn>  The input type for the update all operation (bulk
- *                            version)
- * @param <UpdateEntitiesOut> The output type for the update all operation (bulk
- *                            version)
- * @param <DeleteEntityIn>    The input type for the delete operation
- * @param <DeleteEntityOut>   The output type for the delete operation
- * 
- * @param <DeleteEntitiesIn>  The input type for the delete all operation (bulk
- *                            version)
- * @param <DeleteEntitiesOut> The output type for the delete all operation (bulk
- *                            version)
- * 
- * @param <DeleteIdIn>        The input type for the delete by id operation
- * @param <DeleteIdOut>       The output type for the delete by id operation
- * 
- * @param <DeleteIdsIn>       The input type for the delete by ids operation
- *                            (bulk version)
- * @param <DeleteIdsOut>      The output type for the delete by ids operation
- *                            (bulk version)
+ * This class provide functions for pre, post, and error execution of the main
+ * functions defined in {@link CommandFacade}.
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0.0

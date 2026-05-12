@@ -20,17 +20,8 @@ import jakarta.validation.constraints.NotNull;
  * functionality for handling pre, post, and error functions for various query
  * operations.
  * 
- * Used by QueryPaginationFacade, but can be extended by the user to create
- * custom facades with additional functionality.
- * 
- * @param <Entity>              The facade entity type
- * @param <Id>                  The facade entity id type
- * 
- * @param <OneResult>           The one-result type
- * @param <MultiplePagedResult> The paged multiple-result type
- * @param <Pageable>            The query result controll
- * 
- * @param <Sort>                The query result order
+ * This class provide functions for pre, post, and error execution of the main
+ * functions defined in {@link QueryPaginationFacade}.
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0.0
@@ -46,49 +37,47 @@ public sealed abstract class AbstractQueryPaginationFacade<Entity extends Interf
 
     /**
      * Function executed in
-     * {@link QueryPaginationFacade#findAllPaged(Object, Object...)
-     * findAll} method before the {@link QueryPaginationFacade#findAllPagedFunction
-     * findAllFunction}, use it to configure, change, etc. the input.
+     * {@link QueryPaginationFacade#findAllPaged(Object, Object...)} method before
+     * the {@link QueryPaginationFacade#findAllPagedFunction}, use it to configure,
+     * change, etc. the input.
      */
     protected PreFindAllPagedFunction<Pageable> preFindAllPagedFunction;
 
     /**
      * Function executed in
-     * {@link QueryPaginationFacade#findAllPaged(Object, Object...)
-     * findAll} method after the {@link QueryPaginationFacade#findAllPagedFunction
-     * findAllFunction}, use it to configure, change, etc. the result.
+     * {@link QueryPaginationFacade#findAllPaged(Object, Object...)} method after
+     * the {@link QueryPaginationFacade#findAllPagedFunction}, use it to configure,
+     * change, etc. the result.
      */
     protected PosFindAllPagedFunction<MultiplePagedResult> posFindAllPagedFunction;
 
     /**
      * Function executed in
-     * {@link QueryPaginationFacade#findAllPaged(Object, Object...)
-     * findAll} method to handle {@link QueryPaginationFacade#findAllPagedFunction
-     * findAllFunction} errors.
+     * {@link QueryPaginationFacade#findAllPaged(Object, Object...)} method to
+     * handle {@link QueryPaginationFacade#findAllPagedFunction} errors.
      */
     protected ErrorFindAllPagedFunction<BaseException, Pageable> errorFindAllPagedFunction;
 
     /**
      * Function executed in
-     * {@link QueryPaginationFacade#findOneSorted(Object, Object...)
-     * findOne} method before the {@link QueryPaginationFacade#findOneSortedFunction
-     * findOneFunction}, use it to configure, change, etc. the input.
+     * {@link QueryPaginationFacade#findOneSorted(Object, Object...)} method before
+     * the {@link QueryPaginationFacade#findOneSortedFunction}, use it to configure,
+     * change, etc. the input.
      */
     protected PreFindOneSortedFunction<Sort> preFindOneSortedFunction;
 
     /**
      * Function executed in
-     * {@link QueryPaginationFacade#findOneSorted(Object, Object...)
-     * findOne} method after the {@link QueryPaginationFacade#findOneSortedFunction
-     * findOneFunction}, use it to configure, change, etc. the result.
+     * {@link QueryPaginationFacade#findOneSorted(Object, Object...)} method after
+     * the {@link QueryPaginationFacade#findOneSortedFunction}, use it to configure,
+     * change, etc. the result.
      */
     protected PosFindOneSortedFunction<OneResult> posFindOneSortedFunction;
 
     /**
      * Function executed in
-     * {@link QueryPaginationFacade#findOneSorted(Object, Object...)
-     * findOne} method to handle {@link QueryPaginationFacade#findOneSortedFunction
-     * findOneFunction} errors.
+     * {@link QueryPaginationFacade#findOneSorted(Object, Object...)} method to
+     * handle {@link QueryPaginationFacade#findOneSortedFunction} errors.
      */
     protected ErrorFindOneSortedFunction<BaseException, Sort> errorFindOneSortedFunction;
 

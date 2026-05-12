@@ -19,6 +19,20 @@ import jakarta.validation.constraints.NotNull;
  * Interface responsible for establishing contracts to create, read, update, and
  * delete entities, basic CRUD operations to entities.
  * 
+ * <p>
+ * This interface provides these methods to deal with objects:
+ * <ul>
+ * <li>{@link #save(Object, Object...)}
+ * <li>{@link #saveAll(Object, Object...)}
+ * <li>{@link #update(Object, Object...)}
+ * <li>{@link #updateAll(Object, Object...)}
+ * <li>{@link #delete(Object, Object...)}
+ * <li>{@link #deleteAll(Object, Object...)}
+ * <li>{@link #deleteBy(Object, Object...)}
+ * <li>{@link #deleteAllBy(Object, Object...)}
+ * </ul>
+ * <p>
+ * 
  * @param <Entity>            The entity type
  * @param <Id>                The entity id type
  * @param <SaveEntityIn>      The input type for the save operation
@@ -59,20 +73,7 @@ import jakarta.validation.constraints.NotNull;
  * 
  * @see InterfaceBaseFacade
  */
-public non-sealed interface InterfaceCommandFacade<Entity extends InterfaceEntity<Id>, Id, // basic
-		// save
-		SaveEntityIn, SaveEntityOut, //
-		SaveEntitiesIn, SaveEntitiesOut, //
-		// update
-		UpdateEntityIn, UpdateEntityOut, //
-		UpdateEntitiesIn, UpdateEntitiesOut, //
-		// delete entity
-		DeleteEntityIn, DeleteEntityOut, //
-		DeleteEntitiesIn, DeleteEntitiesOut, //
-		// delete by id
-		DeleteIdIn, DeleteIdOut, //
-		DeleteIdsIn, DeleteIdsOut> //
-		// from base
+public non-sealed interface InterfaceCommandFacade<Entity extends InterfaceEntity<Id>, Id, SaveEntityIn, SaveEntityOut, SaveEntitiesIn, SaveEntitiesOut, UpdateEntityIn, UpdateEntityOut, UpdateEntitiesIn, UpdateEntitiesOut, DeleteEntityIn, DeleteEntityOut, DeleteEntitiesIn, DeleteEntitiesOut, DeleteIdIn, DeleteIdOut, DeleteIdsIn, DeleteIdsOut>
 		extends InterfaceBaseFacade<Entity, Id> {
 
 	/**

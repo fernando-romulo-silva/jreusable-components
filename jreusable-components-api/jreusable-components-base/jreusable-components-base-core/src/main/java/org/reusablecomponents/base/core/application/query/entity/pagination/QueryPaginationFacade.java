@@ -2,7 +2,6 @@ package org.reusablecomponents.base.core.application.query.entity.pagination;
 
 import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_all_paged.FindAllPagedFunction;
 import org.reusablecomponents.base.core.application.query.entity.pagination.function.find_one_sorted.FindOneSortedFunction;
-import org.reusablecomponents.base.core.application.query.entity.simple.QueryFacadeBuilder;
 import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,16 +9,29 @@ import org.slf4j.LoggerFactory;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * The default <code>InterfaceQueryPaginationFacade</code>'s
- * implementation.
+ * This class is responsible for implementing query with pagination defined in
+ * the {@link InterfaceQueryPaginationFacade} interface using functional
+ * approach. <br />
  * 
  * <p>
- * This class provides default implementations for the basic query operations:
+ * For each query operation, this class use a function:
  * <ul>
- * <li>find all paged</li>
- * <li>find one sorted</li>
+ * <li>{@link #findAllPagedFunction} function used to execute the
+ * {@link #findAllPaged(Object, Object...)} method.
+ * <li>{@link #findOneSortedFunction} function used to execute the
+ * {@link #findOneSorted(Object, Object...)} method.
  * </ul>
  * <p>
+ * 
+ * Each query operation also have pre and pos functions, used to execute logic
+ * before and after the main function, and an error function, used to execute
+ * logic in case of error defined in
+ * {@link AbstractQueryPaginationFacade}.
+ * 
+ * <p>
+ * All functions used in this class are provided by the
+ * {@link QueryPaginationFacadeBuilder} builder.
+ * </p>
  * 
  * @author Fernando Romulo da Silva
  * @since 1.0.0
@@ -35,13 +47,13 @@ public non-sealed class QueryPaginationFacade<Entity extends InterfaceEntity<Id>
 
 	/**
 	 * Function that executes the find all operation in the
-	 * {@link #findAllPaged(Object, Object...) findAllPaged} method
+	 * {@link #findAllPaged(Object, Object...)} method
 	 */
 	protected final FindAllPagedFunction<Pageable, MultiplePagedResult> findAllPagedFunction;
 
 	/**
 	 * Function that executes the find one operation in the
-	 * {@link #findOneSorted(Object, Object...) findOneSorted} method
+	 * {@link #findOneSorted(Object, Object...)} method
 	 */
 	protected final FindOneSortedFunction<Sort, OneResult> findOneSortedFunction;
 
@@ -52,7 +64,7 @@ public non-sealed class QueryPaginationFacade<Entity extends InterfaceEntity<Id>
 	 * 
 	 * @throws NullPointerException if the builder is null
 	 * 
-	 * @see QueryFacadeBuilder
+	 * @see QueryPaginationFacadeBuilder
 	 */
 	protected QueryPaginationFacade(
 			final QueryPaginationFacadeBuilder<Entity, Id, OneResult, MultiplePagedResult, Pageable, Sort> builder) {

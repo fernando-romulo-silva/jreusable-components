@@ -11,6 +11,14 @@ import jakarta.validation.constraints.NotNull;
  * This interface is used to retrieve objects using pagination, and it is
  * intended to be used in the query layer of the application.
  * 
+ * <p>
+ * This interface provides these methods to retrieve objects:
+ * <ul>
+ * <li>{@link #findAllPaged(Object, Object...)}
+ * <li>{@link #findOneSorted(Object, Object...)}
+ * </ul>
+ * <p>
+ * 
  * @param <Entity>              The facade entity type
  * @param <Id>                  The facade entity id type
  * 
