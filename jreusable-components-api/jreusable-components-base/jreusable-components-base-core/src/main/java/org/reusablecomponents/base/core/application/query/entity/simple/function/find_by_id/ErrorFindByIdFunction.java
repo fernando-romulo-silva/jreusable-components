@@ -6,7 +6,7 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 
 /**
  * Function executed in {@link QueryFacade#findById(Object, Object...)} method
- * to handle {@link QueryFacade#findByIdFunction} errors.
+ * to handle errors.
  * 
  * @param <QueryIdIn> The input id type for the find by id and exists by id
  * 

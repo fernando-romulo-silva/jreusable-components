@@ -6,6 +6,8 @@ import org.reusablecomponents.base.core.domain.InterfaceEntity;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.security.InterfaceSecurityService;
 import org.reusablecomponents.base.translation.InterfaceI18nService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class design mainly create facade don't need to implement any method, just
@@ -13,6 +15,8 @@ import org.reusablecomponents.base.translation.InterfaceI18nService;
  * you can use the facade without any implementation.
  */
 public non-sealed class EmptyFacade<Entity extends InterfaceEntity<Id>, Id> extends BaseFacade<Entity, Id> {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(EmptyFacade.class);
 
 	/**
 	 * Constructor with parameters.
@@ -25,7 +29,9 @@ public non-sealed class EmptyFacade<Entity extends InterfaceEntity<Id>, Id> exte
 			final InterfaceI18nService i18nService,
 			final InterfaceSecurityService securityService,
 			final InterfaceExceptionAdapterService exceptionAdapterService) {
-
+		LOGGER.atDebug().log(
+				"EmptyFacade constructor with parameters called, all services will be setted i18nService: {}, securityService: {}, exceptionAdapterService: {}",
+				i18nService, securityService, exceptionAdapterService);
 		super(new BaseFacadeBuilder($ -> {
 			$.i18nService = i18nService;
 			$.securityService = securityService;
@@ -37,7 +43,7 @@ public non-sealed class EmptyFacade<Entity extends InterfaceEntity<Id>, Id> exte
 	 * Default constructor.
 	 */
 	public EmptyFacade() {
-		super(new BaseFacadeBuilder($ -> {
-		}));
+		super(new BaseFacadeBuilder(
+				$ -> LOGGER.atDebug().log("EmptyFacade default constructor called, all services will be null")));
 	}
 }

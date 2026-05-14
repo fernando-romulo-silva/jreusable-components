@@ -109,7 +109,7 @@ public non-sealed class QueryPaginationFacade<Entity extends InterfaceEntity<Id>
 	 */
 	@Override
 	public OneResult findOneSorted(final Sort sort, final Object... directives) {
-		LOGGER.atDebug().log("Executing default findOne, pageable {}, directives {}", sort, directives);
+		LOGGER.atDebug().log("Executing default findOne, sort {}, directives {}", sort, directives);
 
 		final var oneResult = execute(
 				sort, getPreFindOneSortedFunction(),
