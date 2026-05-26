@@ -17,4 +17,12 @@ import org.reusablecomponents.base.core.application.query.entity.simple.QueryFac
 @FunctionalInterface
 public non-sealed interface CountAllFunction<CountResult>
         extends OperationFunction1Args<Object[], CountResult>, QueryFunction {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "CountAllFunction";
+    }
 }

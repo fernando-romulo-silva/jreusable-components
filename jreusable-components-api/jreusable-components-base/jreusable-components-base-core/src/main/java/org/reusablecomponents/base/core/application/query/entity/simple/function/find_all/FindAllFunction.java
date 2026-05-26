@@ -19,6 +19,12 @@ import org.reusablecomponents.base.core.application.query.entity.simple.QueryFac
  */
 @FunctionalInterface
 public non-sealed interface FindAllFunction<MultipleResult>
-                extends OperationFunction1Args<Object[], MultipleResult>, QueryFunction {
-
+        extends OperationFunction1Args<Object[], MultipleResult>, QueryFunction {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "FindAllFunction";
+    }
 }

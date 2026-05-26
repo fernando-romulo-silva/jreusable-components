@@ -6,6 +6,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 
 @FunctionalInterface
 public non-sealed interface ErrorExistsByIdFunction<QueryIdIn>
-                extends OperationFunction3Args<BaseException, QueryIdIn, Object[], BaseException>, QueryFunction {
-
+        extends OperationFunction3Args<BaseException, QueryIdIn, Object[], BaseException>, QueryFunction {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "ErrorExistsByIdFunction";
+    }
 }

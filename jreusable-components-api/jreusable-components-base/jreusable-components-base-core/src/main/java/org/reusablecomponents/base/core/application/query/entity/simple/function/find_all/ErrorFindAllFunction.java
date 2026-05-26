@@ -4,7 +4,14 @@ import org.reusablecomponents.base.core.application.query.QueryFunction;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction2Args;
 
+@FunctionalInterface
 public non-sealed interface ErrorFindAllFunction
-                extends OperationFunction2Args<BaseException, Object[], BaseException>, QueryFunction {
-
+        extends OperationFunction2Args<BaseException, Object[], BaseException>, QueryFunction {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "ErrorFindAllFunction";
+    }
 }

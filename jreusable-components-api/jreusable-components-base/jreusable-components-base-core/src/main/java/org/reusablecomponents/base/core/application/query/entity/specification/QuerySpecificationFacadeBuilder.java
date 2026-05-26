@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.count_by_spec.CountBySpecificationFunction;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.exists_by_spec.ExistsBySpecificationFunction;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_by_spec.FindBySpecificationFunction;
-import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.FindOneBySpecFunction;
+import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.FindOneBySpecificationFunction;
 import org.reusablecomponents.base.core.domain.InterfaceEntity;
 
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +21,7 @@ public class QuerySpecificationFacadeBuilder<Entity extends InterfaceEntity<Id>,
 
     public FindBySpecificationFunction<Specification, MultipleResult> findBySpecificationFunction;
 
-    public FindOneBySpecFunction<Specification, OneResult> findOneBySpecificationFunction;
+    public FindOneBySpecificationFunction<Specification, OneResult> findOneBySpecificationFunction;
 
     public ExistsBySpecificationFunction<Specification, ExistsResult> existsBySpecificationFunction;
 

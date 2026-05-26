@@ -6,4 +6,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface PreFindOneSortedFunction<Sort>
 		extends QueryFunction, OperationFunction2Args<Sort, Object[], Sort> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "PreFindOneSortedFunction";
+	}
 }

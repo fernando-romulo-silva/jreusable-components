@@ -5,5 +5,13 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 
 @FunctionalInterface
 public non-sealed interface PosFindAllPagedFunction<MultiplePagedResult>
-                extends QueryFunction, OperationFunction2Args<MultiplePagedResult, Object[], MultiplePagedResult> {
+        extends QueryFunction, OperationFunction2Args<MultiplePagedResult, Object[], MultiplePagedResult> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "PosFindAllPagedFunction";
+    }
 }

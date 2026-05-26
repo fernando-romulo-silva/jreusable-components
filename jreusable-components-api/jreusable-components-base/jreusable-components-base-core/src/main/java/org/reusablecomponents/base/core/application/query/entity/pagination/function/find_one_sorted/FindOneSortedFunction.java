@@ -6,4 +6,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface FindOneSortedFunction<Sort, OnePagedResult>
 		extends QueryFunction, OperationFunction2Args<Sort, Object[], OnePagedResult> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "FindOneSortedFunction";
+	}
 }

@@ -7,5 +7,11 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface ErrorExistsAllFunction
 		extends OperationFunction2Args<BaseException, Object[], BaseException>, QueryFunction {
-
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "ErrorExistsAllFunction";
+	}
 }

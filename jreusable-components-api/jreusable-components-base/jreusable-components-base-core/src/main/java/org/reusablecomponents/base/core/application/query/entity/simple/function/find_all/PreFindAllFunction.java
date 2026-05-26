@@ -5,5 +5,11 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 
 @FunctionalInterface
 public non-sealed interface PreFindAllFunction extends OperationFunction1Args<Object[], Object[]>, QueryFunction {
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "PreFindAllFunction";
+    }
 }

@@ -10,4 +10,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface ErrorFindBySpecificationPagedFunction<Specification, Pageable>
 		extends QueryFunction, OperationFunction4Args<BaseException, Specification, Pageable, Object[], BaseException> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "ErrorFindBySpecificationPagedFunction";
+	}
 }

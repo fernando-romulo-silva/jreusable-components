@@ -5,5 +5,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 
 @FunctionalInterface
 public non-sealed interface FindOneBySpecificationSortedFunction<Specification, Sort, OneResult>
-                extends QueryFunction, OperationFunction3Args<Specification, Sort, Object[], OneResult> {
+        extends QueryFunction, OperationFunction3Args<Specification, Sort, Object[], OneResult> {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "FindOneBySpecificationSortedFunction";
+    }
 }

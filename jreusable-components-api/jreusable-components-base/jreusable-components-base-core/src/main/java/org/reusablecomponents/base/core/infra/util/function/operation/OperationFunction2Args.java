@@ -55,7 +55,8 @@ import org.reusablecomponents.base.core.application.query.entity.specification.f
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_by_spec.FindBySpecificationFunction;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_by_spec.PosFindBySpecificationFunction;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_by_spec.PreFindBySpecificationFunction;
-import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.FindOneBySpecFunction;
+import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.FindOneBySpecificationFunction;
+import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.FindOneBySpecificationFunction;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.PosFindOneBySpecificationFunction;
 import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.PreFindOneBySpecificationFunction;
 import org.reusablecomponents.base.core.infra.util.function.operation.custom.CustomOperation2Args;
@@ -97,7 +98,7 @@ public sealed interface OperationFunction2Args<In1, In2, Out> extends BiFunction
 		CountBySpecificationFunction, PosFindOneBySpecificationFunction, ExistsBySpecificationFunction,
 		PreCountBySpecificationFunction, FindBySpecificationFunction, PosCountBySpecificationFunction,
 		PreExistsBySpecificationFunction, PosExistsBySpecificationFunction, PreFindBySpecificationFunction,
-		PosFindBySpecificationFunction, PreFindOneBySpecificationFunction, FindOneBySpecFunction,
+		PosFindBySpecificationFunction, PreFindOneBySpecificationFunction, FindOneBySpecificationFunction,
 		FindAllPagedFunction, PreFindOneSortedFunction, PreFindAllPagedFunction,
 		PosFindAllPagedFunction, FindOneSortedFunction, PosFindOneSortedFunction,
 		PosFindOneBySpecificationSortedFunction,

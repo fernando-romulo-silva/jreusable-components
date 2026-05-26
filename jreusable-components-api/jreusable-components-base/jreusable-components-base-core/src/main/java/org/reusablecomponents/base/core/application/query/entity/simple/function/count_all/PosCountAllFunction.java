@@ -5,6 +5,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 
 @FunctionalInterface
 public non-sealed interface PosCountAllFunction<CountResult>
-                extends OperationFunction2Args<CountResult, Object[], CountResult>, QueryFunction {
-
+        extends OperationFunction2Args<CountResult, Object[], CountResult>, QueryFunction {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "PosCountAllFunction";
+    }
 }

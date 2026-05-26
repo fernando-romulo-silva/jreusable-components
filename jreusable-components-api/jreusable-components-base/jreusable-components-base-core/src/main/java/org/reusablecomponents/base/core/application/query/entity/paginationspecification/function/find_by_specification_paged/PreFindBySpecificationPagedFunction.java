@@ -5,5 +5,13 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 
 @FunctionalInterface
 public non-sealed interface PreFindBySpecificationPagedFunction<Specification, Pageable>
-                extends QueryFunction, OperationFunction3Args<Specification, Pageable, Object[], Specification> {
+        extends QueryFunction, OperationFunction3Args<Specification, Pageable, Object[], Specification> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "PreFindBySpecificationPagedFunction";
+    }
 }

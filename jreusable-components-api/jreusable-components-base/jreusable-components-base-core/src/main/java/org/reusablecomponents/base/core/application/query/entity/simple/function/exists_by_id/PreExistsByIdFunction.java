@@ -5,6 +5,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 
 @FunctionalInterface
 public non-sealed interface PreExistsByIdFunction<ExistsIdIn>
-                extends OperationFunction2Args<ExistsIdIn, Object[], ExistsIdIn>, QueryFunction {
-
+        extends OperationFunction2Args<ExistsIdIn, Object[], ExistsIdIn>, QueryFunction {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "PreExistsByIdFunction";
+    }
 }

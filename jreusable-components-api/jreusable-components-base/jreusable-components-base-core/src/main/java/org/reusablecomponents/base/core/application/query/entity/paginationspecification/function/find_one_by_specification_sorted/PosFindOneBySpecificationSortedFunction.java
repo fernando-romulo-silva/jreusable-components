@@ -5,5 +5,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 
 @FunctionalInterface
 public non-sealed interface PosFindOneBySpecificationSortedFunction<OneResult>
-                extends QueryFunction, OperationFunction2Args<OneResult, Object[], OneResult> {
+        extends QueryFunction, OperationFunction2Args<OneResult, Object[], OneResult> {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "PosFindOneBySpecificationSortedFunction";
+    }
 }

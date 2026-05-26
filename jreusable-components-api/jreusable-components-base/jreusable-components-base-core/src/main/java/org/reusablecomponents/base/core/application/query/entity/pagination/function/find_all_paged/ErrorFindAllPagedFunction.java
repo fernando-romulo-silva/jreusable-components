@@ -20,4 +20,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface ErrorFindAllPagedFunction<BaseException, Pageable>
 		extends QueryFunction, OperationFunction3Args<BaseException, Pageable, Object[], BaseException> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "ErrorFindAllPagedFunction";
+	}
 }

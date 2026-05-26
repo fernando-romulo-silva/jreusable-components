@@ -16,7 +16,9 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface PreFindByIdFunction<QueryIdIn>
         extends OperationFunction2Args<QueryIdIn, Object[], QueryIdIn>, QueryFunction {
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     default String getName() {
         return "PreFindByIdFunction";

@@ -20,4 +20,11 @@ import org.reusablecomponents.base.core.application.query.entity.simple.QueryFac
 @FunctionalInterface
 public non-sealed interface FindByIdFunction<QueryIdIn, OneResult>
         extends OperationFunction2Args<QueryIdIn, Object[], OneResult>, QueryFunction {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "FindByIdFunction";
+    }
 }

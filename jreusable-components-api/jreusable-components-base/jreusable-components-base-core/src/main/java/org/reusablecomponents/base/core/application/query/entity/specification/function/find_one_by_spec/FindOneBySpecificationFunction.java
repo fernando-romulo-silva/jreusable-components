@@ -4,13 +4,13 @@ import org.reusablecomponents.base.core.application.query.QueryFunction;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction2Args;
 
 @FunctionalInterface
-public non-sealed interface PreFindOneBySpecificationFunction<Specification>
-        extends QueryFunction, OperationFunction2Args<Specification, Object[], Specification> {
+public non-sealed interface FindOneBySpecificationFunction<Specification, OneResult>
+        extends QueryFunction, OperationFunction2Args<Specification, Object[], OneResult> {
     /**
      * {@inheritDoc}
      */
     @Override
     default String getName() {
-        return "PreFindOneBySpecificationFunction";
+        return "FindOneBySpecificationFunction";
     }
 }

@@ -17,7 +17,9 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface PosFindByIdFunction<OneResult>
         extends OperationFunction2Args<OneResult, Object[], OneResult>, QueryFunction {
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     default String getName() {
         return "PosFindByIdFunction";

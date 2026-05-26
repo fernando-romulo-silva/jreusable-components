@@ -4,5 +4,11 @@ import org.reusablecomponents.base.core.application.query.QueryFunction;
 import org.reusablecomponents.base.core.infra.util.function.operation.OperationFunction1Args;
 
 public non-sealed interface PreExistsAllFunction extends OperationFunction1Args<Object[], Object[]>, QueryFunction {
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "PreExistsAllFunction";
+    }
 }

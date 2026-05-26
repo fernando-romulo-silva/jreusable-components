@@ -6,7 +6,7 @@ import org.reusablecomponents.base.core.application.command.entity.function.dele
 import org.reusablecomponents.base.core.application.command.entity.function.save.SaveFunction;
 import org.reusablecomponents.base.core.application.command.entity.function.save_all.SaveAllFunction;
 import org.reusablecomponents.base.core.application.query.QueryFunction;
-import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.FindOneBySpecFunction;
+import org.reusablecomponents.base.core.application.query.entity.specification.function.find_one_by_spec.FindOneBySpecificationFunction;
 import org.reusablecomponents.base.core.infra.exception.InterfaceExceptionAdapterService;
 import org.reusablecomponents.base.core.infra.exception.common.BaseException;
 import org.reusablecomponents.base.core.infra.exception.common.ElementAlreadyExistsException;
@@ -47,7 +47,7 @@ public class ListExceptionAdapterService implements InterfaceExceptionAdapterSer
                 case CommandFunction _ ->
                     commandExceptionHandler(ex, i18nService, object);
 
-                case FindOneBySpecFunction _ ->
+                case FindOneBySpecificationFunction _ ->
                     findOneBySpecExceptionHandler(ex, clazz, i18nService, directives[2]);
 
                 case QueryFunction _ ->

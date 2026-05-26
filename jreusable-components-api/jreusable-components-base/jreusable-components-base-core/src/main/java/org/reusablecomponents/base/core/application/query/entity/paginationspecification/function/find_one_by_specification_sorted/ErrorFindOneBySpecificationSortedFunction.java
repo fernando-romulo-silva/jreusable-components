@@ -6,6 +6,14 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 
 @FunctionalInterface
 public non-sealed interface ErrorFindOneBySpecificationSortedFunction<Specification, Sort>
-                extends QueryFunction,
-                OperationFunction4Args<BaseException, Specification, Sort, Object[], BaseException> {
+        extends QueryFunction,
+        OperationFunction4Args<BaseException, Specification, Sort, Object[], BaseException> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "ErrorFindOneBySpecificationSortedFunction";
+    }
 }

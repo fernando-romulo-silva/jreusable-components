@@ -30,110 +30,106 @@ public abstract sealed class AbstractQuerySpecificationFacade<Entity extends Int
 
     /**
      * Function executed in
-     * {@link QuerySpecificationFacade#findBySpecification(Object, Object...)
-     * findBySpec}
-     * method before the {@link QuerySpecificationFacade#findBySpecificationFunction
-     * findBySpecFunction}, use it to configure, change, etc. the query input.
+     * {@link QuerySpecificationFacade#findBySpecification(Object, Object...)}
+     * method before the
+     * {@link QuerySpecificationFacade#findBySpecificationFunction}, use it to
+     * configure, change, etc. the query input.
      */
     protected PreFindBySpecificationFunction<Specification> preFindBySpecificationFunction;
 
     /**
      * Function executed in
-     * {@link QuerySpecificationFacade#findBySpecification(Object, Object...)
-     * findBySpec}
-     * method after the {@link QuerySpecificationFacade#findBySpecificationFunction
-     * findBySpecFunction}, use it to configure, change, etc. the result.
+     * {@link QuerySpecificationFacade#findBySpecification(Object, Object...)}
+     * method after the
+     * {@link QuerySpecificationFacade#findBySpecificationFunction}, use it to
+     * configure, change, etc. the result.
      */
     protected PosFindBySpecificationFunction<MultipleResult> posFindBySpecificationFunction;
 
     /**
      * Function executed in
-     * {@link QuerySpecificationFacade#findBySpecification(Object, Object...)
-     * findBySpec}
-     * method to handle {@link QuerySpecificationFacade#findBySpecificationFunction
-     * findBySpecFunction} errors.
+     * {@link QuerySpecificationFacade#findBySpecification(Object, Object...)}
+     * method to handle {@link QuerySpecificationFacade#findBySpecificationFunction}
+     * errors.
      */
     protected ErrorFindBySpecificationFunction<Specification> errorFindBySpecificationFunction;
 
     /**
      * Function executed in
-     * {@link QuerySpecificationFacade#findOneBySpecification(Object, Object...)
-     * findOneBySpec}
-     * method before the {@link QuerySpecificationFacade#findOneBySpecFunction
-     * findOneBySpecFunction}, use it to configure, change, etc. the input.
+     * {@link QuerySpecificationFacade#findOneBySpecification(Object, Object...)}
+     * method before the
+     * {@link QuerySpecificationFacade#findOneBySpecificationFunction}, use it to
+     * configure, change, etc. the input.
      */
     protected PreFindOneBySpecificationFunction<Specification> preFindOneBySpecificationFunction;
 
     /**
      * Function executed in
-     * {@link QuerySpecificationFacade#findOneBySpecification(Object, Object...)
-     * findOneBySpec} method after the
-     * {@link QuerySpecificationFacade#findOneBySpecFunction
-     * findOneBySpecFunction}, use it to configure, change, etc. the result.
+     * {@link QuerySpecificationFacade#findOneBySpecification(Object, Object...)}
+     * method after the
+     * {@link QuerySpecificationFacade#findOneBySpecificationFunction}, use it to
+     * configure, change, etc. the result.
      */
     protected PosFindOneBySpecificationFunction<OneResult> posFindOneBySpecificationFunction;
 
     /**
      * Function executed in
-     * {@link QuerySpecificationFacade#findOneBySpecification(Object, Object...)
-     * findOneBySpec} method to handle
-     * {@link QuerySpecificationFacade#findBySpecificationFunction
-     * findBySpecFunction}
+     * {@link QuerySpecificationFacade#findOneBySpecification(Object, Object...)}
+     * method to handle
+     * {@link QuerySpecificationFacade#findOneBySpecificationFunction}
      * errors.
      */
     protected ErrorFindOneBySpecificationFunction<Specification> errorFindOneBySpecificationFunction;
 
     /**
      * Function executed in
-     * {@link QuerySpecificationFacade#countBySpecification(Object, Object...)
-     * countBySpec}
-     * method before the {@link QuerySpecificationFacade#countBySpecFunction
-     * countBySpecFunction}, use it to configure, change, etc. the input.
+     * {@link QuerySpecificationFacade#countBySpecification(Object, Object...)}
+     * method before the
+     * {@link QuerySpecificationFacade#countBySpecificationFunction}, use it to
+     * configure, change, etc. the input.
      */
     protected PreCountBySpecificationFunction<Specification> preCountBySpecificationFunction;
 
     /**
      * Function executed in
-     * {@link QuerySpecificationFacade#countBySpecification(Object, Object...)
-     * countBySpec}
-     * method after the {@link QuerySpecificationFacade#countBySpecFunction
-     * countBySpecFunction}, use it to configure, change, etc. the result.
+     * {@link QuerySpecificationFacade#countBySpecification(Object, Object...)}
+     * method after the
+     * {@link QuerySpecificationFacade#countBySpecificationFunction}, use it to
+     * configure, change, etc. the result.
      */
     protected PosCountBySpecificationFunction<CountResult> posCountBySpecificationFunction;
 
     /**
      * Function executed in
-     * {@link QuerySpecificationFacade#countBySpecification(Object, Object...)
-     * countBySpec}
-     * method to handle {@link QuerySpecificationFacade#countBySpecFunction
-     * countBySpecFunction} errors.
+     * {@link QuerySpecificationFacade#countBySpecification(Object, Object...)}
+     * method to handle
+     * {@link QuerySpecificationFacade#countBySpecificationFunction} errors.
      */
     protected ErrorCountBySpecificationFunction<Specification> errorCountBySpecificationFunction;
 
     /**
      * Method executed in
-     * {@link QuerySpecificationFacade#existsBySpecification(Object, Object...)
-     * existsBySpec}
-     * method before the {@link QuerySpecificationFacade#existsBySpecFunction
-     * existsBySpecFunction}, use it to configure, change, etc. the input.
+     * {@link QuerySpecificationFacade#existsBySpecification(Object, Object...)}
+     * method before the
+     * {@link QuerySpecificationFacade#existsBySpecificationFunction}, use it to
+     * configure, change, etc. the input.
      */
     protected PreExistsBySpecificationFunction<Specification> preExistsBySpecificationFunction;
 
     /**
      * Method executed in
-     * {@link QuerySpecificationFacade#existsBySpecification(Object, Object...)
-     * existsBySpec}
-     * method after the {@link QuerySpecificationFacade#existsBySpecFunction
-     * existsBySpecFunction}, use it to configure, change, etc. the result.
+     * {@link QuerySpecificationFacade#existsBySpecification(Object, Object...)}
+     * method after the
+     * {@link QuerySpecificationFacade#existsBySpecificationFunction}, use it to
+     * configure, change, etc. the result.
      */
     protected PosExistsBySpecificationFunction<ExistsResult> posExistsBySpecificationFunction;
 
     /**
      * Method executed in
-     * {@link QuerySpecificationFacade#existsBySpecification(Object, Object...)
-     * existsBySpec}
-     * method to handle {@link QuerySpecificationFacade#existsBySpecFunction
-     * existsBySpecFunction} errors.
+     * {@link QuerySpecificationFacade#existsBySpecification(Object, Object...)}
+     * method to handle
+     * {@link QuerySpecificationFacade#existsBySpecificationFunction} errors.
      */
     protected ErrorExistsBySpecificationFunction<Specification> errorExistsBySpecificationFunction;
 

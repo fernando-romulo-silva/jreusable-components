@@ -21,4 +21,11 @@ import org.reusablecomponents.base.core.application.query.entity.simple.QueryFac
 @FunctionalInterface
 public non-sealed interface ExistsByIdFunction<QueryIdIn, ExistsResult>
         extends OperationFunction2Args<QueryIdIn, Object[], ExistsResult>, QueryFunction {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "ExistsByIdFunction";
+    }
 }

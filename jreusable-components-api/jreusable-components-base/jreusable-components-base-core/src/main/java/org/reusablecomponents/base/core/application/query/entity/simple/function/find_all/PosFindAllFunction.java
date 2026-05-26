@@ -5,6 +5,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 
 @FunctionalInterface
 public non-sealed interface PosFindAllFunction<MultipleResult>
-                extends OperationFunction2Args<MultipleResult, Object[], MultipleResult>, QueryFunction {
-
+        extends OperationFunction2Args<MultipleResult, Object[], MultipleResult>, QueryFunction {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getName() {
+        return "PosFindAllFunction";
+    }
 }

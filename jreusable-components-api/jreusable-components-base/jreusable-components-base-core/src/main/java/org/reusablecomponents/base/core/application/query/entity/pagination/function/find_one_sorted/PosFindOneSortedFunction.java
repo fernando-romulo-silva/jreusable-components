@@ -6,4 +6,12 @@ import org.reusablecomponents.base.core.infra.util.function.operation.OperationF
 @FunctionalInterface
 public non-sealed interface PosFindOneSortedFunction<OnePagedResult>
 		extends QueryFunction, OperationFunction2Args<OnePagedResult, Object[], OnePagedResult> {
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	default String getName() {
+		return "PosFindOneSortedFunction";
+	}
 }
